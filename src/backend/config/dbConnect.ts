@@ -1,38 +1,64 @@
 import mongoose, { Connection } from "mongoose";
 
-class DBConnect {
-	private static connection: Connection;
-	private constructor() {}
+class DB {
+  private static instance: DB; // singleton instance
+  private connection?: Connection;
 
-	private static async connect(uri: string): Promise<Connection> {
-		if (this.connection) return this.connection; // already connected
+  // private constructor to prevent direct instantiation
+  private constructor() {}
 
-		try {
-			const { connection } = await mongoose.connect(uri);
-			this.connection = connection;
+  // Get the singleton instance
+  public static getInstance(): DB {
+    if (!DB.instance) {
+      DB.instance = new DB();
+    }
+    return DB.instance;
+  }
 
-			console.log("Connected to MongoDB");
+  // Connect to MongoDB
+  public async connect(uri?: string): Promise<Connection> {
+    if (this.connection) return this.connection; // return existing connection
 
-			this.connection?.on("disconnected", () => {
-				console.warn("MongoDB disconnected");
-			});
+    const mongoUri = uri || process.env.MONGO_URI;
+    if (!mongoUri) throw new Error("MONGO_URI is not defined");
 
-			this.connection?.on("error", (err) => {
-				console.error("MongoDB connection error:", err);
-			});
-		} catch (error) {
-			console.error("Failed to connect to MongoDB:", (error as Error).message);
-			process.exit(1);
-		}
+    try {
+      const { connection } = await mongoose.connect(mongoUri, {
+        // optional mongoose options can go here
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      } as mongoose.ConnectOptions);
 
-		return this.connection;
-	}
+      this.connection = connection;
 
-	static async getConnection(): Promise<Connection> {
-		const uri = process.env.MONGO_URI;
-		if (!uri) throw new Error("MONGO_URI is missing");
-		return await this.connect(uri);
-	}
+      console.log("✅ Connected to MongoDB");
+
+      this.connection.on("disconnected", () => {
+        console.warn("⚠️ MongoDB disconnected");
+      });
+
+      this.connection.on("error", (err) => {
+        console.error("❌ MongoDB connection error:", err);
+      });
+
+      return this.connection;
+    } catch (error) {
+      console.error(
+        "❌ Failed to connect to MongoDB:",
+        (error as Error).message
+      );
+      process.exit(1);
+    }
+  }
+
+  // Get the existing connection (connects if not yet connected)
+  public async getConnection(): Promise<Connection> {
+    if (!this.connection) {
+      await this.connect();
+    }
+    return this.connection!;
+  }
 }
 
-export { DBConnect as DB };
+// Export the singleton instance
+export const DBInstance = DB.getInstance();

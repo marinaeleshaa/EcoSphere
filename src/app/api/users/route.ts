@@ -1,5 +1,5 @@
 import { rootContainer } from "@/src/backend/config/container";
-import UserController from "@/src/backend/features/user.controller";
+import UserController from "@/src/backend/features/user/user.controller";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {

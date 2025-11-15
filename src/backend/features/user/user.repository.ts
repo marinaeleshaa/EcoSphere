@@ -1,17 +1,17 @@
 import { injectable } from "tsyringe";
 import { IUser, UserModel } from "./user.model";
-import { DB } from "../config/dbConnect";
+import { DBInstance } from "../../config/dbConnect";
 
 export interface IUserRepository {
-	getAll(): Promise<IUser[]>;
+  getAll(): Promise<IUser[]>;
 }
 
 @injectable()
 class UserRepository {
-	async getAll(): Promise<IUser[]> {
-		await DB.getConnection();
-		return await UserModel.find();
-	}
+  async getAll(): Promise<IUser[]> {
+    await DBInstance.getConnection();
+    return await UserModel.find();
+  }
 }
 
 export default UserRepository;
