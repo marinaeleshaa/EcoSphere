@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { rootContainer } from "@/src/backend/config/container";
-import AuthController from "@/src/backend/features/auth/auth.controller";
+import { rootContainer } from "@/backend/config/container";
+import AuthController from "@/backend/features/auth/auth.controller";
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();

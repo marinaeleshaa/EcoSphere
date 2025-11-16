@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 import { prisma } from "@/lib/prisma";
-import { User } from "@/src/generated/prisma/client";
+import { User } from "@/generated/prisma/client";
 
 export interface IAuthRepository {
   register(email: string, name: string, password: string): Promise<User>;
