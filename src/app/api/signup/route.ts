@@ -1,35 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rootContainer } from "@/backend/config/container";
 import AuthController from "@/backend/features/auth/auth.controller";
+import {
+  handleControllerResponse,
+  handleError,
+} from "@/types/api-helpers";
+import type { SignupResponse } from "@/types/api.types";
 
-export const POST = async (request: NextRequest) => {
+export const POST = async (
+  request: NextRequest
+): Promise<NextResponse<SignupResponse>> => {
   const body = await request.json();
   const controller = rootContainer.resolve(AuthController);
 
   try {
     const result = await controller.Register(body);
-
-    if (!result) {
-      return NextResponse.json(
-        {
-          message: "User already exists",
-        },
-        { status: 409 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        result,
-      },
-      { status: 201 }
+    return handleControllerResponse(
+      result,
+      "User registered successfully",
+      "User already exists",
+      409
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    );
+    return handleError(error, 500);
   }
 };

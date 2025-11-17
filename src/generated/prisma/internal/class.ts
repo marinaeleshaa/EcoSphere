@@ -23,7 +23,7 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "E:\\Graduation Project\\EcoSphere\\src\\generated\\prisma",
+      "value": "F:\\ITI\\EcoSphere\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -37,7 +37,7 @@ const config: runtime.GetPrismaClientConfig = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\Graduation Project\\EcoSphere\\prisma\\schema.prisma",
+    "sourceFilePath": "F:\\ITI\\EcoSphere\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../../../prisma",
