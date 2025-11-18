@@ -68,6 +68,34 @@ export const PUT = async (
   }
 };
 
+export const PATCH = async (
+  _req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+): Promise<NextResponse<UserResponse>> => {
+  const { id } = await context.params;
+  const body = await _req.json();
+  const { favoritesIds } = body as { favoritesIds?: string[] };
+  if (!Array.isArray(favoritesIds)) {
+    return createErrorResponse(
+      "Invalid favoritesIds provided",
+      "Invalid favoritesIds provided",
+      400
+    );
+  }
+  try {
+    const controller = rootContainer.resolve(UserController);
+    const result = await controller.updateFavorites(id, favoritesIds);
+    return handleControllerResponse(
+      result,
+      "User updated successfully",
+      "User not found or update failed",
+      404
+    );
+  } catch (error) {
+    return handleError(error, 500);
+  }
+};
+
 export const DELETE = async (
   _req: NextRequest,
   context: { params: Promise<{ id: string }> }

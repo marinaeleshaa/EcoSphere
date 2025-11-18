@@ -10,6 +10,10 @@ export interface IUserRepository {
     id: string,
     data: Prisma.UserUpdateInput
   ): Promise<Omit<User, "password"> | null>;
+  updateFavorites(
+    id: string,
+    data: string[]
+  ): Promise<Omit<User, "password"> | null>;
   deleteById(id: string): Promise<Omit<User, "password"> | null>;
 }
 
@@ -84,6 +88,51 @@ class UserRepository {
         gender: true,
       },
     });
+  }
+
+  async updateFavorites(
+    id: string,
+    data: string[]
+  ): Promise<Omit<User, "password"> | null> {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: { favoritesIds: true },
+    });
+
+    if (user) {
+      const updatedFavorites = [...user.favoritesIds];
+
+      data.forEach((favId) => {
+        const index = updatedFavorites.indexOf(favId);
+        if (index > -1) {
+          updatedFavorites.splice(index, 1);
+        } else {
+          updatedFavorites.push(favId);
+        }
+      });
+      console.log(updatedFavorites);
+
+      return await prisma.user.update({
+        where: { id },
+        data: { favoritesIds: { set: updatedFavorites } },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          password: false,
+          phoneNumber: true,
+          address: true,
+          avatar: true,
+          birthDate: true,
+          createdAt: true,
+          favoritesIds: true,
+          points: true,
+          role: true,
+          gender: true,
+        },
+      });
+    }
+    return null;
   }
 
   async deleteById(id: string): Promise<Omit<User, "password"> | null> {

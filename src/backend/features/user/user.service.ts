@@ -10,6 +10,10 @@ export interface IUserService {
     id: string,
     data: Prisma.UserUpdateInput
   ): Promise<Omit<User, "password"> | null>;
+  updateFavorites(
+    id: string,
+    data: string[]
+  ): Promise<Omit<User, "password"> | null>;
   deleteById(id: string): Promise<Omit<User, "password"> | null>;
 }
 
@@ -35,6 +39,13 @@ class UserService {
   ): Promise<Omit<User, "password"> | null> {
     return await this.userRepository.updateById(id, data);
   }
+
+	async updateFavorites(
+		id: string,
+		data: string[]
+	): Promise<Omit<User, "password"> | null> {
+		return await this.userRepository.updateFavorites(id, data);
+	}
 
   async deleteById(id: string): Promise<Omit<User, "password"> | null> {
     return await this.userRepository.deleteById(id);

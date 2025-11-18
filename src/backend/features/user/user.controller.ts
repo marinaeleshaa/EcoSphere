@@ -25,6 +25,13 @@ class UserController {
     const user = await this.userService.updateById(id, data);
     return user;
   }
+  async updateFavorites(
+    id: string,
+    data: string[]
+  ): Promise<Omit<User, "password"> | null> {
+    const user = await this.userService.updateFavorites(id, data);
+    return user;
+  }
   async deleteById(id: string): Promise<Omit<User, "password"> | null> {
     const user = await this.userService.deleteById(id);
     return user;
