@@ -9,5 +9,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Reviews'
 export type * from './models/Restaurant'
+export type * from './models/Menu'
 export type * from './commonInputTypes'

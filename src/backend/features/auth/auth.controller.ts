@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { User } from "@/src/generated/prisma/client";
+import { User } from "@/generated/prisma/client";
 import type { IAuthService } from "./auth.service";
 import "reflect-metadata";
 
@@ -12,7 +12,7 @@ class AuthController {
   async LogIn(
     email: string,
     password: string
-  ): Promise<{ token: string; user: User } | null> {
+  ): Promise<{ token: string; user: Omit<User, "password"> } | null> {
     return await this.IAuthService.login(email, password);
   }
 
@@ -20,11 +20,21 @@ class AuthController {
     email: string;
     name: string;
     password: string;
-  }): Promise<{ token: string; user:User } | null> {
+    birthDate: string;
+    address: string;
+    avatar: string;
+    gender: string;
+    phoneNumber : string,
+  }): Promise<{ token: string; user: Omit<User, "password"> } | null> {
     return await this.IAuthService.register(
       body.email,
       body.name,
-      body.password
+      body.password,
+      body.birthDate,
+      body.address,
+      body.avatar,
+      body.gender,
+      body.phoneNumber,
     );
   }
 }

@@ -5,19 +5,24 @@ import {
   generateToken,
   hashPassword,
 } from "../../utils/helpers";
-import { User } from "@/generated/prisma/client";
+import { Gender, User } from "@/generated/prisma/client";
 
 
 export interface IAuthService {
   login(
     email: string,
     password: string
-  ): Promise<{ token: string; user: User } | null>;
+  ): Promise<{ token: string; user: Omit<User, "password"> } | null>;
   register(
     email: string,
     name: string,
-    password: string
-  ): Promise<{ token: string; user: User } | null>;
+    password: string,
+    birthDate: string,
+    address: string,
+    avatar: string,
+    gender: string,
+    phoneNumber : string,
+  ): Promise<{ token: string; user: Omit<User, "password"> } | null>;
   logout(): Promise<void>;
 }
 
@@ -37,9 +42,11 @@ class AuthService {
       if (isMatch) {
         const token = generateToken({ id: user.id, email: user.email });
 
+        const { password, ...rest } = user;
+
         return {
           token,
-          user: { id: user.id, email: user.email, name: user.name },
+          user : rest,
         };
       }
     }
@@ -49,18 +56,26 @@ class AuthService {
   public async register(
     email: string,
     name: string,
-    password: string
+    password: string,
+    birthDate: string,
+    address: string,
+    avatar: string,
+    gender: string,
+    phoneNumber : string,
   ): Promise<{ token: string; user: Omit<User, "password"> } | null> {
     const existingUser = await this.authRepository.findByEmail(email);
     if (!existingUser) {
       const hashed = await hashPassword(password);
-      const user = await this.authRepository.register(email, name, hashed);
+      const userGender = Gender[gender as keyof typeof Gender]
+      const user = await this.authRepository.register(email, name, hashed, birthDate, address, avatar, userGender, phoneNumber);
 
       const token = generateToken({ id: user.id, email: user.email });
+      
+      const { password, ...rest } = user;
 
       return {
         token,
-        user: { id: user.id, email: user.email, name: user.name },
+        user : rest,
       };
     }
     return null;

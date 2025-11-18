@@ -1,9 +1,16 @@
 import { injectable } from "tsyringe";
 import { prisma } from "@/lib/prisma";
-import { User } from "@/generated/prisma/client";
+import { Gender, User } from "@/generated/prisma/client";
 
 export interface IAuthRepository {
-  register(email: string, name: string, password: string): Promise<User>;
+  register(    email: string,
+    name: string,
+    password: string,
+    birthDate: string,
+    address: string,
+    avatar: string,
+    gender: Gender,
+    phoneNumber : string,): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
   createUser(email: string, name: string, password: string): Promise<User>;
   me(): Promise<User[]>;
@@ -14,13 +21,23 @@ class AuthRepository {
   async register(
     email: string,
     name: string,
-    password: string
+    password: string,
+    birthDate: string,
+    address: string,
+    avatar: string,
+    gender: Gender,
+    phoneNumber : string,
   ): Promise<User | null> {
     return await prisma.user.create({
       data: {
         email,
         name,
         password,
+        birthDate,
+        address : address || null,
+        avatar: avatar || null,
+        gender,
+        phoneNumber,
       },
     });
   }

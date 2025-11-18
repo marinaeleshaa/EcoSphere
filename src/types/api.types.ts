@@ -52,7 +52,7 @@ export function isApiError(
  */
 export type AuthTokenResponse = {
   token: string;
-  user: User;
+  user: Omit<User, "password">;
 };
 
 export type LoginResponse = ApiResponse<AuthTokenResponse>;
