@@ -40,11 +40,14 @@ class RestaurantRepository {
     });
   }
   async getAll(): Promise<Restaurant[]> {
-    return await prisma.restaurant.findMany();
+    return await prisma.restaurant.findMany({
+      include: { reviews: true },
+    });
   }
   async getById(id: string): Promise<Restaurant | null> {
     return await prisma.restaurant.findUnique({
       where: { id },
+      include: { reviews: true },
     });
   }
   async updateById(
