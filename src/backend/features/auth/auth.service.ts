@@ -4,9 +4,9 @@ import {
   comparePassword,
   generateToken,
   hashPassword,
+  OMIT,
 } from "../../utils/helpers";
 import { Gender, User } from "@/generated/prisma/client";
-
 
 export interface IAuthService {
   login(
@@ -21,7 +21,7 @@ export interface IAuthService {
     address: string,
     avatar: string,
     gender: string,
-    phoneNumber : string,
+    phoneNumber: string
   ): Promise<{ token: string; user: Omit<User, "password"> } | null>;
   logout(): Promise<void>;
 }
@@ -35,18 +35,18 @@ class AuthService {
   public async login(
     email: string,
     password: string
-  ): Promise<{ token: string; user: Omit<User, "password"> } | null> {
+  ): Promise<{ token: string; user: User } | null> {
     const user = await this.authRepository.findByEmail(email);
     if (user) {
       const isMatch = await comparePassword(password, user.password);
       if (isMatch) {
         const token = generateToken({ id: user.id, email: user.email });
 
-        const { password, ...rest } = user;
+        const data = OMIT(user, "password");
 
         return {
           token,
-          user : rest,
+          user: data as User,
         };
       }
     }
@@ -61,21 +61,28 @@ class AuthService {
     address: string,
     avatar: string,
     gender: string,
-    phoneNumber : string,
-  ): Promise<{ token: string; user: Omit<User, "password"> } | null> {
+    phoneNumber: string
+  ): Promise<{ token: string; user: User } | null> {
     const existingUser = await this.authRepository.findByEmail(email);
     if (!existingUser) {
       const hashed = await hashPassword(password);
-      const userGender = Gender[gender as keyof typeof Gender]
-      const user = await this.authRepository.register(email, name, hashed, birthDate, address, avatar, userGender, phoneNumber);
+      const userGender = Gender[gender as keyof typeof Gender];
+      const user = await this.authRepository.register(
+        email,
+        name,
+        hashed,
+        birthDate,
+        address,
+        avatar,
+        userGender,
+        phoneNumber
+      );
 
       const token = generateToken({ id: user.id, email: user.email });
-      
-      const { password, ...rest } = user;
 
       return {
         token,
-        user : rest,
+        user,
       };
     }
     return null;

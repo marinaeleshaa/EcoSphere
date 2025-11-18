@@ -3,16 +3,17 @@ import { prisma } from "@/lib/prisma";
 import { Gender, User } from "@/generated/prisma/client";
 
 export interface IAuthRepository {
-  register(    email: string,
+  register(
+    email: string,
     name: string,
     password: string,
     birthDate: string,
     address: string,
     avatar: string,
     gender: Gender,
-    phoneNumber : string,): Promise<User>;
+    phoneNumber: string
+  ): Promise<User>;
   findByEmail(email: string): Promise<User | null>;
-  createUser(email: string, name: string, password: string): Promise<User>;
   me(): Promise<User[]>;
 }
 
@@ -26,20 +27,33 @@ class AuthRepository {
     address: string,
     avatar: string,
     gender: Gender,
-    phoneNumber : string,
+    phoneNumber: string
   ): Promise<User | null> {
-    return await prisma.user.create({
+    return (await prisma.user.create({
       data: {
         email,
         name,
         password,
         birthDate,
-        address : address || null,
+        address: address || null,
         avatar: avatar || null,
         gender,
         phoneNumber,
       },
-    });
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phoneNumber: true,
+        address: true,
+        avatar: true,
+        birthDate: true,
+        createdAt: true,
+        points: true,
+        role: true,
+        gender: true,
+      },
+    })) as User;
   }
 
   async findByEmail(email: string): Promise<User | null> {
