@@ -36,6 +36,7 @@ class UserRepository {
         points: true,
         role: true,
         gender: true,
+        reviews: true,
       },
     });
   }
@@ -59,6 +60,7 @@ class UserRepository {
         points: true,
         role: true,
         gender: true,
+        reviews: true,
       },
     });
   }
