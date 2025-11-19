@@ -40,7 +40,7 @@ class AuthService {
     if (user) {
       const isMatch = await comparePassword(password, user.password);
       if (isMatch) {
-        const token = generateToken({ id: user.id, email: user.email });
+        const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
         const data = OMIT(user, "password");
 
@@ -78,7 +78,7 @@ class AuthService {
         phoneNumber
       );
 
-      const token = generateToken({ id: user.id, email: user.email });
+      const token = generateToken({ id: user.id, email: user.email, role: user.role });
 
       return {
         token,
