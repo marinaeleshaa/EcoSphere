@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rootContainer } from "@/backend/config/container";
 import AuthController from "@/backend/features/auth/auth.controller";
+import type { LoginDto } from "@/backend/features/auth/dto/user.dto";
 import {
   handleControllerResponse,
   handleError,
@@ -10,11 +11,11 @@ import type { LoginResponse } from "@/types/api.types";
 export const POST = async (
   request: NextRequest
 ): Promise<NextResponse<LoginResponse>> => {
-  const { email, password } = await request.json();
+  const body = (await request.json()) as LoginDto;
   const controller = rootContainer.resolve(AuthController);
 
   try {
-    const result = await controller.LogIn(email, password);
+    const result = await controller.login(body);
     return handleControllerResponse(
       result,
       "Login successful",
