@@ -104,10 +104,10 @@ import type { LoginResponse } from "@/types/api.types";
 export const POST = async (
   request: NextRequest
 ): Promise<LoginResponse> => {
-  const { email, password } = await request.json();
+  const body = await request.json();
   
   // Validation
-  if (!email || !password) {
+  if (!body.email || !body.password) {
     return createErrorResponse(
       "Email and password are required",
       "Email and password are required",
@@ -117,7 +117,7 @@ export const POST = async (
 
   try {
     const controller = rootContainer.resolve(AuthController);
-    const result = await controller.LogIn(email, password);
+    const result = await controller.LogIn(body);
     return handleControllerResponse(
       result,
       "Login successful",
