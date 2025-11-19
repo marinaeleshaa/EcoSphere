@@ -1,5 +1,5 @@
 import React from 'react'
-import { Gamepad2 , Calendar, Home, ShoppingBag, Recycle, Store, ShoppingCart, Heart, LogIn, Newspaper , Info } from "lucide-react"
+import { Gamepad2, Calendar, Home, ShoppingBag, Recycle, Store, ShoppingCart, Heart, LogIn, Newspaper, Info } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -12,10 +12,12 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarTrigger,
+    SidebarMenuBadge
 } from "@/components/ui/sidebar"
-import { ModeToggle } from '@/components/layout/common/Toggle'
-import { Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link'
+import ThemeBtn from '../ThemeBtn/ThemeBtn'
+import UserBtn from '../UserBtn/UserBtn'
 // Menu items.
 const items = [
     {
@@ -62,10 +64,9 @@ const items = [
 
 export default function SideBar() {
     return (
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible="icon" variant='floating' className='bg-background'>
             <SidebarHeader >
                 <SidebarTrigger />
-                <ModeToggle />
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
@@ -95,6 +96,7 @@ export default function SideBar() {
                                 <Link href="/fav">
                                     <Heart />
                                     <span>Favourite</span>
+                                    <SidebarMenuBadge>24</SidebarMenuBadge>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -103,10 +105,10 @@ export default function SideBar() {
                                 <Link href="/cart">
                                     <ShoppingCart />
                                     <span>cart</span>
+                                    <SidebarMenuBadge>24</SidebarMenuBadge>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                      
                         <SidebarMenuItem >
                             <SidebarMenuButton asChild >
                                 <Link href="/auth">
@@ -115,20 +117,10 @@ export default function SideBar() {
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                    </SidebarMenu>
-                    <SidebarMenu>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton >
-                                <Avatar className='size-6'>
-                                    <AvatarImage src="https://github.com/shadcn.png" />
-                                    <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                                <span>Profile</span>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
+                        <ThemeBtn />
+                        <UserBtn />
                     </SidebarMenu>
                 </SidebarGroupContent>
-
             </SidebarFooter>
         </Sidebar>
     )

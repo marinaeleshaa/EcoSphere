@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/frontend/providers/Providers";
-import SideBar from "@/components/layout/SideBar/SideBar";
+import SideBar from "@/components/layout/SideBar/SideBar/SideBar";
 
 
 const geistSans = Geist({
@@ -33,7 +33,7 @@ export  default function RootLayout({
       >
         <Providers >
           <SideBar/>
-          <div className="w-full">
+          <div className="w-full bg-background text-foreground">
           {children}
           </div>
         </Providers>
