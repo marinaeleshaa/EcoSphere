@@ -64,7 +64,7 @@ const items = [
 
 export default function SideBar() {
     return (
-        <Sidebar collapsible="icon" variant='floating' className='bg-background'>
+        <Sidebar collapsible="icon" variant='floating' className='bg-background/10'>
             <SidebarHeader >
                 <SidebarTrigger />
             </SidebarHeader>

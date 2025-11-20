@@ -24,7 +24,7 @@ const ProductCard = (props: Props) => {
 
   return (
     <motion.div
-      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[420px] flex flex-col overflow-hidden"
+      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden"
       initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
@@ -68,7 +68,7 @@ const ProductCard = (props: Props) => {
         <p className="text-sm text-stone-700 line-clamp-1 mb-2">
           {productSubtitle}
         </p>
-        <p className="text-sm text-stone-600 line-clamp-3 mb-3 flex-1 overflow-hidden ">
+        <p className="text-sm text-stone-600 line-clamp-3 mb-3  ">
           {productDescription}
         </p>
         <p className="text-lg font-semibold mt-auto ml-10">
