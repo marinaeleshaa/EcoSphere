@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { RiShoppingCartLine } from "react-icons/ri";
+import { IoMdHeartEmpty } from "react-icons/io";
+
 interface Props {
   shopName: string;
   shopSubtitle: string;
@@ -68,12 +71,25 @@ const ProductCard = (props: Props) => {
         <p className="text-sm text-stone-700 line-clamp-1 mb-2">
           {productSubtitle}
         </p>
-        <p className="text-sm text-stone-600 line-clamp-3 mb-3  ">
+        <div className="grow ">
+
+        <p className="text-sm text-stone-600 line-clamp-3 mb-3   ">
           {productDescription}
         </p>
-        <p className="text-lg font-semibold mt-auto ml-10">
-          ${productPrice.toFixed(2)}
-        </p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p className="text-lg font-semibold mt-auto ml-10">
+            ${productPrice.toFixed(2)}
+          </p>
+          <div className="text-stone-800 flex gap-3">
+            <button>
+              <RiShoppingCartLine />
+            </button>
+            <button>
+              <IoMdHeartEmpty />
+            </button>
+          </div>
+        </div>
       </div>
     </motion.div>
   );
