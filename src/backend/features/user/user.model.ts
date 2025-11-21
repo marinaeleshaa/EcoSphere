@@ -5,6 +5,7 @@ export interface IUser {
 	email: string;
 	name: string;
 	passwordHash: string;
+	userType: string;
 	createdAt?: Date;
 }
 
@@ -15,6 +16,7 @@ const userSchema = new Schema<IUserDocument>(
 		email: { type: String, required: true, unique: true },
 		name: { type: String, required: true },
 		passwordHash: { type: String, required: true },
+		userType: { type: String, required: true },
 	},
 	{ timestamps: true }
 );
