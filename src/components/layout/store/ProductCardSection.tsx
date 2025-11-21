@@ -1,4 +1,3 @@
-import React from "react";
 import ProductCard from "./ProductCard";
 
 const ProductCardSection = () => {
@@ -98,7 +97,7 @@ const ProductCardSection = () => {
   return (
     <section>
       <div className="w-[80%] mx-auto">
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-15">
           {products.map((product, index) => (
               
           <ProductCard key={index} {...product} />
