@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { RiShoppingCartLine } from "react-icons/ri";
+import { IoMdHeartEmpty } from "react-icons/io";
+
 interface Props {
   shopName: string;
   shopSubtitle: string;
@@ -24,7 +27,7 @@ const ProductCard = (props: Props) => {
 
   return (
     <motion.div
-      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden"
+      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10"
       initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
@@ -43,12 +46,12 @@ const ProductCard = (props: Props) => {
             <p className="line-clamp-1 font-medium text-sm leading-tight">
               {shopName}
             </p>
-            <p className="text-xs text-stone-700 line-clamp-1">
+            <p className="text-xs text-secondary-foreground line-clamp-1">
               {shopSubtitle}
             </p>
           </div>
         </div>
-        <div className="rounded-full w-3 h-3 bg-[#527b50] shrink-0 mr-5"></div>
+        <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
       </div>
 
       {/* product img - fixed height */}
@@ -65,15 +68,28 @@ const ProductCard = (props: Props) => {
       {/* product details - flexible but controlled */}
       <div className="p-5 flex flex-col flex-1 min-h-0">
         <p className="text-lg font-semibold line-clamp-1 mb-1">{productName}</p>
-        <p className="text-sm text-stone-700 line-clamp-1 mb-2">
+        <p className="text-sm text-secondary-foreground/80 line-clamp-1 mb-2">
           {productSubtitle}
         </p>
-        <p className="text-sm text-stone-600 line-clamp-3 mb-3  ">
+        <div className="grow ">
+
+        <p className="text-sm text-secondary-foreground/90 line-clamp-3 mb-3   ">
           {productDescription}
         </p>
-        <p className="text-lg font-semibold mt-auto ml-10">
-          ${productPrice.toFixed(2)}
-        </p>
+        </div>
+        <div className="flex justify-between items-center">
+          <p className="text-lg font-semibold mt-auto ml-10">
+            ${productPrice.toFixed(2)}
+          </p>
+          <div className=" flex gap-3">
+            <button>
+              <RiShoppingCartLine />
+            </button>
+            <button>
+              <IoMdHeartEmpty />
+            </button>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

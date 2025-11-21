@@ -3,3 +3,14 @@ export interface TokenPayload {
   email: string;
   role: string;
 }
+
+export enum UserRole {
+  CUSTOMER = "customer",
+  Organizer = "organizer",
+  ADMIN = "admin",
+}
+
+export enum Gender {
+  MALE = "male",
+  FEMALE = "female",
+}
