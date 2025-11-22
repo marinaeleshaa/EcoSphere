@@ -21,7 +21,7 @@ const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
 
         {/* Overlay Box */}
         <motion.div
-          className="relative left-1/2 -translate-x-1/2 -translate-y-1/3 w-[75%] backdrop-blur-2xl bg-linear-to-br from-white/10 to-transparent rounded-xl p-6 flex flex-col items-center text-center shadow-lg"
+          className="relative left-1/2 -translate-x-1/2 -translate-y-1/3 w-[75%] bg-primary/50 backdrop-blur-lg to-transparent rounded-xl p-6 flex flex-col items-center text-center shadow-lg"
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           //   viewport={{ once: true }}
