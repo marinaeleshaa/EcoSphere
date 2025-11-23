@@ -1,10 +1,14 @@
-import FavHero from '@/components/layout/fav/FavHero'
-import React from 'react'
+import CardsView from "@/components/layout/fav/CardsView";
+import FavHero from "@/components/layout/fav/FavHero";
+import React from "react";
 
 export default function Fav() {
   return (
     <div>
-      <FavHero/>
+      <FavHero />
+      <div className="w-[80%] mx-auto mt-10">
+        <CardsView />
+      </div>
     </div>
-  )
+  );
 }
