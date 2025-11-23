@@ -1,7 +1,10 @@
+import FavHero from '@/components/layout/fav/FavHero'
 import React from 'react'
 
 export default function Fav() {
   return (
-    <div>Fav page</div>
+    <div>
+      <FavHero/>
+    </div>
   )
 }

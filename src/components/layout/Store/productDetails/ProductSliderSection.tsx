@@ -14,7 +14,7 @@ const ProductSliderSection = () => {
         className="overflow-x-auto scroll-smooth scrollbar-hide py-5"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <div className="flex flex-nowrap gap-5 ">
+        <div className="flex flex-nowrap gap-5 py-5 ">
           {products.map((p) => (
             <div key={p.id} className="shrink-0 w-[260px]">
               <ProductCard {...p} />
