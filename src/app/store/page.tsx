@@ -1,7 +1,7 @@
-import StoreSlider from "@/components/layout/Store/StoreSlider";
-import StoreHero from "@/components/layout/Store/StoreHero";
+import StoreSlider from "@/components/layout/store/StoreSlider";
+import StoreHero from "@/components/layout/store/StoreHero";
 import React from "react";
-import ProductCardSection from "@/components/layout/Store/ProductCardSection";
+import ProductCardSection from "@/components/layout/store/ProductCardSection";
 
 export default function Store() {
   return (
