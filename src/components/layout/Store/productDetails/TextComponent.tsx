@@ -1,7 +1,6 @@
 "use client";
 import { IProduct } from "@/types/ProductType";
 import { motion } from "framer-motion";
-import { Link } from "lucide-react";
 import React from "react";
 
 const TextComponent = ({ product }: { product: IProduct }) => {
@@ -9,7 +8,7 @@ const TextComponent = ({ product }: { product: IProduct }) => {
     "description"
   );
   return (
-    <section className="my-10">
+    <section className="my-10 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

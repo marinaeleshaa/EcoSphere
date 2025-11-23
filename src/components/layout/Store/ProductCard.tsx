@@ -25,9 +25,7 @@ const ProductCard = (props: IProduct) => {
   return (
     <motion.div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer"
-      initial={{ opacity: 0, y: 80 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+   
       onClick={() => router.push(`/store/${id}`)}
     >
       {/* header - fixed height */}

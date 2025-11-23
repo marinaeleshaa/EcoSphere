@@ -26,12 +26,12 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   };
 
   return (
-    <section>
+    <section className="">
       <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="flex flex-col justify-center items-center md:flex-row gap-10 my-30">
+      className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 ">
         {/* product image */}
         <div className="relative shadow-lg rounded-lg  ">
           <Image
