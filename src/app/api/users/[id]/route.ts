@@ -34,29 +34,10 @@ export const PUT = async (
 ): Promise<NextResponse<UserResponse>> => {
   const { id } = await context.params;
   const body = await _req.json();
-  const { email, name, password } = body as {
-    email?: string;
-    name?: string;
-    password?: string;
-  };
-
-  const updateData: Record<string, string> = {};
-  if (typeof email === "string") updateData.email = email;
-  if (typeof name === "string") updateData.name = name;
-  if (typeof password === "string")
-    updateData.password = await hashPassword(password);
-
-  if (Object.keys(updateData).length === 0) {
-    return createErrorResponse(
-      "No valid fields provided for update",
-      "No valid fields provided for update",
-      400
-    );
-  }
 
   try {
     const controller = rootContainer.resolve(UserController);
-    const result = await controller.updateById(id, updateData);
+    const result = await controller.updateById(id, body);
     return handleControllerResponse(
       result,
       "User updated successfully",
@@ -74,8 +55,8 @@ export const PATCH = async (
 ): Promise<NextResponse<UserResponse>> => {
   const { id } = await context.params;
   const body = await _req.json();
-  const { favoritesIds } = body as { favoritesIds?: string[] };
-  if (!Array.isArray(favoritesIds)) {
+  const { favoritesIds } = body as { favoritesIds?: string };
+  if (!favoritesIds) {
     return createErrorResponse(
       "Invalid favoritesIds provided",
       "Invalid favoritesIds provided",
