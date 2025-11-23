@@ -25,11 +25,11 @@ class UserRepository {
   async updateById(id: string, data: Partial<IUser>): Promise<IUser | null> {
     await DBInstance.getConnection();
     const user = await this.getById(id);
-    if (data.password && user) {
-      user.password = await bcrypt.hash(data.password, 10);
-      return await user.save();
+    if (!user) {
+      return null;
     }
-    return await UserModel.findByIdAndUpdate(id, data, { new: true });
+    Object.assign(user, data);
+    return await user.save();
   }
 
   async updateFavorites(id: string, item: string): Promise<IUser | null> {

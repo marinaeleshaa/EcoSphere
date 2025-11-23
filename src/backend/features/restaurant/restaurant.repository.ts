@@ -68,11 +68,11 @@ class RestaurantRepository {
   ): Promise<IRestaurant | null> {
     await DBInstance.getConnection();
     const restaurant = await this.getById(id);
-    if (data.password && restaurant) {
-      restaurant.password = await bcrypt.hash(data.password, 10);
-      return await restaurant.save();
+    if (!restaurant) {
+      return null;
     }
-    return await RestaurantModel.findByIdAndUpdate(id, data, { new: true });
+    Object.assign(restaurant, data);
+    return await restaurant.save();
   }
 
   async deleteById(id: string): Promise<IRestaurant | null> {
