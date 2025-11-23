@@ -32,6 +32,7 @@ export interface IRestaurant extends Document {
 	avatar?: string;
 	createdAt?: Date;
 	updatedAt?: Date;
+	comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
 export const ratingSchema = new Schema<IRating>(
