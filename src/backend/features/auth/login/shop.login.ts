@@ -4,7 +4,7 @@ import { ILoginStrategy } from "./login.service";
 @injectable()
 class ShopLoginStrategy implements ILoginStrategy {
 	constructor() {}
-	login<T, V>(date: T): Promise<V> {
+	login(date: any): Promise<any> {
 		console.log(date);
 		throw new Error("Method not implemented, shop login");
 	}
