@@ -1,68 +1,84 @@
 import { injectable } from "tsyringe";
 import { prisma } from "@/lib/prisma";
 import { Gender, User } from "@/generated/prisma/client";
+import { IUser, UserModel } from "../user/user.model";
+import { DBInstance } from "@/backend/config/dbConnect";
+import { ObjectId } from "mongoose";
+import { RegisterRequestDTO } from "./dto/user.dto";
 
 export interface IAuthRepository {
-  register(
-    email: string,
-    name: string,
-    password: string,
-    birthDate: string,
-    address: string,
-    avatar: string,
-    gender: Gender,
-    phoneNumber: string
-  ): Promise<User>;
-  findByEmail(email: string): Promise<User | null>;
-  me(): Promise<User[]>;
+	register(
+		email: string,
+		name: string,
+		password: string,
+		birthDate: string,
+		address: string,
+		avatar: string,
+		gender: Gender,
+		phoneNumber: string
+	): Promise<User>;
+	existsByEmail(email: string): Promise<{ _id: ObjectId } | null>;
+	saveNewUser(data: RegisterRequestDTO): Promise<Partial<IUser>>;
+	findByEmail(email: string): Promise<IUser | null>;
+	me(): Promise<User[]>;
 }
 
 @injectable()
 class AuthRepository {
-  async register(
-    email: string,
-    name: string,
-    password: string,
-    birthDate: string,
-    address: string,
-    avatar: string,
-    gender: Gender,
-    phoneNumber: string
-  ): Promise<User | null> {
-    return (await prisma.user.create({
-      data: {
-        email,
-        name,
-        password,
-        birthDate,
-        address: address || null,
-        avatar: avatar || null,
-        gender,
-        phoneNumber,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        phoneNumber: true,
-        address: true,
-        avatar: true,
-        birthDate: true,
-        createdAt: true,
-        points: true,
-        role: true,
-        gender: true,
-      },
-    })) as User;
-  }
+	async register(
+		email: string,
+		name: string,
+		password: string,
+		birthDate: string,
+		address: string,
+		avatar: string,
+		gender: Gender,
+		phoneNumber: string
+	): Promise<User | null> {
+		return (await prisma.user.create({
+			data: {
+				email,
+				name,
+				password,
+				birthDate,
+				address: address || null,
+				avatar: avatar || null,
+				gender,
+				phoneNumber,
+			},
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				phoneNumber: true,
+				address: true,
+				avatar: true,
+				birthDate: true,
+				createdAt: true,
+				points: true,
+				role: true,
+				gender: true,
+			},
+		})) as User;
+	}
 
-  async findByEmail(email: string): Promise<User | null> {
-    return await prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
-  }
+	async existsByEmail(email: string) {
+		await DBInstance.getConnection();
+
+		return await UserModel.exists({ email }).lean().exec();
+	}
+
+	async saveNewUser(data: RegisterRequestDTO): Promise<Partial<IUser>> {
+		const savedUser = await UserModel.create(data);
+		return savedUser;
+	}
+
+	async findByEmail(email: string): Promise<Partial<IUser> | null> {
+		await DBInstance.getConnection();
+
+		console.log({ email });
+		return await UserModel.findOne({ email }).select("+password").exec();
+	}
 }
 
 export default AuthRepository;
