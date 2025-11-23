@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 import { ILoginStrategy } from "./login.service";
 import { type IAuthRepository } from "../auth.repository";
 import type { LoginRequestDTO, LoginResponseDTO } from "../dto/user.dto";
-import { generateToken, OMIT } from "@/backend/utils/helpers";
+import { generateToken } from "@/backend/utils/helpers";
 import { mapUserToPublicProfile } from "../mappers";
 @injectable()
 class UserLoginStrategy implements ILoginStrategy {
@@ -10,7 +10,7 @@ class UserLoginStrategy implements ILoginStrategy {
 		@inject("IAuthRepository") private readonly authRepository: IAuthRepository
 	) {}
 	async login(data: LoginRequestDTO): Promise<LoginResponseDTO> {
-		const user = await this.authRepository.findByEmail(data.email);
+		const user = await this.authRepository.findUserByEmail(data.email);
 
 		if (!user) throw new Error("User not found");
 		if (!(await user.comparePassword(data.password)))

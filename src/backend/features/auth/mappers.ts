@@ -1,5 +1,6 @@
+import { IRestaurant } from "../restaurant/restaurant.model";
 import { IUser, UserRole } from "../user/user.model";
-import { LoginRequestDTO, RegisterResponseDTO } from "./dto/user.dto";
+import { RegisterResponseDTO } from "./dto/user.dto";
 
 export type LoginCommand = {
 	email: string;
@@ -10,14 +11,6 @@ export type LoginCommand = {
 export type RegisterCommand = {
 	user: Pick<IUser, "lastName" | "email" | "role" | "_id">;
 } & { token: string };
-
-export const mapLoginDtoToCommand = (dto: LoginRequestDTO): LoginCommand => {
-	return {
-		email: dto.email.toLowerCase(),
-		password: dto.password,
-		userType: mapStringToEnum(UserRole, dto.userType),
-	};
-};
 
 export const mapRegisterResultToDto = (
 	command: RegisterCommand
@@ -42,12 +35,11 @@ export const mapUserToPublicProfile = (user: IUser) => {
 	};
 };
 
-const mapStringToEnum = <T extends { [key: string]: string | number }>(
-	enumObj: T,
-	value: string
-): T[keyof T] => {
-	if (!Object.values(enumObj).includes(value as T[keyof T])) {
-		throw new Error(`Invalid enum value: ${value}`);
-	}
-	return value as T[keyof T];
+export const mapShopToPublicProfile = (shop: IRestaurant) => {
+	return {
+		id: shop._id!,
+		email: shop.email,
+		lastName: shop.name,
+		role: "shop",
+	};
 };

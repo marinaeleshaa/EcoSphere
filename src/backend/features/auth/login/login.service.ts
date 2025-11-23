@@ -13,7 +13,7 @@ class LoginService {
 	) {}
 
 	async login(data: LoginRequestDTO) {
-		const strategy = this.strategyFactory.getStrategy(data.userType);
+		const strategy = this.strategyFactory.getStrategy(data.loginType);
 		return await strategy.login(data);
 	}
 }

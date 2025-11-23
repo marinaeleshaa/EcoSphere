@@ -4,7 +4,7 @@ import { UserRole } from "../../user/user.model";
 export type LoginRequestDTO = {
 	email: string;
 	password: string;
-	userType: UserRole;
+	loginType: LoginTypes;
 };
 
 export type LoginResponseDTO = {
@@ -21,10 +21,12 @@ export type RegisterRequestDTO = {
 	avatar: string;
 	gender: string;
 	phoneNumber: string;
-	role: UserRole;
+	role: LoginTypes;
 };
 
 export type RegisterResponseDTO = {
 	token: string;
 	user: TokenPayload;
 };
+
+export type LoginTypes = UserRole | "shop";

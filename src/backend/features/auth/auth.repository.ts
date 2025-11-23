@@ -1,10 +1,9 @@
 import { injectable } from "tsyringe";
-import { prisma } from "@/lib/prisma";
-import { Gender, User } from "@/generated/prisma/client";
 import { IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { ObjectId } from "mongoose";
 import { RegisterRequestDTO } from "./dto/user.dto";
+import { IRestaurant, RestaurantModel } from "../restaurant/restaurant.model";
 
 export interface IAuthRepository {
 	register(
@@ -19,7 +18,8 @@ export interface IAuthRepository {
 	): Promise<User>;
 	existsByEmail(email: string): Promise<{ _id: ObjectId } | null>;
 	saveNewUser(data: RegisterRequestDTO): Promise<IUser>;
-	findByEmail(email: string): Promise<IUser | null>;
+	findUserByEmail(email: string): Promise<IUser | null>;
+	findShopByEmail(email: string): Promise<IRestaurant>;
 	me(): Promise<User[]>;
 }
 
@@ -78,6 +78,12 @@ class AuthRepository {
 
 		console.log({ email });
 		return await UserModel.findOne({ email }).select("+password").exec();
+	}
+
+	async findShopByEmail(email: string): Promise<IRestaurant> {
+		await DBInstance.getConnection();
+
+		return await RestaurantModel.findOne({ email }).select("+password").exec();
 	}
 }
 
