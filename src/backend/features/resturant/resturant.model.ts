@@ -1,35 +1,87 @@
-import mongoose, {model, Schema} from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
-export type IResturant = {
-  _id?: string;
-  name: string;
-  email: string;
-  passwordHash: string;
-  location: string;
-  rating: number;
-  workingHours: string;
-  phoneNumber: string;
-  avatar?: string;
-  description: string;
-  createdAt?: Date;
+export interface IRating extends Document {
+	userId: string;
+	rate: number;
+	review?: string;
 }
 
-export type IResturantDocument = IResturant & Document;
+export interface IMenuItem extends Document {
+	title: string;
+	subtitle: string;
+	price: number;
+	avatar?: string;
+	availableOnline: boolean;
+	itemRating: IRating[];
+}
 
-const resturantSchema = new Schema<IResturantDocument>(
-  {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    passwordHash: { type: String, required: true },
-    location: { type: String, required: true },
-    rating: { type: Number, required: true, default: 0 },
-    workingHours: { type: String, required: true },
-    phoneNumber: { type: String, required: true },
-    avatar: { type: String, required: false },
-    description: { type: String, required: true },
-  },
-  { timestamps: true }
+export interface IRestaurant extends Document {
+	_id?: string;
+	name: string;
+	email: string;
+	password: string;
+	locate: string;
+	workingHours: string;
+	phoneNumber: string;
+	description: string;
+	subscribed: boolean;
+	subscriptionPeriod: Date;
+	menus?: IMenuItem[];
+	restaurantRating?: IRating[];
+	avatar?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
+}
+
+export const ratingSchema = new Schema<IRating>(
+	{
+		userId: { type: String, required: true },
+		rate: { type: Number, required: true },
+		review: { type: String, required: false },
+	},
+	{ _id: false }
 );
 
-export const ResturantModel =
-  mongoose.models.Resturant || model<IResturantDocument>("Resturant", resturantSchema);
+export const menuItemSchema = new Schema<IMenuItem>({
+	title: { type: String, required: true },
+	subtitle: { type: String, required: true },
+	price: { type: Number, required: true },
+	avatar: { type: String, required: false },
+});
+
+const restaurantSchema = new Schema<IRestaurant>(
+	{
+		name: { type: String, required: true },
+		email: { type: String, required: true, unique: true },
+		password: { type: String, required: true },
+		location: { type: String, required: true },
+		workingHours: { type: String, required: true },
+		phoneNumber: { type: String, required: true },
+		avatar: { type: String, required: false },
+		description: { type: String, required: true },
+		subscribed: { type: Boolean, default: false },
+		subscriptionPeriod: { type: Date, required: false },
+		menus: { type: [menuItemSchema], default: [] },
+		restaurantRating: { type: [ratingSchema], default: [] },
+	},
+	{ timestamps: true }
+);
+
+restaurantSchema.pre("save", async function (next) {
+	this.createdAt ??= new Date();
+	if (!this.isModified("password")) next();
+
+	this.password = await bcrypt.hash(this.password, 10);
+	next();
+});
+
+restaurantSchema.methods.comparePassword = async function (
+	candidatePassword: string
+): Promise<boolean> {
+	return await bcrypt.compare(candidatePassword, this.password);
+};
+
+export const RestaurantModel =
+	mongoose.models.Restaurant ||
+	model<IRestaurant>("Restaurant", restaurantSchema);
