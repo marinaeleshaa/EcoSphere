@@ -4,10 +4,10 @@ import { IUser} from "./user.model";
 
 export interface IUserService {
   getAll(): Promise<IUser[]>;
-  getById(id: string): Promise<IUser | null>;
-  updateById(id: string, data: Partial<IUser>): Promise<IUser | null>;
-  updateFavorites(id: string, data: string): Promise<IUser | null>;
-  deleteById(id: string): Promise<IUser | null>;
+  getById(id: string): Promise<IUser>;
+  updateById(id: string, data: Partial<IUser>): Promise<IUser>;
+  updateFavorites(id: string, data: string): Promise<IUser>;
+  deleteById(id: string): Promise<IUser>;
 }
 
 @injectable()
@@ -21,20 +21,20 @@ class UserService {
     return users;
   }
 
-  async getById(id: string): Promise<IUser | null> {
+  async getById(id: string): Promise<IUser> {
     return await this.userRepository.getById(id);
   }
 
   // Needs to Updated later when we have Avatar Upload functionality
-  async updateById(id: string, data: Partial<IUser>): Promise<IUser | null> {
+  async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     return await this.userRepository.updateById(id, data);
   }
 
-  async updateFavorites(id: string, data: string): Promise<IUser | null> {
+  async updateFavorites(id: string, data: string): Promise<IUser> {
     return await this.userRepository.updateFavorites(id, data);
   }
 
-  async deleteById(id: string): Promise<IUser | null> {
+  async deleteById(id: string): Promise<IUser> {
     return await this.userRepository.deleteById(id);
   }
 }

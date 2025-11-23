@@ -4,10 +4,10 @@ import { DBInstance } from "@/backend/config/dbConnect";
 
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
-  getById(id: string): Promise<IUser | null>;
-  updateById(id: string, data: Partial<IUser>): Promise<IUser | null>;
-  updateFavorites(id: string, data: string): Promise<IUser | null>;
-  deleteById(id: string): Promise<IUser | null>;
+  getById(id: string): Promise<IUser>;
+  updateById(id: string, data: Partial<IUser>): Promise<IUser>;
+  updateFavorites(id: string, data: string): Promise<IUser>;
+  deleteById(id: string): Promise<IUser>;
 }
 
 @injectable()
@@ -16,22 +16,29 @@ class UserRepository {
     await DBInstance.getConnection();
     return await UserModel.find({}, { password: 0 });
   }
-  async getById(id: string): Promise<IUser | null> {
+
+  async getById(id: string): Promise<IUser> {
     await DBInstance.getConnection();
-    return await UserModel.findById(id, { password: 0 });
+    const user = await UserModel.findById(id, { password: 0 });
+
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+
+    return user;
   }
 
-  async updateById(id: string, data: Partial<IUser>): Promise<IUser | null> {
+  async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     await DBInstance.getConnection();
     const user = await this.getById(id);
     if (!user) {
-      return null;
+      throw new Error(`User with id ${id} not found`);
     }
     Object.assign(user, data);
     return await user.save();
   }
 
-  async updateFavorites(id: string, item: string): Promise<IUser | null> {
+  async updateFavorites(id: string, item: string): Promise<IUser> {
     await DBInstance.getConnection();
 
     // Attempt to add the item (if not present)
@@ -55,9 +62,13 @@ class UserRepository {
     return updatedUser;
   }
 
-  async deleteById(id: string): Promise<IUser | null> {
+  async deleteById(id: string): Promise<IUser> {
     await DBInstance.getConnection();
-    return await UserModel.findByIdAndDelete(id);
+    const user = await this.getById(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    return await user.deleteOne();
   }
 }
 

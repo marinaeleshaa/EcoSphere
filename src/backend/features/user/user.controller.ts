@@ -14,19 +14,19 @@ class UserController {
     return users;
   }
 
-  async getById(id: string): Promise<IUser | null> {
+  async getById(id: string): Promise<IUser> {
     const user = await this.userService.getById(id);
     return user;
   }
-  async updateById(id: string, data: Partial<IUser>): Promise<IUser | null> {
+  async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     const user = await this.userService.updateById(id, data);
     return user;
   }
-  async updateFavorites(id: string, data: string): Promise<IUser | null> {
+  async updateFavorites(id: string, data: string): Promise<IUser> {
     const user = await this.userService.updateFavorites(id, data);
     return user;
   }
-  async deleteById(id: string): Promise<IUser | null> {
+  async deleteById(id: string): Promise<IUser> {
     const user = await this.userService.deleteById(id);
     return user;
   }

@@ -14,16 +14,10 @@ export interface IRestaurantRepository {
     description: string
   ): Promise<IRestaurant>;
   getAll(): Promise<IRestaurant[]>;
-  getById(id: string): Promise<IRestaurant | null>;
-  updateById(
-    id: string,
-    data: Partial<IRestaurant>
-  ): Promise<IRestaurant | null>;
-  updateFavoritedBy(
-    userId: string,
-    restaurantId: string
-  ): Promise<IRestaurant | null>;
-  deleteById(id: string): Promise<IRestaurant | null>;
+  getById(id: string): Promise<IRestaurant>;
+  updateById(id: string, data: Partial<IRestaurant>): Promise<IRestaurant>;
+  updateFavoritedBy(userId: string, restaurantId: string): Promise<IRestaurant>;
+  deleteById(id: string): Promise<IRestaurant>;
 }
 
 @injectable()
@@ -56,27 +50,35 @@ class RestaurantRepository {
     return await RestaurantModel.find({}, { password: 0 });
   }
 
-  async getById(id: string): Promise<IRestaurant | null> {
+  async getById(id: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
-    return await RestaurantModel.findById(id, { password: 0 });
+    const restaurant = await RestaurantModel.findById(id, { password: 0 });
+    if (!restaurant) {
+      throw new Error(`Restaurant with id ${id} not found`);
+    }
+    return restaurant;
   }
 
   async updateById(
     id: string,
     data: Partial<IRestaurant>
-  ): Promise<IRestaurant | null> {
+  ): Promise<IRestaurant> {
     await DBInstance.getConnection();
     const restaurant = await this.getById(id);
     if (!restaurant) {
-      return null;
+      throw new Error(`Restaurant with id ${id} not found`);
     }
     Object.assign(restaurant, data);
     return await restaurant.save();
   }
 
-  async deleteById(id: string): Promise<IRestaurant | null> {
+  async deleteById(id: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
-    return await RestaurantModel.findByIdAndDelete(id);
+    const restaurant = await this.getById(id);
+    if (!restaurant) {
+      throw new Error(`Restaurant with id ${id} not found`);
+    }
+    return await restaurant.deleteOne();
   }
 }
 

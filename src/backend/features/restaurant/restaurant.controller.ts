@@ -33,16 +33,16 @@ class RestaurantController {
   async getAll(): Promise<IRestaurant[]> {
     return await this.restaurantService.getAll();
   }
-  async getById(id: string): Promise<IRestaurant | null> {
+  async getById(id: string): Promise<IRestaurant> {
     return await this.restaurantService.getById(id);
   }
   async updateById(
     id: string,
     data: Partial<IRestaurant>
-  ): Promise<IRestaurant | null> {
+  ): Promise<IRestaurant> {
     return await this.restaurantService.updateById(id, data);
   }
-  async deleteById(id: string): Promise<IRestaurant | null> {
+  async deleteById(id: string): Promise<IRestaurant> {
     return await this.restaurantService.deleteById(id);
   }
 }
