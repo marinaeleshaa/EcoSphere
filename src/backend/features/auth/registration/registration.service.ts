@@ -14,7 +14,6 @@ class RegistrationService {
 	) {}
 
 	async register(data: RegisterRequestDTO): Promise<RegisterResponseDTO> {
-		console.log(data);
 		const strategy = this.strategyFactory.getStrategy(data.role);
 		return await strategy.register(data);
 	}

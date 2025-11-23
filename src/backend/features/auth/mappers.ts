@@ -18,7 +18,7 @@ export const mapRegisterResultToDto = (
 	return {
 		token: command.token,
 		user: {
-			id: command.user._id!.toString(),
+			_id: command.user._id!.toString(),
 			email: command.user.email,
 			lastName: command.user.lastName,
 			role: command.user.role,
@@ -28,7 +28,7 @@ export const mapRegisterResultToDto = (
 
 export const mapUserToPublicProfile = (user: IUser) => {
 	return {
-		id: user._id!.toString(),
+		_id: user._id!.toString(),
 		email: user.email,
 		lastName: user.lastName,
 		role: user.role,
@@ -37,7 +37,7 @@ export const mapUserToPublicProfile = (user: IUser) => {
 
 export const mapShopToPublicProfile = (shop: IRestaurant) => {
 	return {
-		id: shop._id!,
+		_id: shop._id!,
 		email: shop.email,
 		lastName: shop.name,
 		role: "shop",

@@ -11,7 +11,6 @@ class EndUserRegistration implements IRegistrationStrategy {
 		@inject("IAuthRepository") private readonly authRepository: IAuthRepository
 	) {}
 	async register(data: RegisterRequestDTO): Promise<RegisterResponseDTO> {
-		console.log(data);
 		const isUserExists = await this.authRepository.existsByEmail(data.email);
 		if (isUserExists) throw new Error("email already exists.");
 		const savedUser = await this.authRepository.saveNewUser(data);

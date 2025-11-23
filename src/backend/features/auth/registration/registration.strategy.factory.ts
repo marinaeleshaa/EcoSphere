@@ -19,15 +19,15 @@ class RegistrationFactory implements IRegistrationFactory {
 	getStrategy(userType: string): IRegistrationStrategy {
 		console.log(userType);
 		switch (userType) {
-			case "endUser":
-				return this.userStrategy;
-			case "organizer":
-				return this.organizerStrategy;
-			case "shop":
-				return this.shopStrategy;
-			default:
-				throw new Error("Invalid user type");
-		}
+      case "customer":
+        return this.userStrategy;
+      case "organizer":
+        return this.organizerStrategy;
+      case "shop":
+        return this.shopStrategy;
+      default:
+        throw new Error("Invalid user type");
+    }
 	}
 }
 export { RegistrationFactory, type IRegistrationFactory };
