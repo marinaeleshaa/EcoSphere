@@ -9,8 +9,10 @@ export default function Fav() {
       <FavHero />
       <div className="w-[80%] mx-auto mt-10">
         <CardsView />
-        <FavCardsSection />
+        
+      <FavCardsSection />
       </div>
+
     </div>
   );
 }

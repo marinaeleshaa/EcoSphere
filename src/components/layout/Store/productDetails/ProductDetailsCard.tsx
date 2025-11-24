@@ -4,6 +4,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/Redux/Store";
+import { isInFavSelector, toggleFav } from "@/Redux/fav/FavSlice";
+import { toast } from "sonner";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const {
@@ -18,7 +22,16 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   } = product;
 
   const [count, setCount] = useState(1);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const isFav = useSelector((state: RootState) => isInFavSelector(state, id));
+  const dispatch=useDispatch<AppDispatch>()
+  const handleFav = () => {
+    dispatch(toggleFav(product));
+    if (isFav) {
+      toast.success("Removed from favorites");
+    } else {
+      toast.success("Added to favorites");
+    }
+  }
 
   const handleIncrement = () => setCount((prev) => prev + 1);
   const handleDecrement = () => {
@@ -159,16 +172,16 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
               Add to Cart
             </button>
             <button
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={handleFav}
               className={`p-3 rounded-lg border-2 transition-colors ${
-                isFavorite
+                isFav
                   ? "bg-primary border-primary text-primary-foreground"
                   : "border-primary text-primary hover:bg-primary/10"
               }`}
               aria-label="Add to favorites"
             >
               <Heart
-                className={`w-6 h-6 ${isFavorite ? "fill-current" : ""}`}
+                className={`w-6 h-6 ${isFav ? "fill-current" : ""}`}
               />
             </button>
           </div>
