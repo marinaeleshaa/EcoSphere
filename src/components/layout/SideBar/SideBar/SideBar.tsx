@@ -96,7 +96,7 @@ export default function SideBar() {
                             <SidebarMenuButton asChild >
                                 <Link href="/fav">
                                     <Heart />
-                                    <span>Favourite</span>
+                                    <span>Favorite</span>
                                     <SidebarMenuBadge><GetFavCount /></SidebarMenuBadge>
                                 </Link>
                             </SidebarMenuButton>
