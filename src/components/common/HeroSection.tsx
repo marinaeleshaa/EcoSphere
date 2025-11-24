@@ -16,7 +16,7 @@ const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
           width={1000}
           height={1000}
           alt="hero"
-          className=" mx-auto h-[450px] relative"
+          className=" w-full object-cover h-[450px] relative"
         />
 
         {/* Overlay Box */}
