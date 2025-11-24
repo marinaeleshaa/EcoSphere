@@ -5,10 +5,12 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/Redux/Store";
+import { isInFavSelector, toggleFav } from "@/Redux/fav/FavSlice";
+import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 
-
-
-const ProductCard = (props: IProduct) => {
+const ProductCard = (product: IProduct) => {
   const {
     id,
     shopName,
@@ -18,14 +20,24 @@ const ProductCard = (props: IProduct) => {
     productPrice,
     productSubtitle,
     productDescription,
-  } = props;
+  } = product;
 
   const router = useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const isFav = useSelector((state: RootState) =>
+    isInFavSelector(state, product.id)
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleFav = (e: any) => {
+    e.stopPropagation();
+    dispatch(toggleFav(product));
+  };
 
   return (
     <motion.div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer"
-   
       onClick={() => router.push(`/store/${id}`)}
     >
       {/* header - fixed height */}
@@ -76,12 +88,15 @@ const ProductCard = (props: IProduct) => {
           <p className="text-lg font-semibold mt-auto ml-10">
             ${productPrice.toFixed(2)}
           </p>
-          <div className=" flex gap-3">
-            <button>
+          <div className=" flex gap-3 text-2xl">
+            <button className="cursor-pointer hover:scale-130 transition duration-300">
               <RiShoppingCartLine />
             </button>
-            <button>
-              <IoMdHeartEmpty />
+            <button
+              onClick={handleFav}
+              className="cursor-pointer hover:scale-130 transition duration-300 text-3xl"
+            >
+              {isFav ? <IoHeartCircleSharp /> : <IoHeartCircleOutline />}{" "}
             </button>
           </div>
         </div>
