@@ -1,6 +1,6 @@
 "use client"
 
-import { RootState } from "@/Redux/Store"
+import { RootState } from "@/frontend/Redux/Store"
 import { useSelector } from "react-redux"
 
 const FavCardsSection = () => {

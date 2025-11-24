@@ -1,6 +1,6 @@
 "use client";
-import { toggleFavView } from "@/Redux/fav/FavSlice";
-import { AppDispatch, RootState } from "@/Redux/Store";
+import { toggleFavView } from "@/frontend/Redux/Slice/FavSlice";
+import { RootState, AppDispatch } from "@/frontend/Redux/Store";
 import { CiGrid2H, CiGrid2V } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 

@@ -1,6 +1,6 @@
 import StoreSlider from "@/components/layout/Store/StoreSlider";
 import ProductCardSection from "@/components/layout/Store/ProductCardSection";
-import HeroSection from "@/components/common/HeroSection";
+import HeroSection from "@/components/layout/common/HeroSection";
 
 export default function Store() {
   return (

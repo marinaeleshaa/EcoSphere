@@ -14,6 +14,9 @@ import {
     SidebarTrigger,
     SidebarMenuBadge
 } from "@/components/ui/sidebar"
+import { MdOutlineEventRepeat } from "react-icons/md";
+import { MdOutlineAddToPhotos } from "react-icons/md";
+import { RxDashboard } from "react-icons/rx";
 import Link from 'next/link'
 import ThemeBtn from '../ThemeBtn/ThemeBtn'
 import UserBtn from '../UserBtn/UserBtn'
@@ -61,7 +64,23 @@ const items = [
     },
 ]
 
-
+const dashboardItems=[
+    {
+        title: "OverView",
+        url: "/",
+        icon: RxDashboard,
+    },
+    {
+        title: "Add Event",
+        url: "/",
+        icon: MdOutlineAddToPhotos,
+    },
+    {
+        title: "All Events",
+        url: "/",
+        icon: MdOutlineEventRepeat,
+    },
+]
 
 export default function SideBar() {
     return (
@@ -75,6 +94,24 @@ export default function SideBar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {items.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <Link href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+
+                    </SidebarGroupContent>
+                </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {dashboardItems.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton asChild>
                                         <Link href={item.url}>
@@ -105,7 +142,7 @@ export default function SideBar() {
                             <SidebarMenuButton asChild >
                                 <Link href="/cart">
                                     <ShoppingCart />
-                                    <span>cart</span>
+                                    <span>Cart</span>
                                     <SidebarMenuBadge>24</SidebarMenuBadge>
                                 </Link>
                             </SidebarMenuButton>
