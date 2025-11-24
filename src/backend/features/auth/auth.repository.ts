@@ -18,6 +18,7 @@ export interface IAuthRepository {
   ): Promise<IUser>;
   existsByEmail(email: string): Promise<{ _id: ObjectId } | null>;
   saveNewUser(data: RegisterRequestDTO): Promise<IUser>;
+  saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant>;
   findUserByEmail(email: string): Promise<IUser | null>;
   findShopByEmail(email: string): Promise<IRestaurant>;
   me(): Promise<IUser[]>;
@@ -55,11 +56,15 @@ class AuthRepository {
   }
 
   async saveNewUser(data: RegisterRequestDTO): Promise<IUser> {
-    const savedUser = await UserModel.create(data);
-    return savedUser;
+    await DBInstance.getConnection();
+    return await UserModel.create(data);
+  }
+  async saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant> {
+    await DBInstance.getConnection();
+    return await RestaurantModel.create(data);
   }
 
-  async findUserByEmail(email: string): Promise<Partial<IUser> | null> {
+  async findUserByEmail(email: string): Promise<IUser> {
     await DBInstance.getConnection();
 
     console.log({ email });
