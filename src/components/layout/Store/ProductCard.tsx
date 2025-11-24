@@ -6,8 +6,8 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/Redux/Store";
-import { isInFavSelector, toggleFav } from "@/Redux/fav/FavSlice";
+import { AppDispatch, RootState } from "@/frontend/Redux/store";
+import { isInFavSelector, toggleFav } from "@/frontend/Redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 

@@ -1,6 +1,6 @@
 import { IProduct } from "@/types/ProductType";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../Store";
+import { RootState } from "@/frontend/Redux/store";
 
 interface FavState {
   view: "grid" | "horizontal";

@@ -78,7 +78,7 @@ export default function UserBtn() {
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
                                 <Sparkles />
-                                Upgrade to Pro
+                                Subscribe
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
