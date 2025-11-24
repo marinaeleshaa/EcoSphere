@@ -14,7 +14,6 @@ import {
     SidebarTrigger,
     SidebarMenuBadge
 } from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Link from 'next/link'
 import ThemeBtn from '../ThemeBtn/ThemeBtn'
 import UserBtn from '../UserBtn/UserBtn'
@@ -61,6 +60,8 @@ const items = [
         icon: Info,
     },
 ]
+
+
 
 export default function SideBar() {
     return (
