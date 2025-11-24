@@ -11,7 +11,7 @@ const GameHero = () => {
         <h1>Tic Tac Toe</h1>
         <GiTicTacToe />
       </div>
-        <div className="mt-4 md:mt-3 text-center">
+        <div className="mt-4 md:mt-3 text-center lg:hidden">
             <div className="inline-flex items-center gap-3 bg-background backdrop-blur-sm px-4 py-2 rounded-full shadow-md">
               <div className="flex items-center gap-1.5">
                 <BiSolidLeaf
