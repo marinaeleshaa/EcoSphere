@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
 import { MdDoNotDisturbAlt } from "react-icons/md";
 import { BiSolidLeaf } from "react-icons/bi";
 import { RiRobot3Line } from "react-icons/ri";
@@ -10,7 +10,7 @@ import { GiTrophy } from "react-icons/gi";
 
 export default function TicTacToe() {
   type Player = "X" | "O" | null;
-
+  type Difficulty = "easy" | "medium" | "hard";
   // -------------------------
   // 🧩 STATES
   // -------------------------
@@ -18,7 +18,8 @@ export default function TicTacToe() {
   const [winner, setWinner] = useState<Player | "Draw">(null);
   const [isAiTurn, setIsAiTurn] = useState(false);
   const [scores, setScores] = useState({ player: 0, ai: 0, draws: 0 });
-
+  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
+  console.log(difficulty);
   // -------------------------
   // 💾 LOAD SCORES FROM STORAGE
   // -------------------------
@@ -144,6 +145,28 @@ export default function TicTacToe() {
   // 🤖 AI MOVE
   // -------------------------
   const aiMove = useCallback(() => {
+    // Determine random move chance based on difficulty
+    let randomMoveChance = 0;
+    if (difficulty === "easy") randomMoveChance = 0.7; // 70% random moves
+    else if (difficulty === "medium") randomMoveChance = 0.5; // 50% random moves
+
+    const makeRandomMove = Math.random() < randomMoveChance;
+
+    if (makeRandomMove) {
+      const availableMoves = getAvailableMoves(board);
+      if (availableMoves.length > 0) {
+        const randomMove =
+          availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        const newBoard = [...board];
+        newBoard[randomMove] = "O";
+        setBoard(newBoard);
+        checkWinner(newBoard);
+        setIsAiTurn(false);
+        return;
+      }
+    }
+
+    // Otherwise use minimax (smart move)
     let bestScore = -Infinity;
     let bestMove = -1;
 
@@ -167,7 +190,7 @@ export default function TicTacToe() {
     }
 
     setIsAiTurn(false);
-  }, [board, checkWinner, getAvailableMoves]);
+  }, [board, checkWinner, getAvailableMoves, difficulty]);
 
   // -------------------------
   // 🎮 PLAYER MOVE
@@ -230,6 +253,13 @@ export default function TicTacToe() {
   };
 
   // -------------------------
+  // change difficulty
+  // -------------------------
+  const handleDifficultyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDifficulty(e.target.value as Difficulty);
+  };
+
+  // -------------------------
   // 🖥️ UI
   // -------------------------
   const getGameStatus = () => {
@@ -284,97 +314,6 @@ export default function TicTacToe() {
       ></div>
 
       <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-6 lg:p-12 relative z-10">
-        {/* Left Section - Score Board */}
-        <div className="w-full sm:w-[60%] lg:w-80 space-y-6">
-          {/* Title Card - Only on large screens */}
-          <div className="hidden  bg-primary/10 lg:flex justify-evenly backdrop-blur-md rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition-transform">
-            <div className="flex items-center gap-1.5">
-              <BiSolidLeaf
-                className="text-xl md:text-4xl text-primary animate-spin"
-                style={{ animationDuration: "4s" }}
-              />
-              <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                You
-              </span>
-            </div>
-            <span className="text-gray-400 md:text-2xl">vs</span>
-            <div className="flex items-center gap-1.5">
-              <MdDoNotDisturbAlt className="text-xl md:text-4xl text-primary animate-pulse" />
-              <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                AI
-              </span>
-            </div>
-          </div>
-
-          {/* Score Board */}
-          <div className="bg-primary/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <GiTrophy className="text-3xl text-primary animate-bounce" />
-              <h2 className="text-2xl font-black dark:text-secondary-foreground">
-                SCORE BOARD
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-linear-to-r from-green-100 to-green-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center">
-                      <FaRegSmileWink className="text-xl" />
-                    </div>
-                    <span className="font-bold text-lg text-primary">
-                      You
-                    </span>
-                  </div>
-                  <span className="text-3xl font-black text-primary">
-                    {scores.player}
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-linear-to-r from-yellow-100 to-yellow-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
-                      <FaHandshakeSimple className="text-xl" />
-                    </div>
-                    <span className="font-bold text-lg text-yellow-600">
-                      Draws
-                    </span>
-                  </div>
-                  <span className="text-3xl font-black text-yellow-600">
-                    {scores.draws}
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-linear-to-r from-red-100 to-red-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
-                      <RiRobot3Line className="text-xl" />
-                    </div>
-                    <span className="font-bold text-lg text-red-600">
-                      AI
-                    </span>
-                  </div>
-                  <span className="text-3xl font-black text-red-600">
-                    {scores.ai}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={resetScores}
-              className="mt-6 w-full py-3 rounded-xl bg-linear-to-r from-primary to-primary/80 text-primary-foreground font-bold
-                hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all shadow-lg"
-            >
-              Reset Scores
-            </button>
-          </div>
-        </div>
-
         {/* Right Section - Game Board */}
         <div className="w-fit lg:w-auto shrink-0">
           {/* Mobile Title */}
@@ -434,6 +373,130 @@ export default function TicTacToe() {
                 Play Again
               </button>
             )}
+          </div>
+        </div>
+
+        {/* Left Section - Score Board */}
+        <div className="w-full  sm:w-[60%] md:w-[50%] lg:w-80 space-y-6">
+          {/* Title Card - Only on large screens */}
+          <div className="hidden  bg-primary/10 lg:flex justify-evenly backdrop-blur-md rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition-transform">
+            <div className="flex items-center gap-1.5">
+              <BiSolidLeaf
+                className="text-xl md:text-4xl text-primary animate-spin"
+                style={{ animationDuration: "4s" }}
+              />
+              <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
+                You
+              </span>
+            </div>
+            <span className="text-gray-400 md:text-2xl">vs</span>
+            <div className="flex items-center gap-1.5">
+              <MdDoNotDisturbAlt className="text-xl md:text-4xl text-primary animate-pulse" />
+              <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
+                AI
+              </span>
+            </div>
+          </div>
+          <div className="text-primary/10 space-y-4">
+            <div className="flex justify-evenly gap-4 bg-primary/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
+              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
+                <input
+                  type="radio"
+                  name="difficulty"
+                  value="easy"
+                  onChange={handleDifficultyChange}
+                  className="accent-primary scale-125"
+                />
+                <span className="text-primary">Easy</span>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
+                <input
+                  type="radio"
+                  name="difficulty"
+                  value="medium"
+                  onChange={handleDifficultyChange}
+                  defaultChecked
+                  className="accent-primary scale-125"
+                />
+                <span className="text-primary">Medium</span>
+              </label>
+
+              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
+                <input
+                  type="radio"
+                  name="difficulty"
+                  value="hard"
+                  onChange={handleDifficultyChange}
+                  className="accent-primary scale-125"
+                />
+                <span className="text-primary">Hard</span>
+              </label>
+            </div>
+          </div>
+
+          {/* Score Board */}
+          <div className="bg-primary/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <GiTrophy className="text-3xl text-primary animate-bounce" />
+              <h2 className="text-2xl font-black dark:text-secondary-foreground">
+                SCORE BOARD
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-linear-to-r from-green-100 to-green-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center">
+                      <FaRegSmileWink className="text-xl" />
+                    </div>
+                    <span className="font-bold text-lg text-primary">You</span>
+                  </div>
+                  <span className="text-3xl font-black text-primary">
+                    {scores.player}
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-linear-to-r from-yellow-100 to-yellow-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                      <FaHandshakeSimple className="text-xl" />
+                    </div>
+                    <span className="font-bold text-lg text-yellow-600">
+                      Draws
+                    </span>
+                  </div>
+                  <span className="text-3xl font-black text-yellow-600">
+                    {scores.draws}
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-linear-to-r from-red-100 to-red-50 rounded-2xl p-4 shadow-lg transform hover:scale-105 transition-transform">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
+                      <RiRobot3Line className="text-xl" />
+                    </div>
+                    <span className="font-bold text-lg text-red-600">AI</span>
+                  </div>
+                  <span className="text-3xl font-black text-red-600">
+                    {scores.ai}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={resetScores}
+              className="mt-6 w-full py-3 rounded-xl bg-linear-to-r from-primary to-primary/80 text-primary-foreground font-bold
+                hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all shadow-lg"
+            >
+              Reset Scores
+            </button>
           </div>
         </div>
       </div>

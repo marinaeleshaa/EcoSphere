@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaGoogle, FaFacebookF, FaApple, FaTwitter } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import SignUp from "@/components/layout/Auth/SignUp";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 
 const AuthPage = () => {
-  const [active, setActive] = useState<"login" | "register">("login");
+  const {active}=useSelector((state:RootState)=>state.auth)
+  const dispatch = useDispatch<AppDispatch>();
 
   const controls = useAnimation();
 
@@ -55,7 +60,7 @@ const AuthPage = () => {
     if (width < 1024) {
       return {
         loginX: -1350,
-        registerX: 400,
+        registerX: 500,
 
         loginImgX: -510,
         loginImgY: 200,
@@ -137,7 +142,7 @@ const AuthPage = () => {
     toSignUpX: 0,
     toSignInX: 0,
   });
-  
+
   getCoords(window.innerWidth, window.innerHeight);
   useEffect(() => {
     const updateCoords = () => {
@@ -227,14 +232,16 @@ const AuthPage = () => {
     };
     sequence();
   }, [active, controls]);
-
+  const handleToggle = () => {
+        dispatch(toggleAuthView())
+    }
   return (
     <section className="relative overflow-hidden bg-background">
       <div className="w-[80%] m-auto">
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center min-h-screen  ">
           {/* register form */}
           <motion.div
-            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[40%] md:w-[50%]    w-full ${
+            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${
               active === "login" ? "hidden" : ""
             }`}
             variants={formVariants}
@@ -244,37 +251,7 @@ const AuthPage = () => {
             }
             transition={{ duration: 2, delay: 0.5 }}
           >
-            <p className="capitalize text-center font-extrabold text-secondary-foreground text-4xl">
-              sign up
-            </p>
-            <input
-              type="text"
-              placeholder="Username"
-              className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <button className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
-              <Image src={"/leaf.png"} width={25} height={25} alt="leaf" />
-              Sign up
-            </button>
-            <p className="text-center text-stone-700  space-x-1 sm:hidden ">
-              <span>One of us ?</span>
-              <button
-                onClick={() => setActive("login")}
-                className="text-primary cursor-pointer"
-              >
-                Login
-              </button>
-            </p>
+            <SignUp/>
           </motion.div>
 
           {/* login form */}
@@ -363,7 +340,7 @@ const AuthPage = () => {
             <p className="text-center text-stone-600 space-x-1 sm:hidden ">
               <span>New to EcoSphere ?</span>
               <button
-                onClick={() => setActive("register")}
+                onClick={handleToggle}
                 className="text-primary cursor-pointer"
               >
                 Sign up
@@ -389,11 +366,11 @@ const AuthPage = () => {
         transition={{ duration: 2, delay: 0.5 }}
       >
         <Image
-          src="/leaf.png"
+          src="/logo.png"
           width={250}
           height={250}
           alt="login"
-          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] "
+          className="absolute  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] "
         />
       </motion.div>
       <motion.img
@@ -433,7 +410,7 @@ const AuthPage = () => {
           sign up to get started with Ecosphere
         </p>
         <motion.button
-          onClick={() => setActive(active === "login" ? "register" : "login")}
+          onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
           Sign Up
@@ -454,7 +431,7 @@ const AuthPage = () => {
           we are happy to see you back
         </p>
         <motion.button
-          onClick={() => setActive(active === "login" ? "register" : "login")}
+          onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground  hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
           Sign In
