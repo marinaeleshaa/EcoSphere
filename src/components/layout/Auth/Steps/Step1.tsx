@@ -9,7 +9,7 @@ const Step1 = () => {
   return (
     <div className="flex flex-col text-foreground rounded-lg p-5 gap-5">
       <p className="text-secondary-foreground text-center text-2xl md:text-3xl font-bold">
-        Sign Up To Get Started
+        Sign Up 
       </p>
       <button
         className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 focus:outline-2 focus:outline-primary focus:outline-offset-4 capitalize cursor-pointer"
