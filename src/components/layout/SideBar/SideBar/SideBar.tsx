@@ -14,8 +14,7 @@ import {
     SidebarTrigger,
     SidebarMenuBadge
 } from "@/components/ui/sidebar"
-import { MdOutlineEventRepeat } from "react-icons/md";
-import { MdOutlineAddToPhotos } from "react-icons/md";
+import { MdOutlineAddToPhotos, MdOutlineSearch, MdOutlineEventRepeat } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import Link from 'next/link'
 import ThemeBtn from '../ThemeBtn/ThemeBtn'
@@ -77,7 +76,12 @@ const dashboardItems=[
         icon: MdOutlineAddToPhotos,
     },
     {
-        title: "All Events",
+        title: "Browse Events",
+        url: "/",
+        icon: MdOutlineSearch,
+    },
+    {
+        title: "Event Details",
         url: "/",
         icon: MdOutlineEventRepeat,
     },
