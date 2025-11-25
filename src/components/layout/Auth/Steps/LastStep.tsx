@@ -1,8 +1,11 @@
 import React from "react";
 
-const UStep3 = () => {
+const LastStep = () => {
   return (
     <div className="flex sm:flex gap-5 flex-col p-5">
+      <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
+       Final Step
+      </p>
       {/* Email */}
       <input
         type="email"
@@ -27,4 +30,4 @@ const UStep3 = () => {
   );
 };
 
-export default UStep3;
+export default LastStep;

@@ -1,21 +1,24 @@
 const UStep2 = () => {
   return (
     <div className="flex  sm:flex gap-5 flex-col p-5">
+      <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
+        User Details
+      </p>
       <input
         type="text"
-        placeholder="First Name"
+        placeholder=" Enter Your First Name"
         className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
       />
 
       <input
         type="text"
-        placeholder="Last Name"
+        placeholder=" Enter Your Last Name"
         className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
       />
 
       <input
         type="date"
-        placeholder="Birthdate"
+        placeholder="Enter Your Birthdate"
         className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
       />
 
