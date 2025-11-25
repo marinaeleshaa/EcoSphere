@@ -2,7 +2,7 @@
 
 import React from "react";
 import Reveal from "@/components/ui/reveal";
-import { Eye, Lightbulb } from "lucide-react";
+import { Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -17,7 +17,7 @@ export default function Vision() {
                             <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-cover" unoptimized/>
                         </div>
 
-            <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <div className="mx-auto max-w-[80%] px-4 md:px-6 relative z-10">
                 <Reveal>
                     <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
                         
@@ -32,14 +32,14 @@ export default function Vision() {
                                 </span>
                                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
                                     A world where <br />
-                                    <span className="text-green-600">sustainable is standard.</span>
+                                    <span className="text-primary">sustainable is standard.</span>
                                 </h2>
                             </div>
 
                             <div className="space-y-6 text-muted text-lg leading-relaxed">
                                 <p>
                                     Our vision is to help create an interconnected, global economy 
-                                    where sustainable and regenerative commerce is the <strong className="text-gray-900">standard, not the exception.</strong>
+                                    where sustainable and regenerative commerce is the <strong> standard, not the exception.</strong>
                                 </p>
                                 <p>
                                     We envision a world where consumers implicitly trust that their 
@@ -74,19 +74,8 @@ export default function Vision() {
                                                                     alt="Global Sustainable Vision"
                                                                     fill
                                                                     className="object-cover"
-                                                                />
-                                                            </div>
+/>                                </div>
                                 
-                                {/* Overlay Card with icon */}
-                                                                <div className="absolute bottom-6 left-6 right-6 bg-card/95 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-theme flex items-center justify-between">
-                                   <div>
-                                                                         <p className="text-sm font-bold text-foreground">Future Forward</p>
-                                                                         <p className="text-xs text-primary">Driving global change</p>
-                                   </div>
-                                   <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                                     <Lightbulb className="w-5 h-5" />
-                                   </div>
-                                </div>
                             </motion.div>
                         </div>
 

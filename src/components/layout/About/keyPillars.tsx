@@ -9,22 +9,22 @@ import Image from "next/image";
 export default function KeyPillars() {
     const pillars = [
         { 
-            icon: <Sprout className="w-8 h-8 text-green-600" />,
+            icon: <Sprout className="w-8 h-8 text-primary" />,
             title: "Environmental Impact", 
             text: "Sourcing organic, recycled materials with a focus on carbon neutrality and minimal waste." 
         },
         { 
-            icon: <HeartHandshake className="w-8 h-8 text-green-600" />,
+            icon: <HeartHandshake className="w-8 h-8 text-primary" />,
             title: "Ethical Labor", 
             text: "Ensuring fair wages, safe working conditions, and absolutely no forced or child labor." 
         },
         { 
-            icon: <Search className="w-8 h-8 text-green-600" />,
+            icon: <Search className="w-8 h-8 text-primary" />,
             title: "Supply Chain Transparency", 
             text: "Providing verifiable proof and complete openness about sourcing, processing, and logistics." 
         },
         { 
-            icon: <ShieldCheck className="w-8 h-8 text-green-600" />,
+            icon: <ShieldCheck className="w-8 h-8 text-primary" />,
             title: "Durability & Quality", 
             text: "Products designed for longevity, repairability, and circularity — actively fighting waste culture." 
         }
@@ -40,7 +40,7 @@ export default function KeyPillars() {
                             <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-cover" unoptimized/>
                         </div>
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="mx-auto max-w-[80%] px-4 relative z-10">
                 <Reveal>
                     {/* Header Section */}
                     <div className="text-center max-w-3xl mx-auto mb-16">

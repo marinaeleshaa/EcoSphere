@@ -2,14 +2,14 @@
 
 import React from "react";
 import Reveal from "@/components/ui/reveal";
-import { Target, ArrowRight } from "lucide-react";
+import { Target } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function Mission() {
   return (
     <section className="relative w-full bg-card text-card-foreground py-16 md:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="mx-auto max-w-[80%] px-4 md:px-6">
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             
@@ -24,7 +24,7 @@ export default function Mission() {
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
                   Making sustainability <br />
-                  <span className="text-green-600">effortless & trustworthy.</span>
+                  <span className="text-primary">effortless & trustworthy.</span>
                 </h2>
               </div>
 
@@ -45,12 +45,6 @@ export default function Mission() {
                     <span className="text-sm">High-visibility growth for brands that prioritize integrity over easy profits.</span>
                   </div>
                 </div>
-              </div>
-
-              <div className="pt-4">
-                <button className="inline-flex items-center justify-center rounded-md bg-primary px-8 py-3 text-sm font-medium text-primary-foreground transition-all shadow-lg hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-                  Join Our Mission <ArrowRight className="ml-2 h-4 w-4" />
-                </button>
               </div>
             </div>
 
@@ -76,22 +70,8 @@ export default function Mission() {
                     onError={() => { /* no-op fallback: keep source as-is; public image expected */ }}
                   />
                 </div>
-                
-                {/* Overlay Card similar to first component */}
-                <div className="absolute bottom-6 left-6 right-6 bg-card/95 backdrop-blur-sm p-6 rounded-lg shadow-lg border border-theme">
-                   <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-bold text-gray-900">Impact Goal</p>
-                        <p className="text-xs text-green-600">Net Zero by 2030</p>
-                      </div>
-                      <div className="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center text-green-600">
-                        <Target className="w-5 h-5" />
-                      </div>
-                   </div>
-                </div>
               </motion.div>
             </div>
-
           </div>
         </Reveal>
       </div>

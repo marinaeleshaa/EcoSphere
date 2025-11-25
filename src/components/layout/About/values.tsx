@@ -2,29 +2,29 @@
 
 import React from "react";
 import Reveal from "@/components/ui/reveal";
-import { Leaf, Handshake, Globe, Users, Recycle } from "lucide-react";
+import { Leaf, Handshake, Globe, Users} from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function Values() {
     const values = [
         { 
-            icon: <Leaf className="w-8 h-8 text-green-600" />, 
+            icon: <Leaf className="w-8 h-8 text-primary" />, 
             title: "Planet-First", 
             text: "Every action is measured by its environmental benefit and commitment to regeneration." 
         },
         { 
-            icon: <Handshake className="w-8 h-8 text-green-600" />, 
+            icon: <Handshake className="w-8 h-8 text-primary" />, 
             title: "Integrity & Trust", 
             text: "We demand radical transparency from our partners and communicate openly with our users." 
         },
         { 
-            icon: <Globe className="w-8 h-8 text-green-600" />, 
+            icon: <Globe className="w-8 h-8 text-primary" />, 
             title: "Accessibility", 
             text: "We strive to make sustainable choices the easiest and most convenient option available." 
         },
         { 
-            icon: <Users className="w-8 h-8 text-green-600" />, 
+            icon: <Users className="w-8 h-8 text-primary" />, 
             title: "Community", 
             text: "We prioritize connecting ethical enterprises with dedicated customers." 
         }
@@ -40,7 +40,7 @@ export default function Values() {
                             <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-cover" unoptimized/>
                         </div>
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="mx-auto max-w-[80%] px-4 relative z-10">
                 <Reveal>
                     {/* Header Section */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
@@ -76,25 +76,6 @@ export default function Values() {
                                 </p>
                             </motion.div>
                         ))}
-                    </div>
-
-                    {/* Bottom Image Section */}
-                    <div className="flex justify-center mt-12">
-                        <div className="relative rounded-2xl overflow-hidden shadow-lg max-w-sm w-full h-48 group">
-                                                        <div className="relative w-full h-full">
-                                                            <Image
-                                                                src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=2070&auto=format&fit=crop"
-                                                                alt="Recycling process"
-                                                                fill
-                                                                className="object-cover transform group-hover:scale-105 transition-transform duration-500"
-                                                                unoptimized
-                                                            />
-                                                        </div>
-                            {/* Overlay icon similar to design */}
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                                <Recycle className="w-12 h-12 text-white drop-shadow-lg" />
-                            </div>
-                        </div>
                     </div>
                 </Reveal>
             </div>

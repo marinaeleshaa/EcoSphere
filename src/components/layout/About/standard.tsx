@@ -9,7 +9,7 @@ import Image from "next/image";
 export default function Standard() {
   return (
     <section className="relative w-full bg-card text-card-foreground py-16 md:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="mx-auto max-w-[80%] px-4 md:px-6">
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             
@@ -74,19 +74,13 @@ export default function Standard() {
               {/* Main Image Container */}
               <motion.div className="relative z-10 overflow-hidden rounded-xl shadow-2xl transform transition-transform hover:scale-[1.01] duration-500 bg-card"
                 initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7 }}>
-                <div className="relative w-full md:min-h-[400px] h-72">
+                <div className="relative w-full md:min-h-[300px] h-72">
                   <Image
                     src="/standard.png"
                     alt="Standard Illustration"
                     fill
                     className="object-cover"
                   />
-                </div>
-                
-                {/* Floating Badge */}
-                <div className="absolute top-6 right-6 bg-card/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-theme flex items-center gap-2">
-                   <div className="h-2 w-2 rounded-full animate-pulse" style={{ background: 'var(--primary)' }} />
-                   <span className="text-xs font-bold text-foreground uppercase tracking-wider">100% Verified</span>
                 </div>
               </motion.div>
             </div>

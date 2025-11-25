@@ -1,32 +1,16 @@
 "use client";
 
 import React from "react";
-import { Check, ArrowRight, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-// Placeholder components to mimic the provided environment
-// Replace these with your actual UI library components if available (e.g., shadcn/ui)
-const Button = ({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
-  <button
-    className={`inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-medium text-primary-foreground transition-colors hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 ${className}`}
-    style={{ background: 'var(--primary)' }}
-    {...props}
-  >
-    {children}
-  </button>
-);
 
-const Avatar = ({ src, alt }: { src: string; alt: string }) => (
-  <div className="h-12 w-12 overflow-hidden rounded-full border-2 border-white shadow-sm relative">
-    <Image src={src} alt={alt} fill className="object-cover" unoptimized />
-  </div>
-);
 
-export default function AboutGreenerFuture() {
+export default function About() {
   return (
     <section className="relative w-full bg-card text-card-foreground py-16 md:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="mx-auto max-w-[80%] px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           
           {/* LEFT COLUMN: Images & Decorative Elements */}
@@ -87,56 +71,11 @@ export default function AboutGreenerFuture() {
               businesses by offering a platform that rigorously vets and simplifies 
               ethical shopping.
             </p>
-
-            {/* Feature Bullets */}
-            <div className="space-y-3 py-2">
-                <div className="flex items-center gap-3">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary-foreground)/0.12]">
-                  <Check className="h-3.5 w-3.5 text-primary" />
-                </div>
-                <span className="text-sm font-semibold text-foreground">
-                  Know what your target market wants and needs
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--primary-foreground)/0.12]">
-                  <Check className="h-3.5 w-3.5 text-primary" />
-                </div>
-                <span className="text-sm font-semibold text-foreground">
-                  A Whole Lot of Digital Love for Less
-                </span>
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-              <div className="space-y-2 pt-2">
-              <div className="flex justify-between text-sm font-bold text-foreground">
-                <span>Problem Solving</span>
-                <span>80%</span>
-              </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-input">
-                <div className="h-full w-[80%] rounded-full" style={{ background: 'var(--primary)' }} />
-              </div>
-            </div>
-
             {/* Footer: Profile & CTA */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pt-6 border-t border-theme mt-4">
               <div className="flex items-center gap-3">
-                <Avatar 
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80" 
-                  alt="Leslie Alexander" 
-                />
-                <div>
-                  <p className="text-xs text-primary font-medium">Agronomist</p>
-                  <p className="text-sm font-bold text-foreground">Leslie Alexander</p>
-                </div>
               </div>
-
-              <Button className="gap-2 shadow-lg shadow-green-200">
-                Explore More <ArrowRight className="h-4 w-4" />
-              </Button>
             </div>
-
           </div>
         </div>
       </div>
