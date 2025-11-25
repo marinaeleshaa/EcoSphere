@@ -400,7 +400,7 @@ export default function TicTacToe() {
                   onClick={() => handleClick(index)}
                   disabled={isAiTurn || winner !== null}
                   className={`
-                    w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36
+                    w-20 h-20 sm:w-28 sm:h-28 lg:w-30 lg:h-30
                     bg-linear-to-br from-primary via-primary to-primary/80 
                     rounded-3xl flex items-center justify-center shadow-xl
                     transition-all duration-300 ease-out
