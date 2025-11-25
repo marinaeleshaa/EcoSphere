@@ -149,7 +149,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
             <div className="flex items-center gap-3 border rounded-lg p-2">
               <button
                 onClick={handleDecrement}
-                className="w-8 h-8 flex items-center justify-center rounded hover:bg-muted transition-colors"
+                className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
                 aria-label="Decrease quantity"
               >
                 <Minus className="w-4 h-4" />
@@ -157,7 +157,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
               <span className="w-12 text-center font-semibold">{count}</span>
               <button
                 onClick={handleIncrement}
-                className="w-8 h-8 flex items-center justify-center rounded hover:bg-muted transition-colors"
+                className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
                 aria-label="Increase quantity"
               >
                 <Plus className="w-4 h-4" />
@@ -167,16 +167,16 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
-            <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
+            <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
               <ShoppingCart className="w-5 h-5" />
               Add to Cart
             </button>
             <button
               onClick={handleFav}
-              className={`p-3 rounded-lg border-2 transition-colors ${
+              className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${
                 isFav
                   ? "bg-primary border-primary text-primary-foreground"
-                  : "border-primary text-primary hover:bg-primary/10"
+                  : "border-primary text-primary hover:bg-primary/10 "
               }`}
               aria-label="Add to favorites"
             >
