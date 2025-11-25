@@ -1,22 +1,22 @@
 import { inject, injectable } from "tsyringe";
 import type {
   LoginRequestDTO,
-  LoginResponseDTO,
+  LoginResponse,
   RegisterRequestDTO,
   RegisterResponseDTO,
 } from "./dto/user.dto";
 import type { IRegistrationStrategy } from "./registration/registration.service";
-import type { ILoginStrategy } from "./login/login.service";
+import { LoginService } from "./login/users.login.service";
 
 @injectable()
 class AuthController {
   constructor(
     @inject("RegistrationService")
     private readonly registrationService: IRegistrationStrategy,
-    @inject("LoginService") private readonly loginService: ILoginStrategy
+    @inject("LoginService") private readonly loginService: LoginService
   ) {}
 
-  async login(loginDto: LoginRequestDTO): Promise<LoginResponseDTO> {
+  async login(loginDto: LoginRequestDTO): Promise<LoginResponse> {
     return await this.loginService.login(loginDto);
   }
 
