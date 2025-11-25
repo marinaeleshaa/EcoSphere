@@ -269,7 +269,7 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators =
     >
       <motion.div
         variants={{
-          inactive: { scale: 1, backgroundColor: '#222', color: '#a3a3a3' },
+          inactive: { scale: 1, backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' },
           active: { scale: 1, backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' },
           complete: { scale: 1, backgroundColor: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }
         }}
@@ -279,7 +279,7 @@ function StepIndicator({ step, currentStep, onClickStep, disableStepIndicators =
         {status === 'complete' ? (
           <CheckIcon className="h-4 w-4 text-primary-foreground" />
         ) : status === 'active' ? (
-          <div className="h-3 w-3 rounded-full bg-[#060010]" />
+          <div className="h-3 w-3 rounded-full bg-background" />
         ) : (
           <span className="text-sm">{step}</span>
         )}
