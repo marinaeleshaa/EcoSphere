@@ -1,32 +1,104 @@
-import React from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as Z from "zod";
+import { useDispatch } from "react-redux";
+import { saveStep4Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
+import { LastStepSchema } from "@/frontend/schema/register.schema";
+import { AppDispatch } from "@/frontend/redux/store";
+import { Eye, EyeOff } from "lucide-react";
+
+type LastStepForm = Z.infer<typeof LastStepSchema>;
 
 const LastStep = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors , isValid },
+  } = useForm<LastStepForm>({
+    resolver: zodResolver(LastStepSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = (data: LastStepForm) => {
+    dispatch(saveStep4Data(data));
+    dispatch(setStepValid({ step: 4, valid: true }));
+  };
+
+  useEffect(() => {
+  dispatch(setStepValid({ step: 4, valid: isValid }));
+}, [isValid , dispatch]);
+
   return (
-    <div className="flex sm:flex gap-5 flex-col p-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-5">
       <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-       Final Step
+        Final Step
       </p>
+
       {/* Email */}
-      <input
-        type="email"
-        placeholder="Email"
-        className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-      />
+      <div>
+        <input
+          type="email"
+          placeholder="Email"
+          {...register("email")}
+          className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10 w-full"
+        />
+        {errors.email && (
+          <p className="text-red-500 mt-1 text-sm">{errors.email.message}</p>
+        )}
+      </div>
 
       {/* Password */}
-      <input
-        type="password"
-        placeholder="Password"
-        className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-      />
+      <div className="relative">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          {...register("password")}
+          className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10 pr-12 w-full"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-4 top-1/2 cursor-pointer -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {showPassword ? <EyeOff size={20} className="text-black" /> : <Eye size={20} className="text-black" />}
+        </button>
+        {errors.password && (
+          <p className="text-red-500 mt-1 text-sm">{errors.password.message}</p>
+        )}
+      </div>
 
       {/* Confirm Password */}
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-      />
-    </div>
+      <div className="relative">
+        <input
+          type={showConfirmPassword ? "text" : "password"}
+          placeholder="Confirm Password"
+          {...register("confirmPassword")}
+          className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10 pr-12 w-full"
+        />
+        <button
+          type="button"
+          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {showConfirmPassword ? <EyeOff size={20} className="text-black" /> : <Eye size={20} className="text-black" />}
+        </button>
+        {errors.confirmPassword && (
+          <p className="text-red-500 mt-1 text-sm">{errors.confirmPassword.message}</p>
+        )}
+      </div>
+    </form>
   );
 };
 

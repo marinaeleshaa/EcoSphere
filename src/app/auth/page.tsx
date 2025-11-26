@@ -2,137 +2,20 @@
 import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { FaGoogle, FaFacebookF, FaApple, FaTwitter } from "react-icons/fa";
-import { IoIosArrowRoundForward } from "react-icons/io";
 import SignUp from "@/components/layout/Auth/SignUp";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
+import LogIn from "@/components/layout/Auth/LogIn";
+import { getCoords, ICoords } from "@/frontend/Actions/GetCoords";
 
 const AuthPage = () => {
-  const {active}=useSelector((state:RootState)=>state.auth)
+  const { active } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
   const controls = useAnimation();
 
-  const getCoords = (width: number, height: number) => {
-    const percentWidth = width / 5;
-
-    // xs screen < 640px
-    if (width < 640) {
-      return {
-        // circle (unchanged)
-        loginX: -percentWidth * 2,
-        registerX: 100,
-
-        // images
-        loginImgX: -450,
-        loginImgY: 120,
-
-        signupImgX: 1200,
-        signupImgY: 150,
-
-        // text panels
-        toSignUpX: 0,
-        toSignInX: 1500,
-      };
-    }
-
-    // sm screen < 768
-    if (width < 768) {
-      return {
-        loginX: -1350,
-        registerX: 360,
-
-        loginImgX: -350,
-        loginImgY: 200,
-
-        signupImgX: 0,
-        signupImgY: 0,
-
-        toSignUpX: 0,
-        toSignInX: 0,
-      };
-    }
-
-    // md screen < 1024
-    if (width < 1024) {
-      return {
-        loginX: -1350,
-        registerX: 500,
-
-        loginImgX: -510,
-        loginImgY: 200,
-
-        signupImgX: 0,
-        signupImgY: 0,
-
-        toSignUpX: -100,
-        toSignInX: 70,
-      };
-    }
-
-    // lg screen < 1280
-    if (width < 1280) {
-      return {
-        loginX: -1200,
-        registerX: 600,
-
-        loginImgX: -600,
-        loginImgY: 200,
-
-        signupImgX: -70,
-        signupImgY: 200,
-
-        toSignUpX: 0,
-        toSignInX: 0,
-      };
-    }
-
-    // xl screen
-    if (width < 1535) {
-      return {
-        loginX: -1100,
-        registerX: 600,
-
-        loginImgX: -750,
-        loginImgY: 200,
-
-        signupImgX: -190,
-        signupImgY: 200,
-
-        toSignUpX: 0,
-        toSignInX: 0,
-      };
-    }
-
-    // 2xl+
-    return {
-      loginX: -1000,
-      registerX: 800,
-
-      loginImgX: -1000,
-      loginImgY: 200,
-
-      signupImgX: -190,
-      signupImgY: 200,
-
-      toSignUpX: 0,
-      toSignInX: 0,
-    };
-  };
-
-  const [coords, setCoords] = useState<{
-    loginX: number;
-    registerX: number;
-    loginImgX: number;
-    loginImgY: number;
-    signupImgX: number;
-    signupImgY: number;
-    toSignUpX: number;
-    toSignInX: number;
-  }>({
+  const [coords, setCoords] = useState<ICoords>({
     loginX: -1000,
     registerX: 800,
     loginImgX: -1000,
@@ -143,13 +26,11 @@ const AuthPage = () => {
     toSignInX: 0,
   });
 
-  getCoords(window.innerWidth, window.innerHeight);
   useEffect(() => {
     const updateCoords = () => {
       const width = window.innerWidth;
-      const height = window.innerHeight;
 
-      setCoords(getCoords(width, height));
+      setCoords(getCoords(width));
     };
 
     updateCoords();
@@ -233,8 +114,8 @@ const AuthPage = () => {
     sequence();
   }, [active, controls]);
   const handleToggle = () => {
-        dispatch(toggleAuthView())
-    }
+    dispatch(toggleAuthView());
+  };
   return (
     <section className="relative overflow-hidden bg-background">
       <div className="w-[80%] m-auto">
@@ -251,7 +132,7 @@ const AuthPage = () => {
             }
             transition={{ duration: 2, delay: 0.5 }}
           >
-            <SignUp/>
+            <SignUp />
           </motion.div>
 
           {/* login form */}
@@ -264,88 +145,7 @@ const AuthPage = () => {
             initial={false}
             transition={{ duration: 2, delay: 0.5 }}
           >
-            <p className="capitalize text-center font-extrabold mb-5 text-secondary-foreground text-4xl">
-              Login
-            </p>
-
-            <input
-              type="email"
-              placeholder="Email"
-              className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <div className="relative">
-              <input
-                type="password"
-                placeholder="Password"
-                className="bg-input text-input-foreground w-full p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-              />
-            </div>
-            {/* forget password */}
-            <Link href="#">
-              <div className="flex justify-end px-5">
-                <div className="flex gap-1 justify-center items-center text-sm group cursor-pointer">
-                  <p className="text-secondary-foreground transition-all duration-300 ">
-                    Forget Password
-                  </p>
-                  <IoIosArrowRoundForward className=" transform transition-all duration-300 ease-out group-hover:translate-x-1 " />
-                </div>
-              </div>
-            </Link>
-
-            <button className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
-              Login
-              <Image
-                src={"/leaf.png"}
-                width={25}
-                height={25}
-                alt="leaf"
-                className="scale-x-[-1]"
-              />
-            </button>
-
-            {/* divider */}
-            <div className="flex items-center gap-2">
-              <div className="h-px bg-secondary-foreground/50 w-full"></div>
-              <p className="text-stone-500">or</p>
-              <div className="h-px bg-secondary-foreground/50 w-full"></div>
-            </div>
-
-            {/* social login */}
-            <div className="flex justify-evenly items-center my-4 text-4xl text-secondary-foreground ">
-              <Link
-                href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
-              >
-                <FaGoogle />
-              </Link>
-              <Link
-                href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
-              >
-                <FaFacebookF />
-              </Link>
-              <Link
-                href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
-              >
-                <FaApple />
-              </Link>
-              <Link
-                href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
-              >
-                <FaTwitter />
-              </Link>
-            </div>
-            <p className="text-center text-stone-600 space-x-1 sm:hidden ">
-              <span>New to EcoSphere ?</span>
-              <button
-                onClick={handleToggle}
-                className="text-primary cursor-pointer"
-              >
-                Sign up
-              </button>
-            </p>
+            <LogIn />
           </motion.div>
         </div>
       </div>
