@@ -5,9 +5,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaGoogle, FaFacebookF, FaApple, FaTwitter } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import SignUp from "@/components/layout/Auth/SignUp";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 
 const AuthPage = () => {
-  const [active, setActive] = useState<"login" | "register">("login");
+  const {active}=useSelector((state:RootState)=>state.auth)
+  const dispatch = useDispatch<AppDispatch>();
 
   const controls = useAnimation();
 
@@ -55,7 +60,7 @@ const AuthPage = () => {
     if (width < 1024) {
       return {
         loginX: -1350,
-        registerX: 400,
+        registerX: 500,
 
         loginImgX: -510,
         loginImgY: 200,
@@ -137,6 +142,7 @@ const AuthPage = () => {
     toSignUpX: 0,
     toSignInX: 0,
   });
+
   getCoords(window.innerWidth, window.innerHeight);
   useEffect(() => {
     const updateCoords = () => {
@@ -190,7 +196,7 @@ const AuthPage = () => {
     const sequence = async () => {
       if (active === "login") {
         await controls.start({
-          width: "10px",
+          width: "0px",
           left: 0,
           right: "auto",
           transition: { duration: 0 },
@@ -200,14 +206,14 @@ const AuthPage = () => {
           transition: { duration: 0.8, ease: "easeInOut" },
         });
         await controls.start({
-          width: "10px",
+          width: "0px",
           left: 0,
           right: "auto",
           transition: { duration: 1, ease: "easeInOut" },
         });
       } else {
         await controls.start({
-          width: "10px",
+          width: "0px",
           left: "auto",
           right: 0,
           transition: { duration: 0 },
@@ -217,7 +223,7 @@ const AuthPage = () => {
           transition: { duration: 0.8, ease: "easeInOut" },
         });
         await controls.start({
-          width: "10px",
+          width: "0px",
           left: "auto",
           right: 0,
           transition: { duration: 1, ease: "easeInOut" },
@@ -226,14 +232,16 @@ const AuthPage = () => {
     };
     sequence();
   }, [active, controls]);
-
+  const handleToggle = () => {
+        dispatch(toggleAuthView())
+    }
   return (
     <section className="relative overflow-hidden bg-background">
       <div className="w-[80%] m-auto">
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center min-h-screen  ">
           {/* register form */}
           <motion.div
-            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[40%] md:w-[50%]    w-full ${
+            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${
               active === "login" ? "hidden" : ""
             }`}
             variants={formVariants}
@@ -243,37 +251,7 @@ const AuthPage = () => {
             }
             transition={{ duration: 2, delay: 0.5 }}
           >
-            <p className="capitalize text-center font-extrabold text-stone-700 text-4xl">
-              sign up
-            </p>
-            <input
-              type="text"
-              placeholder="Username"
-              className="bg-gray-200 p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              className="bg-gray-200 p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="bg-gray-200 p-3 rounded-full transition duration-300 focus:outline-none pl-10"
-            />
-            <button className="bg-[#527b50] text-white p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-[#527b50] hover:outline-offset-4">
-              <Image src={"/leaf.png"} width={25} height={25} alt="leaf" />
-              Sign up
-            </button>
-            <p className="text-center text-stone-600 space-x-1 sm:hidden ">
-              <span>One of us ?</span>
-              <button
-                onClick={() => setActive("login")}
-                className="text-[#527b50] cursor-pointer"
-              >
-                Login
-              </button>
-            </p>
+            <SignUp/>
           </motion.div>
 
           {/* login form */}
@@ -286,35 +264,35 @@ const AuthPage = () => {
             initial={false}
             transition={{ duration: 2, delay: 0.5 }}
           >
-            <p className="capitalize text-center font-extrabold mb-5 text-stone-700 text-4xl">
+            <p className="capitalize text-center font-extrabold mb-5 text-secondary-foreground text-4xl">
               Login
             </p>
 
             <input
               type="email"
               placeholder="Email"
-              className="bg-gray-200 p-3 rounded-full transition duration-300 focus:outline-none pl-10"
+              className="bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10"
             />
             <div className="relative">
               <input
                 type="password"
                 placeholder="Password"
-                className="bg-gray-200 w-full p-3 rounded-full transition duration-300 focus:outline-none pl-10"
+                className="bg-input text-input-foreground w-full p-3 rounded-full transition duration-300 focus:outline-none pl-10"
               />
             </div>
             {/* forget password */}
             <Link href="#">
               <div className="flex justify-end px-5">
                 <div className="flex gap-1 justify-center items-center text-sm group cursor-pointer">
-                  <p className="text-stone-500 transition-all duration-300 group-hover:text-stone-700">
+                  <p className="text-secondary-foreground transition-all duration-300 ">
                     Forget Password
                   </p>
-                  <IoIosArrowRoundForward className=" transform transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100 opacity-70" />
+                  <IoIosArrowRoundForward className=" transform transition-all duration-300 ease-out group-hover:translate-x-1 " />
                 </div>
               </div>
             </Link>
 
-            <button className="bg-[#527b50] text-white p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-[#527b50] hover:outline-offset-4">
+            <button className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
               Login
               <Image
                 src={"/leaf.png"}
@@ -327,34 +305,34 @@ const AuthPage = () => {
 
             {/* divider */}
             <div className="flex items-center gap-2">
-              <div className="h-[1px] bg-stone-500 w-full"></div>
+              <div className="h-px bg-secondary-foreground/50 w-full"></div>
               <p className="text-stone-500">or</p>
-              <div className="h-[1px] bg-stone-500 w-full"></div>
+              <div className="h-px bg-secondary-foreground/50 w-full"></div>
             </div>
 
             {/* social login */}
-            <div className="flex justify-evenly items-center my-4 text-4xl text-stone-700">
+            <div className="flex justify-evenly items-center my-4 text-4xl text-secondary-foreground ">
               <Link
                 href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-[#527b50] transition duration-300"
+                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
               >
                 <FaGoogle />
               </Link>
               <Link
                 href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-[#527b50] transition duration-300"
+                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
               >
                 <FaFacebookF />
               </Link>
               <Link
                 href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-[#527b50] transition duration-300"
+                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
               >
                 <FaApple />
               </Link>
               <Link
                 href={"#"}
-                className="hover:scale-115 hover:shadow-2xl shadow-[#527b50] transition duration-300"
+                className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
               >
                 <FaTwitter />
               </Link>
@@ -362,8 +340,8 @@ const AuthPage = () => {
             <p className="text-center text-stone-600 space-x-1 sm:hidden ">
               <span>New to EcoSphere ?</span>
               <button
-                onClick={() => setActive("register")}
-                className="text-[#527b50] cursor-pointer"
+                onClick={handleToggle}
+                className="text-primary cursor-pointer"
               >
                 Sign up
               </button>
@@ -374,7 +352,7 @@ const AuthPage = () => {
 
       {/* animated background div */}
       <motion.div
-        className="  w-[1700px] h-[1700px] rounded-full bg-[#527b50] hidden sm:block absolute "
+        className="  w-[1700px] h-[1700px] rounded-full bg-primary hidden sm:block absolute "
         variants={divVariants}
         animate={active}
         initial={false}
@@ -382,17 +360,17 @@ const AuthPage = () => {
       ></motion.div>
       {/* animated background for mobile */}
       <motion.div
-        className="absolute  h-screen bg-[#527b50] sm:hidden top-0 left-0"
+        className="absolute  h-screen bg-primary sm:hidden top-0 left-0"
         initial={false}
         animate={controls}
         transition={{ duration: 2, delay: 0.5 }}
       >
         <Image
-          src="/leaf.png"
+          src="/logo.png"
           width={250}
           height={250}
           alt="login"
-          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] "
+          className="absolute  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] "
         />
       </motion.div>
       <motion.img
@@ -419,7 +397,7 @@ const AuthPage = () => {
       />
       {/* to sign up */}
       <motion.div
-        className="hidden sm:absolute top-30 left-0 md:left-30 lg:left-20  min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-white  "
+        className="hidden sm:absolute top-30 left-0 md:left-30 lg:left-20  min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  "
         variants={toSignUpVariants}
         animate={active}
         initial={false}
@@ -432,15 +410,15 @@ const AuthPage = () => {
           sign up to get started with Ecosphere
         </p>
         <motion.button
-          onClick={() => setActive(active === "login" ? "register" : "login")}
-          className="cursor-pointer  text-white border-2  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-white hover:bg-white hover:text-[#527b50] hover:outline-offset-4 "
+          onClick={handleToggle}
+          className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
           Sign Up
         </motion.button>
       </motion.div>
       {/* to sign in */}
       <motion.div
-        className=" hidden sm:absolute top-50 right-10 md:right-30 lg:top-40 lg:right-10 xl:right-30 xl:top-30 min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-white  "
+        className=" hidden sm:absolute top-50 right-10 md:right-30 lg:top-40 lg:right-10 xl:right-30 xl:top-30 min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  "
         variants={toSignInVariants}
         animate={active}
         initial={false}
@@ -453,8 +431,8 @@ const AuthPage = () => {
           we are happy to see you back
         </p>
         <motion.button
-          onClick={() => setActive(active === "login" ? "register" : "login")}
-          className="cursor-pointer  text-white border-2  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-white  hover:bg-white hover:text-[#527b50] hover:outline-offset-4 "
+          onClick={handleToggle}
+          className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground  hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
           Sign In
         </motion.button>

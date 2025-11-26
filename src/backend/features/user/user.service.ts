@@ -1,56 +1,40 @@
 import { inject, injectable } from "tsyringe";
 import type { IUserRepository } from "./user.repository";
-import { Prisma, User } from "@/generated/prisma/client";
-import type { IRestaurantRepository } from "../resturant/resturant.repository";
+import { IUser} from "./user.model";
 
 export interface IUserService {
-  getAll(): Promise<Omit<User, "password">[]>;
-  getById(id: string): Promise<Omit<User, "password"> | null>;
-  updateById(
-    id: string,
-    data: Prisma.UserUpdateInput
-  ): Promise<Omit<User, "password"> | null>;
-  updateFavorites(
-    id: string,
-    data: string[]
-  ): Promise<Omit<User, "password"> | null>;
-  deleteById(id: string): Promise<Omit<User, "password"> | null>;
+  getAll(): Promise<IUser[]>;
+  getById(id: string): Promise<IUser>;
+  updateById(id: string, data: Partial<IUser>): Promise<IUser>;
+  updateFavorites(id: string, data: string): Promise<IUser>;
+  deleteById(id: string): Promise<IUser>;
 }
 
 @injectable()
 class UserService {
   constructor(
-    @inject("IUserRepository") private readonly userRepository: IUserRepository,
-    @inject("IRestaurantRepository")
-    private readonly restaurantRepository: IRestaurantRepository
+    @inject("IUserRepository") private readonly userRepository: IUserRepository
   ) {}
 
-  async getAll(): Promise<Omit<User, "password">[]> {
+  async getAll(): Promise<IUser[]> {
     const users = await this.userRepository.getAll();
     return users;
   }
 
-  async getById(id: string): Promise<Omit<User, "password"> | null> {
+  async getById(id: string): Promise<IUser> {
     return await this.userRepository.getById(id);
   }
 
   // Needs to Updated later when we have Avatar Upload functionality
-  async updateById(
-    id: string,
-    data: Prisma.UserUpdateInput
-  ): Promise<Omit<User, "password"> | null> {
+  async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     return await this.userRepository.updateById(id, data);
   }
 
-  async updateFavorites(
-    id: string,
-    data: string[]
-  ): Promise<Omit<User, "password"> | null> {
-    await this.restaurantRepository.updateFavoritedBy(id, data[0]);
+  async updateFavorites(id: string, data: string): Promise<IUser> {
     return await this.userRepository.updateFavorites(id, data);
   }
 
-  async deleteById(id: string): Promise<Omit<User, "password"> | null> {
+  async deleteById(id: string): Promise<IUser> {
     return await this.userRepository.deleteById(id);
   }
 }

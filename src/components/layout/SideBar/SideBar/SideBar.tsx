@@ -14,10 +14,12 @@ import {
     SidebarTrigger,
     SidebarMenuBadge
 } from "@/components/ui/sidebar"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { MdOutlineAddToPhotos, MdOutlineSearch, MdOutlineEventRepeat } from "react-icons/md";
+import { RxDashboard } from "react-icons/rx";
 import Link from 'next/link'
 import ThemeBtn from '../ThemeBtn/ThemeBtn'
 import UserBtn from '../UserBtn/UserBtn'
+import GetFavCount from '@/frontend/Actions/GetFavCount'
 // Menu items.
 const items = [
     {
@@ -62,9 +64,32 @@ const items = [
     },
 ]
 
+const dashboardItems=[
+    {
+        title: "OverView",
+        url: "/",
+        icon: RxDashboard,
+    },
+    {
+        title: "Add Event",
+        url: "/",
+        icon: MdOutlineAddToPhotos,
+    },
+    {
+        title: "Browse Events",
+        url: "/",
+        icon: MdOutlineSearch,
+    },
+    {
+        title: "Event Details",
+        url: "/",
+        icon: MdOutlineEventRepeat,
+    },
+]
+
 export default function SideBar() {
     return (
-        <Sidebar collapsible="icon" variant='floating' className='bg-background'>
+        <Sidebar collapsible="icon" variant='floating' className='bg-background '>
             <SidebarHeader >
                 <SidebarTrigger />
             </SidebarHeader>
@@ -87,6 +112,24 @@ export default function SideBar() {
 
                     </SidebarGroupContent>
                 </SidebarGroup>
+                <SidebarGroup>
+                    <SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            {dashboardItems.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton asChild>
+                                        <Link href={item.url}>
+                                            <item.icon />
+                                            <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+
+                    </SidebarGroupContent>
+                </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
                 <SidebarGroupContent className='gap-2'>
@@ -95,8 +138,8 @@ export default function SideBar() {
                             <SidebarMenuButton asChild >
                                 <Link href="/fav">
                                     <Heart />
-                                    <span>Favourite</span>
-                                    <SidebarMenuBadge>24</SidebarMenuBadge>
+                                    <span>Favorite</span>
+                                    <GetFavCount />
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -104,7 +147,7 @@ export default function SideBar() {
                             <SidebarMenuButton asChild >
                                 <Link href="/cart">
                                     <ShoppingCart />
-                                    <span>cart</span>
+                                    <span>Cart</span>
                                     <SidebarMenuBadge>24</SidebarMenuBadge>
                                 </Link>
                             </SidebarMenuButton>

@@ -1,28 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rootContainer } from "@/backend/config/container";
 import AuthController from "@/backend/features/auth/auth.controller";
-import type { RegisterDto } from "@/backend/features/auth/dto/user.dto";
-import {
-  handleControllerResponse,
-  handleError,
-} from "@/types/api-helpers";
-import type { SignupResponse } from "@/types/api.types";
+import type {
+  RegisterRequestDTO,
+  RegisterResponseDTO,
+} from "@/backend/features/auth/dto/user.dto";
+import { ApiResponse, ok, serverError } from "@/types/api-helpers";
 
 export const POST = async (
   request: NextRequest
-): Promise<NextResponse<SignupResponse>> => {
-  const body = (await request.json()) as RegisterDto;
+): Promise<NextResponse<ApiResponse<RegisterResponseDTO>>> => {
+  const body = (await request.json()) as RegisterRequestDTO;
   const controller = rootContainer.resolve(AuthController);
 
   try {
     const result = await controller.register(body);
-    return handleControllerResponse(
-      result,
-      "User registered successfully",
-      "User already exists",
-      409
-    );
+    return ok(result);
   } catch (error) {
-    return handleError(error, 500);
+    console.log(error);
+    return serverError("Something went wrong");
   }
 };

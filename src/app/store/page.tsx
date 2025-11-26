@@ -1,12 +1,15 @@
-import StoreSlider from "@/components/layout/store/StoreSlider";
-import StoreHero from "@/components/layout/store/StoreHero";
-import React from "react";
-import ProductCardSection from "@/components/layout/store/ProductCardSection";
+import StoreSlider from "@/components/layout/Store/StoreSlider";
+import ProductCardSection from "@/components/layout/Store/ProductCardSection";
+import HeroSection from "@/components/layout/common/HeroSection";
 
 export default function Store() {
   return (
     <div className="space-y-5 md:space-y-10">
-      <StoreHero />
+      <HeroSection
+        imgUrl="/m.png"
+        title="Our Store"
+        subTitle="EcoSphere is your trusted destination for eco-friendly products, sustainable gifts, and smart green choices. Browse a variety of earth-conscious items made to help you live cleaner, better, and more naturally every day."
+      />
       <StoreSlider />
       <ProductCardSection />
     </div>

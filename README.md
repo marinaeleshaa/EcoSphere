@@ -27,7 +27,6 @@
 
 ### Backend
 - **Next.js API Routes** - Serverless API endpoints
-- **Prisma** - Modern ORM with MongoDB
 - **NextAuth.js** - Authentication solution
 - **JWT** - JSON Web Tokens for secure authentication
 - **bcrypt** - Password hashing
@@ -76,7 +75,6 @@ EcoSphere/
 │   │   ├── api.types.ts        # API response types
 │   │   └── api-helpers.ts      # API helper functions
 │   └── lib/                    # Library configurations
-├── prisma/                     # Prisma schema and migrations
 └── public/                     # Static assets
 ```
 
@@ -116,14 +114,7 @@ EcoSphere/
    GOOGLE_CLIENT_SECRET="your-google-client-secret"
    JWT_SECRET="your-jwt-secret-key"
    ```
-
-4. **Set up the database**
-   ```bash
-   npx prisma generate
-   npx prisma db push
-   ```
-
-5. **Run the development server**
+4. **Run the development server**
    ```bash
    npm run dev
    # or
@@ -132,7 +123,7 @@ EcoSphere/
    pnpm dev
    ```
 
-6. **Open your browser**
+5. **Open your browser**
    
    Navigate to [http://localhost:3000](http://localhost:3000)
 

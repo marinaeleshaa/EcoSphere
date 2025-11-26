@@ -1,164 +1,74 @@
 import { injectable } from "tsyringe";
-import { prisma } from "@/lib/prisma";
-import { Prisma, User } from "@/generated/prisma/client";
-import { Omit } from "@prisma/client/runtime/library";
+import { IUser, UserModel } from "./user.model";
+import { DBInstance } from "@/backend/config/dbConnect";
 
 export interface IUserRepository {
-  getAll(): Promise<Omit<User, "password">[]>;
-  getById(id: string): Promise<Omit<User, "password"> | null>;
-  updateById(
-    id: string,
-    data: Prisma.UserUpdateInput
-  ): Promise<Omit<User, "password"> | null>;
-  updateFavorites(
-    id: string,
-    data: string[]
-  ): Promise<Omit<User, "password"> | null>;
-  deleteById(id: string): Promise<Omit<User, "password"> | null>;
+  getAll(): Promise<IUser[]>;
+  getById(id: string): Promise<IUser>;
+  updateById(id: string, data: Partial<IUser>): Promise<IUser>;
+  updateFavorites(id: string, data: string): Promise<IUser>;
+  deleteById(id: string): Promise<IUser>;
 }
 
 @injectable()
 class UserRepository {
-  async getAll(): Promise<Omit<User, "password">[]> {
-    return await prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        password: false,
-        phoneNumber: true,
-        address: true,
-        avatar: true,
-        birthDate: true,
-        createdAt: true,
-        favorites: true,
-        favoritesIds: true,
-        points: true,
-        role: true,
-        gender: true,
-        reviews: true,
-      },
-    });
-  }
-  async getById(id: string): Promise<Omit<User, "password"> | null> {
-    return await prisma.user.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        password: false,
-        phoneNumber: true,
-        address: true,
-        avatar: true,
-        birthDate: true,
-        createdAt: true,
-        favorites: true,
-        favoritesIds: true,
-        points: true,
-        role: true,
-        gender: true,
-        reviews: true,
-      },
-    });
+  async getAll(): Promise<IUser[]> {
+    await DBInstance.getConnection();
+    return await UserModel.find({}, { password: 0 });
   }
 
-  async updateById(
-    id: string,
-    data: Prisma.UserUpdateInput
-  ): Promise<Omit<User, "password"> | null> {
+  async getById(id: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const user = await UserModel.findById(id, { password: 0 });
+
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+
+    return user;
+  }
+
+  async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
+    await DBInstance.getConnection();
     const user = await this.getById(id);
     if (!user) {
-      return null;
+      throw new Error(`User with id ${id} not found`);
     }
-    return await prisma.user.update({
-      where: { id },
-      data,
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        password: false,
-        phoneNumber: true,
-        address: true,
-        avatar: true,
-        birthDate: true,
-        createdAt: true,
-        favoritesIds: true,
-        points: true,
-        role: true,
-        gender: true,
-      },
-    });
+    Object.assign(user, data);
+    return await user.save();
   }
 
-  async updateFavorites(
-    id: string,
-    data: string[]
-  ): Promise<Omit<User, "password"> | null> {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: { favoritesIds: true },
-    });
+  async updateFavorites(id: string, item: string): Promise<IUser> {
+    await DBInstance.getConnection();
 
-    if (user) {
-      const updatedFavorites = [...user.favoritesIds];
+    // Attempt to add the item (if not present)
+    let updatedUser = await UserModel.findOneAndUpdate(
+      { _id: id, favoritesIds: { $ne: item } },
+      { $addToSet: { favoritesIds: item } },
+      { new: true }
+    );
 
-      data.forEach((favId) => {
-        const index = updatedFavorites.indexOf(favId);
-        if (index > -1) {
-          updatedFavorites.splice(index, 1);
-        } else {
-          updatedFavorites.push(favId);
-        }
-      });
-
-      return await prisma.user.update({
-        where: { id },
-        data: { favoritesIds: { set: updatedFavorites } },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          password: false,
-          phoneNumber: true,
-          address: true,
-          avatar: true,
-          birthDate: true,
-          createdAt: true,
-          favoritesIds: true,
-          points: true,
-          role: true,
-          gender: true,
-        },
-      });
+    if (updatedUser) {
+      return updatedUser;
     }
-    return null;
+
+    // If the item was already in favorites, remove it
+    updatedUser = await UserModel.findByIdAndUpdate(
+      id,
+      { $pull: { favoritesIds: item } },
+      { new: true }
+    );
+
+    return updatedUser;
   }
 
-  async deleteById(id: string): Promise<Omit<User, "password"> | null> {
-    return await prisma.user.delete({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        password: false,
-        phoneNumber: true,
-        address: true,
-        avatar: true,
-        birthDate: true,
-        createdAt: true,
-        favoritesIds: true,
-        points: true,
-        role: true,
-        gender: true,
-      },
-    });
+  async deleteById(id: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const user = await this.getById(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    return await user.deleteOne();
   }
 }
 

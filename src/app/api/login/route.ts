@@ -1,28 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { rootContainer } from "@/backend/config/container";
 import AuthController from "@/backend/features/auth/auth.controller";
-import type { LoginDto } from "@/backend/features/auth/dto/user.dto";
-import {
-  handleControllerResponse,
-  handleError,
-} from "@/types/api-helpers";
-import type { LoginResponse } from "@/types/api.types";
+import type {
+  LoginRequestDTO,
+  LoginResponseDTO,
+} from "@/backend/features/auth/dto/user.dto";
+import { ApiResponse, ok, serverError } from "@/types/api-helpers";
 
 export const POST = async (
   request: NextRequest
-): Promise<NextResponse<LoginResponse>> => {
-  const body = (await request.json()) as LoginDto;
+): Promise<NextResponse<ApiResponse<LoginResponseDTO>>> => {
+  const body = (await request.json()) as LoginRequestDTO;
   const controller = rootContainer.resolve(AuthController);
 
   try {
     const result = await controller.login(body);
-    return handleControllerResponse(
-      result,
-      "Login successful",
-      "Either email or password is incorrect",
-      401
-    );
+    return ok(result);
   } catch (error) {
-    return handleError(error, 500);
+    console.log(error);
+    return serverError("Something went wrong");
   }
 };
