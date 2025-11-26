@@ -14,7 +14,7 @@ const AuthPage = () => {
 
   const controls = useAnimation();
 
-  const getCoords = (width: number, height: number) => {
+  const getCoords = (width: number) => {
     const percentWidth = width / 5;
 
     // xs screen < 640px
@@ -141,13 +141,11 @@ const AuthPage = () => {
     toSignInX: 0,
   });
 
-  getCoords(window.innerWidth, window.innerHeight);
   useEffect(() => {
     const updateCoords = () => {
       const width = window.innerWidth;
-      const height = window.innerHeight;
 
-      setCoords(getCoords(width, height));
+      setCoords(getCoords(width));
     };
 
     updateCoords();
