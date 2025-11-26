@@ -29,7 +29,6 @@ const ProductCard = (product: IProduct) => {
     isInFavSelector(state, product.id)
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       dispatch(toggleFav(product));
