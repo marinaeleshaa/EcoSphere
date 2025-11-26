@@ -1,7 +1,17 @@
-import React from 'react'
+"use client";
+
+import HeroSection from "@/components/layout/common/HeroSection";
+import ShopSection from "@/components/layout/Shop/ShopSection";
 
 export default function Shop() {
   return (
-    <div>shop page</div>
-  )
+    <>
+      <HeroSection
+        title="Shops"
+        subTitle="Shops for eco-friendly products and gifts made with love for our planet."
+        imgUrl="/s.png"
+      />
+      <ShopSection />
+    </>
+  );
 }

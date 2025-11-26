@@ -17,7 +17,6 @@ import { useState, useEffect } from 'react';
 export default function ThemeBtn() {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    console.log(theme);
     useEffect(() => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         setMounted(true);

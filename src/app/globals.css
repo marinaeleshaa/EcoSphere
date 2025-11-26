@@ -26,7 +26,7 @@ body {
 }
 
 .myInput {
-  @apply pl-10 bg-input text-input-foreground p-3 rounded-full focus:outline-2 focus:outline-primary focus:outline-offset-2 transition
+  @apply pl-10 bg-input text-input-foreground p-3 rounded-full focus:outline-2 focus:outline-primary focus:outline-offset-2 transition w-full
 }
 
 
