@@ -13,16 +13,14 @@ export type LoginResponse = {
 	role: string;
 };
 
-export type RegisterRequestDTO = {
-	email: string;
-	name: string;
-	password: string;
-	birthDate: string;
-	address: string;
-	avatar: string;
-	gender: string;
-	phoneNumber: string;
-	role: LoginTypes;
+export type RegisterRequestDTO = OAuthUserDTO & {
+	password?: string;
+	birthDate?: string;
+	address?: string;
+	avatar?: string;
+	gender?: string;
+	phoneNumber?: string;
+	hotline?: string;
 };
 
 export type RegisterResponseDTO = {
@@ -30,7 +28,7 @@ export type RegisterResponseDTO = {
 	user: TokenPayload;
 };
 
-export type LoginTypes = UserRole | "shop";
+export type UserTypes = UserRole | "shop";
 
 export type FoundedUser = {
 	_id: string;
@@ -38,5 +36,16 @@ export type FoundedUser = {
 	name: string;
 	password: string;
 	role: string;
+	oAuthId?: string;
+	accountProvider?: string;
 	comparePassword?: (password: string) => Promise<boolean>;
+};
+
+export type OAuthUserDTO = {
+	email: string;
+	firstName: string;
+	lastName: string;
+	role: UserTypes;
+	oAuthId: string;
+	provider?: string;
 };
