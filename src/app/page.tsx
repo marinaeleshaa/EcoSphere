@@ -1,9 +1,9 @@
-import HomeHero from "@/components/layout/Home/HomeHero";
+import HomeHeroLayout from "@/components/layout/Home/HeroSection/HomeHeroLayout";
 
 export default function Home() {
   return (
-    <main className=" min-h-screen">
-      <HomeHero/>
+    <main>
+      <HomeHeroLayout/>
     </main>
   );
 }
