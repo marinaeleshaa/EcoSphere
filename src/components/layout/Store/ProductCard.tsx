@@ -5,8 +5,8 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/frontend/Redux/store";
-import { isInFavSelector, toggleFav } from "@/frontend/Redux/Slice/FavSlice";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 
@@ -29,7 +29,6 @@ const ProductCard = (product: IProduct) => {
     isInFavSelector(state, product.id)
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       dispatch(toggleFav(product));

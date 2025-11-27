@@ -1,6 +1,6 @@
 "use client";
 
-import { RootState } from "@/frontend/Redux/store";
+import { RootState } from "@/frontend/redux/store";
 import { useSelector } from "react-redux";
 import FavCard from "./FavCard";
 import { Heart } from "lucide-react";

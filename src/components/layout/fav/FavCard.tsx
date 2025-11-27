@@ -1,11 +1,11 @@
-import { AppDispatch, RootState } from "@/frontend/Redux/store";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { IProduct } from "@/types/ProductType";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HiMiniTrash } from "react-icons/hi2";
-import { toggleFav } from "@/frontend/Redux/Slice/FavSlice";
+import { toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import {toast} from "sonner"
 
 interface FavCardProps {

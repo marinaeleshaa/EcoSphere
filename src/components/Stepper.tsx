@@ -9,6 +9,7 @@ import React, {
 import { motion, AnimatePresence, Variants } from "motion/react";
 
 interface StepperProps extends HTMLAttributes<HTMLDivElement> {
+  isStepValid?: boolean;
   children: ReactNode;
   initialStep?: number;
   onStepChange?: (step: number) => void;
@@ -30,6 +31,7 @@ interface StepperProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export default function Stepper({
+  isStepValid = true,
   children,
   initialStep = 1,
   onStepChange = () => {},
@@ -156,7 +158,11 @@ export default function Stepper({
               )}
               <button
                 onClick={isLastStep ? handleComplete : handleNext}
-                className="duration-350 flex items-center justify-center rounded-full bg-primary py-3 px-7 font-medium tracking-tight  text-primary-foreground cursor-pointer transition hover:bg-primary/80 hover:scale-105"
+                disabled={nextButtonProps.disabled || !isStepValid}
+                className={`duration-350 flex items-center justify-center rounded-full bg-primary py-3 px-7 
+  font-medium tracking-tight text-primary-foreground cursor-pointer transition 
+  hover:bg-primary/80 hover:scale-105 
+  ${!isStepValid ? "opacity-50 pointer-events-none" : ""}`}
                 {...nextButtonProps}
               >
                 {isLastStep ? "Complete" : nextButtonText}
