@@ -1,10 +1,11 @@
 "use client";
 
+import { RootState } from "@/frontend/redux/store";
 import { useSelector } from "react-redux";
 import FavCard from "./FavCard";
 import { Heart } from "lucide-react";
 import Link from "next/link";
-import { RootState } from "@/frontend/redux/store";
+
 
 const FavCardsSection = () => {
   const { view, favProducts } = useSelector((state: RootState) => state.fav);
