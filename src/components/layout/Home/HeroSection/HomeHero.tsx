@@ -1,3 +1,5 @@
+"use client";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 
@@ -26,9 +28,19 @@ const HomeHero = () => {
               More About EcoSphere
             </Link>
           </div>
-          <div className=" absolute left-1/2 top-1/2  aspect-square w-full -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary opacity-50  " />
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            whileInView={{ opacity: 0.3, scale: 1 }}
+            transition={{ duration: 1.2 }}
+            className=" absolute left-1/2 top-1/2  aspect-square w-full -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary opacity-50  "
+          />
         </div>
-        <div className="absolute left-1/2 top-1/2  aspect-square w-full md:w-2/3 h-fit -translate-x-1/2 -translate-y-1/2 inset-0 border-primary border opacity-30  rounded-full"></div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 0.3, scale: 1 }}
+          transition={{ duration: 1.2 }}
+          className="absolute left-1/2 top-1/2  aspect-square w-full md:w-2/3 h-fit -translate-x-1/2 -translate-y-1/2 inset-0 border-primary border opacity-30  rounded-full"
+        ></motion.div>
       </div>
     </section>
   );
