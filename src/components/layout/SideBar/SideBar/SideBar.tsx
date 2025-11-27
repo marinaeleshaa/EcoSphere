@@ -20,6 +20,7 @@ import Link from 'next/link'
 import ThemeBtn from '../ThemeBtn/ThemeBtn'
 import UserBtn from '../UserBtn/UserBtn'
 import GetFavCount from '@/frontend/Actions/GetFavCount'
+import { PiListMagnifyingGlassBold } from "react-icons/pi";
 // Menu items.
 const items = [
     {
@@ -76,14 +77,14 @@ const dashboardItems=[
         icon: MdOutlineAddToPhotos,
     },
     {
-        title: "Browse Events",
-        url: "/",
-        icon: MdOutlineSearch,
-    },
-    {
-        title: "Event Details",
+        title: "View events",
         url: "/",
         icon: MdOutlineEventRepeat,
+    },
+    {
+        title: "Browse Events",
+        url: "/",
+        icon: PiListMagnifyingGlassBold,
     },
 ]
 
@@ -103,7 +104,7 @@ export default function SideBar() {
                                     <SidebarMenuButton asChild>
                                         <Link href={item.url}>
                                             <item.icon />
-                                            <span>{item.title}</span>
+                                            <span className='capitalize'>{item.title}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -121,7 +122,7 @@ export default function SideBar() {
                                     <SidebarMenuButton asChild>
                                         <Link href={item.url}>
                                             <item.icon />
-                                            <span>{item.title}</span>
+                                            <span className='capitalize'>{item.title}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>

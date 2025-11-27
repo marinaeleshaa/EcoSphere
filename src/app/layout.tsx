@@ -36,10 +36,7 @@ export default function RootLayout({
             <Toaster position="top-right" />
             <SideBar />
           <SidebarInset>
-
-            {/* <div className="w-full bg-background text-foreground"> */}
               {children}
-            {/* </div> */}
           </SidebarInset>
             
           </Providers>

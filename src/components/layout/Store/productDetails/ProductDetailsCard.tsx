@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/frontend/Redux/store";
-import { isInFavSelector, toggleFav } from "@/frontend/Redux/Slice/FavSlice";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
