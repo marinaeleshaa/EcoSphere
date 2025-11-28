@@ -67,7 +67,7 @@ const items = [
 const dashboardItems=[
     {
         title: "OverView",
-        url: "/",
+        url: "/overview",
         icon: RxDashboard,
     },
     {

@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "@/frontend/providers/Providers";
 import SideBar from "@/components/layout/SideBar/SideBar/SideBar";
 import { Toaster } from "sonner";
+import { SidebarInset } from "@/components/ui/sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,13 @@ export default function RootLayout({
           <Providers>
             <Toaster position="top-right" />
             <SideBar />
-            <div className="w-full bg-background text-foreground">
+          <SidebarInset>
+
+            {/* <div className="w-full bg-background text-foreground"> */}
               {children}
-            </div>
+            {/* </div> */}
+          </SidebarInset>
+            
           </Providers>
       </body>
     </html>

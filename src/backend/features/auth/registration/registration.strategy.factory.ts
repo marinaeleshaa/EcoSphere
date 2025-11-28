@@ -26,7 +26,7 @@ class RegistrationFactory implements IRegistrationFactory {
       case "shop":
         return this.shopStrategy;
       default:
-        throw new Error("Invalid user type");
+        throw new Error("Invalid user type, from strategy factory");
     }
 	}
 }
