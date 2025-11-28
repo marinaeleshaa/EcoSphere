@@ -29,6 +29,14 @@ body {
   @apply pl-10 bg-input text-input-foreground p-3 rounded-full focus:outline-2 focus:outline-primary focus:outline-offset-2 transition w-full
 }
 
+.myBtnPrimary {
+  @apply bg-primary text-primary-foreground p-3 px-5 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4
+}
+
+
+
+
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

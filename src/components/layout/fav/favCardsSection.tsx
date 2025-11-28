@@ -6,12 +6,13 @@ import FavCard from "./FavCard";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 
+
 const FavCardsSection = () => {
   const { view, favProducts } = useSelector((state: RootState) => state.fav);
   return (
     <section>
       {favProducts.length === 0 && (
-        <div className="flex items-center justify-center p-20 bg-primary/10 rounded-xl mt-10">
+        <div className="flex items-center justify-center p-20 bg-primary/10 rounded-xl mt-10 my-20">
           <div className="text-center max-w-md px-6">
             <div className="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/20 ">
               <Heart className="w-10 h-10 text-primary" />
