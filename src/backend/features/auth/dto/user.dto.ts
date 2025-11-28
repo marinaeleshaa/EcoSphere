@@ -1,32 +1,71 @@
-import { TokenPayload } from "@/backend/interfaces/interfaces";
-import { UserRole } from "../../user/user.model";
+import { Gender, UserRole } from "../../user/user.model";
 
 export type LoginRequestDTO = {
 	email: string;
 	password: string;
-	loginType: LoginTypes;
 };
 
-export type LoginResponseDTO = {
-	token: string;
-	user: TokenPayload;
-};
-
-export type RegisterRequestDTO = {
+export type LoginResponse = {
+	id: string;
 	email: string;
 	name: string;
-	password: string;
-	birthDate: string;
-	address: string;
-	avatar: string;
-	gender: string;
-	phoneNumber: string;
-	role: LoginTypes;
+	role: string;
 };
 
 export type RegisterResponseDTO = {
-	token: string;
-	user: TokenPayload;
+	success: boolean;
 };
 
-export type LoginTypes = UserRole | "shop";
+export type UserTypes = UserRole | "shop";
+
+export type FoundedUser = {
+	_id: string;
+	email: string;
+	name: string;
+	password: string;
+	role: string;
+	oAuthId?: string;
+	accountProvider?: string;
+	comparePassword?: (password: string) => Promise<boolean>;
+};
+
+export type OAuthUserDTO = RegisterRequestDTO &
+	RegisterForConsumer & {
+		role: UserTypes;
+		oAuthId: string;
+		provider?: string;
+	};
+
+export type UserRegisterDTO = RegisterWithCredentialsDTO &
+	RegisterForConsumer &
+	RegisterWithPhoneNumber & {
+		birthDate: string;
+		gender: Gender;
+	};
+
+export type ShopRegisterDTO = RegisterWithCredentialsDTO &
+	RegisterWithPhoneNumber & {
+		name: string;
+		description: string;
+		hotline: string;
+		file: string;
+		workingHours: string;
+	};
+
+export type RegisterRequestDTO = {
+	email: string;
+	role: UserTypes;
+};
+
+export type RegisterWithCredentialsDTO = RegisterRequestDTO & {
+	password: string;
+};
+
+export type RegisterForConsumer = {
+	firstName: string;
+	lastName: string;
+};
+
+export type RegisterWithPhoneNumber = {
+	phoneNumber: string;
+};
