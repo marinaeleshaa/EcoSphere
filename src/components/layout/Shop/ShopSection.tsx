@@ -157,7 +157,7 @@ export default function ShopSection() {
             </motion.div>
           ))
         ) : (
-          <p className="col-span-full text-center text-foreground py-10">
+          <p className="col-span-full text-center text-primary-forground py-10">
             No products match your current search criteria.
           </p>
         )}

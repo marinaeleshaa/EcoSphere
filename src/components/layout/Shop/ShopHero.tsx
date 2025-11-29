@@ -7,21 +7,18 @@ export default function ShopHero() {
   const cards = [
     {
       id: 1,
-      color: "green",
       emoji: "🌎",
       title: "Planet-Friendly Products",
       text: "Each shop prioritizes items that are inherently sustainable and kind to the environment, minimizing ecological impact.",
     },
     {
       id: 2,
-      color: "yellow",
       emoji: "♻️",
       title: "Eco-Conscious Sourcing",
       text: "They ensure full responsibility and ethical sourcing, favoring materials that are renewable, recycled, or low-waste.",
     },
     {
       id: 3,
-      color: "blue",
       emoji: "🌱",
       title: "Commitment to You",
       text: "Products are carefully selected to be safe, kind to your health, and promote a holistic, sustainable lifestyle.",
@@ -37,11 +34,11 @@ export default function ShopHero() {
       viewport={{ once: true }}
     >
       <div className="rounded-3xl p-6">
-        <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
+        <h2 className="text-3xl font-bold text-primary-forground mb-4 text-center">
           Quality You Can Trust
         </h2>
 
-        <p className="text-foreground leading-relaxed mb-6 text-center">
+        <p className="text-primary-forground leading-relaxed mb-6 text-center">
           We check every partner shop with real care keeping things healthy,
           planet-friendly, and a little fun along the way. Hover over a card to
           explore it!
@@ -63,20 +60,18 @@ export default function ShopHero() {
           
           ${isDimmed ? "opacity-40 scale-[0.98]" : "opacity-100 scale-100"}
           
-          bg-${card.color}-400/20 border-${
-                  card.color
-                }-300/20 hover:-translate-y-1`}
+          bg-primary border-0 hover:-translate-y-1`}
               >
                 <div className="text-3xl mb-2">{card.emoji}</div>
-                <h3 className="font-semibold text-foreground text-lg mb-1">
+                <h3 className="font-semibold text-primary-forground text-lg mb-1">
                   {card.title}
                 </h3>
                 <p
                   className={`text-sm mt-2 transition-all duration-300
             ${
               isActive
-                ? "text-foreground text-base"
-                : "text-foreground/20 text-sm"
+                ? "text-primary-forground text-base"
+                : "text-primary-forground/20 text-sm"
             }
           `}
                 >
