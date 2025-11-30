@@ -2,7 +2,7 @@ import { injectable } from "tsyringe";
 import { Gender, IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { ObjectId } from "mongoose";
-import { FoundedUser, RegisterRequestDTO } from "./dto/user.dto";
+import { FoundedUser, RegisterRequestDTO, ShopRegisterDTO } from "./dto/user.dto";
 import { IRestaurant, RestaurantModel } from "../restaurant/restaurant.model";
 
 export interface IAuthRepository {
@@ -20,7 +20,7 @@ export interface IAuthRepository {
   existsByEmail(email: string): Promise<{ _id: ObjectId } | null>;
   existsShopByEmail(email: string): Promise<{ _id: ObjectId }>;
   saveNewUser(data: RegisterRequestDTO): Promise<IUser>;
-  saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant>;
+  saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant>;
   findUserByEmail(email: string, keys?: string): Promise<FoundedUser>;
   findShopByEmail(email: string, keys?: string): Promise<FoundedUser>;
   me(): Promise<IUser[]>;
@@ -67,7 +67,8 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.create(data);
   }
-  async saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant> {
+
+  async saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant> {
     await DBInstance.getConnection();
     const shopData: any = { ...data };
     if (data.avatar && typeof data.avatar === "string") {

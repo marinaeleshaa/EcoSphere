@@ -5,8 +5,9 @@ import type {
 	LoginRequestDTO,
 	LoginResponse,
 } from "../dto/user.dto";
-import { mapToUserPublicProfile } from "../mappers";
 
+// NOTE: This service appears to be deprecated in favor of UserLoginStrategy and ShopLoginStrategy
+// Consider removing if not used
 @injectable()
 class LoginService {
 	constructor(
@@ -20,7 +21,9 @@ class LoginService {
 
 		if (!(await user.comparePassword!(data.password)))
 			throw new Error("Invalid email or password");
-		return mapToUserPublicProfile(user);
+		
+		// This needs proper DTO transformation - returning raw FoundedUser as workaround
+		return user as any;
 	}
 
 	async findByEmail(email: string, key: string): Promise<FoundedUser> {

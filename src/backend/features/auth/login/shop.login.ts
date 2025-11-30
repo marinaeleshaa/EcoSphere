@@ -1,9 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { ILoginStrategy } from "./login.service";
-import { LoginRequestDTO, LoginResponseDTO } from "../dto/user.dto";
+import { ILoginStrategy, LoginResponseDTO } from "./login.service";
+import { LoginRequestDTO, PublicUserProfile } from "../dto/user.dto";
 import type { IAuthRepository } from "../auth.repository";
-import { mapShopToPublicProfile } from "../mappers";
-import { generateToken } from "@/backend/utils/helpers";
+import { signJwt } from "@/backend/utils/helpers";
 
 @injectable()
 class ShopLoginStrategy implements ILoginStrategy {
@@ -14,12 +13,12 @@ class ShopLoginStrategy implements ILoginStrategy {
 		console.log(date);
 		const shop = await this.authRepo.findShopByEmail(date.email);
 		if (!shop) throw new Error("Shop not found");
-		if (!(await shop.comparePassword(date.password)))
+		if (!shop.comparePassword || !(await shop.comparePassword(date.password)))
 			throw new Error("Invalid email or password");
 
-		const shopData = await mapShopToPublicProfile(shop);
+		const shopData = await PublicUserProfile.fromRestaurant(shop as any);
 
-		const token = generateToken(shopData);
+		const token = signJwt(PublicUserProfile.toTokenPayloadFromRestaurant(shop as any));
 		return {
 			token,
 			user: shopData,

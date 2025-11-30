@@ -2,7 +2,6 @@ import { inject, injectable } from "tsyringe";
 import type { IUserService } from "./user.service";
 import { IUser } from "./user.model";
 import "reflect-metadata";
-import { mapUserAsEndUser, mapUserAsOrganizer } from "../auth/mappers";
 import { PublicUserProfile } from "../auth/dto/user.dto";
 
 @injectable()
@@ -22,12 +21,8 @@ class UserController {
   }
   async updateById(id: string, data: Partial<IUser>): Promise<PublicUserProfile> {
     const user = await this.userService.updateById(id, data);
-    // Map the avatar object to a string URL
-    if (user.role === "organizer") {
-      return await mapUserAsOrganizer(user);
-    } else {
-      return await mapUserAsEndUser(user);
-    }
+    // Use DTO factory method to map user to profile with avatar URL
+    return await PublicUserProfile.fromUser(user);
   }
   async updateFavorites(id: string, data: string): Promise<IUser> {
     const user = await this.userService.updateFavorites(id, data);

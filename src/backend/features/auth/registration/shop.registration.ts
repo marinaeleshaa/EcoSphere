@@ -1,9 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IRegistrationStrategy } from "./registration.service";
-import { RegisterResponseDTO, ShopRegisterDTO } from "../dto/user.dto";
+import { RegisterResponseDTO, ShopRegisterDTO, PublicUserProfile } from "../dto/user.dto";
 import type { IAuthRepository } from "../auth.repository";
-import { mapRestaurantToTokenPayload, mapShopToPublicProfile } from "../mappers";
-import { generateToken } from "@/backend/utils/helpers";
+import { signJwt } from "@/backend/utils/helpers";
 import { container } from "tsyringe";
 import { ImageService } from "@/backend/services/image.service";
 
@@ -34,11 +33,8 @@ class ShopRegistration implements IRegistrationStrategy {
         const shopData = { ...data, avatar: avatarKey };
 
 		const savedShop = await this.authRepo.saveNewShop(shopData);
-		const token = generateToken(mapRestaurantToTokenPayload(savedShop));
-		return {
-			token,
-			user: await mapShopToPublicProfile(savedShop),
-		};
+		const token = signJwt(PublicUserProfile.toTokenPayloadFromRestaurant(savedShop));
+		return await RegisterResponseDTO.create(token, savedShop);
 	}
 }
 export { ShopRegistration };
