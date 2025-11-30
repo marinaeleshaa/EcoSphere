@@ -23,6 +23,10 @@ export const notFound = (message: string) => {
   return NextResponse.json({ success: false, error: message }, { status: 404 });
 };
 
+export const unauthorized = (message: string) => {
+  return NextResponse.json({ success: false, error: message }, { status: 401 });
+};
+
 export const serverError = (message: string) => {
   return NextResponse.json({ success: false, error: message }, { status: 500 });
 };

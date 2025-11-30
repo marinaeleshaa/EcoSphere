@@ -5,6 +5,7 @@ import { Providers } from "@/frontend/providers/Providers";
 import SideBar from "@/components/layout/SideBar/SideBar/SideBar";
 import { Toaster } from "sonner";
 import { SidebarInset } from "@/components/ui/sidebar";
+import SessionRestore from "@/components/common/SessionRestore";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
       >
           <Providers>
             <Toaster position="top-right" />
+            <SessionRestore />
             <SideBar />
           <SidebarInset>
 

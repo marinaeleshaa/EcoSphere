@@ -31,15 +31,24 @@ import Link from "next/link"
 
 import { useDispatch, useSelector } from "react-redux"
 import { RootState, AppDispatch } from "@/frontend/redux/store"
-import { logout } from "@/frontend/redux/Slice/UserSlice"
+import { logoutUserThunk } from "@/frontend/redux/Slice/AuthSlice"
+import { useRouter } from "next/navigation"
 
 export default function UserBtn() {
     const { isMobile } = useSidebar()
     const dispatch = useDispatch<AppDispatch>()
     const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
 
-    const handleLogout = () => {
-        dispatch(logout())
+    const handleLogout = async () => {
+        try {
+            await dispatch(logoutUserThunk()).unwrap()
+            // Redirect to home page after successful logout
+            router.push("/")
+        } catch (error) {
+            // Even if logout fails, redirect to home
+            router.push("/")
+        }
     }
 
     if (!user.isLoggedIn) return null
@@ -107,12 +116,10 @@ export default function UserBtn() {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <Link href="/auth" onClick={handleLogout}>
-                            <DropdownMenuItem>
-                                <LogOut />
-                                <span>Log out</span>
-                            </DropdownMenuItem>
-                        </Link>
+                        <DropdownMenuItem onClick={handleLogout}>
+                            <LogOut />
+                            <span>Log out</span>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

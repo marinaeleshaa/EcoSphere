@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setUser, UserState } from "./UserSlice";
+import { setUser, UserState, logout as logoutUser } from "./UserSlice";
 
 interface ISecondUserStep {
   firstName: string;
@@ -65,9 +65,7 @@ const initialState: AuthState = {
   },
 };
 
-import { signIn } from "next-auth/react";
-
-// ...
+import { signIn, signOut } from "next-auth/react";
 
 // Real Login Thunk
 export const loginUser = createAsyncThunk(
@@ -172,6 +170,30 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+// Logout Thunk
+export const logoutUserThunk = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      // Sign out from NextAuth (clears session cookie)
+      await signOut({ redirect: false });
+
+      // Clear token from localStorage
+      localStorage.removeItem("token");
+
+      // Clear user state in Redux
+      dispatch(logoutUser());
+
+      return { success: true };
+    } catch (error: any) {
+      // Even if signOut fails, clear local state
+      localStorage.removeItem("token");
+      dispatch(logoutUser());
+      return rejectWithValue(error.message || "Logout failed");
+    }
+  }
+);
+
 type StepKey = "step1" | "step2" | "step3" | "step4";
 
 const AuthSlice = createSlice({
@@ -229,6 +251,18 @@ const AuthSlice = createSlice({
         state.loading = false;
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(logoutUserThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutUserThunk.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(logoutUserThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
