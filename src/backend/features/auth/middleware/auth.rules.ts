@@ -11,7 +11,7 @@ export const applyAuthRules = (
 
 	// 1. Signed-in users shouldn't access /auth/*
 	if (signedIn && pathname === "/auth")
-		return NextResponse.redirect(new URL("/dashboard", req.url));
+		return NextResponse.redirect(new URL("/", req.url));
 
 	// 2. Not signed in → accessing protected route
 	const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r));

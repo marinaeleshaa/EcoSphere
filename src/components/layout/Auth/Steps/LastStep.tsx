@@ -17,11 +17,7 @@ const LastStep = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors , isValid },
-  } = useForm<LastStepForm>({
+  const form = useForm<LastStepForm>({
     resolver: zodResolver(LastStepSchema),
     mode: "onChange",
     defaultValues: {
@@ -31,14 +27,27 @@ const LastStep = () => {
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = form;
+
   const onSubmit = (data: LastStepForm) => {
     dispatch(saveStep4Data(data));
     dispatch(setStepValid({ step: 4, valid: true }));
   };
 
   useEffect(() => {
-  dispatch(setStepValid({ step: 4, valid: isValid }));
-}, [isValid , dispatch]);
+    const subscription = form.watch((value) => {
+      dispatch(saveStep4Data(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form, dispatch]);
+
+  useEffect(() => {
+    dispatch(setStepValid({ step: 4, valid: isValid }));
+  }, [isValid, dispatch]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 p-5">

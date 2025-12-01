@@ -1,7 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IRegistrationStrategy } from "./registration.service";
 import type { IAuthRepository } from "../auth.repository";
-import { RegisterResponseDTO, UserRegisterDTO } from "../dto/user.dto";
+import { RegisterResponseDTO, UserRegisterDTO, PublicUserProfile } from "../dto/user.dto";
+import { signJwt } from "@/backend/utils/helpers";
 
 @injectable()
 class EndUserRegistration implements IRegistrationStrategy {
@@ -19,7 +20,10 @@ class EndUserRegistration implements IRegistrationStrategy {
 		const savedUser = await this.authRepository.saveNewUser(data);
 		if (!savedUser)
 			throw new Error("something went wrong, user can not registered");
-		return { success: true };
+		
+		const token = signJwt(PublicUserProfile.toTokenPayload(savedUser));
+		
+		return await RegisterResponseDTO.create(token, savedUser);
 	}
 }
 

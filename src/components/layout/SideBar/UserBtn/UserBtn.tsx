@@ -29,13 +29,37 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 
+import { useDispatch, useSelector } from "react-redux"
+import { RootState, AppDispatch } from "@/frontend/redux/store"
+import { logoutUserThunk } from "@/frontend/redux/Slice/AuthSlice"
+import { useRouter } from "next/navigation"
+
 export default function UserBtn() {
     const { isMobile } = useSidebar()
-    const user = {
-        name: 'user',
-        email: 'email@gmail.com',
-        avatar: "https://github.com/shadcn.png",
+    const dispatch = useDispatch<AppDispatch>()
+    const user = useSelector((state: RootState) => state.user)
+    const router = useRouter()
+
+    const handleLogout = async () => {
+        try {
+            await dispatch(logoutUserThunk()).unwrap()
+            // Redirect to home page after successful logout
+            router.push("/")
+        } catch (error) {
+            // Even if logout fails, redirect to home
+            router.push("/")
+        }
     }
+
+    if (!user.isLoggedIn) return null
+
+    // Determine display name and initials based on role
+    const isRestaurant = user.role === "shop" || user.role === "restaurant"
+    const displayName = isRestaurant ? user.name : `${user.firstName} ${user.lastName}`
+    const initials = isRestaurant
+        ? user.name?.substring(0, 2).toUpperCase()
+        : `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`
+
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -46,11 +70,11 @@ export default function UserBtn() {
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={user.avatar} alt={user.name} />
-                                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                <AvatarImage src={user.avatar} alt={displayName} />
+                                <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
                             </Avatar>
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{user.name}</span>
+                                <span className="truncate font-medium">{displayName}</span>
                                 <span className="truncate text-xs">{user.email}</span>
                             </div>
                             <ChevronsUpDown className="ml-auto size-4" />
@@ -65,11 +89,11 @@ export default function UserBtn() {
                         <DropdownMenuLabel className="p-0 font-normal">
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-xl">
-                                    <AvatarImage src={user.avatar} alt={user.name} />
-                                    <AvatarFallback className="rounded-xl">CN</AvatarFallback>
+                                    <AvatarImage src={user.avatar} alt={displayName} />
+                                    <AvatarFallback className="rounded-xl">{initials}</AvatarFallback>
                                 </Avatar>
                                 <div className="grid flex-1 text-left text-sm leading-tight">
-                                    <span className="truncate font-medium">{user.name}</span>
+                                    <span className="truncate font-medium">{displayName}</span>
                                     <span className="truncate text-xs">{user.email}</span>
                                 </div>
                             </div>
@@ -84,10 +108,10 @@ export default function UserBtn() {
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <Link href="/profile">
-                            <DropdownMenuItem>
-                                <BadgeCheck />
-                                Account
-                            </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <BadgeCheck />
+                                    Account
+                                </DropdownMenuItem>
                             </Link>
                             <DropdownMenuItem>
                                 <CreditCard />
@@ -99,12 +123,10 @@ export default function UserBtn() {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <Link href="/auth">
-                            <DropdownMenuItem>
-                                <LogOut />
-                                <span> Log out</span>
-                            </DropdownMenuItem>
-                        </Link>
+                        <DropdownMenuItem onClick={handleLogout}>
+                            <LogOut />
+                            <span>Log out</span>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </SidebarMenuItem>

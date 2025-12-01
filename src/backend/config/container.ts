@@ -11,6 +11,9 @@ import { RegistrationService } from "../features/auth/registration/registration.
 import { ShopRegistration } from "../features/auth/registration/shop.registration";
 import { OrganizerRegistration } from "../features/auth/registration/organizer.registration";
 import { LoginService } from "../features/auth/login/users.login.service";
+import { LoginFactory } from "../features/auth/login/login.strategy.factory";
+import { UserLoginStrategy } from "../features/auth/login/user.login";
+import { ShopLoginStrategy } from "../features/auth/login/shop.login";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
@@ -24,5 +27,8 @@ container.registerSingleton("EndUserRegistration", EndUserRegistration);
 container.registerSingleton("ShopRegistration", ShopRegistration);
 container.registerSingleton("OrganizerRegistration", OrganizerRegistration);
 container.registerSingleton("LoginService", LoginService);
+container.registerSingleton("LoginFactory", LoginFactory);
+container.registerSingleton("UserLoginStrategy", UserLoginStrategy);
+container.registerSingleton("ShopLoginStrategy", ShopLoginStrategy);
 
 export { container as rootContainer } from "tsyringe";

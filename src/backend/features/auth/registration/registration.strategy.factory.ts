@@ -24,6 +24,7 @@ class RegistrationFactory implements IRegistrationFactory {
       case "organizer":
         return this.organizerStrategy;
       case "shop":
+      case "restaurant":
         return this.shopStrategy;
       default:
         throw new Error("Invalid user type, from strategy factory");

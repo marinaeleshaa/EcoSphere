@@ -27,6 +27,13 @@ const ShStep2 = () => {
   };
 
   useEffect(() => {
+    const subscription = form.watch((value) => {
+      dispatch(saveStep2Data(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch]);
+
+  useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));
   }, [form.formState.isValid, dispatch]);
 

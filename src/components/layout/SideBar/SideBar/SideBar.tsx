@@ -1,4 +1,7 @@
+"use client"
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/frontend/redux/store'
 import { Gamepad2, Calendar, Home, ShoppingBag, Recycle, Store, ShoppingCart, Heart, LogIn, Newspaper, Info } from "lucide-react"
 import {
     Sidebar,
@@ -64,7 +67,7 @@ const items = [
     },
 ]
 
-const dashboardItems=[
+const dashboardItems = [
     {
         title: "OverView",
         url: "/overview",
@@ -88,6 +91,8 @@ const dashboardItems=[
 ]
 
 export default function SideBar() {
+    const user = useSelector((state: RootState) => state.user)
+
     return (
         <Sidebar collapsible="icon" variant='floating' className='bg-background '>
             <SidebarHeader >
@@ -152,14 +157,16 @@ export default function SideBar() {
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
-                        <SidebarMenuItem >
-                            <SidebarMenuButton asChild >
-                                <Link href="/auth">
-                                    <LogIn />
-                                    <span>Login</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
+                        {!user.isLoggedIn && (
+                            <SidebarMenuItem >
+                                <SidebarMenuButton asChild >
+                                    <Link href="/auth">
+                                        <LogIn />
+                                        <span>Login</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )}
                         <ThemeBtn />
                         <UserBtn />
                     </SidebarMenu>
