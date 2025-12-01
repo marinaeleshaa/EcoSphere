@@ -6,32 +6,7 @@ export const getCartFromServer = (): CartItems[] => {
 	// const res = await fetch(`api/cart`, { headers: {...} })
 	// return res.json();
 	// For now: return [] as placeholder
-	return [
-		{
-			id: "1",
-			title: "product a",
-			description: "description",
-			image: "/11.png",
-			price: 600,
-			quantity: 1,
-		},
-		{
-			id: "2",
-			title: "product b",
-			description: "description",
-			image: "/11.png",
-			price: 40,
-			quantity: 1,
-		},
-		{
-			id: "4",
-			title: "product b",
-			description: "description",
-			image: "/11.png",
-			price: 40,
-			quantity: 1,
-		},
-	];
+	return [];
 };
 
 const Cart = async () => {
