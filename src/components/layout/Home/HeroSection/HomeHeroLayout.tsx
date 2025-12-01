@@ -2,6 +2,7 @@ import React from "react";
 import HomeHero from "./HomeHero";
 import LeftFloatingImg from "./LeftFloatingImg";
 import RightFloatingImg from "./RightFloatingImg";
+import TextHeroSection from "./TextHeroSection";
 
 const HomeHeroLayout = () => {
   return (
@@ -17,6 +18,9 @@ const HomeHeroLayout = () => {
         <div className="">
           <RightFloatingImg />
         </div>
+      </div>
+      <div>
+        <TextHeroSection/>
       </div>
     </div>
   );
