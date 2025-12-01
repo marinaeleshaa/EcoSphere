@@ -1,16 +1,10 @@
+"use client";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-
-interface IShop {
-  id: number;
-  title: string;
-  desc: string;
-  img: string;
-  rating: number;
-  workingHours: string;
-}
+import { useRouter } from "next/navigation";
+import { IShop } from "@/data/shops";
 
 interface AnimatedShopCardProps {
   shop: IShop;
@@ -19,6 +13,7 @@ interface AnimatedShopCardProps {
 
 export default function ShopCard({ shop, index }: AnimatedShopCardProps) {
   const [isExiting, setIsExiting] = useState(false);
+  const router = useRouter();
   const exitVariant = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
@@ -39,6 +34,7 @@ export default function ShopCard({ shop, index }: AnimatedShopCardProps) {
       viewport={{ once: false }}
       onViewportLeave={() => setIsExiting(true)}
       onViewportEnter={() => setIsExiting(false)}
+      onClick={() => router.push(`/shop/${shop.id}`)}
     >
       <div className="absolute inset-0">
         <Image
