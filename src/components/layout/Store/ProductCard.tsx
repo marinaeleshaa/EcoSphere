@@ -5,7 +5,7 @@ import { RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
 import { useSelector } from "react-redux";
-import {  RootState } from "@/frontend/redux/store";
+import { RootState } from "@/frontend/redux/store";
 import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
@@ -53,7 +53,8 @@ const ProductCard = (product: IProduct) => {
 				image: productImg,
 			})
 		);
-    // if (isFav) {
+		toast.success("added to cart");
+		// if (isFav) {
 		// 	toast.success("Removed from favorites");
 		// } else {
 		// 	toast.success("Added to favorites");
