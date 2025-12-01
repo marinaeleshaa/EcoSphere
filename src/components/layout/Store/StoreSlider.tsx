@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
+import BasicAnimatedWrapper from "../common/BasicAnimatedWrapper";
 
 const StoreSlider = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -46,25 +46,15 @@ const StoreSlider = () => {
         <div className="w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="mb-12 text-center"
-            >
+            <BasicAnimatedWrapper className="mb-12 text-center">
               <h2 className="text-4xl lg:text-4xl font-semibold text-foreground mb-3">
                 Our Partner Stores
               </h2>
               <div className="w-24 h-1.5 bg-primary mx-auto rounded-full"></div>
-            </motion.div>
+            </BasicAnimatedWrapper>
 
             {/* Slider Container */}
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, y: 80 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+            <BasicAnimatedWrapper className="relative">
               <div className="overflow-hidden rounded-2xl relative">
                 {/* Scrollable Container */}
                 <div
@@ -75,13 +65,10 @@ const StoreSlider = () => {
                     msOverflowStyle: "none",
                   }}
                 >
-                  <div className="flex gap-6 py-5">
+                  <div className="flex gap-6 py-5  overflow-y-hidden">
                     {stores.map((store, index) => (
-                      <motion.div
+                      <BasicAnimatedWrapper
                         key={index}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: index * 0.05 }}
                         whileHover={{ y: -10, scale: 1.05 }}
                         className="shrink-0 w-[170px] h-[170px] relative group/card cursor-pointer"
                       >
@@ -112,7 +99,7 @@ const StoreSlider = () => {
 
                         {/* Glow Effect */}
                         <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-xl opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 -z-10"></div>
-                      </motion.div>
+                      </BasicAnimatedWrapper>
                     ))}
                   </div>
                 </div>
@@ -138,21 +125,16 @@ const StoreSlider = () => {
                   <ChevronRight className="w-6 h-6" />
                 </button>
               </div>
-            </motion.div>
+            </BasicAnimatedWrapper>
 
             {/* Bottom Indicator */}
-            <motion.div
-              initial={{ opacity: 0, y: 80 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="mt-8 text-center"
-            >
+            <BasicAnimatedWrapper className="mt-8 text-center">
               <p className="text-stone-500 text-sm flex items-center justify-center gap-2">
                 <span className="inline-block w-2 h-2 bg-primary rounded-full animate-pulse"></span>
                 {""}
                 Scroll to explore more stores
               </p>
-            </motion.div>
+            </BasicAnimatedWrapper>
           </div>
         </div>
       </section>

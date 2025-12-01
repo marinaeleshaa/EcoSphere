@@ -41,7 +41,7 @@ const LogIn = () => {
               </div>
             </Link>
 
-            <button className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
+            <button className="myBtnPrimary">
               Login
               <Image
                 src={"/leaf.png"}
