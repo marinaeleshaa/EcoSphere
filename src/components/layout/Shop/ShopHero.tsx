@@ -58,7 +58,7 @@ export default function ShopHero() {
                 className={`
           transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
           
-          ${isDimmed ? "opacity-40 scale-[0.98]" : "opacity-100 scale-100"}
+          ${isDimmed ? "opacity-60 scale-[0.98]" : "opacity-100 scale-100"}
           
           bg-primary border-0 hover:-translate-y-1`}
               >
