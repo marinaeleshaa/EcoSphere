@@ -149,5 +149,23 @@
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites"
     }
+  },
+  "Favorites": {
+    "hero": {
+      "title": "Favorite",
+      "breadcrumb": {
+        "home": "Home",
+        "favorite": "Favorite"
+      }
+    },
+    "emptyState": {
+      "title": "No favorites yet",
+      "description": "Start adding products to your favorites to see them here",
+      "browseButton": "Browse Products"
+    },
+    "card": {
+      "addToCart": "add to cart",
+      "removedFromFavorites": "Removed from favorites"
+    }
   }
 }
