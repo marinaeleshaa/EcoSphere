@@ -18,8 +18,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					const response = await controller.loginWithCredentials({
 						email: credentials.email as string,
 						password: credentials.password as string,
-						loginType: (credentials as any).loginType,
-					} as any);
+					});
 					if (!response) return null;
 
 					// Return user object with id and other properties
@@ -70,12 +69,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			}
 		},
 		async jwt({ token, user }) {
-		  if (user) {
+			if (user) {
 				token.id = user.id;
 				token.email = user.email;
 				token.role = user.role;
 				token.name = user.name;
-				}
+			}
 			return token;
 		},
 
