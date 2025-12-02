@@ -6,6 +6,7 @@ import {
 	type LoginRequestDTO,
 	type LoginResponse,
 } from "../dto/user.dto";
+import { IUser } from "../../user/user.model";
 
 // NOTE: This service appears to be deprecated in favor of UserLoginStrategy and ShopLoginStrategy
 // Consider removing if not used
@@ -24,7 +25,12 @@ class LoginService {
 			throw new Error("Invalid email or password");
 
 		// This needs proper DTO transformation - returning raw FoundedUser as workaround
-		return mapToUserPublicProfile(user);
+		return mapToUserPublicProfile({
+			id: user._id,
+			lastName: user.name,
+			email: user.email,
+			role: user.role,
+		} as IUser);
 	}
 
 	async findByEmail(email: string, key: string): Promise<FoundedUser> {
