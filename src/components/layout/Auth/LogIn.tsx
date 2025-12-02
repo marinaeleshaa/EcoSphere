@@ -6,13 +6,11 @@ import { FaApple, FaFacebookF, FaGoogle, FaTwitter } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { signIn } from "next-auth/react";
 
 const LogIn = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const router = useRouter();
   const { loading, error } = useSelector((state: RootState) => state.auth);
 
   const [email, setEmail] = useState("");
@@ -26,11 +24,7 @@ const LogIn = () => {
   const handleLogin = async () => {
     if (!email || !password) return;
 
-    await signIn("credentials", { email, password });
-    //   router.push('/');
-    // const resultAction = await dispatch(loginUser({ email, password }));
-    // if (loginUser.fulfilled.match(resultAction)) {
-    // }
+    await signIn("credentials", { email, password , redirectTo: "/"});
   };
 
   return (
