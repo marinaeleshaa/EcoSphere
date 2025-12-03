@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 export interface IEventRepository {
   getEvents(): Promise<IEvent[]>;
   getEvent(id: string, eventId: string): Promise<IEvent>;
+  getEventsByUserId(id: string): Promise<IEvent[]>;
   createEvent(id: string, data: IEvent): Promise<IEvent>;
   updateEvent(id: string, data: Partial<IEvent>): Promise<IEvent>;
   deleteEvent(id: string, eventId: string): Promise<IEvent>;
@@ -46,6 +47,17 @@ class EventRepository {
 
     return data as IEvent;
   }
+
+  async getEventsByUserId(userId: string): Promise<IEvent[]> {
+    await DBInstance.getConnection();
+
+    const user = await UserModel.findById(userId, { events: 1 })
+      .lean<{ events: IEvent[] }>()
+      .exec();
+
+    return user?.events || [];
+  }
+
 
   async createEvent(userId: string, eventData: IEvent): Promise<IEvent | null> {
     await DBInstance.getConnection();

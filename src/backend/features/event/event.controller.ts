@@ -12,12 +12,16 @@ class EventController {
     return await this.eventService.getEvents();
   }
 
-  async createEvent(id: string, event: IEvent): Promise<IEvent> {
-    return await this.eventService.createEvent(id, event);
-  }
-
   async getEvent(id: string, eventId: string): Promise<IEvent> {
     return await this.eventService.getEvent(id, eventId);
+  }
+
+  async getEventsByUserId(id: string): Promise<IEvent[]> {
+    return await this.eventService.getEventsByUserId(id);
+  }
+
+  async createEvent(id: string, event: IEvent): Promise<IEvent> {
+    return await this.eventService.createEvent(id, event);
   }
 
   async updateEvent(id: string, event: Partial<IEvent>): Promise<IEvent> {

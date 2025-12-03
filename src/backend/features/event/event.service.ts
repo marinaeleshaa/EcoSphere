@@ -5,6 +5,7 @@ import type { IEventRepository } from "./event.repository";
 export interface IEventService {
   getEvents: () => Promise<IEvent[]>;
   getEvent: (id: string, eventId: string) => Promise<IEvent>;
+  getEventsByUserId: (id: string) => Promise<IEvent[]>;
   createEvent: (id: string, event: IEvent) => Promise<IEvent>;
   updateEvent: (id: string, event: Partial<IEvent>) => Promise<IEvent>;
   deleteEvent: (id: string, eventId: string) => Promise<IEvent>;
@@ -23,6 +24,10 @@ class EventService {
 
   async getEvent(id: string, eventId: string): Promise<IEvent> {
     return await this.eventRepository.getEvent(id, eventId);
+  }
+
+  async getEventsByUserId(id: string): Promise<IEvent[]> {
+    return await this.eventRepository.getEventsByUserId(id);
   }
 
   async createEvent(userId: string, data: IEvent): Promise<IEvent> {

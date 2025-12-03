@@ -5,10 +5,14 @@ import { ApiResponse, ok, serverError } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
-  req: NextRequest
-): Promise<NextResponse<ApiResponse<IEvent[]>>> => {
+  req: NextRequest,
+  context: { params: Promise<{ userId: string; eventId: string }> }
+): Promise<NextResponse<ApiResponse<IEvent>>> => {
+  const { userId, eventId } = await context.params;
   try {
-    return ok(await rootContainer.resolve(EventController).getEvents());
+    return ok(
+      await rootContainer.resolve(EventController).getEvent(userId, eventId)
+    );
   } catch (error) {
     console.log(error);
     return serverError("Something went wrong");
