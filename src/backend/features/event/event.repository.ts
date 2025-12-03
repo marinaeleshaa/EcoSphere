@@ -17,15 +17,6 @@ class EventRepository {
     return await UserModel.find({}).select("events").lean().exec();
   }
 
-  async createEvent(id: string, data: Partial<IEvent>): Promise<any> {
-    // TODO: Check returned object from mongo
-    const user = await UserModel.findById({ _id: id })
-      .select("events _id")
-      .lean()
-      .exec();
-    return user;
-  }
-
   async getEvent(id: string, eventId: string): Promise<IEvent> {
     const data = await UserModel.findOne(
       { _id: id },
@@ -39,6 +30,24 @@ class EventRepository {
       .exec();
 
     return data as IEvent;
+  }
+
+  async createEvent(id: string, data: Partial<IEvent>): Promise<any> {
+    // TODO: Check returned object from mongo
+    const user = await UserModel.findById({ _id: id })
+      .select("events _id")
+      .lean()
+      .exec();
+    return user;
+  }
+
+  async updateEvent(id: string, data: Partial<IEvent>): Promise<any> {
+    // TODO: Implement the update logic
+    const user = await UserModel.findById({ _id: id })
+      .select("events _id")
+      .lean()
+      .exec();
+    return user;
   }
 
   async deleteEvent(id: string, eventId: string): Promise<IEvent> {

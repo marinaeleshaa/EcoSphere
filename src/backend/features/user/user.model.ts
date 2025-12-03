@@ -29,7 +29,7 @@ export interface IEvent extends Document {
   avatar?: string;
   attenders: string[];
   capacity: number;
-  sections: ISection[];
+  sections?: ISection[];
   eventDate: Date;
   startTime: string;
   endTime: string;
