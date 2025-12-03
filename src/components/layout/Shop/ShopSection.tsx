@@ -9,10 +9,10 @@ export default function ShopSection() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const processedShops = shops.filter((shop) => {
-    const passesSearch =
+    return (
       shop.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      shop.desc.toLowerCase().includes(searchQuery.toLowerCase());
-    return passesSearch;
+      shop.desc.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   });
 
   const sortedShops = [...processedShops].sort((a, b) => {
@@ -33,7 +33,7 @@ export default function ShopSection() {
         onSearch={setSearchQuery}
         isSorting={true}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10 auto-rows-auto w-[80%] mx-auto mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-15 auto-rows-auto w-[80%] mx-auto mb-4">
         {sortedShops.length > 0 ? (
           sortedShops.map((shop, index) => (
             <motion.div

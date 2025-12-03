@@ -33,12 +33,12 @@ export default function ShopHero() {
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
     >
-      <div className="rounded-3xl p-6">
+      <div className="rounded-3xl p-2">
         <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
           Quality You Can Trust
         </h2>
 
-        <p className="text-foreground leading-relaxed mb-6 text-center">
+        <p className="text-foreground leading-relaxed mb-6 text-center w-[70%] mx-auto">
           We check every partner shop with real care keeping things healthy,
           planet-friendly, and a little fun along the way. Hover over a card to
           explore it!
@@ -58,20 +58,20 @@ export default function ShopHero() {
                 className={`
           transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
           
-          ${isDimmed ? "opacity-60 scale-[0.98]" : "opacity-100 scale-100"}
+          ${isDimmed ? "opacity-70 scale-[0.98]" : "opacity-100 scale-100"}
           
           bg-primary border-0 hover:-translate-y-1`}
               >
                 <div className="text-3xl mb-2">{card.emoji}</div>
-                <h3 className="font-semibold text-primary-foreground text-lg mb-1">
+                <h3 className="font-semibold text-primary-foreground text-xl mb-1">
                   {card.title}
                 </h3>
                 <p
                   className={`text-sm mt-2 transition-all duration-300
             ${
               isActive
-                ? "text-primary-foreground text-base"
-                : "text-primary-foreground text-sm"
+                ? "text-primary-foreground"
+                : "text-primary-foreground"
             }
           `}
                 >
