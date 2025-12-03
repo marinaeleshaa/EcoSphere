@@ -22,7 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					if (!response) return null;
 
 					// Return user object with id and other properties
-					return response as any;
+					return response;
 				} catch (error) {
 					console.error(
 						"Authorization error:",

@@ -34,7 +34,7 @@ export default function UserBtn({
 	const { isMobile } = useSidebar();
 
 	const handleLogout = async () => {
-		await signOut({ redirectTo: "/auth" });
+		await signOut({ redirectTo: "/auth" , redirect: false});
 	};
 
 	if (status === "unauthenticated") return null;
@@ -126,7 +126,7 @@ export default function UserBtn({
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={handleLogout}>
 							<LogOut />
-							<span>Log out</span>
+							<span>Logout</span>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

@@ -24,7 +24,7 @@ const LogIn = () => {
   const handleLogin = async () => {
     if (!email || !password) return;
 
-    await signIn("credentials", { email, password , redirectTo: "/"});
+    await signIn("credentials", { email, password , redirect: false, redirectTo: "/"});
   };
 
   return (
