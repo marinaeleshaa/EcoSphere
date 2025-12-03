@@ -19,6 +19,7 @@ class EndUserRegistration implements IRegistrationStrategy {
 		const savedUser = await this.authRepository.saveNewUser(data);
 		if (!savedUser)
 			throw new Error("something went wrong, user can not registered");
+
 		return { success: true };
 	}
 }

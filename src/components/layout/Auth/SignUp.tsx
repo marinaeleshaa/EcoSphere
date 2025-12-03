@@ -1,6 +1,6 @@
 "use client";
-import Stepper, { Step } from "@/components/Stepper";
-import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
+import { toggleAuthView, registerUser } from "@/frontend/redux/Slice/AuthSlice";
+import Stepper, { Step } from "@/components/ui/Stepper";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Step1 from "./Steps/Step1";
@@ -11,14 +11,16 @@ import ShStep3 from "./Steps/shop/ShStep3";
 import { useMemo, useState } from "react";
 import { useTranslations } from 'next-intl';
 
+import { useRouter } from "next/navigation";
 type StepKey = "step1" | "step2" | "step3" | "step4";
 
 const SignUp = () => {
   const t = useTranslations('Auth.signup');
   const dispatch = useDispatch<AppDispatch>();
-  const { selectedType, stepsValidation } = useSelector(
+  const { selectedType, stepsValidation, step2Data, step3Data, step4Data, loading } = useSelector(
     (state: RootState) => state.auth
   );
+  const router = useRouter();
 
   const handleToggle = () => {
     dispatch(toggleAuthView());
@@ -36,12 +38,29 @@ const SignUp = () => {
   const currentStepKey = stepOrder[currentStep - 1] ?? "step4";
   const currentStepValid = stepsValidation[currentStepKey];
 
+  const handleComplete = async () => {
+    const registrationData = {
+      role: selectedType === "shop" ? "restaurant" : selectedType === "eventOrganizer" ? "organizer" : "customer",
+      ...step2Data,
+      ...step3Data,
+      ...step4Data,
+    };
+
+    const resultAction = await dispatch(registerUser(registrationData));
+    if (registerUser.fulfilled.match(resultAction)) {
+      router.push('/');
+    }
+  };
+
   return (
     <div className="">
       <Stepper
         initialStep={1}
         onStepChange={(step) => setCurrentStep(step)}
         isStepValid={currentStepValid}
+        onFinalStepCompleted={handleComplete}
+        nextButtonProps={{ disabled: loading }}
+        nextButtonText={loading ? "Registering..." : "Continue"}
       >
         <Step>
           <Step1 />

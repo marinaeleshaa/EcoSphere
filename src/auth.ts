@@ -22,7 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					if (!response) return null;
 
 					// Return user object with id and other properties
-					return response;
+					return response as any;
 				} catch (error) {
 					console.error(
 						"Authorization error:",
@@ -91,6 +91,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
 	pages: {
 		signIn: "/auth",
+		error: "/auth"
 	},
 
 	// Add these important NextAuth v5 configs

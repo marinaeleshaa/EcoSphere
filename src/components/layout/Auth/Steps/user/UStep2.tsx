@@ -20,12 +20,20 @@ const UStep2 = () => {
       birthDate: "",
       phoneNumber: "",
       gender: "male",
+      address: "",
     },
   });
 
   const onSubmit = (data: Z.infer<typeof Step2UserSchema>) => {
     dispatch(saveStep2Data(data));
   };
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      dispatch(saveStep2Data(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch]);
 
   useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));
@@ -102,6 +110,21 @@ const UStep2 = () => {
           {errors.phoneNumber && (
             <p className="text-red-500 mt-1 text-sm">
               {errors.phoneNumber.message}
+            </p>
+          )}
+        </div>
+
+        {/* Address */}
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Your Address"
+            {...register("address")}
+            className="myInput"
+          />
+          {errors.address && (
+            <p className="text-red-500 mt-1 text-sm">
+              {errors.address.message}
             </p>
           )}
         </div>

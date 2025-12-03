@@ -1,55 +1,22 @@
 import { injectable } from "tsyringe";
-import { Gender, IUser, UserModel } from "../user/user.model";
+import { IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { ObjectId } from "mongoose";
-import { FoundedUser, RegisterRequestDTO } from "./dto/user.dto";
+import { FoundedUser, RegisterRequestDTO, ShopRegisterDTO } from "./dto/user.dto";
 import { IRestaurant, RestaurantModel } from "../restaurant/restaurant.model";
 
 export interface IAuthRepository {
-  register(
-    email: string,
-    name: string,
-    password: string,
-    birthDate: string,
-    address: string,
-    avatar: string,
-    gender: Gender,
-    phoneNumber: string
-  ): Promise<IUser>;
   existsByEmail(email: string): Promise<{ _id: ObjectId } | null>;
   existsShopByEmail(email: string): Promise<{ _id: ObjectId }>;
   saveNewUser(data: RegisterRequestDTO): Promise<IUser>;
-  saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant>;
+  saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant>;
   findUserByEmail(email: string, keys?: string): Promise<FoundedUser>;
   findShopByEmail(email: string, keys?: string): Promise<FoundedUser>;
-  me(): Promise<IUser[]>;
+  me(): Promise<IUser>;
 }
 
 @injectable()
 class AuthRepository {
-  async register(
-    email: string,
-    name: string,
-    password: string,
-    birthDate: string,
-    address: string,
-    avatar: string,
-    gender: Gender,
-    phoneNumber: string
-  ): Promise<IUser> {
-    await DBInstance.getConnection();
-    return await UserModel.create({
-      email,
-      name,
-      password,
-      birthDate,
-      address,
-      avatar,
-      gender,
-      phoneNumber,
-    });
-  }
-
   async existsByEmail(email: string) {
     await DBInstance.getConnection();
     return await UserModel.exists({ email }).lean().exec();
@@ -64,9 +31,14 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.create(data);
   }
-  async saveNewShop(data: RegisterRequestDTO): Promise<IRestaurant> {
+
+  async saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant> {
     await DBInstance.getConnection();
-    return await RestaurantModel.create(data);
+    const shopData: any = { ...data };
+    if (data.avatar) {
+      shopData.avatar = { key: data.avatar };
+    }
+    return await RestaurantModel.create(shopData);
   }
 
   async findUserByEmail(email: string, keys?: string): Promise<FoundedUser> {
@@ -79,8 +51,12 @@ class AuthRepository {
   async findShopByEmail(email: string, keys?: string): Promise<FoundedUser> {
     await DBInstance.getConnection();
     return await RestaurantModel.findOne({ email })
-		  .select(`+password _id email role lastName accountProvider ${keys || ""}`)
+      .select(`+password _id email name ${keys || ""}`)
       .exec();
+  }
+
+  async me(): Promise<IUser> {
+    throw new Error("Method not implemented.");
   }
 }
 

@@ -3,7 +3,6 @@ import ProductHero from "@/components/layout/Store/productDetails/ProductHero";
 import RelatedProducts from "@/components/layout/Store/productDetails/RelatedProducts";
 import TextComponent from "@/components/layout/Store/productDetails/TextComponent";
 import { products } from "@/data/products";
-import OverflowDebugger from "@/components/dev/OverflowDebugger";
 
 interface Props {
   params: {
@@ -12,7 +11,7 @@ interface Props {
 }
 
 const ProductPage = async ({ params }: Props) => {
-  const { productId } = await params;
+  const { productId } = params;
 
   const product = products.find((p) => p.id === productId);
 

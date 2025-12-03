@@ -1,9 +1,19 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import type { NextConfig } from "next";
 
 const withNextIntl = createNextIntlPlugin();
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "ecosphere-iti-bucket.s3.eu-north-1.amazonaws.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
   async rewrites() {
     return [
       {
@@ -19,4 +29,3 @@ const nextConfig = {
 };
 
 export default withNextIntl(nextConfig);
-

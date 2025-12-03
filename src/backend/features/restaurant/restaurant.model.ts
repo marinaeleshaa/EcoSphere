@@ -17,7 +17,7 @@ export interface IMenuItem extends Document {
 }
 
 export interface IRestaurant extends Document {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -29,7 +29,10 @@ export interface IRestaurant extends Document {
   subscriptionPeriod?: Date;
   menus?: IMenuItem[];
   restaurantRating?: IRating[];
-  avatar?: string;
+  avatar?: {
+    key: string;
+    url?: string;
+  };
   createdAt?: Date;
   updatedAt?: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -59,7 +62,9 @@ const restaurantSchema = new Schema<IRestaurant>(
     location: { type: String, required: true },
     workingHours: { type: String, required: true },
     phoneNumber: { type: String, required: true },
-    avatar: { type: String, required: false },
+    avatar: {
+      key: { type: String, required: false },
+    },
     description: { type: String, required: true },
     subscribed: { type: Boolean, default: false },
     subscriptionPeriod: { type: Date, required: false, default: Date.now() },
@@ -71,7 +76,7 @@ const restaurantSchema = new Schema<IRestaurant>(
 
 restaurantSchema.pre("save", async function (next) {
   this.createdAt ??= new Date();
-  if (!this.isModified("password")) next();
+  if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
   next();

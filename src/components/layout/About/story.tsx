@@ -24,7 +24,7 @@ export default function About() {
               <div className="relative z-10 overflow-hidden rounded-xl p-4 bg-card/50 border border-theme shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30">
                 <div className="relative w-full h-full min-h-80 md:min-h-[350px]">
                   <Image
-                    src="/story1.png"
+                    src="/story.png"
                     alt="Sustainable Community"
                     fill
                     className="object-contain"
@@ -32,23 +32,22 @@ export default function About() {
                   />
                 </div>
               </div>
-
-              {/* Overlay Card (Illustration) */}
-              <div className="absolute -bottom-6 -right-4 z-20 md:-bottom-10 md:-right-10 w-48 md:w-64 bg-card p-3 rounded-xl shadow-2xl border border-theme">
-                <div className="relative w-full h-32 md:h-40">
-                  <Image
-                    src="/story.png"
-                    alt="Community planting illustration"
-                    fill
-                    className="rounded-lg object-contain"
-                    unoptimized
-                  />
-                </div>
-              </div>
-
             </div>
-          </div>
 
+            {/* Overlay Card (Illustration) */}
+            <div className="absolute -bottom-6 -right-4 z-20 md:-bottom-10 md:-right-10 w-48 md:w-64 bg-card p-3 rounded-xl shadow-2xl border border-theme">
+              <div className="relative w-full h-32 md:h-40">
+                <Image
+                  src="/story1.png"
+                  alt="Community planting illustration"
+                  fill
+                  className="rounded-lg object-contain"
+                  unoptimized
+                />
+              </div>
+            </div>
+
+          </div>
           {/* RIGHT COLUMN: Content */}
           <div className="flex flex-col space-y-6 lg:pl-8">
             <div className="space-y-2">
@@ -64,14 +63,10 @@ export default function About() {
             <p className="text-muted leading-relaxed">
               {t('description')}
             </p>
-            {/* Footer: Profile & CTA */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pt-6 border-t border-theme mt-4">
-              <div className="flex items-center gap-3">
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

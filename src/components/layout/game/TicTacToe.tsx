@@ -26,6 +26,7 @@ export default function TicTacToe() {
   // 💾 LOAD SCORES FROM STORAGE
   // -------------------------
   useEffect(() => {
+    mainAudioRef.current!.volume = 0.5;
     const savedScores = localStorage.getItem("tictactoe_scores");
     if (savedScores) {
       setTimeout(() => {

@@ -24,23 +24,20 @@ class AuthController implements IAuthController {
   ) {}
 
   async loginWithCredentials(
-    loginDto: LoginRequestDTO,
+    loginDto: LoginRequestDTO
   ): Promise<LoginResponse> {
     if (!loginDto.email || !loginDto.password) {
       throw new Error("Email and password are required");
     }
-    return await this.loginService.login(loginDto);
+    return await this.loginService.login(loginDto);;
   }
 
   async LoginWithGoogle(user: OAuthUserDTO): Promise<boolean> {
     const savedUser = await this.loginService.findByEmail(
       user.email,
-      user.provider!
+      user.provider!,
     );
-
-    if (!savedUser) {
-      await this.registrationService.register(user);
-    }
+    if (!savedUser) await this.registrationService.register(user);
     return true;
   }
 

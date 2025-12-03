@@ -1,6 +1,6 @@
-"use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import BasicAnimatedWrapper from "./BasicAnimatedWrapper";
 
 interface IProps {
   imgUrl: string;
@@ -16,17 +16,11 @@ const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
           width={1000}
           height={1000}
           alt="hero"
-          className=" w-full object-cover h-[450px] relative"
+          className="  object-cover mx-auto h-[450px] relative z-0"
         />
 
         {/* Overlay Box */}
-        <motion.div
-          className="relative left-1/2 -translate-x-1/2 -translate-y-1/3 w-[80%] bg-primary/70  dark:bg-primary/50 backdrop-blur-lg to-transparent rounded-xl p-6 flex flex-col items-center text-center shadow-lg"
-          initial={{ y: 50, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          //   viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
+        <BasicAnimatedWrapper className="relative z-10 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[80%] bg-primary/70  dark:bg-primary/50 backdrop-blur-lg to-transparent rounded-xl p-6 flex flex-col items-center text-center shadow-lg">
           <h1 className="lg:text-5xl md:text-4xl text-3xl font-semibold mb-3 text-primary-foreground ">
             {title}
           </h1>
@@ -34,7 +28,7 @@ const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
           <p className="mt-2 lg:text-lg text-base text-primary-foreground/80 w-[90%] leading-relaxed">
             {subTitle}
           </p>
-        </motion.div>
+        </BasicAnimatedWrapper>
       </div>
     </section>
   );

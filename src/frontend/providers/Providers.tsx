@@ -2,17 +2,20 @@ import { cookies } from "next/headers";
 import { SidebarProvider } from "../../components/ui/sidebar";
 import { ThemeProvider } from "./theme-provider";
 import { StoreProvider } from "./StorePovider";
+import { SessionProvider } from "next-auth/react";
 
-export async function Providers({ children }: { children: React.ReactNode }) {
-    const cookieStore = await cookies();
-    const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
-    return (
-        <StoreProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <SidebarProvider defaultOpen={defaultOpen}>
-                    {children}
-                </SidebarProvider>
-            </ThemeProvider>
-        </StoreProvider>
-    );
+export async function Providers({
+	children,
+}: Readonly<{ children: React.ReactNode }>) {
+	const cookieStore = await cookies();
+	const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+	return (
+		<StoreProvider>
+			<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+				<SidebarProvider defaultOpen={defaultOpen}>
+					<SessionProvider>{children}</SessionProvider>
+				</SidebarProvider>
+			</ThemeProvider>
+		</StoreProvider>
+	);
 }
