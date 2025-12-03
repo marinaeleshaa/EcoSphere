@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import LogIn from "@/components/layout/Auth/LogIn";
-import { getCoords, ICoords } from "@/frontend/Actions/GetCoords";
+import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
 
 const AuthPage = () => {
   const { active } = useSelector((state: RootState) => state.auth);

@@ -59,11 +59,23 @@ const ShStep3 = () => {
 
         {/* Logo upload */}
         <div>
-          <Controller
+          {/* <Controller
             name="avatar"
             control={control}
             render={({ field }) => (
-              <div className="flex flex-col items-center gap-4">
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="myInput"
+                name={field.name}
+                ref={field.ref}
+                onChange={(event) =>
+                  field.onChange(event.target.files ?? undefined)
+                }
+              />
+            )}
+          /> */}
+              {/* <div className="flex flex-col items-center gap-4">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
                   {previewUrl ? (
                     <Image
@@ -118,7 +130,7 @@ const ShStep3 = () => {
                 </div>
               </div>
             )}
-          />
+          /> */}
           {errors.avatar && (
             <p className="text-red-500">{errors.avatar.message}</p>
           )}

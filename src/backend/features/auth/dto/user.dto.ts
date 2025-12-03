@@ -77,7 +77,7 @@ export const mapToUserPublicProfile = (
 	user: Partial<IUser> | Partial<IRestaurant>
 ) => {
 	return {
-		id: user._id!.toString(),
+		id: user._id?.toString(),
 		email: user.email!,
 		name: isUser(user) ? user.lastName! : user.name!,
 		role: isUser(user) ? user.role! : "shop",
