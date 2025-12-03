@@ -3,16 +3,16 @@ import { IEvent, IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 
 export interface IEventRepository {
-  getAll(): Promise<IEvent[]>;
+  getEvents(): Promise<IEvent[]>;
   createEvent(id: string, data: Partial<IEvent>): Promise<IEvent>;
-  getById(id: string, eventId: string): Promise<IEvent>;
-  updateById(id: string, data: Partial<IEvent>): Promise<IEvent>;
-  deleteById(id: string, eventId: string): Promise<IEvent>;
+  getEvent(id: string, eventId: string): Promise<IEvent>;
+  updateEvent(id: string, data: Partial<IEvent>): Promise<IEvent>;
+  deleteEvent(id: string, eventId: string): Promise<IEvent>;
 }
 
 @injectable()
 class EventRepository {
-  async getAll() {
+  async getEvents() {
     await DBInstance.getConnection();
     return await UserModel.find({}).select("events").lean().exec();
   }
@@ -26,7 +26,7 @@ class EventRepository {
     return user;
   }
 
-  async getById(id: string, eventId: string): Promise<IEvent> {
+  async getEvent(id: string, eventId: string): Promise<IEvent> {
     const data = await UserModel.findOne(
       { _id: id },
       {
@@ -41,7 +41,7 @@ class EventRepository {
     return data as IEvent;
   }
 
-  async deleteById(id: string, eventId: string): Promise<IEvent> {
+  async deleteEvent(id: string, eventId: string): Promise<IEvent> {
     const eventProjection = await UserModel.findOne(
       { _id: id },
       { events: { $elemMatch: { _id: eventId } } }
