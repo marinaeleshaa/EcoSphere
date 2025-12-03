@@ -11,7 +11,7 @@ export default function Store() {
   return (
     <div className="space-y-5 md:space-y-10">
       <HeroSection
-        imgUrl="/m.png"
+        imgUrl="/final.png"
         title={t('title')}
         subTitle={t('subtitle')}
       />
