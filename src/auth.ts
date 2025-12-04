@@ -52,7 +52,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			const controller = rootContainer.resolve(AuthController);
 			switch (account?.provider) {
 				case "google":
-					// You can add additional logic here for Google sign-ins if needed
 					return !!(await controller.LoginWithGoogle({
 						firstName: profile?.given_name as string,
 						lastName: profile?.family_name as string,
@@ -62,7 +61,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 						provider: account.provider,
 					}));
 				case "credentials":
-					// You can add additional logic here for Credentials sign-ins if needed
 					return true;
 				default:
 					return false;
@@ -91,7 +89,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
 	pages: {
 		signIn: "/auth",
-		error: "/auth"
+		error: "/auth",
+		signOut: "/auth",
 	},
 
 	// Add these important NextAuth v5 configs
