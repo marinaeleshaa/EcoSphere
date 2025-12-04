@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { applyAuthRules } from "@/backend/features/auth/middleware/auth.rules";
 import { AuthSession } from "@/backend/features/auth/middleware/role.guards";
 import createMiddleware from 'next-intl/middleware';
-import {routing} from './frontend/i18n/routing';
+import {routing} from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
