@@ -1,4 +1,4 @@
-import createNextIntlPlugin from 'next-intl/plugin';
+import createNextIntlPlugin from "next-intl/plugin";
 import type { NextConfig } from "next";
 
 const withNextIntl = createNextIntlPlugin();
@@ -17,12 +17,16 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:locale(en|ar|fr)',
-        destination: '/',
+        source: "/api/auth/:path*",
+        destination: "/api/auth/:path*",
       },
       {
-        source: '/:locale(en|ar|fr)/:path*',
-        destination: '/:path*',
+        source: "/:locale(en|ar|fr)",
+        destination: "/",
+      },
+      {
+        source: "/:locale(en|ar|fr)/:path*",
+        destination: "/:path*",
       },
     ];
   },
