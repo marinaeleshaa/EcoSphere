@@ -114,7 +114,6 @@ const LogIn = () => {
 				className="myBtnPrimary disabled:opacity-50"
 			>
 				{t("title")}
-				(
 				<Image
 					src={"/leaf.png"}
 					width={25}
@@ -122,7 +121,7 @@ const LogIn = () => {
 					alt="leaf"
 					className="scale-x-[-1]"
 				/>
-				)
+				
 			</button>
 
 			{/* divider */}
