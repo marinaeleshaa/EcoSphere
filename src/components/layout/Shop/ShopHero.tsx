@@ -1,27 +1,28 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 export default function ShopHero() {
+  const t = useTranslations('Shop.quality');
   const [active, setActive] = useState<number | null>(null);
 
   const cards = [
     {
       id: 1,
       emoji: "🌎",
-      title: "Planet-Friendly Products",
-      text: "Each shop prioritizes items that are inherently sustainable and kind to the environment, minimizing ecological impact.",
+      titleKey: "planetFriendly",
     },
     {
       id: 2,
       emoji: "♻️",
-      title: "Eco-Conscious Sourcing",
-      text: "They ensure full responsibility and ethical sourcing, favoring materials that are renewable, recycled, or low-waste.",
+      titleKey: "ecoConscious",
     },
     {
       id: 3,
       emoji: "🌱",
-      title: "Commitment to You",
-      text: "Products are carefully selected to be safe, kind to your health, and promote a holistic, sustainable lifestyle.",
+      titleKey: "commitment",
     },
   ];
 
@@ -35,13 +36,11 @@ export default function ShopHero() {
     >
       <div className="rounded-3xl p-2">
         <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
-          Quality You Can Trust
+          {t('title')}
         </h2>
 
-        <p className="text-foreground leading-relaxed mb-6 text-center w-[70%] mx-auto">
-          We check every partner shop with real care keeping things healthy,
-          planet-friendly, and a little fun along the way. Hover over a card to
-          explore it!
+        <p className="text-foreground leading-relaxed mb-6 text-center">
+          {t('description')}
         </p>
 
         {/* Row of cards */}
@@ -63,19 +62,18 @@ export default function ShopHero() {
           bg-primary border-0 hover:-translate-y-1`}
               >
                 <div className="text-3xl mb-2">{card.emoji}</div>
-                <h3 className="font-semibold text-primary-foreground text-xl mb-1">
-                  {card.title}
+                <h3 className="font-semibold text-primary-foreground text-lg mb-1">
+                  {t(`cards.${card.titleKey}.title`)}
                 </h3>
                 <p
                   className={`text-sm mt-2 transition-all duration-300
-            ${
-              isActive
-                ? "text-primary-foreground"
-                : "text-primary-foreground"
-            }
+            ${isActive
+                      ? "text-primary-foreground text-base"
+                      : "text-primary-foreground text-sm"
+                    }
           `}
                 >
-                  {card.text}
+                  {t(`cards.${card.titleKey}.text`)}
                 </p>
               </div>
             );

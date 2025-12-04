@@ -1,29 +1,33 @@
 "use client";
 
-import { useSelector } from "react-redux";
-import { RootState } from "@/frontend/redux/store";
-import CustomerProfile from "@/components/profile/CustomerProfile";
-import OrganizerProfile from "@/components/profile/OrganizerProfile";
-import RestaurantProfile from "@/components/profile/RestaurantProfile";
+import CustomerProfile from "@/components/layout/profile/CustomerProfile";
+import OrganizerProfile from "@/components/layout/profile/OrganizerProfile";
+import RestaurantProfile from "@/components/layout/profile/RestaurantProfile";
+import { useSession } from "next-auth/react";
+import { useTranslations } from 'next-intl';
 
 export default function ProfilePage() {
-  const user = useSelector((state: RootState) => state.user);
+  const { data: session, status } = useSession();
+  const t = useTranslations('Profile.page');
 
-  if (!user.isLoggedIn) {
+  if (status === "unauthenticated") {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl">Please log in to view your profile.</p>
+        <p className="text-xl">{t('pleaseLogin')}</p>
       </div>
     );
   }
 
-  return (
+  if (status === "loading") {
+    return <div>loading</div>
+  }
+  return (status === "authenticated" &&
     <div className=" bg-background py-8">
       <div className="min-h-screen flex justify-center items-center w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-[80%]">
-          {user.role === "customer" && <CustomerProfile />}
-          {user.role === "organizer" && <OrganizerProfile />}
-          {(user.role === "restaurant" || user.role === "shop") && (
+          {session?.user.role === "customer" && <CustomerProfile />}
+          {session?.user.role === "organizer" && <OrganizerProfile />}
+          {(session?.user.role === "restaurant" || session?.user.role === "shop") && (
             <RestaurantProfile />
           )}
         </div>

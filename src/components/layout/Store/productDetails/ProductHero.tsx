@@ -1,9 +1,10 @@
 
 import { IProduct } from "@/types/ProductType";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 
 const ProductHero = ({ product }: { product: IProduct }) => {
-
+  const t = useTranslations('ProductDetails.hero');
 
   return (
     <section className="relative w-full h-[200px] bg-primary overflow-hidden">
@@ -17,7 +18,7 @@ const ProductHero = ({ product }: { product: IProduct }) => {
         {/* Main heading with subtle animation-ready structure */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl text-primary-foreground font-bold tracking-tight">
-            Store
+            {t('title')}
           </h1>
         </div>
 
@@ -30,18 +31,18 @@ const ProductHero = ({ product }: { product: IProduct }) => {
             href="/"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            Home
+            {t('breadcrumb.home')}
           </Link>
           <span className="text-primary-foreground/50">/</span>
           <Link
             href="/store"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            Store
+            {t('breadcrumb.store')}
           </Link>
           <span className="text-primary-foreground/50">/</span>
           <span className="text-primary-foreground font-medium">
-            {product ? product.productName : "Product"}
+            {product ? product.productName : t('breadcrumb.product')}
           </span>
         </nav>
       </div>

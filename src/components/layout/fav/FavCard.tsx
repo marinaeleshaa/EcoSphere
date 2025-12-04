@@ -6,25 +6,26 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HiMiniTrash } from "react-icons/hi2";
 import { toggleFav } from "@/frontend/redux/Slice/FavSlice";
-import {toast} from "sonner"
+import { toast } from "sonner"
+import { useTranslations } from 'next-intl';
 
 interface FavCardProps {
   product: IProduct;
 }
 const FavCard = ({ product }: FavCardProps) => {
+  const t = useTranslations('Favorites.card');
   const { view } = useSelector((state: RootState) => state.fav);
   const dispatch = useDispatch<AppDispatch>();
   const handleRemoveFromFav = () => {
     dispatch(toggleFav(product));
-    toast.success("Removed from favorites")
+    toast.success(t('removedFromFavorites'))
   };
   return (
     <div
-      className={`${
-        view === "grid"
+      className={`${view === "grid"
           ? " flex-col w-[250px]"
           : "flex-row items-center gap-4 h-[300px]"
-      } flex  shadow-md rounded-lg dark:bg-primary/10 bg-background/50 relative`}
+        } flex  shadow-md rounded-lg dark:bg-primary/10 bg-background/50 relative`}
     >
       {/* img */}
       <div
@@ -63,7 +64,7 @@ const FavCard = ({ product }: FavCardProps) => {
         <p className="text-primary">${product.productPrice.toFixed(2)}</p>
         <div className="flex justify-evenly mt-4 gap-5">
           <button className="capitalize flex-1 cursor-pointer bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/80 ">
-            add to cart
+            {t('addToCart')}
           </button>
         </div>
       </div>

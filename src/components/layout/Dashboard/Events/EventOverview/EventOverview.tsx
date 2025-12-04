@@ -8,6 +8,7 @@ import { TbListSearch } from "react-icons/tb";
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import React from 'react'
+import { useTranslations } from 'next-intl';
 
 interface MetricData {
   id: number;
@@ -168,7 +169,8 @@ const MetricCard: React.FC<MetricData> = ({ title, value, change, timeframe, col
   );
 };
 const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location, imageUrl }) => {
-  const buttonText = 'Manage';
+  const t = useTranslations('Dashboard.overview');
+  const buttonText = t('manage');
   const lineColor = 'bg-primary';
 
   return (
@@ -195,8 +197,8 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
         <div className="flex flex-col col-span-1">
           <h3 className="text-base font-semibold text-gray-900">{title}</h3>
           <p className='flex items-center text-gray-600'>
-          <MapPin className="w-4 h-4 mr-1.5 text-gray-400" />
-          <span>{location}</span>
+            <MapPin className="w-4 h-4 mr-1.5 text-gray-400" />
+            <span>{location}</span>
           </p>
         </div>
 
@@ -229,6 +231,7 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
   );
 };
 export default function EventOverview() {
+  const t = useTranslations('Dashboard.overview');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -248,15 +251,15 @@ export default function EventOverview() {
     .slice(0, 3);
   return (
     <div className='min-h-screen py-6 w-[85%] mx-auto flex flex-col gap-6'>
-      <h1 className='capitalize font-bold text-4xl  text-foreground'>Dashboard Overiew</h1>
+      <h1 className='capitalize font-bold text-4xl  text-foreground'>{t('title')}</h1>
       <div className='flex flex-col gap-2'>
-        <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'> Quick Actions</h2>
+        <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('quickActions')}</h2>
         <div className='grid grid-cols-3 gap-5 '>
           <Link href='/add' className='col-span-1 '>
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <MdAddCircleOutline className='size-6' />
               <span className='capitalize'>
-                Create new Event
+                {t('createNewEvent')}
               </span>
             </Button>
           </Link>
@@ -264,7 +267,7 @@ export default function EventOverview() {
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <FaRegRectangleList className='size-6' />
               <span className='capitalize'>
-                View all events
+                {t('viewAllEvents')}
               </span>
             </Button>
           </Link>
@@ -272,7 +275,7 @@ export default function EventOverview() {
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <TbListSearch className='size-6' />
               <span className='capitalize'>
-                Browse Events
+                {t('browseEvents')}
               </span>
             </Button>
           </Link>
@@ -280,8 +283,8 @@ export default function EventOverview() {
       </div>
       <div className='flex flex-col gap-2'>
         <div className='flex justify-between'>
-          <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>Key Matrics</h2>
-          <h4 className='text-gray-400 text-md'>Real-time data</h4>
+          <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('keyMetrics')}</h2>
+          <h4 className='text-gray-400 text-md'>{t('realTimeData')}</h4>
         </div>
         <div className='grid grid-cols-4 gap-5 '>
           {dashboardData.map((data) => (
@@ -301,39 +304,39 @@ export default function EventOverview() {
       </div>
       <div className='flex flex-col gap-2'>
         {/* <div className='grid grid-cols-3 gap-5 '> */}
-          {/* <div className='col-span-2 gap-3'> */}
-            <div className=' flex justify-between'>
-              <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>upcoming events</h2>
-              <h4 className='text-gray-400 text-md'>view all</h4>
+        {/* <div className='col-span-2 gap-3'> */}
+        <div className=' flex justify-between'>
+          <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('upcomingEvents')}</h2>
+          <h4 className='text-gray-400 text-md'>{t('viewAll')}</h4>
+        </div>
+        <div className='flex flex-col gap-2'>
+
+          {sortedAndLimitedEvents.length > 0 ? (
+            sortedAndLimitedEvents.map((event) => (
+              <EventListItem
+                key={event.id}
+                id={event.id}
+                title={event.title}
+                // Pass displayDate and time for the UI
+                displayDate={event.displayDate}
+                time={event.time}
+                location={event.location}
+                imageUrl={event.imageUrl}
+                date={event.date} // Keeping date for interface satisfaction, though not directly rendered
+              />
+            ))
+          ) : (
+            <div className="text-center p-8 bg-white rounded-xl shadow-md text-gray-500">
+              {t('noUpcomingEvents')}
             </div>
-            <div className='flex flex-col gap-2'>
+          )}
 
-              {sortedAndLimitedEvents.length > 0 ? (
-                sortedAndLimitedEvents.map((event) => (
-                  <EventListItem
-                    key={event.id}
-                    id={event.id}
-                    title={event.title}
-                    // Pass displayDate and time for the UI
-                    displayDate={event.displayDate}
-                    time={event.time}
-                    location={event.location}
-                    imageUrl={event.imageUrl}
-                    date={event.date} // Keeping date for interface satisfaction, though not directly rendered
-                  />
-                ))
-              ) : (
-                <div className="text-center p-8 bg-white rounded-xl shadow-md text-gray-500">
-                  No upcoming events found.
-                </div>
-              )}
-
-            </div>
-
-            
+        </div>
 
 
-          {/* </div> */}
+
+
+        {/* </div> */}
         {/* </div> */}
       </div>
     </div>

@@ -4,10 +4,12 @@ import { FaCalendar } from "react-icons/fa";
 import { MdAccessTime } from "react-icons/md";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { PiTicketFill } from "react-icons/pi";
+import { useTranslations } from 'next-intl';
 export default function DisplayEvents() {
+    const t = useTranslations('Dashboard.displayEvents');
     return (
         <div className='min-h-screen py-8 w-[85%] mx-auto flex flex-col  gap-6'>
-            <h1 className='capitalize font-bold text-4xl  text-foreground'>Dashboard Display Events</h1>
+            <h1 className='capitalize font-bold text-4xl  text-foreground'>{t('title')}</h1>
             <div className=" w-full bg-white rounded-xl shadow-lg border border-indigo-200/50 p-4 sm:p-6 transition-all duration-300">
                 <div className="grid grid-cols-6 justify-center items-center   gap-4 sm:gap-6">
 
@@ -61,7 +63,7 @@ export default function DisplayEvents() {
 
                             <div className="text-right grow">
                                 <p className="text-lg font-semibold text-gray-900 leading-none">250</p>
-                                <p className="text-xs text-gray-500 mt-0.5">Ticket Left</p>
+                                <p className="text-xs text-gray-500 mt-0.5">{t('ticketLeft')}</p>
                             </div>
                         </div>
 
@@ -71,7 +73,7 @@ export default function DisplayEvents() {
 
                                 <div className="bg-indigo-500 h-2.5 rounded-full w-[80%]" ></div>
                             </div>
-                            <p className="text-xs font-medium text-yellow-600 mt-1">80% Sold</p>
+                            <p className="text-xs font-medium text-yellow-600 mt-1">{t('sold', { percent: 80 })}</p>
                         </div>
 
 

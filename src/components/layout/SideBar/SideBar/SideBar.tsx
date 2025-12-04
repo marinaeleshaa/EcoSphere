@@ -34,80 +34,85 @@ import { RxDashboard } from "react-icons/rx";
 import Link from "next/link";
 import ThemeBtn from "../ThemeBtn/ThemeBtn";
 import UserBtn from "../UserBtn/UserBtn";
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 // import GetFavCount from "@/frontend/Actions/GetFavCount";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useTranslations } from 'next-intl';
 // Menu items.
 // User items.
-const useritems = [
-	{
-		title: "Home",
-		url: "/",
-		icon: Home,
-	},
-	{
-		title: "Shops",
-		url: "/shop",
-		icon: ShoppingBag,
-	},
-	{
-		title: "Events",
-		url: "/events",
-		icon: Calendar,
-	},
-	{
-		title: "Recycle",
-		url: "/recycle",
-		icon: Recycle,
-	},
-	{
-		title: "News",
-		url: "/news",
-		icon: Newspaper,
-	},
-	{
-		title: "Store",
-		url: "/store",
-		icon: Store,
-	},
-	{
-		title: "Game",
-		url: "/game",
-		icon: Gamepad2,
-	},
-	{
-		title: "About",
-		url: "/about",
-		icon: Info,
-	},
-];
-// Event dashboard items.
-const dashboardItems = [
-	{
-		title: "OverView",
-		url: "/overview",
-		icon: RxDashboard,
-	},
-	{
-		title: "Add Event",
-		url: "/add",
-		icon: MdOutlineAddToPhotos,
-	},
-	{
-		title: "View events",
-		url: "/viewDetails",
-		icon: MdOutlineEventRepeat,
-	},
-	{
-		title: "Browse Events",
-		url: "/browse",
-		icon: PiListMagnifyingGlassBold,
-	},
-];
+
 
 export default function SideBar() {
 	// const user = useSelector((state: RootState) => state.user)
 	const { data: session, status } = useSession();
+
+	const t = useTranslations('Layout.Sidebar');
+	const useritems = [
+		{
+			title: t('menu.home'),
+			url: "/",
+			icon: Home,
+		},
+		{
+			title: t('menu.shops'),
+			url: "/shop",
+			icon: ShoppingBag,
+		},
+		{
+			title: t('menu.events'),
+			url: "/events",
+			icon: Calendar,
+		},
+		{
+			title: t('menu.recycle'),
+			url: "/recycle",
+			icon: Recycle,
+		},
+		{
+			title: t('menu.news'),
+			url: "/news",
+			icon: Newspaper,
+		},
+		{
+			title: t('menu.store'),
+			url: "/store",
+			icon: Store,
+		},
+		{
+			title: t('menu.game'),
+			url: "/game",
+			icon: Gamepad2,
+		},
+		{
+			title: t('menu.about'),
+			url: "/about",
+			icon: Info,
+		},
+	];
+	// Event dashboard items.
+	const dashboardItems = [
+		{
+			title: t('dashboard.overview'),
+			url: "/overview",
+			icon: RxDashboard,
+		},
+		{
+			title: t('dashboard.addEvent'),
+			url: "/add",
+			icon: MdOutlineAddToPhotos,
+		},
+		{
+			title: t('dashboard.eventDetails'),
+			url: "/viewDetails",
+			icon: MdOutlineEventRepeat,
+		},
+		{
+			title: t('dashboard.browseEvents'),
+			url: "/browse",
+			icon: PiListMagnifyingGlassBold,
+		},
+	];
 
 	const pathname = usePathname();
 	const { favProducts } = useSelector((state: RootState) => state.fav);
@@ -118,7 +123,7 @@ export default function SideBar() {
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel>Application</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('groups.application')}</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{useritems.map((item) => (
@@ -135,7 +140,7 @@ export default function SideBar() {
 					</SidebarGroupContent>
 				</SidebarGroup>
 				<SidebarGroup>
-					<SidebarGroupLabel>Dashboard</SidebarGroupLabel>
+					<SidebarGroupLabel>{t('groups.dashboard')}</SidebarGroupLabel>
 					<SidebarGroupContent>
 						<SidebarMenu>
 							{dashboardItems.map((item) => (
@@ -159,7 +164,7 @@ export default function SideBar() {
 							<SidebarMenuButton asChild isActive={pathname === "/fav"}>
 								<Link href="/fav">
 									<Heart />
-									<span>Favorite</span>
+									<span>{t('footer.favorite')}</span>
 								</Link>
 							</SidebarMenuButton>
 							<SidebarMenuBadge suppressHydrationWarning={true}>
@@ -170,22 +175,23 @@ export default function SideBar() {
 							<SidebarMenuButton asChild isActive={pathname === "/cart"}>
 								<Link href="/cart">
 									<ShoppingCart />
-									<span>Cart</span>
+									<span>{t('footer.cart')}</span>
 								</Link>
 							</SidebarMenuButton>
 							<SidebarMenuBadge>24</SidebarMenuBadge>
 						</SidebarMenuItem>
 						{status === "unauthenticated" && (
 							<SidebarMenuItem>
-								<SidebarMenuButton asChild>
+								<SidebarMenuButton asChild isActive={pathname === "/auth"}>
 									<Link href="/auth">
 										<LogIn />
-										<span>Login</span>
+										<span>{t('footer.login')}</span>
 									</Link>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						)}
 						<ThemeBtn />
+						<LanguageSwitcher />
 						<UserBtn session={session!} status={status} />
 					</SidebarMenu>
 				</SidebarGroupContent>

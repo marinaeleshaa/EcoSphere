@@ -3,9 +3,11 @@ import ShopCard from "./ShopCard";
 import FilterBar from "./FilterBar";
 import { motion } from "framer-motion";
 import { shops } from "@/data/shops";
+import { useTranslations } from "next-intl";
 
 export default function ShopSection() {
-  const [currentSort, setCurrentSort] = useState("Default"); // New state for sorting
+  const t = useTranslations('Shop.filter');
+  const [currentSort, setCurrentSort] = useState(t('sortOptions.default')); // New state for sorting
   const [searchQuery, setSearchQuery] = useState("");
 
   const processedShops = shops.filter((shop) => {
@@ -16,10 +18,10 @@ export default function ShopSection() {
   });
 
   const sortedShops = [...processedShops].sort((a, b) => {
-    if (currentSort === "Highest Rating") {
+    if (currentSort === t('sortOptions.highestRating')) {
       return b.rating - a.rating;
     }
-    if (currentSort === "Lowest Rating") {
+    if (currentSort === t('sortOptions.lowestRating')) {
       return a.rating - b.rating;
     }
 
@@ -48,7 +50,7 @@ export default function ShopSection() {
           ))
         ) : (
           <p className="col-span-full text-center text-primary-forground py-10">
-            No products match your current search criteria.
+            {t('noProducts')}
           </p>
         )}
       </div>

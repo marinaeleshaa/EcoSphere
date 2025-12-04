@@ -4,6 +4,7 @@ import { useAppDispatch } from "@/frontend/redux/hooks";
 import { updateQuantity } from "@/frontend/redux/Slice/CartSlice";
 import { motion } from "framer-motion";
 import { Plus, Minus } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export default function QuantitySelector({
 	id,
@@ -12,6 +13,7 @@ export default function QuantitySelector({
 	id: string;
 	quantity: number;
 }>) {
+	const t = useTranslations('Cart.quantitySelector');
 	const dispatch = useAppDispatch();
 	const [local, setLocal] = useState(quantity);
 
@@ -35,7 +37,7 @@ export default function QuantitySelector({
 		<div className="flex items-center border border-primary text-primary rounded-full">
 			<button
 				onClick={dec}
-				aria-label="decrease"
+				aria-label={t('decrease')}
 				className="p-2 text-foreground cursor-pointer transition duration-400"
 				disabled={local <= 1}
 			>
@@ -51,7 +53,7 @@ export default function QuantitySelector({
 			</motion.div>
 			<button
 				onClick={inc}
-				aria-label="increase"
+				aria-label={t('increase')}
 				className="p-2 hover:text-foreground cursor-pointer transition duration-400"
 			>
 				<Plus className="w-5 h-5" strokeWidth={3} />

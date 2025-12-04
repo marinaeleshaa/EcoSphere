@@ -9,10 +9,13 @@ import { RootState } from "@/frontend/redux/store";
 import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
+import { useTranslations } from 'next-intl';
 import { useAppDispatch } from "@/frontend/redux/hooks";
 import { addItem } from "@/frontend/redux/Slice/CartSlice";
 
+
 const ProductCard = (product: IProduct) => {
+	const t = useTranslations('Store.product');
 	const {
 		id,
 		shopName,
@@ -35,9 +38,9 @@ const ProductCard = (product: IProduct) => {
 		e.stopPropagation();
 		dispatch(toggleFav(product));
 		if (isFav) {
-			toast.success("Removed from favorites");
+			toast.success(t('removedFromFavorites'));
 		} else {
-			toast.success("Added to favorites");
+			toast.success(t('addedToFavorites'));
 		}
 	};
 

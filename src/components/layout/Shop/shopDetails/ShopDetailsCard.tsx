@@ -4,8 +4,10 @@ import Image from "next/image";
 import React from "react";
 import { Star, MapPin, Clock } from "lucide-react";
 import { motion } from "framer-motion";
+import { useTranslations } from 'next-intl';
 
 const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
+  const t = useTranslations('ShopDetails.card');
   const { id, title, rating, cuisine, img, desc, workingHours } = shop;
 
   return (
@@ -94,11 +96,10 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className={`w-5 h-5 ${
-                    star <= Math.round(rating)
+                  className={`w-5 h-5 ${star <= Math.round(rating)
                       ? "fill-primary text-primary"
                       : "fill-muted text-muted"
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -108,13 +109,13 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
           {/* Working Hours */}
           <div className="flex items-center gap-2 text-lg">
             <Clock className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-foreground">Working Hours:</span>
+            <span className="font-semibold text-foreground">{t('workingHours')}</span>
             <span className="text-muted-foreground">{workingHours}</span>
           </div>
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">About</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('about')}</h3>
             <p className="text-muted-foreground leading-relaxed">
               {desc}
             </p>
@@ -123,13 +124,13 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
             <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
-              Visit Shop
+              {t('visitShop')}
             </button>
             <button
               className="p-3 rounded-lg border-2 border-primary text-primary hover:bg-primary/10 transition-colors cursor-pointer"
               aria-label="Contact shop"
             >
-              Contact
+              {t('contact')}
             </button>
           </div>
         </div>

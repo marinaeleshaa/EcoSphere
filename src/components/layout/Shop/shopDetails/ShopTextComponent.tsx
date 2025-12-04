@@ -2,13 +2,15 @@
 import { IShop } from "@/data/shops";
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 const ShopTextComponent = ({ shop }: { shop: IShop }) => {
+  const t = useTranslations('ShopDetails.reviews');
   // Get top 3 reviews sorted by rating (highest first)
   const topReviews = shop.reviews
     ? [...shop.reviews]
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 3)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 3)
     : [];
 
   return (
@@ -19,7 +21,7 @@ const ShopTextComponent = ({ shop }: { shop: IShop }) => {
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="flex items-center justify-center gap-5 capitalize text-foreground text-lg md:text-xl border-b-2 p-5 border-primary">
-          <h2 className="text-primary font-semibold">Reviews</h2>
+          <h2 className="text-primary font-semibold">{t('title')}</h2>
         </div>
         <div className="my-5">
           {topReviews.length > 0 ? (
@@ -53,11 +55,10 @@ const ShopTextComponent = ({ shop }: { shop: IShop }) => {
                           {[1, 2, 3, 4, 5].map((star) => (
                             <Star
                               key={star}
-                              className={`w-4 h-4 ${
-                                star <= review.rating
+                              className={`w-4 h-4 ${star <= review.rating
                                   ? "fill-primary text-primary"
                                   : "fill-muted text-muted"
-                              }`}
+                                }`}
                             />
                           ))}
                         </div>
@@ -72,7 +73,7 @@ const ShopTextComponent = ({ shop }: { shop: IShop }) => {
             </div>
           ) : (
             <div className="text-center py-10 text-muted-foreground">
-              No reviews yet. Be the first to review this shop!
+              {t('noReviews')}
             </div>
           )}
         </div>

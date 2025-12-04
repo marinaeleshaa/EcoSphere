@@ -5,10 +5,12 @@ import Image from "next/image";
 import { clearCart as clearAllItems } from "@/frontend/redux/Slice/CartSlice";
 import { useAppDispatch } from "@/frontend/redux/hooks";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export default function ProductsSection({
   items,
 }: Readonly<{ items: CartItems[] }>) {
+  const t = useTranslations('Cart.productsSection');
   const dispatch = useAppDispatch();
 
   const clearCart = () => {
@@ -23,11 +25,11 @@ export default function ProductsSection({
           <>
             {/* Table Header - Hidden on mobile, shown on desktop */}
             <div className="hidden md:grid grid-cols-12 gap-4 pb-3 border-b mb-2 text-sm text-muted-foreground font-medium">
-              <div className="col-span-4 text-center">Product</div>
-              <div className="col-span-2 text-center">Product Code</div>
-              <div className="col-span-2 text-center">Quantity</div>
-              <div className="col-span-2 text-center">Total</div>
-              <div className="col-span-1 text-center">Action</div>
+              <div className="col-span-4 text-center">{t('product')}</div>
+              <div className="col-span-2 text-center">{t('productCode')}</div>
+              <div className="col-span-2 text-center">{t('quantity')}</div>
+              <div className="col-span-2 text-center">{t('total')}</div>
+              <div className="col-span-1 text-center">{t('action')}</div>
             </div>
 
             <div className="space-y-0">
@@ -38,7 +40,7 @@ export default function ProductsSection({
 
             <div className="mt-3 pt-3 flex justify-center">
               <button onClick={clearCart} className="myBtnPrimary w-full lg:w-auto">
-                Clear all
+                {t('clearAll')}
                 <Trash2 className="w-5 h-5  " />
               </button>
             </div>

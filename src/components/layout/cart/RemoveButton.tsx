@@ -3,8 +3,10 @@ import { useAppDispatch } from "@/frontend/redux/hooks";
 import { removeItem } from "@/frontend/redux/Slice/CartSlice";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 export default function RemoveButton({ id }: Readonly<{ id: string }>) {
+  const t = useTranslations('Cart.removeButton');
   const dispatch = useAppDispatch();
   const [confirming, setConfirming] = useState(false);
 
@@ -21,11 +23,11 @@ export default function RemoveButton({ id }: Readonly<{ id: string }>) {
     <button
       onClick={onRemove}
       className="p-2 hover:bg-muted rounded-md transition-colors cursor-pointer group "
-      aria-label="Remove item"
-      title={confirming ? "Click again to confirm" : "Remove item"}
+      aria-label={t('removeItem')}
+      title={confirming ? t('clickToConfirm') : t('removeItem')}
     >
       {confirming ? (
-        <span className="text-sm text-destructive font-semibold">Confirm?</span>
+        <span className="text-sm text-destructive font-semibold">{t('confirm')}</span>
       ) : (
         <Trash2 className="w-5 h-5 text-muted-foreground  transition-colors group-hover:text-destructive" />
       )}

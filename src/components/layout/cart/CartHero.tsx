@@ -1,7 +1,10 @@
 import Link from "next/link";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 const CartHero = () => {
+  const t = useTranslations('Cart.hero');
+
   return (
     <section className="relative w-full h-[200px] bg-primary overflow-hidden">
       {/* Decorative background elements */}
@@ -14,7 +17,7 @@ const CartHero = () => {
         {/* Main heading with subtle animation-ready structure */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl text-primary-foreground font-bold tracking-tight">
-            Shopping Cart
+            {t('title')}
           </h1>
         </div>
 
@@ -27,10 +30,10 @@ const CartHero = () => {
             href="/"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            Home
+            {t('home')}
           </Link>
           <span className="text-primary-foreground/50">/</span>
-          <span className="text-primary-foreground font-medium ">Cart</span>
+          <span className="text-primary-foreground font-medium ">{t('cart')}</span>
         </nav>
       </div>
     </section>

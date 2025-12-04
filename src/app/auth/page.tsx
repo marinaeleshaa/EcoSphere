@@ -7,9 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import LogIn from "@/components/layout/Auth/LogIn";
-import { getCoords, ICoords } from "@/frontend/Actions/GetCoords";
+import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
+import { useTranslations } from 'next-intl';
 
 const AuthPage = () => {
+  const t = useTranslations('Auth.page');
   const { active } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -122,9 +124,8 @@ const AuthPage = () => {
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center min-h-screen  ">
           {/* register form */}
           <motion.div
-            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${
-              active === "login" ? "hidden" : ""
-            }`}
+            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${active === "login" ? "hidden" : ""
+              }`}
             variants={formVariants}
             initial={false}
             animate={
@@ -137,9 +138,8 @@ const AuthPage = () => {
 
           {/* login form */}
           <motion.div
-            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[45%] md:w-[50%] w-full rounded-2xl ${
-              active === "register" ? "hidden" : ""
-            } `}
+            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[45%] md:w-[50%] w-full rounded-2xl ${active === "register" ? "hidden" : ""
+              } `}
             variants={formVariants}
             animate={active === "login" ? "login" : { opacity: 0, x: -200 }}
             initial={false}
@@ -204,16 +204,16 @@ const AuthPage = () => {
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-2xl xl:text-3xl font-extrabold">
-          New to Ecosphere?
+          {t('newToEcosphere')}
         </h2>
         <p className="text-base lg:text-lg xl:text-xl">
-          sign up to get started with Ecosphere
+          {t('signUpText')}
         </p>
         <motion.button
           onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
-          Sign Up
+          {t('signUp')}
         </motion.button>
       </motion.div>
       {/* to sign in */}
@@ -225,16 +225,16 @@ const AuthPage = () => {
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-xl xl:text-5xl font-extrabold">
-          One Of Us?
+          {t('oneOfUs')}
         </h2>
         <p className="text-sm lg:text-xl xl:text-2xl">
-          we are happy to see you back
+          {t('signInText')}
         </p>
         <motion.button
           onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground  hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
-          Sign In
+          {t('signIn')}
         </motion.button>
       </motion.div>
     </section>
