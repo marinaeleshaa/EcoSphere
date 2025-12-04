@@ -9,7 +9,6 @@ class OrganizerRegistration implements IRegistrationStrategy {
 		@inject("IAuthRepository") private readonly authRepo: IAuthRepository
 	) {}
 	async register(data: UserRegisterDTO): Promise<RegisterResponseDTO> {
-		console.log(data);
 		const isOrganizerExists = await this.authRepo.existsByEmail(data.email);
 		if (isOrganizerExists) throw new Error("user already exists.");
 		const organizer = await this.authRepo.saveNewUser(data);
