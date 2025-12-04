@@ -36,7 +36,7 @@
     },
     "UserBtn": {
       "subscribe": "S’abonner",
-      "account": "Compte",
+      "account": "Profil",
       "billing": "Facturation",
       "notifications": "Notifications",
       "logout": "Déconnexion"
