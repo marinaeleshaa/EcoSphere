@@ -17,7 +17,6 @@ class RegistrationFactory implements IRegistrationFactory {
 	) {}
 
 	getStrategy(userType: string): IRegistrationStrategy {
-		console.log(userType);
 		switch (userType) {
       case "customer":
         return this.userStrategy;

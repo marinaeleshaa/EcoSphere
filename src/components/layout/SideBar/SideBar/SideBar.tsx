@@ -182,7 +182,7 @@ export default function SideBar() {
 						</SidebarMenuItem>
 						{status === "unauthenticated" && (
 							<SidebarMenuItem>
-								<SidebarMenuButton asChild>
+								<SidebarMenuButton asChild isActive={pathname === "/auth"}>
 									<Link href="/auth">
 										<LogIn />
 										<span>{t('footer.login')}</span>
