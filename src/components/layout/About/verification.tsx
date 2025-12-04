@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export default function Verification() {
   return (
-    <section className="relative w-full text-card-foreground py-16 md:py-24 overflow-hidden">
+    <section className="relative w-full text-foreground py-16 md:py-24 overflow-hidden">
       <div className="mx-auto w-[80%] px-4 md:px-6">
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
@@ -16,7 +16,7 @@ export default function Verification() {
             {/* LEFT COLUMN: Content */}
             <div className="flex flex-col space-y-8">
               <div className="space-y-4">
-                <span className="text-xl font-bold tracking-widest text-primary uppercase flex items-center gap-2">
+                <span className="text-xl font-bold tracking-widest text-accent-foreground uppercase flex items-center gap-2">
                   <motion.span initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center">
                     <ClipboardCheck className="w-6 h-6" />
                   </motion.span>
@@ -24,11 +24,11 @@ export default function Verification() {
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
                   The EcoSphere <br />
-                  <span className="text-primary">Verification.</span>
+                  <span className="text-accent-foreground">Verification.</span>
                 </h2>
               </div>
 
-              <div className="space-y-6 text-muted text-lg leading-relaxed">
+              <div className="space-y-6 text-foreground text-lg leading-relaxed">
              
                
                 <p>

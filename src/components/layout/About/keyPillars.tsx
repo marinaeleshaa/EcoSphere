@@ -9,29 +9,29 @@ import Image from "next/image";
 export default function KeyPillars() {
     const pillars = [
         { 
-            icon: <Sprout className="w-8 h-8 text-primary" />,
+            icon: <Sprout className="w-8 h-8 text-accent-foreground" />,
             title: "Environmental Impact", 
             text: "Sourcing organic, recycled materials with a focus on carbon neutrality and minimal waste." 
         },
         { 
-            icon: <HeartHandshake className="w-8 h-8 text-primary" />,
+            icon: <HeartHandshake className="w-8 h-8 text-accent-foreground" />,
             title: "Ethical Labor", 
             text: "Ensuring fair wages, safe working conditions, and absolutely no forced or child labor." 
         },
         { 
-            icon: <Search className="w-8 h-8 text-primary" />,
+            icon: <Search className="w-8 h-8 text-accent-foreground" />,
             title: "Supply Chain Transparency", 
             text: "Providing verifiable proof and complete openness about sourcing, processing, and logistics." 
         },
         { 
-            icon: <ShieldCheck className="w-8 h-8 text-primary" />,
+            icon: <ShieldCheck className="w-8 h-8 text-accent-foreground" />,
             title: "Durability & Quality", 
             text: "Products designed for longevity, repairability, and circularity — actively fighting waste culture." 
         }
     ];
 
     return (
-        <section className="relative py-20 text-card-foreground overflow-hidden">
+        <section className="relative py-20 text-foreground overflow-hidden">
             {/* Decorative Corner Leaves (Rotated for variety compared to Values component) */}
                                     <div className="absolute top-0 right-0 w-48 opacity-10 translate-x-12 -translate-y-8 rotate-90 pointer-events-none mix-blend-multiply">
                                         <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-contain" unoptimized/>
@@ -44,13 +44,13 @@ export default function KeyPillars() {
                 <Reveal>
                     {/* Header Section */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
-                        <span className="text-xl font-bold tracking-[0.2em] text-primary uppercase mb-3 block">
+                        <span className="text-xl font-bold tracking-[0.2em] text-accent-foreground uppercase mb-3 block">
                             Our Standards
                         </span>
                         <h2 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">
                             Key Pillars
                         </h2>
-                        <p className="mt-4 text-muted max-w-2xl mx-auto">
+                        <p className="mt-4 text-foreground max-w-2xl mx-auto">
                             We don&apos;t just take a brand&apos;s word for it. We rigorously evaluate every partner against these four non-negotiable standards.
                         </p>
                     </div>
@@ -76,7 +76,7 @@ export default function KeyPillars() {
                                     {pillar.title}
                                 </h3>
                                 
-                                <p className="text-sm text-muted leading-relaxed">
+                                <p className="text-sm text-foreground leading-relaxed">
                                     {pillar.text}
                                 </p>
                             </motion.div>

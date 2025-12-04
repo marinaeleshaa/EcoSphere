@@ -3,22 +3,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Recycle, Mountain } from "lucide-react";
 
 export const Hero = () => {
   return (
     <section className="relative w-full">
       <div className="relative w-full h-[450px] md:h-[520px] lg:h-[600px] bg-primary/5 dark:bg-primary/10 overflow-hidden flex items-center justify-center">
-        {/* Abstract Background */}
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 50%)",
-          }}
-        />
-        <Mountain className="absolute -bottom-10 -right-10 w-96 h-96 text-primary/20 rotate-12" />
-
+      
         {/* Hero illustration (right side) */}
         <div className="absolute right-4 top-8 hidden md:block w-1/2 h-full pointer-events-none opacity-95">
           <Image
@@ -29,7 +19,6 @@ export const Hero = () => {
           />
         </div>
 
-        <Recycle className="absolute top-20 left-20 w-32 h-32 text-primary/20 -rotate-12" />
 
         {/* Hero Content */}
         <motion.div
@@ -41,7 +30,7 @@ export const Hero = () => {
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
             A Greener Tomorrow <br className="hidden md:block" /> Starts Today
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-foreground max-w-2xl mx-auto leading-relaxed">
             Join us in our mission to revolutionize waste management and build a
             sustainable future for our planet. Every piece counts.
           </p>

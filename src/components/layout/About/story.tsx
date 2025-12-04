@@ -7,14 +7,14 @@ import Image from "next/image";
 
 export default function About() {
   return (
-    <section className="relative w-full text-card-foreground py-16 md:py-24 overflow-hidden">
+    <section className="relative w-full text-foreground py-16 md:py-24 overflow-hidden">
       <div className="mx-auto w-[80%] px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           
           {/* LEFT COLUMN: Images & Decorative Elements */}
           <div className="relative">
             {/* Primary color decorative sidebar line */}
-            <div className="absolute -left-4 top-10 bottom-10 w-1.5 rounded-full hidden md:block" style={{ background: 'var(--primary)' }} />
+            <div className="absolute -left-4 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
             
             <div className="relative pl-4 md:pl-8">
               {/* Main Image  */}
@@ -49,7 +49,7 @@ export default function About() {
           {/* RIGHT COLUMN: Content */}
           <div className="flex flex-col space-y-6 lg:pl-8">
               <div className="space-y-2">
-              <span className="text-xl font-bold tracking-widest text-primary uppercase mb-5">About Us</span>
+              <span className="text-xl font-bold tracking-widest text-accent-foreground uppercase mb-5">About Us</span>
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
                 <motion.span initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="inline-block mr-3">
                   <Globe size={28} />
@@ -60,7 +60,7 @@ export default function About() {
             </div>
 
             {/* Replaced text with your summary */}
-            <p className="text-muted leading-relaxed">
+            <p className="text-foreground leading-relaxed">
              EcoSphere was created to make sustainable shopping simple, trustworthy, and accessible. 
              With greenwashing becoming widespread, consumers are often overwhelmed or unsure who to trust. 
              EcoSphere bridges that gap—connecting verified, planet-friendly businesses with the growing community of people who want to shop responsibly.
