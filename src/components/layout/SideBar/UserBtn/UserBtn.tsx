@@ -26,15 +26,18 @@ import {
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 
 export default function UserBtn({
 	session,
 	status,
 }: Readonly<{ session: Session; status: string }>) {
 	const { isMobile } = useSidebar();
+	const router = useRouter();
 
-	const handleLogout = async () => {
-		await signOut({ redirectTo: "/auth" , redirect: false});
+	const handleLogout = () => {
+		signOut({ redirect: false });
+		router.replace("/")
 	};
 
 	if (status === "unauthenticated") return null;
