@@ -17,7 +17,7 @@ export default function ImageUpload({
     onImageUpdate,
     endpoint = "/api/upload/avatar",
     className = "",
-}: ImageUploadProps) {
+}: Readonly<ImageUploadProps>) {
     const [isUploading, setIsUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
     const fileInputRef = useRef<HTMLInputElement>(null);

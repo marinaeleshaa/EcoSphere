@@ -19,7 +19,6 @@ export default function OrderSummary() {
 		if (couponCode.trim()) {
 			setAppliedCoupon(true);
 			// Here you would typically validate and apply the coupon
-			console.log("Applying coupon:", couponCode);
 		}
 	};
 

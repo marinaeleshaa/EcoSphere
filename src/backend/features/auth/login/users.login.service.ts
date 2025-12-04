@@ -2,45 +2,48 @@ import { inject, injectable } from "tsyringe";
 import { type IAuthRepository } from "../auth.repository";
 import {
 	mapToUserPublicProfile,
-	type FoundedUser,
 	type LoginRequestDTO,
 	type LoginResponse,
 } from "../dto/user.dto";
 import { IUser } from "../../user/user.model";
+import { IRestaurant } from "../../restaurant/restaurant.model";
 
-// NOTE: This service appears to be deprecated in favor of UserLoginStrategy and ShopLoginStrategy
-// Consider removing if not used
+export interface ILoginService {
+	login(data: LoginRequestDTO): Promise<LoginResponse>;
+	findByEmail(email: string, key: string): Promise<boolean>;
+}
+
 @injectable()
 class LoginService {
 	constructor(
 		@inject("IAuthRepository") private readonly authRepository: IAuthRepository
 	) {}
 	async login(data: LoginRequestDTO): Promise<LoginResponse> {
-		let user = await this.authRepository.findShopByEmail(data.email);
+		let user: IUser | IRestaurant = await this.authRepository.findShopByEmail(
+			data.email
+		);
 
 		if (!user) user = await this.authRepository.findUserByEmail(data.email);
 		if (!user) throw new Error("User not found");
 
-		if (!(await user.comparePassword!(data.password)))
+		if (!(await user.comparePassword(data.password)))
 			throw new Error("Invalid email or password");
 
-		// This needs proper DTO transformation - returning raw FoundedUser as workaround
-		return mapToUserPublicProfile({
-			id: user._id,
-			lastName: user.name,
-			email: user.email,
-			role: user.role,
-		} as IUser);
+		return mapToUserPublicProfile(user);
 	}
 
-	async findByEmail(email: string, key: string): Promise<FoundedUser> {
-		let user = await this.authRepository.findShopByEmail(email, key);
+	async findByEmail(email: string, key: string): Promise<boolean> {
+		let user: IUser | IRestaurant = await this.authRepository.findShopByEmail(
+			email,
+			key
+		);
 
 		if (!user) user = await this.authRepository.findUserByEmail(email, key);
-		console.log(user);
-		if (!user?.oAuthId && user?.password)
-			throw new Error("user must login using email and password");
-		return user;
+		if (user?.password) {
+			console.error("user must login using email and password");
+			return false;
+		}
+		return true;
 	}
 }
 
