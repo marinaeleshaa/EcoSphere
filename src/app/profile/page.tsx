@@ -1,8 +1,8 @@
 "use client";
 
-import CustomerProfile from "@/components/profile/CustomerProfile";
-import OrganizerProfile from "@/components/profile/OrganizerProfile";
-import RestaurantProfile from "@/components/profile/RestaurantProfile";
+import CustomerProfile from "@/components/layout/profile/CustomerProfile";
+import OrganizerProfile from "@/components/layout/profile/OrganizerProfile";
+import RestaurantProfile from "@/components/layout/profile/RestaurantProfile";
 import { useSession } from "next-auth/react";
 
 export default function ProfilePage() {
@@ -19,7 +19,6 @@ export default function ProfilePage() {
   if (status === "loading") {
     return <div>loading</div>
   }
-  console.log(session?.user);
   return (status === "authenticated" &&
     <div className=" bg-background py-8">
       <div className="min-h-screen flex justify-center items-center w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
