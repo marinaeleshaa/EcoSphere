@@ -5,6 +5,7 @@ import { IUser} from "./user.model";
 export interface IUserService {
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
+  getUserIdByEmail(email: string): Promise<IUser>
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
@@ -23,6 +24,11 @@ class UserService {
 
   async getById(id: string): Promise<IUser> {
     return await this.userRepository.getById(id);
+  }
+  async getUserIdByEmail(email:string): Promise<IUser> {
+    const user = this.userRepository.getUserIdByEmail(email);
+    if (!user) throw new Error("User not found");
+    return user
   }
 
   // Needs to Updated later when we have Avatar Upload functionality

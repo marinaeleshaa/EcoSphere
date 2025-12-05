@@ -39,7 +39,6 @@ export type ShopRegisterDTO = RegisterWithCredentialsDTO &
 		name: string;
 		description: string;
 		hotline: string;
-		avatar?: string;
 		location?: string;
 		workingHours: string;
 	};
@@ -68,6 +67,7 @@ export const mapToUserPublicProfile = (
 	return {
 		id: `${user._id}`,
 		email: user.email!,
+		image: user.avatar?.url,
 		name: isUser(user) ? user.lastName! : user.name!,
 		role: isUser(user) ? user.role! : "shop",
 	};

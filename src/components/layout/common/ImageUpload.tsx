@@ -47,22 +47,11 @@ export default function ImageUpload({
         const formData = new FormData();
         formData.append("file", file);
 
-        // Get token from localStorage
-        const token = localStorage.getItem("token");
-        if (!token) {
-            toast.error("You must be logged in to upload an image");
-            setIsUploading(false);
-            return;
-        }
-
         try {
             const res = await fetch(endpoint, {
                 method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
                 body: formData,
-            });
+            });            
 
             const data = await res.json();
 
@@ -72,9 +61,9 @@ export default function ImageUpload({
 
             toast.success("Image uploaded successfully");
             onImageUpdate(data.data.avatar.url);
-        } catch (error: any) {
+        } catch (error) { 
             console.error("Upload error:", error);
-            toast.error(error.message || "Failed to upload image");
+            toast.error("Failed to upload image");
             // Revert preview on failure
             setPreviewUrl(currentImageUrl || null);
         } finally {
@@ -85,33 +74,19 @@ export default function ImageUpload({
     const handleDelete = async () => {
         if (!confirm("Are you sure you want to delete your profile picture?")) return;
 
-        const token = localStorage.getItem("token");
-        if (!token) {
-            toast.error("You must be logged in to delete an image");
-            return;
-        }
-
         setIsUploading(true);
         try {
-            const res = await fetch(endpoint, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
-
+            const res = await fetch(endpoint, { method: "DELETE" });
             const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.message || "Delete failed");
-            }
+            if (!res.ok) throw new Error(data.message || "Delete failed");
 
             toast.success("Image deleted successfully");
             setPreviewUrl(null);
             onImageUpdate(""); // Clear image in parent
-        } catch (error: any) {
+        } catch (error) {
             console.error("Delete error:", error);
-            toast.error(error.message || "Failed to delete image");
+            toast.error("Failed to delete image");
         } finally {
             setIsUploading(false);
         }

@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { rootContainer } from "./backend/config/container";
 import AuthController from "./backend/features/auth/auth.controller";
+import UserController from "./backend/features/user/user.controller";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
 	providers: [
@@ -49,39 +50,53 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 	},
 	callbacks: {
 		async signIn({ user, account, profile }) {
-			const controller = rootContainer.resolve(AuthController);
 			switch (account?.provider) {
-				case "google":
-					return !!(await controller.LoginWithGoogle({
-						firstName: profile?.given_name as string,
-						lastName: profile?.family_name as string,
-						email: user?.email as string,
-						role: "customer",
-						oAuthId: account.providerAccountId,
-						provider: account.provider,
-					}));
+				case "google": {
+					const [firstName, ...rest] = (profile?.name ?? "").split(" ");
+					const lastName = rest.join(" ");
+					return !!(await rootContainer
+						.resolve(AuthController)
+						.LoginWithGoogle({
+							firstName: firstName,
+							lastName: lastName,
+							email: user?.email as string,
+							role: "customer",
+							oAuthId: account.providerAccountId,
+							provider: account.provider,
+						}));
+				}
 				case "credentials":
 					return true;
 				default:
 					return false;
 			}
 		},
-		async jwt({ token, user }) {
+		async jwt({ token, user, account }) {
 			if (user) {
-				token.id = user.id;
-				token.email = user.email;
+				token.userId = user.id;
 				token.role = user.role;
-				token.name = user.name;
+			}
+			if (account?.provider === "google") {
+				token.role = "customer";
+				user.image = account.image as string;
+				token.userId = `${
+					(
+						await rootContainer
+							.resolve(UserController)
+							.getUserIdByEmail(user.email!)
+					)._id
+				}`;
 			}
 			return token;
 		},
 
-		async session({ session, token }) {
+		async session({ session, token, user }) {
 			if (token) {
 				session.user.id = token.id as string;
 				session.user.email = token.email as string;
 				session.user.role = token.role as string;
 				session.user.name = token.name as string;
+				session.user.image = user?.picture as string;
 			}
 			return session;
 		},

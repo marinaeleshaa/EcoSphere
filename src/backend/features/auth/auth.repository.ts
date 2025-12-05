@@ -34,24 +34,24 @@ class AuthRepository {
 
   async saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant> {
     await DBInstance.getConnection();
-    const shopData: any = { ...data };
-    if (data.avatar) {
-      shopData.avatar = { key: data.avatar };
-    }
-    return await RestaurantModel.create(shopData);
+    return await RestaurantModel.create(data);
   }
 
   async findUserByEmail(email: string, keys?: string): Promise<IUser> {
     await DBInstance.getConnection();
     return await UserModel.findOne({ email })
-      .select(`+password _id email role lastName accountProvider ${keys || ""}`)
+      .select(
+        `+password _id email role lastName accountProvider avatar ${
+          keys || ""
+        }`
+      )
       .exec();
   }
 
   async findShopByEmail(email: string, keys?: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.findOne({ email })
-      .select(`+password _id email name ${keys || ""}`)
+      .select(`+password _id email name avatar ${keys || ""}`)
       .exec();
   }
 
