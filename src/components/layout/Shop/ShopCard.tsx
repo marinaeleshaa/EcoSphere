@@ -69,7 +69,7 @@ export default function ShopCard({ shop, index }: Readonly<AnimatedShopCardProps
         </div>
 
         <div className="opacity-100 translate-y-0 max-h-full md:opacity-0 md:translate-y-2 md:max-h-0 md:overflow-hidden md:transition-all md:duration-500 md:ease-out md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:max-h-20">
-          <div className="flex items-center justify-between mt-2 text-md">
+          <div className="flex flex-col items-start justify-between mt-2 text-sm">
             <p className="text-primary-foreground font-semibold">
               {shop.location}
             </p>
