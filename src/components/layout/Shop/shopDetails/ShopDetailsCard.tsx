@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
   const t = useTranslations('ShopDetails.card');
   const { id, title, rating, cuisine, img, desc, workingHours } = shop;
+  // 'id' is declared but its value is never read.
 
   return (
     <section className="">

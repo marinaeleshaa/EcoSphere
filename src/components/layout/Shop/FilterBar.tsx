@@ -12,7 +12,7 @@ interface FilterBarProps {
 
 export default function FilterBar({
   onSortChange,
-}: FilterBarProps) {
+}: Readonly<FilterBarProps>) {
   const t = useTranslations('Shop.filter');
   const [selectedSort, setSelectedSort] = useState(t('sortOptions.default'));
 

@@ -180,7 +180,7 @@ export function newEventTemplate(user: BasicUserInfo, event: EventInfo): string 
       <p style="${baseStyles.paragraph}">Stay green,</p>
       <p style="${baseStyles.paragraph}"><strong>The EcoSphere Team</strong></p>
       <div style="${baseStyles.footer}">
-        You received this email because you\'re subscribed to EcoSphere event
+        You received this email because you're subscribed to EcoSphere event
         updates.
       </div>
     </div>

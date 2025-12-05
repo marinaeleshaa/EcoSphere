@@ -49,7 +49,7 @@ export default function ShopSection() {
             </motion.div>
           ))
         ) : (
-          <p className="col-span-full text-center text-primary-forground py-10">
+          <p className="col-span-full text-center text-primary py-10">
             {t('noProducts')}
           </p>
         )}
