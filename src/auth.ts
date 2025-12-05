@@ -71,14 +71,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					return false;
 			}
 		},
-		async jwt({ token, user, account }) {
+		async jwt({ token, user, account, profile }) {
 			if (user) {
 				token.userId = user.id;
 				token.role = user.role;
 			}
 			if (account?.provider === "google") {
 				token.role = "customer";
-				user.image = account.image as string;
+				token.image = profile?.picture;
 				token.userId = `${
 					(
 						await rootContainer
@@ -90,13 +90,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			return token;
 		},
 
-		async session({ session, token, user }) {
+		async session({ session, token }) {
 			if (token) {
-				session.user.id = token.id as string;
+				session.user.id = token.userId as string;
 				session.user.email = token.email as string;
 				session.user.role = token.role as string;
 				session.user.name = token.name as string;
-				session.user.image = user?.picture as string;
+				session.user.image = token.image as string;
 			}
 			return session;
 		},
