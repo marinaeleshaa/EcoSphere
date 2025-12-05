@@ -11,7 +11,7 @@ interface AnimatedShopCardProps {
   index: number;
 }
 
-export default function ShopCard({ shop, index }: AnimatedShopCardProps) {
+export default function ShopCard({ shop, index }: Readonly<AnimatedShopCardProps>) {
   const [isExiting, setIsExiting] = useState(false);
   const router = useRouter();
   const exitVariant = {
@@ -42,7 +42,7 @@ export default function ShopCard({ shop, index }: AnimatedShopCardProps) {
           alt={shop.title}
           width={800}
           height={800}
-          className="w-full h-full object-cover transition-all duration-300 ease-out will-change-transform will-change-filter group-hover:scale-105 group-hover:blur-xs"
+          className="w-full h-full object-cover transition-all duration-300 ease-out will-change-transform will-change-filter group-hover:scale-105 group-hover:blur-[1.5px]"
         />
         <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
       </div>

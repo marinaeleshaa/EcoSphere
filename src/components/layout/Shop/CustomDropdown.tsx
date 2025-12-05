@@ -11,7 +11,7 @@ export default function CustomDropdown({
   options,
   selectedValue,
   onChange,
-}: CustomDropdownProps) {
+}: Readonly<CustomDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {
