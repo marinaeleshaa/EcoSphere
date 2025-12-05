@@ -7,6 +7,7 @@ import {
 } from "../dto/user.dto";
 import { IUser } from "../../user/user.model";
 import { IRestaurant } from "../../restaurant/restaurant.model";
+import { ImageService } from "@/backend/services/image.service";
 
 export interface ILoginService {
 	login(data: LoginRequestDTO): Promise<LoginResponse>;
@@ -16,7 +17,8 @@ export interface ILoginService {
 @injectable()
 class LoginService {
 	constructor(
-		@inject("IAuthRepository") private readonly authRepository: IAuthRepository
+		@inject("IAuthRepository") private readonly authRepository: IAuthRepository,
+		@inject("ImageService") private readonly imageService: ImageService
 	) {}
 	async login(data: LoginRequestDTO): Promise<LoginResponse> {
 		let user: IUser | IRestaurant = await this.authRepository.findShopByEmail(
@@ -28,7 +30,8 @@ class LoginService {
 
 		if (!(await user.comparePassword(data.password)))
 			throw new Error("Invalid email or password");
-
+		if (user?.avatar?.key)
+			user.avatar!.url = await this.imageService.getSignedUrl(user.avatar!.key);
 		return mapToUserPublicProfile(user);
 	}
 
