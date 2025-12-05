@@ -6,6 +6,7 @@ import { BsFillPeopleFill } from "react-icons/bs";
 import { PiTicketFill } from "react-icons/pi";
 import { useTranslations } from 'next-intl';
 export default function DisplayEvents() {
+    
     const t = useTranslations('Dashboard.displayEvents');
     return (
         <div className='min-h-screen py-8 w-[85%] mx-auto flex flex-col  gap-6'>
