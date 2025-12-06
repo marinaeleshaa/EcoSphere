@@ -32,11 +32,11 @@ export default function Mission() {
               </div>
 
               {/* Summarized Text */}
-              <div className="space-y-6 text-muted text-lg leading-relaxed">
+              <div className="space-y-6 text-foreground text-lg leading-relaxed">
                 <p>
                   {t('description')}
                 </p>
-                <div className="pl-6 border-l-4 border-theme space-y-4">
+                <div className="pl-6 border-l-4 border-primary space-y-4">
                   <div>
                     <strong className="block text-foreground">{t('forConsumers.title')}</strong>
                     <span className="text-sm">{t('forConsumers.description')}</span>

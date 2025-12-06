@@ -7,11 +7,8 @@ import Mission from "@/components/layout/About/mission";
 import Vision from "@/components/layout/About/vision";
 import Verification from "@/components/layout/About/verification";
 import KeyPillars from "@/components/layout/About/keyPillars";
-import { useTranslations } from 'next-intl';
-
-
 export default function AboutPage() {
-  const t = useTranslations('About');
+  
   return (
     <div className="scroll-smooth">
       <HeroSection imgUrl="/hero.png"

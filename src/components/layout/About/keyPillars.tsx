@@ -11,26 +11,10 @@ export default function KeyPillars() {
     const t = useTranslations('About.keyPillars');
 
     const pillars = [
-        { 
-            icon: <Sprout className="w-8 h-8 text-accent-foreground" />,
-            title: "Environmental Impact", 
-            text: "Sourcing organic, recycled materials with a focus on carbon neutrality and minimal waste." 
-        },
-        { 
-            icon: <HeartHandshake className="w-8 h-8 text-accent-foreground" />,
-            title: "Ethical Labor", 
-            text: "Ensuring fair wages, safe working conditions, and absolutely no forced or child labor." 
-        },
-        { 
-            icon: <Search className="w-8 h-8 text-accent-foreground" />,
-            title: "Supply Chain Transparency", 
-            text: "Providing verifiable proof and complete openness about sourcing, processing, and logistics." 
-        },
-        { 
-            icon: <ShieldCheck className="w-8 h-8 text-accent-foreground" />,
-            title: "Durability & Quality", 
-            text: "Products designed for longevity, repairability, and circularity — actively fighting waste culture." 
-        }
+        { key: 'environmental', icon: <Sprout className="w-8 h-8 text-accent-foreground" /> },
+        { key: 'ethical', icon: <HeartHandshake className="w-8 h-8 text-accent-foreground" /> },
+        { key: 'transparency', icon: <Search className="w-8 h-8 text-accent-foreground" /> },
+        { key: 'quality', icon: <ShieldCheck className="w-8 h-8 text-accent-foreground" /> },
     ];
 
     return (
@@ -80,7 +64,7 @@ export default function KeyPillars() {
                                 </h3>
                                 
                                 <p className="text-sm text-foreground leading-relaxed">
-                                    {pillar.text}
+                                    {t(`pillars.${pillar.key}.text`)}
                                 </p>
                             </motion.div>
                         ))}

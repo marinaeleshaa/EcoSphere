@@ -1,21 +1,18 @@
-import React from 'react'
+import React from 'react';
 import HeroSection from "@/components/layout/common/HeroSection";
-// import { Hero } from '@/components/layout/Recycle/Hero';
 import { Metrics } from '@/components/layout/Recycle/Metrics';
 import RecycleForm from '@/components/layout/Recycle/recycleForm';
 
 export default function Recycle() {
   return (
-    <div
-       className="scroll-smooth">
-      <HeroSection imgUrl="/recycle2.png"
+    <div className="scroll-smooth">
+      <HeroSection 
+        imgUrl="/recycle2.png"
         title="A Greener Tomorrow Starts Today"
-        subTitle=" Join us in our mission to revolutionize waste management and build a
-            sustainable future for our planet. Every piece counts."
+        subTitle="Join us in our mission to revolutionize waste management and build a sustainable future for our planet. Every piece counts."
       />
-      {/* <Hero /> */}
       <Metrics />
       <RecycleForm />
     </div>
-  )
+  );
 }

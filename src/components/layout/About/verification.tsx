@@ -28,7 +28,6 @@ export default function Verification() {
                   {t('label')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-<<<<<<< HEAD
                   The EcoSphere <br />
                   <span className="text-accent-foreground">Verification.</span>
                 </h2>
@@ -37,16 +36,6 @@ export default function Verification() {
               <div className="space-y-6 text-foreground text-lg leading-relaxed">
              
                
-=======
-                  {t('title')} <br />
-                  <span className="text-primary">{t('titleHighlight')}</span>
-                </h2>
-              </div>
-
-              <div className="space-y-6 text-muted text-lg leading-relaxed">
-
-
->>>>>>> 2514dc631ae13b55e3ec0d953b9cfa935bce365f
                 <p>
                   {t('description')}
                 </p>

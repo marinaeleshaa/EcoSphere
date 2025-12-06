@@ -64,12 +64,12 @@ const LogIn = () => {
           )}
         </button>
       </div>
-      {/* forget password */}
-      <Link href="#">
+      {/* forgot password */}
+      <Link href="/forgot-password">
         <div className="flex justify-end px-5">
           <div className="flex gap-1 justify-center items-center text-sm group cursor-pointer">
             <p className="text-secondary-foreground transition-all duration-300 ">
-              {t('forgetPassword')}
+              {t('forgotPassword')}
             </p>
             <IoIosArrowRoundForward className=" transform transition-all duration-300 ease-out group-hover:translate-x-1 " />
           </div>
