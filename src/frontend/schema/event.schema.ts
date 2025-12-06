@@ -14,7 +14,7 @@ export const subEventSchema = z.object({
 
 export const eventSchema = z
     .object({
-        id: z.string(),
+        _id: z.string(),
         name: z
             .string()
             .min(2, { message: "Event name must be at least 2 characters." }),
@@ -45,7 +45,7 @@ export const eventSchema = z
         capacity: z.coerce.number<number>().min(0),
         ticketType: z.enum(["Priced", "Free"]),
         ticketPrice: z.coerce.number<number>().min(0),
-        sections: z.array(subEventSchema).optional(),
+        sections: z.array(subEventSchema).optional()
     })
     .refine(
         (data) => {

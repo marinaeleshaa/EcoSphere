@@ -23,10 +23,10 @@ export interface ISubEvent {
 }
 
 export interface IEventDetails {
-  id: string;
+  _id: string;
   name: string;
   type: string;
-  avatar?: string | FileList | undefined;
+  avatar?: string | File | undefined;
   description?: string;
   locate: string;
   eventDate: string;
@@ -42,6 +42,6 @@ export interface EventProps {
   events: IEventDetails[];
 }
 
-export type EventListItemProps = Pick<IEventDetails, 'id' | 'name' | 'eventDate' | 'startTime' | 'endTime' | 'locate'> & {
+export type EventListItemProps = Pick<IEventDetails, '_id' | 'name' | 'eventDate' | 'startTime' | 'endTime' | 'locate'> & {
   avatar: string | undefined;
 };

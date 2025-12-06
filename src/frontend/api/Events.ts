@@ -20,14 +20,16 @@ export  async function GetAllUserEvents() {
     // }
     return await res.json();
 };
-export async function PostEvent({data}:{data:Partial<IEventDetails>}) {
+export async function PostEvent(data:Partial<IEventDetails>) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/events/user`, {
         method: 'POST', 
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({...data})
+        body: JSON.stringify({data})
     });
+    console.log(res);
+    
     if (!res.ok) {
         throw new Error("error in fetch api response");
     }
