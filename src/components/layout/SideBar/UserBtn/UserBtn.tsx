@@ -3,7 +3,6 @@ import {
 	BadgeCheck,
 	Bell,
 	ChevronsUpDown,
-	CreditCard,
 	LogOut,
 	Sparkles,
 } from "lucide-react";
@@ -26,6 +25,7 @@ import {
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 import { useTranslations } from 'next-intl';
 
 export default function UserBtn({
@@ -33,10 +33,12 @@ export default function UserBtn({
 	status,
 }: Readonly<{ session: Session; status: string }>) {
 	const { isMobile } = useSidebar();
+	const router = useRouter();
 	const t = useTranslations('Layout.UserBtn');
 
-	const handleLogout = async () => {
-		await signOut({ redirectTo: "/auth" });
+	const handleLogout = () => {
+		signOut({ redirect: false });
+		router.replace("/")
 	};
 
 	if (status === "unauthenticated") return null;
@@ -116,10 +118,6 @@ export default function UserBtn({
 									{t('account')}
 								</DropdownMenuItem>
 							</Link>
-							<DropdownMenuItem>
-								<CreditCard />
-								{t('billing')}
-							</DropdownMenuItem>
 							<DropdownMenuItem>
 								<Bell />
 								{t('notifications')}

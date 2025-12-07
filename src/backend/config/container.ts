@@ -14,10 +14,14 @@ import { LoginService } from "../features/auth/login/users.login.service";
 import { ImageService } from "../services/image.service";
 import { UploadService } from "../features/upload/upload.service";
 import { UploadRepository } from "../features/upload/upload.repository";
+import EventService from "../features/event/event.service";
+import EventRepository from "../features/event/event.repository";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
 container.registerSingleton("IUserService", UserService);
+container.registerSingleton("IEventService", EventService);
+container.registerSingleton("IEventRepository", EventRepository);
 container.registerSingleton("IAuthRepository", AuthRepository);
 container.registerSingleton("IRestaurantService", RestaurantService);
 container.registerSingleton("IRestaurantRepository", RestaurantRepository);

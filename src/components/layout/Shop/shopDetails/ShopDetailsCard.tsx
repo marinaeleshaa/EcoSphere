@@ -1,30 +1,29 @@
 "use client";
-import { IShop } from "@/data/shops";
+
 import Image from "next/image";
-import React from "react";
-import { Star, MapPin, Clock } from "lucide-react";
-import { motion } from "framer-motion";
-import { useTranslations } from 'next-intl';
+import { Star, Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { IShop } from "@/types/ShopTypes";
+import { getAverageRating } from "../ShopSection";
+import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
 
 const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
-  const t = useTranslations('ShopDetails.card');
-  const { id, title, rating, cuisine, img, desc, workingHours } = shop;
+  const t = useTranslations("ShopDetails.card");
 
   return (
     <section className="">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 "
-      >
+      <BasicAnimatedWrapper className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 ">
         {/* shop image */}
         <div className="relative shadow-lg rounded-lg  ">
           <Image
             width={600}
             height={400}
-            src={img}
-            alt={title}
+            src={
+              typeof shop.avatar === "string"
+                ? shop.avatar
+                : "/shop-img.jpg"
+            }
+            alt={shop.name}
             className="w-[500px] rounded-lg "
           />
           {/* top right decorative SVG */}
@@ -68,10 +67,10 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
                 height={40}
                 className="rounded-full"
               />
-              <div className="hidden sm:block">
-                <p className="text-primary-foreground/80 text-sm">
-                  {cuisine}
-                </p>
+              <div>
+                <h1 className="text-lg font-bold text-foreground">
+                  {shop.name}
+                </h1>
               </div>
             </div>
           </div>
@@ -82,12 +81,8 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
           {/* Shop name and cuisine */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {title}
+              {shop.name}
             </h1>
-            <p className="text-lg text-muted-foreground flex items-center gap-2">
-              <MapPin className="w-5 h-5" />
-              {cuisine}
-            </p>
           </div>
 
           {/* Rating */}
@@ -96,45 +91,50 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className={`w-5 h-5 ${star <= Math.round(rating)
+                  className={`w-5 h-5 ${
+                    star <= Math.round(+getAverageRating(shop))
                       ? "fill-primary text-primary"
-                      : "fill-muted text-muted"
-                    }`}
+                      : "fill-none text-primary"
+                  }`}
                 />
               ))}
             </div>
-            <span className="text-sm text-muted-foreground">({rating.toFixed(1)})</span>
+            <span className="text-sm text-muted-foreground">
+              ({getAverageRating(shop).toFixed(1)})
+            </span>
           </div>
 
           {/* Working Hours */}
           <div className="flex items-center gap-2 text-lg">
             <Clock className="w-5 h-5 text-primary" />
-            <span className="font-semibold text-foreground">{t('workingHours')}</span>
-            <span className="text-muted-foreground">{workingHours}</span>
+            <span className="font-semibold text-foreground">
+              {t("workingHours")}
+            </span>
+            <span className="text-muted-foreground">{shop.workingHours}</span>
           </div>
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">{t('about')}</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("about")}</h3>
             <p className="text-muted-foreground leading-relaxed">
-              {desc}
+              {shop.description}
             </p>
           </div>
 
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
             <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
-              {t('visitShop')}
+              {t("visitShop")}
             </button>
             <button
               className="p-3 rounded-lg border-2 border-primary text-primary hover:bg-primary/10 transition-colors cursor-pointer"
               aria-label="Contact shop"
             >
-              {t('contact')}
+              {t("contact")}
             </button>
           </div>
         </div>
-      </motion.div>
+      </BasicAnimatedWrapper>
     </section>
   );
 };

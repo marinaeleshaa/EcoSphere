@@ -1,34 +1,38 @@
-import ShopDetailsCard from "@/components/layout/Shop/shopDetails/ShopDetailsCard";
-import ShopHero from "@/components/layout/Shop/shopDetails/ShopHero";
-import ShopProducts from "@/components/layout/Shop/shopDetails/ShopProducts";
-import ShopTextComponent from "@/components/layout/Shop/shopDetails/ShopTextComponent";
-import { shops } from "@/data/shops";
+import ShopDetailsClient from "@/components/layout/Shop/ShopDetailsClient";
 
 interface Props {
-  params: {
+  params: Promise<{
     shopId: string;
-  };
+  }>;
 }
+
+const getShopDetails = async (shopId: string) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/shops/${shopId}`,
+    {
+      method: "GET",
+      cache: "no-cache",
+      next: { revalidate: 0 },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const { data, success } = await response.json();
+
+  if (success) {
+    return data;
+  }
+};
 
 const ShopPage = async ({ params }: Props) => {
   const { shopId } = await params;
 
-  const shop = shops.find((s) => s.id === Number(shopId));
+  const shop = await getShopDetails(shopId);
 
-  if (!shop) {
-    return <div>Shop not found</div>;
-  }
-
-  return (
-    <div className="overflow-x-hidden">
-      <ShopHero shop={shop} />
-      <div className="w-[80%] mx-auto">
-        <ShopDetailsCard shop={shop} />
-        <ShopTextComponent shop={shop} />
-        <ShopProducts shopName={shop.shopName} />
-      </div>
-    </div>
-  );
+  return <ShopDetailsClient shop={shop} />;
 };
 
 export default ShopPage;

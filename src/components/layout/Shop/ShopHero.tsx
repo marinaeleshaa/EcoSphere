@@ -34,17 +34,17 @@ export default function ShopHero() {
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
     >
-      <div className="rounded-3xl p-6">
+      <div className="rounded-3xl p-2">
         <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
-          {t('title')}
+          {t("title")}
         </h2>
 
         <p className="text-foreground leading-relaxed mb-6 text-center">
-          {t('description')}
+          {t("description")}
         </p>
 
         {/* Row of cards */}
-        <div className="flex gap-4 w-full flex-col items-center md:flex-row justify-center">
+        <div className="flex gap-6 w-full flex-col items-stretch md:flex-row justify-center">
           {cards.map((card) => {
             const isActive = active === card.id;
             const isDimmed = active !== null && !isActive;
@@ -54,10 +54,9 @@ export default function ShopHero() {
                 key={card.id}
                 onMouseEnter={() => setActive(card.id)}
                 onMouseLeave={() => setActive(null)}
-                className={`
-          transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
+                className={`transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
           
-          ${isDimmed ? "opacity-60 scale-[0.98]" : "opacity-100 scale-100"}
+          ${isDimmed ? "opacity-70 scale-[0.98]" : "opacity-100 scale-100"}
           
           bg-primary border-0 hover:-translate-y-1`}
               >
@@ -67,10 +66,11 @@ export default function ShopHero() {
                 </h3>
                 <p
                   className={`text-sm mt-2 transition-all duration-300
-            ${isActive
-                      ? "text-primary-foreground text-base"
-                      : "text-primary-foreground text-sm"
-                    }
+            ${
+              isActive
+                ? "text-primary-foreground text-base"
+                : "text-primary-foreground text-sm"
+            }
           `}
                 >
                   {t(`cards.${card.titleKey}.text`)}

@@ -2,7 +2,7 @@ import { injectable } from "tsyringe";
 import { IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { ObjectId } from "mongoose";
-import { FoundedUser, RegisterRequestDTO, ShopRegisterDTO } from "./dto/user.dto";
+import { RegisterRequestDTO, ShopRegisterDTO } from "./dto/user.dto";
 import { IRestaurant, RestaurantModel } from "../restaurant/restaurant.model";
 
 export interface IAuthRepository {
@@ -10,8 +10,8 @@ export interface IAuthRepository {
   existsShopByEmail(email: string): Promise<{ _id: ObjectId }>;
   saveNewUser(data: RegisterRequestDTO): Promise<IUser>;
   saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant>;
-  findUserByEmail(email: string, keys?: string): Promise<FoundedUser>;
-  findShopByEmail(email: string, keys?: string): Promise<FoundedUser>;
+  findUserByEmail(email: string, keys?: string): Promise<IUser>;
+  findShopByEmail(email: string, keys?: string): Promise<IRestaurant>;
   me(): Promise<IUser>;
 }
 
@@ -34,24 +34,24 @@ class AuthRepository {
 
   async saveNewShop(data: ShopRegisterDTO): Promise<IRestaurant> {
     await DBInstance.getConnection();
-    const shopData: any = { ...data };
-    if (data.avatar) {
-      shopData.avatar = { key: data.avatar };
-    }
-    return await RestaurantModel.create(shopData);
+    return await RestaurantModel.create(data);
   }
 
-  async findUserByEmail(email: string, keys?: string): Promise<FoundedUser> {
+  async findUserByEmail(email: string, keys?: string): Promise<IUser> {
     await DBInstance.getConnection();
     return await UserModel.findOne({ email })
-      .select(`+password _id email role lastName accountProvider ${keys || ""}`)
+      .select(
+        `+password _id email role lastName accountProvider avatar ${
+          keys || ""
+        }`
+      )
       .exec();
   }
 
-  async findShopByEmail(email: string, keys?: string): Promise<FoundedUser> {
+  async findShopByEmail(email: string, keys?: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.findOne({ email })
-      .select(`+password _id email name ${keys || ""}`)
+      .select(`+password _id email name avatar ${keys || ""}`)
       .exec();
   }
 

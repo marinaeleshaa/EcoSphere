@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { rootContainer } from "./backend/config/container";
 import AuthController from "./backend/features/auth/auth.controller";
+import UserController from "./backend/features/user/user.controller";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
 	providers: [
@@ -22,7 +23,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 					if (!response) return null;
 
 					// Return user object with id and other properties
-					return response as any;
+					return response;
 				} catch (error) {
 					console.error(
 						"Authorization error:",
@@ -49,41 +50,53 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 	},
 	callbacks: {
 		async signIn({ user, account, profile }) {
-			const controller = rootContainer.resolve(AuthController);
 			switch (account?.provider) {
-				case "google":
-					// You can add additional logic here for Google sign-ins if needed
-					return !!(await controller.LoginWithGoogle({
-						firstName: profile?.given_name as string,
-						lastName: profile?.family_name as string,
-						email: user?.email as string,
-						role: "customer",
-						oAuthId: account.providerAccountId,
-						provider: account.provider,
-					}));
+				case "google": {
+					const [firstName, ...rest] = (profile?.name ?? "").split(" ");
+					const lastName = rest.join(" ");
+					return !!(await rootContainer
+						.resolve(AuthController)
+						.LoginWithGoogle({
+							firstName: firstName,
+							lastName: lastName,
+							email: user?.email as string,
+							role: "customer",
+							oAuthId: account.providerAccountId,
+							provider: account.provider,
+						}));
+				}
 				case "credentials":
-					// You can add additional logic here for Credentials sign-ins if needed
 					return true;
 				default:
 					return false;
 			}
 		},
-		async jwt({ token, user }) {
+		async jwt({ token, user, account, profile }) {
 			if (user) {
-				token.id = user.id;
-				token.email = user.email;
+				token.userId = user.id;
 				token.role = user.role;
-				token.name = user.name;
+			}
+			if (account?.provider === "google") {
+				token.role = "customer";
+				token.image = profile?.picture;
+				token.userId = `${
+					(
+						await rootContainer
+							.resolve(UserController)
+							.getUserIdByEmail(user.email!)
+					)._id
+				}`;
 			}
 			return token;
 		},
 
 		async session({ session, token }) {
 			if (token) {
-				session.user.id = token.id as string;
+				session.user.id = token.userId as string;
 				session.user.email = token.email as string;
 				session.user.role = token.role as string;
 				session.user.name = token.name as string;
+				session.user.image = token.image as string;
 			}
 			return session;
 		},
@@ -91,7 +104,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
 	pages: {
 		signIn: "/auth",
-		error: "/auth"
+		error: "/auth",
+		signOut: "/auth",
 	},
 
 	// Add these important NextAuth v5 configs

@@ -11,7 +11,7 @@ export default function CustomDropdown({
   options,
   selectedValue,
   onChange,
-}: CustomDropdownProps) {
+}: Readonly<CustomDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {
@@ -24,7 +24,7 @@ export default function CustomDropdown({
       {/* Button/Display Area - Looks like the 'All' button in your image */}
       <button
         type="button"
-        className="inline-flex justify-center w-full rounded-lg border border-primary bg-background text-foreground px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-800 transition duration-150"
+        className="inline-flex justify-center w-full rounded-lg border border-primary bg-background text-foreground px-4 py-2 text-sm font-medium shadow-sm hover:bg-gray-200 transition duration-150"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >

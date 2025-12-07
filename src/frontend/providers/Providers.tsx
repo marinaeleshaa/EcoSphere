@@ -12,9 +12,11 @@ export async function Providers({
 	return (
 		<StoreProvider>
 			<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-				<SidebarProvider defaultOpen={defaultOpen}>
-					<SessionProvider>{children}</SessionProvider>
-				</SidebarProvider>
+				<SessionProvider>
+					<SidebarProvider defaultOpen={defaultOpen}>
+						{children}
+					</SidebarProvider>
+				</SessionProvider>
 			</ThemeProvider>
 		</StoreProvider>
 	);

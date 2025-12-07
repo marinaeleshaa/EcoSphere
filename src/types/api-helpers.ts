@@ -15,16 +15,25 @@ export const created = <T>(data: T) => {
   return NextResponse.json({ success: true, data }, { status: 201 });
 };
 
-export const badRequest = (message: string) => {
-  return NextResponse.json({ success: false, error: message }, { status: 400 });
+export const badRequest = (message?: string) => {
+  return NextResponse.json(
+    { success: false, error: message ?? "Bad Request" },
+    { status: 400 }
+  );
 };
 
-export const notFound = (message: string) => {
-  return NextResponse.json({ success: false, error: message }, { status: 404 });
+export const notFound = (message?: string) => {
+  return NextResponse.json(
+    { success: false, error: message ?? "Not Found" },
+    { status: 404 }
+  );
 };
 
-export const unauthorized = (message: string) => {
-  return NextResponse.json({ success: false, error: message }, { status: 401 });
+export const unauthorized = (message?: string) => {
+  return NextResponse.json(
+    { success: false, error: message ?? "Unauthorized" },
+    { status: 401 }
+  );
 };
 
 export const serverError = (message?: string) => {

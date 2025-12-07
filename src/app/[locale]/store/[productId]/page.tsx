@@ -11,7 +11,7 @@ interface Props {
 }
 
 const ProductPage = async ({ params }: Props) => {
-  const { productId } = params;
+  const { productId } = await params;
 
   const product = products.find((p) => p.id === productId);
 

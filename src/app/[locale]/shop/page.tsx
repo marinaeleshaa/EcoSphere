@@ -1,22 +1,27 @@
-"use client";
+import ShopClient from "@/components/layout/Shop/ShopClient";
 
-import HeroSection from "@/components/layout/common/HeroSection";
-import ShopHero from "@/components/layout/Shop/ShopHero";
-import ShopSection from "@/components/layout/Shop/ShopSection";
-import { useTranslations } from 'next-intl';
+const getShops = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/shops`, {
+    method: "GET",
+    cache: "no-cache",
+    next: { revalidate: 0 },
+  });
 
-export default function Shop() {
-  const t = useTranslations('Shop.hero');
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const { data, success } = await response.json();
+
+  if (success) {
+    return data;
+  }
+};
+
+export default async function Shop() {
+  const shops = await getShops();
 
   return (
-    <>
-      <HeroSection
-        title={t('title')}
-        subTitle={t('subtitle')}
-        imgUrl="/s.png"
-      />
-      <ShopHero />
-      <ShopSection />
-    </>
+      <ShopClient shops={shops} />
   );
 }

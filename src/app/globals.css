@@ -7,12 +7,6 @@ div::-webkit-scrollbar {
   display: none;
 }
 
-/* Prevent horizontal scroll on the entire page */
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
 /* Optional: Better box-sizing for all elements */
 *,
 *::before,
@@ -24,19 +18,6 @@ body {
   background-color: var(--color-primary);
   color: var(--color-primary-foreground);
 }
-
-.myInput {
-  @apply pl-10 bg-input text-input-foreground p-3 rounded-full focus:outline-2 focus:outline-primary focus:outline-offset-2 transition w-full
-}
-
-.myBtnPrimary {
-  @apply bg-primary capitalize text-primary-foreground p-3 px-5 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer
-}
-
-
-
-
-
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -112,30 +93,44 @@ body {
 }
 
 :root {
-  /* green */
-  --primary: oklch(51.57% 0.0683 135.25);
-  --primary-foreground: oklch(1 0 0);
-
-  --input: oklch(92.8% 0.006 264.531);
-  --input-foreground: oklch(0.216 0.006 56.043);
-
-  --secondary: oklch(0.97 0.001 106.424);
-  --secondary-foreground: oklch(0.216 0.006 56.043);
-  /* main */
+  /* main color theme */
   --background: oklch(1 0 0);
   --foreground: oklch(0.216 0.006 56.043);
 
-  --radius: 0.625rem;
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.147 0.004 49.25);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.147 0.004 49.25);
+  /* green background whith its text color on it */
+  --primary: oklch(51.57% 0.0683 135.25);
+  --primary-foreground: oklch(1 0 0);
 
-
+  /* green text color on main color theme */
   --accent: oklch(1 0 0);
   --accent-foreground: oklch(51.57% 0.0683 135.25);
 
+  /* grey text color on main theme */
+  --secondary: oklch(0.97 0.001 106.424);
+  --secondary-foreground: oklch(0.216 0.006 56.043);
 
+  /* input */
+  --input: oklch(92.8% 0.006 264.531);
+  --input-foreground: oklch(0.216 0.006 56.043);
+
+  /* card --> black&white */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.25);
+
+  /* sidebar */
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(51.57% 0.0683 135.25);
+  --sidebar-primary-ring: oklch(51.57% 0.0683 135.25);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(51.57% 0.0683 135.25);
+
+  --radius: 0.625rem;
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.25);
   --muted: oklch(0.97 0.001 106.424);
   --muted-foreground: oklch(0.553 0.013 58.071);
   --destructive: oklch(0.577 0.245 27.325);
@@ -146,37 +141,45 @@ body {
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.147 0.004 49.25);
-  --sidebar-primary:  oklch(51.57% 0.0683 135.25);
-  --sidebar-primary-ring: oklch(51.57% 0.0683 135.25);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.97 0.001 106.424);
-  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
-  --sidebar-border: oklch(0.923 0.003 48.717);
-  --sidebar-ring: oklch(51.57% 0.0683 135.25);
 }
 
 .dark {
-  --primary: oklch(75.63% 0.0818 135.25);
-  --primary-foreground: oklch(0.216 0.006 56.043);
-
-  --secondary: oklch(0.216 0.006 56.043);
-  --secondary-foreground: oklch(100% 0.00011 271.152 / 0.758);
-
-  --input: oklch(98.193% 0.01802 156.147 / 0.723);
-  --input-foreground: oklch(0.216 0.006 56.043);
-
+  /* main color theme */
   /* --background: oklch(0.216 0.006 56.043); */
   --background: oklch(14.11% 0.0018 16.88);
   --foreground: oklch(1 0 0);
 
+  /* green background whith its text color on it */
+  --primary: oklch(75.63% 0.0818 135.25);
+  --primary-foreground: oklch(0.216 0.006 56.043);
+
+  /* green text color on main color theme */
   --accent: oklch(14.11% 0.0018 16.88);
   --accent-foreground: oklch(75.63% 0.0818 135.25);
 
+  /* grey text color on main theme */
+  --secondary: oklch(0.216 0.006 56.043);
+  --secondary-foreground: oklch(100% 0.00011 271.152 / 0.758);
 
+  /* input  */
+  --input: oklch(98.193% 0.01802 156.147 / 0.723);
+  --input-foreground: oklch(0.216 0.006 56.043);
+
+  /* card --> black&white */
   --card: oklch(0.216 0.006 56.043);
   --card-foreground: oklch(1 0 0);
+
+  /* sidebar */
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(75.63% 0.0818 135.25);
+  --sidebar-primary-ring: oklch(75.63% 0.0818 135.25);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(75.63% 0.0818 135.25);
+
   --popover: oklch(0.216 0.006 56.043);
   --popover-foreground: oklch(1 0 0);
   --muted: oklch(0.268 0.007 34.298);
@@ -189,19 +192,16 @@ body {
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.216 0.006 56.043);
-  --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(75.63% 0.0818 135.25);
-  --sidebar-primary-ring: oklch(75.63% 0.0818 135.25);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.268 0.007 34.298);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(75.63% 0.0818 135.25);
 }
 
 @layer base {
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden max-w-[100vw];
+  }
+  .myInput {
+    @apply pl-10 bg-input text-input-foreground p-3 rounded-full focus:outline-2 focus:outline-primary focus:outline-offset-2 transition w-full;
+  }
+  .myBtnPrimary {
+    @apply bg-primary capitalize text-primary-foreground p-3 px-5 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer;
   }
 }

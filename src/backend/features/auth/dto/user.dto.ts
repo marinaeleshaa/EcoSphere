@@ -19,17 +19,6 @@ export type RegisterResponseDTO = {
 
 export type UserTypes = UserRole | "shop";
 
-export type FoundedUser = {
-	_id: string;
-	email: string;
-	name: string;
-	password: string;
-	role: string;
-	oAuthId?: string;
-	accountProvider?: string;
-	comparePassword?: (password: string) => Promise<boolean>;
-};
-
 export type OAuthUserDTO = RegisterRequestDTO &
 	RegisterForConsumer & {
 		role: UserTypes;
@@ -50,7 +39,6 @@ export type ShopRegisterDTO = RegisterWithCredentialsDTO &
 		name: string;
 		description: string;
 		hotline: string;
-		avatar?: string;
 		location?: string;
 		workingHours: string;
 	};
@@ -77,8 +65,9 @@ export const mapToUserPublicProfile = (
 	user: Partial<IUser> | Partial<IRestaurant>
 ) => {
 	return {
-		id: user._id!.toString(),
+		id: `${user._id}`,
 		email: user.email!,
+		image: user.avatar?.url,
 		name: isUser(user) ? user.lastName! : user.name!,
 		role: isUser(user) ? user.role! : "shop",
 	};

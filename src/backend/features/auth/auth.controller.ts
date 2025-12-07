@@ -29,7 +29,7 @@ class AuthController implements IAuthController {
     if (!loginDto.email || !loginDto.password) {
       throw new Error("Email and password are required");
     }
-    return await this.loginService.login(loginDto);;
+    return await this.loginService.login(loginDto);
   }
 
   async LoginWithGoogle(user: OAuthUserDTO): Promise<boolean> {

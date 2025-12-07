@@ -3,7 +3,7 @@ import type { AvatarData, IUploadService } from "./upload.service";
 import { User } from "next-auth";
 
 export type UploadAvatarResponse = {
-	data: { avatar: AvatarData };
+	avatar: AvatarData ;
 };
 
 @injectable()
@@ -25,8 +25,7 @@ export class UploadController {
 			buffer,
 			file.type
 		);
-
-		return { data: { avatar: avatarData } };
+		return { avatar: avatarData };
 	}
 
 	/**
