@@ -137,11 +137,13 @@ const userSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next): Promise<void> {
+userSchema.pre<IUser>("save", function (): Promise<void> | undefined {
   this.createdAt ??= new Date();
-  if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+  if (!this.isModified("password")) return;
+  
+  return bcrypt.hash(this.password, 10).then((hashedPassword) => {
+    this.password = hashedPassword;
+  });
 });
 
 userSchema.methods.comparePassword = async function (

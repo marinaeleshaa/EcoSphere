@@ -74,12 +74,16 @@ const restaurantSchema = new Schema<IRestaurant>(
   { timestamps: true }
 );
 
-restaurantSchema.pre("save", async function (next) {
-  this.createdAt ??= new Date();
-  if (!this.isModified("password")) return next();
-
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+restaurantSchema.pre<IRestaurant>("save", function (): 
+  | Promise<void> 
+  | undefined {
+	this.createdAt ??= new Date();
+	if (!this.isModified("password")) { 
+    return; 
+  }
+  return bcrypt.hash(this.password, 10).then((hashedPassword) => {
+    this.password = hashedPassword;
+  });
 });
 
 restaurantSchema.methods.comparePassword = async function (
