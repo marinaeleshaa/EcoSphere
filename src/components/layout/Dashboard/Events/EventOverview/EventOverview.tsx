@@ -219,8 +219,8 @@ export default function EventOverview({ events }: EventProps) {
           {sortedAndLimitedEvents?.length > 0 ? (
             sortedAndLimitedEvents.map((event) => (
               <EventListItem
-                key={event.id}
-                id={event.id}
+                key={event._id}
+                _id={event._id}
                 name={event.name}
                 eventDate={event.eventDate}
                 startTime={event.startTime}
