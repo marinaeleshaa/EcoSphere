@@ -11,17 +11,27 @@ export const proxy = auth((req) => {
   const session = req.auth as AuthSession | null;
   const pathname = req.nextUrl.pathname;
 
+  // Always apply auth rules (UI + API)
   const result = applyAuthRules(req, session, pathname);
   if (result) return result;
 
-  // Handle locale detection for routes without [locale] folder
-  const response = intlMiddleware(req);
+  // If this is an API/static request, skip next-intl and let the request proceed
+  if (
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname === "/favicon.ico" ||
+    /\.(svg|png|jpg|jpeg|gif|webp)$/.test(pathname)
+  ) {
+    return NextResponse.next();
+  }
 
-  return response;
+  // Otherwise (UI routes) run the locale middleware
+  return intlMiddleware(req);
 });
 
 export const config = {
   matcher: [
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // include API in matcher so auth middleware runs for API too
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

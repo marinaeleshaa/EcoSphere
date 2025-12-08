@@ -5,7 +5,9 @@ import { MdAccessTime } from "react-icons/md";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { PiTicketFill } from "react-icons/pi";
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 export default function DisplayEvents() {
+    
     const t = useTranslations('Dashboard.displayEvents');
     return (
         <div className='min-h-screen py-8 w-[85%] mx-auto flex flex-col  gap-6'>
@@ -15,11 +17,12 @@ export default function DisplayEvents() {
 
 
                     <div className="shrink-0 col-span-1   overflow-hidden rounded-lg">
-                        <img
-                            src="https://placehold.co/192x192/4f46e5/ffffff?text=Music+Festival"
+                        <Image
+                            src=""
                             alt="Crowd gathered at a music festival stage at sunset"
                             className="w-full h-full object-cover transition duration-500 ease-in-out hover:scale-105"
-
+                            width={100}
+                            height={100}
                         />
                     </div>
 

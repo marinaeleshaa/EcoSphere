@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from 'react';
-import { Control, useForm, useFieldArray, SubmitHandler } from 'react-hook-form';
+import {  useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Calendar,
@@ -14,9 +14,9 @@ import {
   Loader2,
   Image as ImageIcon,
   Tag,
-  Plus, // For add button
-  X,    // For remove button
-  ListOrdered // For section title
+  Plus, 
+  X,   
+  ListOrdered 
 } from 'lucide-react';
 
 import { Button } from "@/components/ui/button";
@@ -37,11 +37,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { EVENT_TYPES, IEventDetails } from '@/types/EventTypes';
 import { eventSchema} from '@/frontend/schema/event.schema';
+import { PostEvent } from '@/frontend/api/Events';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
-export default function EventForm() {
+export default function ManageEvent() {
   const form = useForm<IEventDetails>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
@@ -65,11 +67,15 @@ export default function EventForm() {
     control: form.control,
     name: "sections",
   });
+  const ticketType = useWatch({
+    control: form.control,
+    name: "ticketType"
+  });
 
   // --- 3. Watchers & Calculations ---
   // Watch specific fields to trigger side effects or UI updates
-  const ticketType = form.watch("ticketType");
-
+  // const ticketType = form.watch("ticketType");
+const router = useRouter();
   // --- 4. Side Effects ---
   // If ticket type changes to 'Free', reset price to 0 automatically
   useEffect(() => {
@@ -80,15 +86,29 @@ export default function EventForm() {
   }, [ticketType, form]);
 
   // --- 5. Submission Handler ---
-  const onSubmit: SubmitHandler<IEventDetails> = (data) => {
+   async function onSubmit(data:Partial<IEventDetails>) {
     const file = data.avatar instanceof FileList ? data.avatar[0] : null;
-    const { ticketType, ...restOfData } = data;
+    const {  ...restOfData } = data;
     const eventData = {
       ...restOfData,
-      ticketPrice: restOfData.ticketPrice,
+      capacity: Number(restOfData.capacity),
+      ticketPrice: Number(restOfData.ticketPrice),
       avatar: file || restOfData.avatar,
     };
     console.log("--- Event Details (excluding file/upload details) ---", eventData);
+    try {
+      await PostEvent(eventData);
+      toast.success("Event added successfully", {
+        position: "bottom-right",
+        duration: 3000,
+      });
+      router.push("/organizer/details");
+    } catch (error) {
+      toast.error(`${error}`, {
+        position: "bottom-right",
+        duration: 3000,
+      });
+    }
   }
 
   return (
@@ -155,7 +175,7 @@ export default function EventForm() {
                 <FormField
                   control={form.control}
                   name="avatar"
-                  render={({ field: { value, onChange, ...fieldProps } }) => (
+                  render={({ field: { value:_, onChange, ...fieldProps } }) => (
                     <FormItem>
                       <FormLabel>Event Image (Upload File)</FormLabel>
                       <FormControl>
@@ -293,7 +313,7 @@ export default function EventForm() {
                         <FormControl>
                           <div className="relative">
                             <Ticket className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input type="number" min={0} className="pl-9" {...field} />
+                            <Input type="number" min={0} className="pl-9" {...field} onChange={e => field.onChange(+e.target.value)} />
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -302,7 +322,7 @@ export default function EventForm() {
                   />
 
                   {/* Radio Group for Ticket Status */}
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="ticketType"
                     render={({ field }) => (
@@ -335,6 +355,30 @@ export default function EventForm() {
                         <FormMessage />
                       </FormItem>
                     )}
+                  /> */}
+                  <FormField
+                    control={form.control}
+                    name="ticketType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ticket Status</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <div className="relative">
+                              <Tag className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground z-10" />
+                              <SelectTrigger className="pl-9">
+                                <SelectValue placeholder="Select ticket status" />
+                              </SelectTrigger>
+                            </div>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Priced">Priced</SelectItem>
+                            <SelectItem value="Free">Free</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
 
                   <FormField
@@ -342,7 +386,7 @@ export default function EventForm() {
                     name="ticketPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Ticket Price (Rs)</FormLabel>
+                        <FormLabel>Ticket Price</FormLabel>
                         <FormControl>
                           <div className="relative">
                             <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -351,6 +395,7 @@ export default function EventForm() {
                               className="pl-9"
                               disabled={ticketType === 'Free'} // Disable if free
                               {...field}
+                              onChange={e => field.onChange(+e.target.value)}
                             />
                           </div>
                         </FormControl>
@@ -472,9 +517,9 @@ export default function EventForm() {
               <Button
                 type="submit"
                 className="w-full h-12 text-lg bg-indigo-600 hover:bg-indigo-700"
-                disabled={form.formState.isSubmitting}
+                // disabled={form.formState.isSubmitting}
               >
-                {form.formState.isSubmitting ? (
+                {/* {form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Saving Event...
@@ -483,8 +528,10 @@ export default function EventForm() {
                   <>
                     <Send className="mr-2 h-4 w-4" />
                     Save Event Details
-                  </>
-                )}
+                    </>
+                    )} */}
+                    <Send className="mr-2 h-4 w-4" />
+                    Save Event Details
               </Button>
             </form>
           </Form>

@@ -1,9 +1,9 @@
-import { IShop } from "@/data/shops";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { IShop } from "@/types/ShopTypes";
 
 const ShopHero = ({ shop }: { shop: IShop }) => {
-  const t = useTranslations('ShopDetails.hero');
+  const t = useTranslations("ShopDetails.hero");
 
   return (
     <section className="relative w-full h-[200px] bg-primary overflow-hidden">
@@ -17,7 +17,7 @@ const ShopHero = ({ shop }: { shop: IShop }) => {
         {/* Main heading with subtle animation-ready structure */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl text-primary-foreground font-bold tracking-tight">
-            {t('title')}
+            {t("title")}
           </h1>
         </div>
 
@@ -30,18 +30,18 @@ const ShopHero = ({ shop }: { shop: IShop }) => {
             href="/"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            {t('breadcrumb.home')}
+            {t("breadcrumb.home")}
           </Link>
           <span className="text-primary-foreground/50">/</span>
           <Link
             href="/shop"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            {t('breadcrumb.shop')}
+            {t("breadcrumb.shop")}
           </Link>
           <span className="text-primary-foreground/50">/</span>
           <span className="text-primary-foreground font-medium">
-            {shop ? shop.title : t('breadcrumb.defaultShop')}
+            {shop ? shop.name : t("breadcrumb.defaultShop")}
           </span>
         </nav>
       </div>

@@ -7,26 +7,12 @@ import { FaRegRectangleList } from "react-icons/fa6";
 import { TbListSearch } from "react-icons/tb";
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { MapPin } from 'lucide-react';
-import React from 'react'
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import { EventListItemProps, EventProps, MetricData } from '@/types/EventTypes';
+import React from 'react';
+import { useSession } from 'next-auth/react';
 
-interface MetricData {
-  id: number;
-  title: string;
-  value: string;
-  change: string | null;
-  timeframe: string | null;
-  color: string;
-}
-interface EventData {
-  id: number;
-  title: string;
-  date: string;
-  displayDate: string; // The human-readable date for display
-  location: string;
-  imageUrl: string;
-  time: string;
-}
 
 const dashboardData: MetricData[] = [
   {
@@ -34,102 +20,28 @@ const dashboardData: MetricData[] = [
     title: "Total Ticket Sales",
     value: "1,245",
     change: "+12%",
-    timeframe: "from last week",
-    color: 'text-green-600',
   },
   {
     id: 2,
     title: "Total Revenue",
     value: "$45,200",
     change: "+8%",
-    timeframe: null,
-    color: 'text-green-600',
   },
   {
     id: 3,
     title: "Confirmed Attendees",
     value: "890",
     change: "+5%",
-    timeframe: null,
-    color: 'text-green-600',
   },
   {
     id: 4,
     title: "Active Events",
     value: "4",
     change: null,
-    timeframe: null,
-    color: 'text-gray-500',
-  },
-];
-const eventData: EventData[] = [
-  {
-    id: 1,
-    title: "Summer Music Festival",
-    date: "2026-07-20", // Next year to ensure they are in the future
-    displayDate: "July 20-22, 2026",
-    location: "Central Park, NY",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Music",
-    time: "10:00 AM - 11:00 PM",
-  },
-  {
-    id: 2,
-    title: "Tech Summit 2024",
-    date: "2025-08-15",
-    displayDate: "August 15, 2025",
-    location: "Convention Center, SF",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Tech",
-    time: "9:00 AM",
-  },
-  {
-    id: 3,
-    title: "Local Food Fair",
-    date: "2025-09-05",
-    displayDate: "September 5, 2025",
-    location: "City Plaza, Chicago",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Food",
-    time: "4:00 PM - 8:00 PM",
-  },
-  {
-    id: 4,
-    title: "Winter Tech Meetup",
-    date: "2025-12-01",
-    displayDate: "December 1, 2025",
-    location: "Online",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Web",
-    time: "7:00 PM PST",
-  },
-  {
-    id: 5,
-    title: "Spring Art Exhibition", // Event further out
-    date: "2026-04-10",
-    displayDate: "April 10, 2026",
-    location: "Art Museum, LA",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Art",
-    time: "6:30 PM",
-  },
-  {
-    id: 6,
-    title: "Annual Charity Gala", // Event furthest out
-    date: "2026-10-25",
-    displayDate: "October 25, 2026",
-    location: "Grand Ballroom, Miami",
-    imageUrl: "https://placehold.co/80x80/22c55e/ffffff?text=Gala",
-    time: "8:00 PM",
-  },
-  // Added an old event to show filtering works
-  {
-    id: 7,
-    title: "Past Hackathon",
-    date: "2024-01-01",
-    displayDate: "January 1, 2024",
-    location: "Past Venue",
-    imageUrl: "https://placehold.co/80x80/e5e7eb/4b5563?text=Past",
-    time: "All Day",
   },
 ];
 
-const MetricCard: React.FC<MetricData> = ({ title, value, change, timeframe, color }) => {
+const MetricCard: React.FC<MetricData> = ({ title, value, change}) => {
   const isPositive = change && change.startsWith('+');
 
   // Determine the trend icon based on the change value
@@ -137,12 +49,12 @@ const MetricCard: React.FC<MetricData> = ({ title, value, change, timeframe, col
   const Icon = isPositive ? TrendingUp : TrendingDown;
 
   return (
-    <div className='flex flex-col justify-center h-full gap-2 px-3 '>
+    <div className='flex flex-col justify-center items-center h-full gap-1 p-3 '>
       {/* Title */}
       <p className="text-foreground text-sm font-medium mb-1">{title}</p>
 
       {/* Value and Change */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start gap-2 justify-between">
         <h2 className="text-3xl font-bold text-foreground leading-none">
           {value}
         </h2>
@@ -152,30 +64,23 @@ const MetricCard: React.FC<MetricData> = ({ title, value, change, timeframe, col
           <div className="flex items-center ml-2 space-x-1">
             {/* Icon is green for positive trend, red for negative */}
             <Icon className={`w-5 h-5 ${isPositive ? 'text-accent-foreground' : 'text-red-500'} hidden sm:block`} />
-            <span className={`text-sm text-accent-foreground font-semibold ${color} pt-1`}>
+            <span className={`text-sm text-accent-foreground font-semibold  pt-1`}>
               {change}
             </span>
           </div>
         )}
       </div>
-
-      {/* Subtext (for the first card only) */}
-      {timeframe && (
-        <p className="text-xs font-medium mt-1">
-          {change}{timeframe ? ` ${timeframe}` : ''}
-        </p>
-      )}
     </div>
   );
 };
-const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location, imageUrl }) => {
+const EventListItem: React.FC<EventListItemProps> = ({  name, eventDate, startTime, endTime, locate, avatar }) => {
   const t = useTranslations('Dashboard.overview');
   const buttonText = t('manage');
   const lineColor = 'bg-primary';
-
+  const imageSource = avatar || '/events/defaultImgEvent.png';
   return (
     <div className="
-      flex items-center p-2 pr-6 bg-white rounded-xl shadow-md border-2 border-gray-100
+      flex items-center p-2 pr-6  rounded-xl shadow-md border-2 border-gray-100
       transition duration-200 hover:shadow-lg hover:border-primary
     ">
 
@@ -183,11 +88,12 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
       <div className={`w-1.5 h-16 rounded-full mr-4 ${lineColor} self-center shrink-0`}></div>
 
       {/* 2. Event Image */}
-      <img
-        src={imageUrl}
-        alt={`Image for ${title}`}
+      <Image
+        src={imageSource}
+        alt={`Image for ${name}`}
         className="w-14 h-14 object-cover rounded-md mr-4 shrink-0"
-
+        width={100}
+        height={100}
       />
 
       {/* 3. Main Content Area */}
@@ -195,18 +101,18 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
 
         {/* Title, Date, and Time */}
         <div className="flex flex-col col-span-1">
-          <h3 className="text-base font-semibold text-gray-900">{title}</h3>
+          <h3 className="text-base font-semibold ">{name}</h3>
           <p className='flex items-center text-gray-600'>
             <MapPin className="w-4 h-4 mr-1.5 text-gray-400" />
-            <span>{location}</span>
+            <span>{locate}</span>
           </p>
         </div>
 
         {/* Location */}
         <div className="flex justify-center items-center flex-col text-sm col-span-1">
-          <p className="text-sm text-gray-500 font-medium">{displayDate}</p>
+          <p className="text-sm text-gray-500 font-medium">{eventDate}</p>
           {/* Displaying the Time */}
-          <p className="text-sm text-grey-600 font-semibold">{time}</p>
+          <p className="text-sm text-grey-600 font-semibold">`${startTime} - ${endTime}`</p>
         </div>
 
         {/* Placeholder column */}
@@ -216,6 +122,7 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
       </div>
 
       {/* 4. Action Button */}
+      <Link href='/organizer/manage'>
       <button className="
         ml-4 px-4 py-2 text-sm font-medium
         border border-primary rounded-lg
@@ -227,35 +134,38 @@ const EventListItem: React.FC<EventData> = ({ title, displayDate, time, location
       ">
         {buttonText}
       </button>
+      </Link>
     </div>
   );
 };
-export default function EventOverview() {
+export default function EventOverview({ events }: EventProps) {
+   const { data: session, status } = useSession();
+  //  console.log(session);
+   
   const t = useTranslations('Dashboard.overview');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   // 2. Filter, Sort, and Limit the events
-  const sortedAndLimitedEvents = eventData
-    .filter(event => {
+  const sortedAndLimitedEvents = events?.filter(event => {
       // Filter out past events. Parse YYYY-MM-DD string into Date object.
-      const eventDate = new Date(event.date);
+      const eventDate = new Date(event.eventDate);
       return eventDate >= today;
     })
     .sort((a, b) => {
       // Sort by date from nearest (earlier) to furthest (later)
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
+      const dateA = new Date(a.eventDate).getTime();
+      const dateB = new Date(b.eventDate).getTime();
       return dateA - dateB;
     })
     .slice(0, 3);
   return (
-    <div className='min-h-screen py-6 w-[85%] mx-auto flex flex-col gap-6'>
+    <div className='min-h-screen py-6 w-[90%] mx-auto flex flex-col gap-6'>
       <h1 className='capitalize font-bold text-4xl  text-foreground'>{t('title')}</h1>
       <div className='flex flex-col gap-2'>
         <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('quickActions')}</h2>
         <div className='grid grid-cols-3 gap-5 '>
-          <Link href='/add' className='col-span-1 '>
+          <Link href='/organizer/manage' className='col-span-1 '>
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <MdAddCircleOutline className='size-6' />
               <span className='capitalize'>
@@ -263,7 +173,7 @@ export default function EventOverview() {
               </span>
             </Button>
           </Link>
-          <Link href='/viewDetails' className='col-span-1 '>
+          <Link href='/organizer/details' className='col-span-1 '>
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <FaRegRectangleList className='size-6' />
               <span className='capitalize'>
@@ -271,7 +181,7 @@ export default function EventOverview() {
               </span>
             </Button>
           </Link>
-          <Link href='/browse' className='col-span-1 '>
+          <Link href='/organizer/browse' className='col-span-1 '>
             <Button className='w-full py-6 text-xl text-primary-foreground rounded-2xl'>
               <TbListSearch className='size-6' />
               <span className='capitalize'>
@@ -286,7 +196,7 @@ export default function EventOverview() {
           <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('keyMetrics')}</h2>
           <h4 className='text-gray-400 text-md'>{t('realTimeData')}</h4>
         </div>
-        <div className='grid grid-cols-4 gap-5 '>
+        <div className='grid grid-cols-4 gap-10 '>
           {dashboardData.map((data) => (
             <BackgroundGradient key={data.id} className='col-span-1 rounded-4xl  p-2 h-full   text-foreground bg-background' >
               <MetricCard
@@ -294,8 +204,6 @@ export default function EventOverview() {
                 title={data.title}
                 value={data.value}
                 change={data.change}
-                timeframe={data.timeframe}
-                color={data.color}
               />
             </BackgroundGradient>
           ))}
@@ -303,26 +211,22 @@ export default function EventOverview() {
         </div>
       </div>
       <div className='flex flex-col gap-2'>
-        {/* <div className='grid grid-cols-3 gap-5 '> */}
-        {/* <div className='col-span-2 gap-3'> */}
         <div className=' flex justify-between'>
           <h2 className='capitalize font-bold text-2xl mb-2 text-foreground'>{t('upcomingEvents')}</h2>
           <h4 className='text-gray-400 text-md'>{t('viewAll')}</h4>
         </div>
         <div className='flex flex-col gap-2'>
-
-          {sortedAndLimitedEvents.length > 0 ? (
+          {sortedAndLimitedEvents?.length > 0 ? (
             sortedAndLimitedEvents.map((event) => (
               <EventListItem
-                key={event.id}
-                id={event.id}
-                title={event.title}
-                // Pass displayDate and time for the UI
-                displayDate={event.displayDate}
-                time={event.time}
-                location={event.location}
-                imageUrl={event.imageUrl}
-                date={event.date} // Keeping date for interface satisfaction, though not directly rendered
+                key={event._id}
+                _id={event._id}
+                name={event.name}
+                eventDate={event.eventDate}
+                startTime={event.startTime}
+                endTime={event.endTime}
+                locate={event.locate}
+                avatar={typeof event.avatar === 'string' ? event.avatar : '/events/defaultImgEvent.png'}
               />
             ))
           ) : (
@@ -330,14 +234,7 @@ export default function EventOverview() {
               {t('noUpcomingEvents')}
             </div>
           )}
-
         </div>
-
-
-
-
-        {/* </div> */}
-        {/* </div> */}
       </div>
     </div>
   )

@@ -36,8 +36,7 @@
     },
     "UserBtn": {
       "subscribe": "اشتراك",
-      "account": "الملف الشخصي",
-      "billing": "الفوترة",
+      "profile": "الملف الشخصي",
       "notifications": "الإشعارات",
       "logout": "تسجيل الخروج"
     }

@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { Providers } from "@/frontend/providers/Providers";
 import SideBar from "@/components/layout/SideBar/SideBar/SideBar";
 import { Toaster } from "sonner";
 import { SidebarInset } from "@/components/ui/sidebar";
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages } from 'next-intl/server';
+import { getMessages } from 'next-intl/server';
+import SidebarTriggerBtn from "@/components/layout/SideBar/SidebarTriggerBtn/SidebarTriggerBtn";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,11 +26,13 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const { locale } = await params;
+  const messages = await getMessages({ locale });
 
   return (
     <html lang={locale} suppressHydrationWarning={true}>
@@ -42,12 +45,9 @@ export default async function RootLayout({
             <Toaster position="top-right" />
             <SideBar />
             <SidebarInset>
-
-              {/* <div className="w-full bg-background text-foreground"> */}
+              <SidebarTriggerBtn/>
               {children}
-              {/* </div> */}
             </SidebarInset>
-
           </Providers>
         </NextIntlClientProvider>
       </body>

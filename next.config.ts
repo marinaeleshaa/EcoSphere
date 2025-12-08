@@ -14,22 +14,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/auth/:path*",
-        destination: "/api/auth/:path*",
-      },
-      {
-        source: "/:locale(en|ar|fr)",
-        destination: "/",
-      },
-      {
-        source: "/:locale(en|ar|fr)/:path*",
-        destination: "/:path*",
-      },
-    ];
-  },
 };
 
 export default withNextIntl(nextConfig);
