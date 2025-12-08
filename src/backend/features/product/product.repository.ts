@@ -1,11 +1,7 @@
 import { injectable } from "tsyringe";
 import { DBInstance } from "@/backend/config/dbConnect";
-import {
-  RestaurantModel,
-  IMenuItem,
-  IRestaurant,
-} from "../restaurant/restaurant.model";
-import mongoose, { Types } from "mongoose";
+import { RestaurantModel, IRestaurant } from "../restaurant/restaurant.model";
+import mongoose from "mongoose";
 import {
   ProductResponse,
   CreateProductDTO,
@@ -50,7 +46,7 @@ export class ProductRepository implements IProductRepository {
           itemRating: "$menus.itemRating",
         },
       },
-    ]);
+    ]).exec();
   }
 
   async findProductById(productId: string): Promise<ProductResponse | null> {
@@ -71,7 +67,7 @@ export class ProductRepository implements IProductRepository {
           itemRating: "$menus.itemRating",
         },
       },
-    ]);
+    ]).exec();
 
     return result[0] || null;
   }
@@ -96,7 +92,7 @@ export class ProductRepository implements IProductRepository {
           itemRating: "$menus.itemRating",
         },
       },
-    ]);
+    ]).exec();
   }
 
   async addProduct(
@@ -110,7 +106,7 @@ export class ProductRepository implements IProductRepository {
         $push: { menus: productData },
       },
       { new: true, runValidators: true }
-    );
+    ).exec();
   }
 
   async updateProduct(
@@ -129,7 +125,7 @@ export class ProductRepository implements IProductRepository {
       { _id: restaurantId, "menus._id": productId },
       { $set: updateQuery },
       { new: true }
-    );
+    ).exec();
   }
 
   async deleteProduct(
@@ -143,6 +139,6 @@ export class ProductRepository implements IProductRepository {
         $pull: { menus: { _id: productId } },
       },
       { new: true }
-    );
+    ).exec();
   }
 }

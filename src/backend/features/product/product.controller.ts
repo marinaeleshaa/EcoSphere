@@ -1,5 +1,5 @@
 import { injectable, inject } from "tsyringe";
-import { ProductService } from "./product.service";
+import { type IProductService } from "./product.service";
 import { IRestaurant } from "../restaurant/restaurant.model";
 import {
   ProductResponse,
@@ -10,7 +10,7 @@ import {
 @injectable()
 export class ProductController {
   constructor(
-    @inject(ProductService) private readonly productService: ProductService
+    @inject("ProductService") private readonly productService: IProductService
   ) {}
 
   async getAll(): Promise<ProductResponse[]> {

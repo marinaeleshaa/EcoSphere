@@ -1,6 +1,6 @@
 import { injectable, inject } from "tsyringe";
-import { ProductRepository } from "./product.repository";
-import { IMenuItem, IRestaurant } from "../restaurant/restaurant.model";
+import { type IProductRepository } from "./product.repository";
+import {  IRestaurant } from "../restaurant/restaurant.model";
 import {
   ProductResponse,
   CreateProductDTO,
@@ -26,8 +26,8 @@ export interface IProductService {
 @injectable()
 export class ProductService implements IProductService {
   constructor(
-    @inject(ProductRepository)
-    private readonly productRepository: ProductRepository
+    @inject("ProductRepository")
+    private readonly productRepository: IProductRepository
   ) {}
 
   async getAllProducts(): Promise<ProductResponse[]> {
