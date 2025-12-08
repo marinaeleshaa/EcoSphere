@@ -19,9 +19,9 @@ type PaymentMethod = "card" | "cash";
 export default function CheckoutPage() {
   const subtotalCents = useAppSelector(selectCartTotal);
   const discountCents = Math.round(subtotalCents * 0.1);
-  const deliveryCents = 500;
+  const deliveryCents = 5000; // 50 EGP (Stripe requires minimum charge of ~$0.50)
 
-  const amount = Math.max(subtotalCents - discountCents + deliveryCents, 3000);
+  const amount = subtotalCents - discountCents + deliveryCents;
 
   const { theme, systemTheme } = useTheme();
 

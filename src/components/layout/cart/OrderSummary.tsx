@@ -10,11 +10,10 @@ export default function OrderSummary() {
   const t = useTranslations("Cart.orderSummary");
   const subtotalCents = useAppSelector(selectCartTotal);
   const discountCents = Math.round(subtotalCents * 0.1);
-  const deliveryCents = 500;
-  console.log("OrderSummary render. Delivery:", deliveryCents);
+  const deliveryCents = 5000;
 
   const rawTotal = subtotalCents - discountCents + deliveryCents;
-  const total = Math.max(rawTotal, 3000);
+  const total = rawTotal;
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(false);
 
@@ -26,9 +25,7 @@ export default function OrderSummary() {
 
   return (
     <div className="rounded-2xl p-6 shadow-md  border border-primary">
-      <h2 className="text-xl font-semibold mb-6 text-center">
-        {t("title")} (Updated)
-      </h2>
+      <h2 className="text-xl font-semibold mb-6 text-center">{t("title")}</h2>
       <div className="mb-6">
         <div className="flex flex-col :flex-row gap-3">
           <input
