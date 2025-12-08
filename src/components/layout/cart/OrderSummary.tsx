@@ -10,7 +10,7 @@ export default function OrderSummary() {
   const t = useTranslations("Cart.orderSummary");
   const subtotalCents = useAppSelector(selectCartTotal);
   const discountCents = Math.round(subtotalCents * 0.1);
-  const deliveryCents = 5000;
+  const deliveryCents = 500;
   console.log("OrderSummary render. Delivery:", deliveryCents);
 
   const rawTotal = subtotalCents - discountCents + deliveryCents;
