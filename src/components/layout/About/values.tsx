@@ -10,29 +10,33 @@ export default function Values() {
     const t = useTranslations('About.values');
 
     const values = [
-        {
-            icon: <Leaf className="w-8 h-8 text-primary" />,
-            titleKey: "planetFirst"
+        { 
+            icon: <Leaf className="w-8 h-8 text-accent-foreground" />, 
+            title: "Planet-First", 
+            text: "Every action is measured by its environmental benefit and commitment to regeneration." 
         },
-        {
-            icon: <Handshake className="w-8 h-8 text-primary" />,
-            titleKey: "integrity"
+        { 
+            icon: <Handshake className="w-8 h-8 text-accent-foreground" />, 
+            title: "Integrity & Trust", 
+            text: "We demand radical transparency from our partners and communicate openly with our users." 
         },
-        {
-            icon: <Globe className="w-8 h-8 text-primary" />,
-            titleKey: "accessibility"
+        { 
+            icon: <Globe className="w-8 h-8 text-accent-foreground" />, 
+            title: "Accessibility", 
+            text: "We strive to make sustainable choices the easiest and most convenient option available." 
         },
-        {
-            icon: <Users className="w-8 h-8 text-primary" />,
-            titleKey: "community"
+        { 
+            icon: <Users className="w-8 h-8 text-accent-foreground" />, 
+            title: "Community", 
+            text: "We prioritize connecting ethical enterprises with dedicated customers." 
         }
     ];
 
     return (
-        <section className="relative py-20 bg-card text-card-foreground overflow-hidden">
+           <section className="relative py-20 text-foreground overflow-hidden">
 
 
-            <div className="mx-auto max-w-[80%] px-4 relative z-10">
+            <div className="mx-auto w-[80%] px-4 relative z-10">
                 <Reveal>
                     {/* Header Section */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
@@ -55,16 +59,16 @@ export default function Values() {
                                 className="bg-card rounded-2xl p-8 text-center shadow-lg duration-300 group border border-transparent hover:border-theme transform hover:scale-[1.02] ring-2 ring-primary/30 dark:ring-primary/60 dark:shadow-primary/30"
                             >
                                 {/* Icon Circle */}
-                                <motion.div whileTap={{ scale: 0.98 }} className="mx-auto w-20 h-20 bg-[var(--primary-foreground)/0.08] rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <motion.div whileTap={{ scale: 0.98 }} className="mx-auto w-20 h-20 bg-primary/0.08 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                     {val.icon}
                                 </motion.div>
 
-                                <h3 className="font-bold text-xl text-foreground mb-4">
-                                    {t(`cards.${val.titleKey}.title`)}
+                                <h3 className="font-bold text-xl text-accent-foreground mb-4">
+                                    {val.title}
                                 </h3>
 
-                                <p className="text-sm text-muted leading-relaxed">
-                                    {t(`cards.${val.titleKey}.text`)}
+                                <p className="text-sm text-foreground leading-relaxed">
+                                    {val.text}
                                 </p>
                             </motion.div>
                         ))}

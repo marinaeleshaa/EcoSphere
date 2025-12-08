@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { motion } from "framer-motion";
 import BasicAnimatedWrapper from "./BasicAnimatedWrapper";
 
 interface IProps {
@@ -7,6 +6,7 @@ interface IProps {
   title: string;
   subTitle: string;
 }
+
 const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
   return (
     <section>

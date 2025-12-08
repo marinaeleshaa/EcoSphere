@@ -43,13 +43,13 @@
   },
   "About": {
     "hero": {
-      "title": "Our Store",
+      "title": "Our Story",
       "subtitle": "EcoSphere is your trusted destination for eco-friendly products, sustainable gifts, and smart green choices. Browse a variety of earth-conscious items made to help you live cleaner, better, and more naturally every day."
     },
     "story": {
       "label": "About Us",
       "title": "Building a greener future together Forever",
-      "description": "EcoSphere was created to make sustainable shopping simple, trustworthy, and accessible. With greenwashing becoming widespread, consumers are often overwhelmed or unsure who to trust. EcoSphere bridges that gap—connecting verified, planet-friendly businesses with the growing community of people who want to shop responsibly."
+      "description": "EcoSphere was created to make sustainable shopping simple, trustworthy, and accessible. With greenwashing becoming widespread, consumers are often overwhelmed or unsure who to trust."
     },
     "mission": {
       "label": "Our Mission",
@@ -294,6 +294,7 @@
       "email": "Email",
       "password": "Password",
       "forgetPassword": "Forget Password",
+      "forgotPassword": "Forgot Password",
       "or": "or",
       "newToEcosphere": "New to EcoSphere ?",
       "signUp": "Sign up"
@@ -301,6 +302,28 @@
     "signup": {
       "oneOfUs": "One of us ?",
       "login": "Login"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "resetPassword": "Reset Password",
+      "enterEmailDescription": "Enter your email address and we'll send you a link to reset your password.",
+      "enterVerificationCodeAndPassword": "Enter the verification code sent to your email and create a new password.",
+      "email": "Email",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "verificationCode": "Verification Code",
+      "sendVerificationCode": "Send Verification Code",
+      "sending": "Sending",
+      "resettingPassword": "Resetting Password",
+      "emailSent": "Check Your Email",
+      "checkEmailInstructions": "We've sent a verification code to",
+      "useAnotherEmail": "Use Another Email",
+      "backToLogin": "Back to Login",
+      "rememberPassword": "Remember your password?",
+      "login": "Login",
+      "passwordResetSuccess": "Password Reset Successful",
+      "passwordResetSuccessMessage": "Your password has been reset successfully. You can now log in with your new password.",
+      "passwordsDoNotMatch": "Passwords do not match"
     },
     "steps": {
       "step1": {

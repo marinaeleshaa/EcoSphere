@@ -264,13 +264,36 @@
       "email": "Email",
       "password": "Mot de passe",
       "forgetPassword": "Mot de passe oublié",
+      "forgotPassword": "Mot de passe oublié",
       "or": "ou",
       "newToEcosphere": "Nouveau sur EcoSphere ?",
       "signUp": "Créer un compte"
     },
     "signup": {
-      "oneOfUs": "Déjà l’un des nôtres ?",
+      "oneOfUs": "Déjà l'un des nôtres ?",
       "login": "Se connecter"
+    },
+    "forgotPassword": {
+      "title": "Mot de passe oublié",
+      "resetPassword": "Réinitialiser le mot de passe",
+      "enterEmailDescription": "Entrez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
+      "enterVerificationCodeAndPassword": "Entrez le code de vérification envoyé à votre adresse e-mail et créez un nouveau mot de passe.",
+      "email": "Email",
+      "newPassword": "Nouveau mot de passe",
+      "confirmPassword": "Confirmez le mot de passe",
+      "verificationCode": "Code de vérification",
+      "sendVerificationCode": "Envoyer le code de vérification",
+      "sending": "Envoi en cours",
+      "resettingPassword": "Réinitialisation du mot de passe en cours",
+      "emailSent": "Vérifiez votre email",
+      "checkEmailInstructions": "Nous avons envoyé un code de vérification à",
+      "useAnotherEmail": "Utiliser un autre email",
+      "backToLogin": "Retour à la connexion",
+      "rememberPassword": "Vous vous souvenez de votre mot de passe ?",
+      "login": "Se connecter",
+      "passwordResetSuccess": "Mot de passe réinitialisé avec succès",
+      "passwordResetSuccessMessage": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
     },
     "steps": {
       "step1": {
