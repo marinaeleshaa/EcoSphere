@@ -14,7 +14,7 @@ export const GET = async (
     const result = await controller.getById(id);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
@@ -30,7 +30,7 @@ export const PUT = async (
     const result = await controller.updateById(id, body);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
@@ -45,7 +45,7 @@ export const DELETE = async (
     const result = await controller.deleteById(id);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

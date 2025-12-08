@@ -13,13 +13,18 @@ export interface IMenuItem {
   itemRating?: IReview[];
 }
 
+export interface IShopAvatar {
+  key: string;
+  url?: string;
+}
+
 export interface IShop {
   _id: number;
   name: string;
   location: string;
   workingHours: string;
   phoneNumber: string;
-  avatar: string;
+  avatar: IShopAvatar;
   description: string;
   menus?: IMenuItem[];
   restaurantRating?: IReview[];

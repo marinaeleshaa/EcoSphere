@@ -46,18 +46,17 @@ export default function ShopSection({ shops }: { shops: IShop[] }) {
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-15 auto-rows-auto w-[80%] mx-auto mb-4">
         {sortedShops.length > 0 ? (
-          sortedShops.map((shop, index) => (
-            <BasicAnimatedWrapper
-              key={shop._id}
-              index={index}
-              delay={index * 0.1}
-            >
-              <ShopCard
-                shop={shop}
+          sortedShops.map((shop, index) => {
+            return (
+              <BasicAnimatedWrapper
+                key={shop._id}
                 index={index}
-              />
-            </BasicAnimatedWrapper>
-          ))
+                delay={index * 0.1}
+              >
+                <ShopCard shop={shop} index={index} />
+              </BasicAnimatedWrapper>
+            );
+          })
         ) : (
           <p className="col-span-full text-center text-primary-foreground py-10">
             {t("noProducts")}

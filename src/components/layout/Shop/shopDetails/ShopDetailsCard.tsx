@@ -18,9 +18,7 @@ const ShopDetailsCard = ({ shop }: { shop: IShop }) => {
           <Image
             width={600}
             height={400}
-            src={
-              typeof shop.avatar === "string" ? shop.avatar : "/shop-img.jpg"
-            }
+            src={shop.avatar?.url ?? "/shop-img.jpg"}
             alt={shop.name}
             className="w-[500px] rounded-lg "
           />

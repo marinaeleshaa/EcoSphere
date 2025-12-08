@@ -24,7 +24,7 @@ export const GET = async (
       await rootContainer.resolve(EventController).getEvent(user.id, eventId)
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
