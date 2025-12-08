@@ -11,7 +11,10 @@ export interface IMenuItem extends Document {
   title: string;
   subtitle: string;
   price: number;
-  avatar?: string;
+  avatar?: {
+    key: string;
+    url?: string;
+  };
   availableOnline: boolean;
   itemRating?: IRating[];
 }
@@ -51,7 +54,12 @@ export const menuItemSchema = new Schema<IMenuItem>({
   title: { type: String, required: true },
   subtitle: { type: String, required: true },
   price: { type: Number, required: true },
-  avatar: { type: String, required: false },
+  avatar: {
+    key: { type: String, required: false },
+    url: { type: String, required: false },
+  },
+  availableOnline: { type: Boolean, default: true },
+  itemRating: { type: [ratingSchema], default: [] },
 });
 
 const restaurantSchema = new Schema<IRestaurant>(
