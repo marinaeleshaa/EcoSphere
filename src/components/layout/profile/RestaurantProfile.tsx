@@ -13,7 +13,7 @@ import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
 import { getUserData } from "@/frontend/api/Users";
 import { Shop } from "@/types/UserTypes";
 
-export default function RestaurantProfile({ id }: { id: string }) {
+export default function RestaurantProfile({ id, role }: { id: string; role: string }) {
   const [user, setUser] = useState<Shop>();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -40,7 +40,7 @@ export default function RestaurantProfile({ id }: { id: string }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserData(id);
+        const userData = await getUserData<Shop>(id, role);
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch user", error);
@@ -121,7 +121,7 @@ export default function RestaurantProfile({ id }: { id: string }) {
 
   const handleSave = async () => {
     if (user.id) {
-    //   await dispatch(updateUserProfile({ id: user.id, data: formData }));
+      //   await dispatch(updateUserProfile({ id: user.id, data: formData }));
       setIsEditing(false);
     }
   };

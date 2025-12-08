@@ -13,7 +13,7 @@ import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
 import { getUserData } from "@/frontend/api/Users";
 import { User } from "@/types/UserTypes";
 
-export default function OrganizerProfile({ id }: { id: string }) {
+export default function OrganizerProfile({ id, role }: { id: string; role: string }) {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -40,7 +40,7 @@ export default function OrganizerProfile({ id }: { id: string }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserData(id);
+        const userData = await getUserData<User>(id,role);
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch user", error);

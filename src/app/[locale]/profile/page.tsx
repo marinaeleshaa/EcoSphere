@@ -27,14 +27,23 @@ export default function ProfilePage() {
         <div className="min-h-screen flex justify-center items-center w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="w-[80%]">
             {session?.user.role === "customer" && (
-              <CustomerProfile id={session?.user.id} />
+              <CustomerProfile
+                id={session?.user.id}
+                role={session?.user.role}
+              />
             )}
             {session?.user.role === "organizer" && (
-              <OrganizerProfile id={session?.user.id} />
+              <OrganizerProfile
+                id={session?.user.id}
+                role={session?.user.role}
+              />
             )}
             {(session?.user.role === "restaurant" ||
               session?.user.role === "shop") && (
-              <RestaurantProfile id={session?.user.id} />
+              <RestaurantProfile
+                id={session?.user.id}
+                role={session?.user.role}
+              />
             )}
           </div>
         </div>
