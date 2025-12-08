@@ -12,7 +12,10 @@ interface AnimatedShopCardProps {
   index: number;
 }
 
-export default function ShopCard({ shop, index }: Readonly<AnimatedShopCardProps>) {
+export default function ShopCard({
+  shop,
+  index,
+}: Readonly<AnimatedShopCardProps>) {
   const [isExiting, setIsExiting] = useState(false);
   const router = useRouter();
   const exitVariant = {
@@ -39,11 +42,7 @@ export default function ShopCard({ shop, index }: Readonly<AnimatedShopCardProps
     >
       <div className="absolute inset-0">
         <Image
-          src={
-            typeof shop.avatar === "string"
-              ? shop.avatar
-              : "/shop-img.jpg"
-          }
+          src={shop.avatar?.url ?? "/shop-img.jpg"}
           alt={shop.name}
           width={800}
           height={800}

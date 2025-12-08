@@ -28,7 +28,7 @@ export const POST = async (
     // Convert to PublicUserProfile to get proper avatar URL;
     return ok(user);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

@@ -10,7 +10,7 @@ export const GET = async (
   try {
     return ok(await rootContainer.resolve(EventController).getEvents());
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

@@ -8,7 +8,7 @@ const getShops = async () => {
   });
 
   if (!response.ok) {
-    console.log(response)
+    console.error(response);
     throw new Error("Failed to fetch data");
   }
 
