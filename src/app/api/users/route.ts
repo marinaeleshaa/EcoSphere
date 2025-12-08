@@ -1,7 +1,6 @@
 import { rootContainer } from "@/backend/config/container";
 import UserController from "@/backend/features/user/user.controller";
 import { IUser } from "@/backend/features/user/user.model";
-import { PublicUserProfile } from "@/backend/features/auth/dto/user.dto";
 import { ApiResponse, ok, serverError, unauthorized } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
@@ -15,7 +14,7 @@ export const GET = async (
 // Get current user endpoint - returns PublicUserProfile with proper avatar URL
 export const POST = async (
   _req: NextRequest
-): Promise<NextResponse<ApiResponse<PublicUserProfile>>> => {
+): Promise<NextResponse<ApiResponse<IUser>>> => {
   try {
     const session = await auth();
     
@@ -26,11 +25,10 @@ export const POST = async (
     const controller = rootContainer.resolve(UserController);
     const user = await controller.getById(session.user.id);
     
-    // Convert to PublicUserProfile to get proper avatar URL
-    const profile = await PublicUserProfile.fromUser(user);
-    return ok(profile);
+    // Convert to PublicUserProfile to get proper avatar URL;
+    return ok(user);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

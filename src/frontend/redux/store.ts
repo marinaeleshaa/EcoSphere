@@ -1,16 +1,45 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, Reducer } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import FavSlice from "./Slice/FavSlice";
 import AuthSlice from "./Slice/AuthSlice";
 import UserSlice from "./Slice/UserSlice";
+import CartSlice from "./Slice/CartSlice";
 
-export const store = configureStore({
-  reducer: {
-    fav: FavSlice,
-    auth: AuthSlice,
-    user: UserSlice,
-  },
+// Persist config
+const persistConfig = {
+	key: "root",
+	storage,
+	whitelist: ["cart"], // persist ONLY the cart slice
+};
+
+// Combine all reducers
+const rootReducer = combineReducers({
+	fav: FavSlice,
+	auth: AuthSlice,
+	cart: CartSlice,
+	user: UserSlice,
 });
 
-// Types (مهمين للـ TS)
-export type RootState = ReturnType<typeof store.getState>;
+const persistedReducer =
+	globalThis.window === undefined
+		? rootReducer
+		: persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+	reducer: persistedReducer as Reducer,
+	middleware: (getDefault) =>
+		getDefault({
+			serializableCheck: {
+				ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+			},
+		}),
+	devTools: process.env.NODE_ENV !== "production",
+});
+
+// Persister for <PersistGate>
+export const persister = persistStore(store);
+
+// TS Types
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

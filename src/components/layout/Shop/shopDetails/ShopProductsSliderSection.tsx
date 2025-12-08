@@ -3,19 +3,21 @@
 import { useRef } from "react";
 import ProductCard from "../../Store/ProductCard";
 import { products } from "@/data/products";
+import { useTranslations } from 'next-intl';
 
 const ShopProductsSliderSection = ({ shopName }: { shopName?: string }) => {
+  const t = useTranslations('ShopDetails.products');
   const sliderRef = useRef<HTMLDivElement>(null);
-  
+
   // Filter products by shopName
-  const shopProducts = shopName 
+  const shopProducts = shopName
     ? products.filter((product) => product.shopName === shopName)
     : [];
 
   if (shopProducts.length === 0) {
     return (
       <div className="text-center py-10">
-        <p className="text-muted-foreground">No products available for this shop.</p>
+        <p className="text-muted-foreground">{t('noProducts')}</p>
       </div>
     );
   }

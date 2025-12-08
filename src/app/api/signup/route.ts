@@ -17,7 +17,7 @@ export const POST = async (
     const result = await controller.register(body);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

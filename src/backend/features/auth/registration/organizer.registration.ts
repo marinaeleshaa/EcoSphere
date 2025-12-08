@@ -1,23 +1,29 @@
 import { inject, injectable } from "tsyringe";
 import { IRegistrationStrategy } from "./registration.service";
-import { RegisterResponseDTO, UserRegisterDTO, PublicUserProfile } from "../dto/user.dto";
+import { RegisterResponseDTO, UserRegisterDTO } from "../dto/user.dto";
 import type { IAuthRepository } from "../auth.repository";
-import { signJwt } from "@/backend/utils/helpers";
+import { sendWelcomeEmail } from "@/backend/utils/mailer";
 
 @injectable()
 class OrganizerRegistration implements IRegistrationStrategy {
 	constructor(
 		@inject("IAuthRepository") private readonly authRepo: IAuthRepository
-	) {}
+	) { }
 	async register(data: UserRegisterDTO): Promise<RegisterResponseDTO> {
-		console.log(data);
 		const isOrganizerExists = await this.authRepo.existsByEmail(data.email);
 		if (isOrganizerExists) throw new Error("user already exists.");
 		const organizer = await this.authRepo.saveNewUser(data);
+		if (!organizer)
+			throw new Error("something went wrong, organizer can not registered");
 
-		const token = signJwt(PublicUserProfile.toTokenPayload(organizer));
+		await sendWelcomeEmail(
+			data.email,
+			`${"firstName" in data ? data.firstName : ""} ${"lastName" in data ? data.lastName : ""
+				}`.trim(),
+			"organizer"
+		);
 
-		return await RegisterResponseDTO.create(token, organizer);
+		return { success: true };
 	}
 }
 export { OrganizerRegistration };

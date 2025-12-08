@@ -11,24 +11,36 @@ import { RegistrationService } from "../features/auth/registration/registration.
 import { ShopRegistration } from "../features/auth/registration/shop.registration";
 import { OrganizerRegistration } from "../features/auth/registration/organizer.registration";
 import { LoginService } from "../features/auth/login/users.login.service";
-import { LoginFactory } from "../features/auth/login/login.strategy.factory";
-import { UserLoginStrategy } from "../features/auth/login/user.login";
-import { ShopLoginStrategy } from "../features/auth/login/shop.login";
+import { ImageService } from "../services/image.service";
+import { UploadService } from "../features/upload/upload.service";
+import { UploadRepository } from "../features/upload/upload.repository";
+import EventService from "../features/event/event.service";
+import EventRepository from "../features/event/event.repository";
+import { ProductRepository } from "../features/product/product.repository";
+import { ProductService } from "../features/product/product.service";
+import { OrderRepository } from "../features/orders/order.repository";
+import { OrderService } from "../features/orders/order.service";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
 container.registerSingleton("IUserService", UserService);
+container.registerSingleton("IEventService", EventService);
+container.registerSingleton("IEventRepository", EventRepository);
 container.registerSingleton("IAuthRepository", AuthRepository);
 container.registerSingleton("IRestaurantService", RestaurantService);
 container.registerSingleton("IRestaurantRepository", RestaurantRepository);
+container.registerSingleton("OrderRepository", OrderRepository);
+container.registerSingleton("OrderService", OrderService);
 container.registerSingleton("RegistrationService", RegistrationService);
 container.registerSingleton("RegistrationFactory", RegistrationFactory);
 container.registerSingleton("EndUserRegistration", EndUserRegistration);
 container.registerSingleton("ShopRegistration", ShopRegistration);
 container.registerSingleton("OrganizerRegistration", OrganizerRegistration);
 container.registerSingleton("LoginService", LoginService);
-container.registerSingleton("LoginFactory", LoginFactory);
-container.registerSingleton("UserLoginStrategy", UserLoginStrategy);
-container.registerSingleton("ShopLoginStrategy", ShopLoginStrategy);
+container.registerSingleton("ImageService", ImageService);
+container.registerSingleton("UploadService", UploadService);
+container.registerSingleton("UploadRepository", UploadRepository);
+container.registerSingleton("ProductRepository" ,ProductRepository);
+container.registerSingleton("ProductService", ProductService);
 
 export { container as rootContainer } from "tsyringe";

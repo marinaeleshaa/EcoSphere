@@ -1,7 +1,6 @@
 import { rootContainer } from "@/backend/config/container";
 import UserController from "@/backend/features/user/user.controller";
 import { IUser } from "@/backend/features/user/user.model";
-import { PublicUserProfile } from "@/backend/features/auth/dto/user.dto";
 import { ApiResponse, badRequest, ok, serverError } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -15,7 +14,7 @@ export const GET = async (
     const result = await controller.getById(id);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
@@ -23,7 +22,7 @@ export const GET = async (
 export const PUT = async (
   _req: NextRequest,
   context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<PublicUserProfile>>> => {
+): Promise<NextResponse<ApiResponse<IUser>>> => {
   const { id } = await context.params;
   const body = await _req.json();
   const controller = rootContainer.resolve(UserController);
@@ -32,7 +31,7 @@ export const PUT = async (
     const result = await controller.updateById(id, body);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
@@ -54,7 +53,7 @@ export const PATCH = async (
     const result = await controller.updateFavorites(id, favoritesIds);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };
@@ -69,7 +68,7 @@ export const DELETE = async (
     const result = await controller.deleteById(id);
     return ok(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return serverError("Something went wrong");
   }
 };

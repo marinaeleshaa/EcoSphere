@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import ShopProductsSliderSection from "./ShopProductsSliderSection";
+import { useTranslations } from 'next-intl';
 
 const ShopProducts = ({ shopName }: { shopName?: string }) => {
+  const t = useTranslations('ShopDetails.products');
   return (
     <section className="mt-20 overflow-hidden">
 
@@ -14,14 +16,14 @@ const ShopProducts = ({ shopName }: { shopName?: string }) => {
         viewport={{ once: false }}
         className="mb-10"
       >
-     <div className="mb-10">
-         <h2 className="text-2xl text-center font-semibold text-foreground">
-          Shop Products
-        </h2>
-        <p className="text-sm text-center text-secondary-foreground">
-          explore products from this shop
-        </p>
-     </div>
+        <div className="mb-10">
+          <h2 className="text-2xl text-center font-semibold text-foreground">
+            {t('title')}
+          </h2>
+          <p className="text-sm text-center text-secondary-foreground">
+            {t('subtitle')}
+          </p>
+        </div>
         <ShopProductsSliderSection shopName={shopName} />
       </motion.div>
     </section>

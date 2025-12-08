@@ -2,10 +2,12 @@ import React from "react";
 import HomeHero from "./HomeHero";
 import LeftFloatingImg from "./LeftFloatingImg";
 import RightFloatingImg from "./RightFloatingImg";
+import TextHeroSection from "./TextHeroSection";
+import SolidContentSection from "./SolidContentSection";
 
 const HomeHeroLayout = () => {
   return (
-    <div className="min-h-screen relative">
+    <div className=" relative">
       <HomeHero />
       <div className="absolute inset-0 gap-5 h-screen w-full hidden md:grid md:grid-cols-2 lg:grid-cols-3">
         {/* left */}
@@ -17,6 +19,10 @@ const HomeHeroLayout = () => {
         <div className="">
           <RightFloatingImg />
         </div>
+      </div>
+      <div className="mt-10 gap-10 flex flex-col">
+        {/* <TextHeroSection/> */}
+        <SolidContentSection/>
       </div>
     </div>
   );

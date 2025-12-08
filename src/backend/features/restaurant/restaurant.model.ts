@@ -11,7 +11,10 @@ export interface IMenuItem extends Document {
   title: string;
   subtitle: string;
   price: number;
-  avatar?: string;
+  avatar?: {
+    key: string;
+    url?: string;
+  };
   availableOnline: boolean;
   itemRating?: IRating[];
 }
@@ -51,7 +54,12 @@ export const menuItemSchema = new Schema<IMenuItem>({
   title: { type: String, required: true },
   subtitle: { type: String, required: true },
   price: { type: Number, required: true },
-  avatar: { type: String, required: false },
+  avatar: {
+    key: { type: String, required: false },
+    url: { type: String, required: false },
+  },
+  availableOnline: { type: Boolean, default: true },
+  itemRating: { type: [ratingSchema], default: [] },
 });
 
 const restaurantSchema = new Schema<IRestaurant>(
@@ -74,12 +82,16 @@ const restaurantSchema = new Schema<IRestaurant>(
   { timestamps: true }
 );
 
-restaurantSchema.pre("save", async function (next) {
-  this.createdAt ??= new Date();
-  if (!this.isModified("password")) return next();
-
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+restaurantSchema.pre<IRestaurant>("save", function (): 
+  | Promise<void> 
+  | undefined {
+	this.createdAt ??= new Date();
+	if (!this.isModified("password")) { 
+    return; 
+  }
+  return bcrypt.hash(this.password, 10).then((hashedPassword) => {
+    this.password = hashedPassword;
+  });
 });
 
 restaurantSchema.methods.comparePassword = async function (

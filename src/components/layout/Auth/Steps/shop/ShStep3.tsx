@@ -7,12 +7,14 @@ import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";
+import { useTranslations } from 'next-intl';
 import { useState } from "react";
 import Image from "next/image";
 import { Loader2, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
 
 const ShStep3 = () => {
+  const t = useTranslations('Auth.steps.shopStep3');
   const dispatch = useDispatch();
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -54,16 +56,28 @@ const ShStep3 = () => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          Shop Details
+          {t('title')}
         </p>
 
         {/* Logo upload */}
         <div>
-          <Controller
+          {/* <Controller
             name="avatar"
             control={control}
             render={({ field }) => (
-              <div className="flex flex-col items-center gap-4">
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="myInput"
+                name={field.name}
+                ref={field.ref}
+                onChange={(event) =>
+                  field.onChange(event.target.files ?? undefined)
+                }
+              />
+            )}
+          /> */}
+              {/* <div className="flex flex-col items-center gap-4">
                 <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
                   {previewUrl ? (
                     <Image
@@ -118,7 +132,7 @@ const ShStep3 = () => {
                 </div>
               </div>
             )}
-          />
+          /> */}
           {errors.avatar && (
             <p className="text-red-500">{errors.avatar.message}</p>
           )}
@@ -128,7 +142,7 @@ const ShStep3 = () => {
         <div>
           <input
             type="text"
-            placeholder="Enter shop location"
+            placeholder={t('location')}
             className="myInput"
             {...register("location")}
           />
@@ -142,7 +156,7 @@ const ShStep3 = () => {
         <div>
           <input
             type="text"
-            placeholder="e.g., Mon-Fri 9:00 AM - 6:00 PM"
+            placeholder={t('workingHours')}
             className="myInput"
             {...register("workingHours")}
           />

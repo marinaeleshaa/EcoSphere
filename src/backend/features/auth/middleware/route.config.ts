@@ -5,7 +5,7 @@ export const PROTECTED_ROUTES = [
 	"/dashboard",
 	"/profile",
 	"/settings",
-	"/store",
+	// "/store",
 ];
 
 // Role-based rules (optional, but scalable)
