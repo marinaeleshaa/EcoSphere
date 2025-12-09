@@ -5,14 +5,17 @@ import Reveal from "@/components/ui/reveal";
 import { Target } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 
 export default function Mission() {
+  const t = useTranslations('About.mission');
+
   return (
     <section className="relative w-full bg-card text-card-foreground py-16 md:py-24 overflow-hidden">
       <div className="mx-auto max-w-[80%] px-4 md:px-6">
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-            
+
             {/* LEFT COLUMN: Content */}
             <div className="flex flex-col space-y-8 order-2 lg:order-1">
               <div className="space-y-4">
@@ -20,29 +23,26 @@ export default function Mission() {
                   <motion.span initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center">
                     <Target className="w-6 h-6" />
                   </motion.span>
-                  Our Mission
+                  {t('label')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Making sustainability <br />
-                  <span className="text-primary">effortless & trustworthy.</span>
+                  {t('title')} <br />
+                  <span className="text-primary">{t('titleHighlight')}</span>
                 </h2>
               </div>
 
-              {/* Summarized Text */}
               <div className="space-y-6 text-muted text-lg leading-relaxed">
                 <p>
-                  EcoSphere exists to bridge the gap between conscious consumers and ethical enterprises. 
-                  We strip away the guesswork of &quot;greenwashing&quot; by providing a rigorously vetted marketplace 
-                  where every choice is a verified step towards a better planet.
+                  {t('description')}
                 </p>
                 <div className="pl-6 border-l-4 border-theme space-y-4">
                   <div>
-                    <strong className="block text-foreground">For Consumers</strong>
-                    <span className="text-sm">Instant access to transparent, planet-first products without the research fatigue.</span>
+                    <strong className="block text-foreground">{t('forConsumers.title')}</strong>
+                    <span className="text-sm">{t('forConsumers.description')}</span>
                   </div>
                   <div>
-                    <strong className="block text-foreground">For Businesses</strong>
-                    <span className="text-sm">High-visibility growth for brands that prioritize integrity over easy profits.</span>
+                    <strong className="block text-foreground">{t('forBusinesses.title')}</strong>
+                    <span className="text-sm">{t('forBusinesses.description')}</span>
                   </div>
                 </div>
               </div>

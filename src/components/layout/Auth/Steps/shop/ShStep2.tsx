@@ -7,8 +7,10 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";
+import { useTranslations } from 'next-intl';
 
 const ShStep2 = () => {
+  const t = useTranslations('Auth.steps.shopStep2');
   const dispatch = useDispatch();
 
   const form = useForm<Z.infer<typeof Step2ShopSchema>>({
@@ -27,6 +29,13 @@ const ShStep2 = () => {
   };
 
   useEffect(() => {
+    const subscription = form.watch((value) => {
+      dispatch(saveStep2Data(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch]);
+
+  useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));
   }, [form.formState.isValid, dispatch]);
 
@@ -43,12 +52,12 @@ const ShStep2 = () => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          Shop Details
+          {t('title')}
         </p>
         <div>
           <input
             type="text"
-            placeholder="Enter shop name"
+            placeholder={t('name')}
             className=" myInput"
             {...register("name")}
           />
@@ -56,7 +65,7 @@ const ShStep2 = () => {
         </div>
         <div>
           <textarea
-            placeholder="Description"
+            placeholder={t('description')}
             className="myInput resize-none"
             {...register("description")}
           />
@@ -67,7 +76,7 @@ const ShStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder="Phone Number"
+            placeholder={t('phoneNumber')}
             className="myInput"
             {...register("phoneNumber")}
           />
@@ -78,7 +87,7 @@ const ShStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder="Hotline"
+            placeholder={t('hotline')}
             className="myInput"
             {...register("hotline")}
           />

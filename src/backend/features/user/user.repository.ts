@@ -5,6 +5,7 @@ import { DBInstance } from "@/backend/config/dbConnect";
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
+  getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
@@ -27,7 +28,9 @@ class UserRepository {
 
     return user;
   }
-
+  async getUserIdByEmail(email: string): Promise<IUser> {
+    return await UserModel.findOne({ email }).select("_id").exec()
+  }
   async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     await DBInstance.getConnection();
     const user = await this.getById(id);

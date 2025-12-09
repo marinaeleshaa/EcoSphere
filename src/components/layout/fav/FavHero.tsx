@@ -1,9 +1,14 @@
+"use client";
+
 import Link from 'next/link'
 import React from 'react'
+import { useTranslations } from 'next-intl';
 
 const FavHero = () => {
+  const t = useTranslations('Favorites.hero');
+
   return (
-     <section className="relative w-full h-[200px] bg-primary overflow-hidden">
+    <section className="relative w-full h-[200px] bg-primary overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-foreground rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
@@ -14,7 +19,7 @@ const FavHero = () => {
         {/* Main heading with subtle animation-ready structure */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl lg:text-6xl text-primary-foreground font-bold tracking-tight">
-            Favorite
+            {t('title')}
           </h1>
         </div>
 
@@ -27,15 +32,15 @@ const FavHero = () => {
             href="/"
             className="text-primary-foreground/70 hover:text-primary-foreground transition-colors duration-200 hover:underline underline-offset-4"
           >
-            Home
+            {t('breadcrumb.home')}
           </Link>
           <span className="text-primary-foreground/50">/</span>
           <span
             className="text-primary-foreground font-medium "
           >
-            Favorite
+            {t('breadcrumb.favorite')}
           </span>
-        
+
         </nav>
       </div>
     </section>

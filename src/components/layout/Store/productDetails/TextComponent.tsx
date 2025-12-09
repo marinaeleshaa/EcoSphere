@@ -2,8 +2,10 @@
 import { IProduct } from "@/types/ProductType";
 import { motion } from "framer-motion";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 const TextComponent = ({ product }: { product: IProduct }) => {
+  const t = useTranslations('ProductDetails.tabs');
   const [activeTab, setActiveTab] = React.useState<"description" | "reviews">(
     "description"
   );
@@ -16,25 +18,23 @@ const TextComponent = ({ product }: { product: IProduct }) => {
       >
         <div className="flex items-center justify-center gap-5 capitalize text-foreground text-lg md:text-xl border-b-2 p-5 border-primary">
           <button
-            className={`cursor-pointer capitalize ${
-              activeTab === "description"
+            className={`cursor-pointer capitalize ${activeTab === "description"
                 ? "text-primary underline underline-offset-8"
                 : ""
-            }`}
+              }`}
             onClick={() => setActiveTab("description")}
           >
-            description
+            {t('description')}
           </button>
           <button
-            className={`cursor-pointer capitalize ${
-              activeTab === "reviews"
+            className={`cursor-pointer capitalize ${activeTab === "reviews"
                 ? "text-primary underline underline-offset-8"
                 : ""
-            }`}
+              }`}
             onClick={() => setActiveTab("reviews")}
           >
             {" "}
-            reviews
+            {t('reviews')}
           </button>
         </div>
         <div>
@@ -45,7 +45,7 @@ const TextComponent = ({ product }: { product: IProduct }) => {
           )}
           {activeTab === "reviews" && (
             <div className="my-5 text-secondary-foreground text-md md:text-lg leading-8">
-              reviews section coming soon...
+              {t('reviewsComingSoon')}
             </div>
           )}
         </div>

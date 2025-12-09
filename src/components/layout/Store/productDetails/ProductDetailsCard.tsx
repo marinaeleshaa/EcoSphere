@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
+import { useTranslations } from 'next-intl';
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
+  const t = useTranslations('ProductDetails.card');
   const {
     id,
     shopName,
@@ -23,13 +25,13 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
   const [count, setCount] = useState(1);
   const isFav = useSelector((state: RootState) => isInFavSelector(state, id));
-  const dispatch=useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>()
   const handleFav = () => {
     dispatch(toggleFav(product));
     if (isFav) {
-      toast.success("Removed from favorites");
+      toast.success(t('removedFromFavorites'));
     } else {
-      toast.success("Added to favorites");
+      toast.success(t('addedToFavorites'));
     }
   }
 
@@ -41,10 +43,10 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   return (
     <section className="">
       <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 ">
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 ">
         {/* product image */}
         <div className="relative shadow-lg rounded-lg  ">
           <Image
@@ -137,7 +139,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">Description</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('description')}</h3>
             <p className="text-muted-foreground leading-relaxed">
               {productDescription}
             </p>
@@ -145,7 +147,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Quantity selector */}
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium">Quantity:</span>
+            <span className="text-sm font-medium">{t('quantity')}</span>
             <div className="flex items-center gap-3 border rounded-lg p-2">
               <button
                 onClick={handleDecrement}
@@ -169,15 +171,14 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           <div className="flex gap-4 mt-4">
             <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
               <ShoppingCart className="w-5 h-5" />
-              Add to Cart
+              {t('addToCart')}
             </button>
             <button
               onClick={handleFav}
-              className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${
-                isFav
+              className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${isFav
                   ? "bg-primary border-primary text-primary-foreground"
                   : "border-primary text-primary hover:bg-primary/10 "
-              }`}
+                }`}
               aria-label="Add to favorites"
             >
               <Heart

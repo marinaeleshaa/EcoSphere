@@ -5,8 +5,10 @@ import * as Z from "zod";
 import { useDispatch } from "react-redux";
 import { saveStep2Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
 import { useEffect } from "react";
+import { useTranslations } from 'next-intl';
 
 const UStep2 = () => {
+  const t = useTranslations('Auth.steps.userStep2');
   const dispatch = useDispatch();
 
   const form = useForm<Z.infer<typeof Step2UserSchema>>({
@@ -18,12 +20,20 @@ const UStep2 = () => {
       birthDate: "",
       phoneNumber: "",
       gender: "male",
+      address: "",
     },
   });
 
   const onSubmit = (data: Z.infer<typeof Step2UserSchema>) => {
     dispatch(saveStep2Data(data));
   };
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      dispatch(saveStep2Data(value));
+    });
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch]);
 
   useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));
@@ -42,14 +52,14 @@ const UStep2 = () => {
         className="flex flex-col gap-5"
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          User Details
+          {t('title')}
         </p>
 
         {/* First Name */}
         <div>
           <input
             type="text"
-            placeholder="Enter Your First Name"
+            placeholder={t('firstName')}
             {...register("firstName")}
             className="myInput"
           />
@@ -64,7 +74,7 @@ const UStep2 = () => {
         <div>
           <input
             type="text"
-            placeholder="Enter Your Last Name"
+            placeholder={t('lastName')}
             {...register("lastName")}
             className="myInput"
           />
@@ -93,13 +103,28 @@ const UStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder="Enter Your Phone Number"
+            placeholder={t('phoneNumber')}
             {...register("phoneNumber")}
             className="myInput"
           />
           {errors.phoneNumber && (
             <p className="text-red-500 mt-1 text-sm">
               {errors.phoneNumber.message}
+            </p>
+          )}
+        </div>
+
+        {/* Address */}
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Your Address"
+            {...register("address")}
+            className="myInput"
+          />
+          {errors.address && (
+            <p className="text-red-500 mt-1 text-sm">
+              {errors.address.message}
             </p>
           )}
         </div>
@@ -113,7 +138,7 @@ const UStep2 = () => {
               {...register("gender")}
               className="w-4 h-4 accent-primary"
             />
-            <span className="text-secondary-foreground">Female</span>
+            <span className="text-secondary-foreground">{t('female')}</span>
           </label>
 
           <label className="flex items-center gap-2 cursor-pointer">
@@ -123,7 +148,7 @@ const UStep2 = () => {
               {...register("gender")}
               className="w-4 h-4 accent-primary"
             />
-            <span className="text-secondary-foreground">Male</span>
+            <span className="text-secondary-foreground">{t('male')}</span>
           </label>
         </div>
 

@@ -1,27 +1,28 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 export default function ShopHero() {
+  const t = useTranslations('Shop.quality');
   const [active, setActive] = useState<number | null>(null);
 
   const cards = [
     {
       id: 1,
       emoji: "🌎",
-      title: "Planet-Friendly Products",
-      text: "Each shop prioritizes items that are inherently sustainable and kind to the environment, minimizing ecological impact.",
+      titleKey: "planetFriendly",
     },
     {
       id: 2,
       emoji: "♻️",
-      title: "Eco-Conscious Sourcing",
-      text: "They ensure full responsibility and ethical sourcing, favoring materials that are renewable, recycled, or low-waste.",
+      titleKey: "ecoConscious",
     },
     {
       id: 3,
       emoji: "🌱",
-      title: "Commitment to You",
-      text: "Products are carefully selected to be safe, kind to your health, and promote a holistic, sustainable lifestyle.",
+      titleKey: "commitment",
     },
   ];
 
@@ -33,19 +34,17 @@ export default function ShopHero() {
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
     >
-      <div className="rounded-3xl p-6">
+      <div className="rounded-3xl p-2">
         <h2 className="text-3xl font-bold text-foreground mb-4 text-center">
-          Quality You Can Trust
+          {t("title")}
         </h2>
 
         <p className="text-foreground leading-relaxed mb-6 text-center">
-          We check every partner shop with real care keeping things healthy,
-          planet-friendly, and a little fun along the way. Hover over a card to
-          explore it!
+          {t("description")}
         </p>
 
         {/* Row of cards */}
-        <div className="flex gap-4 w-full flex-col items-center md:flex-row justify-center">
+        <div className="flex gap-6 w-full flex-col items-stretch md:flex-row justify-center">
           {cards.map((card) => {
             const isActive = active === card.id;
             const isDimmed = active !== null && !isActive;
@@ -55,16 +54,15 @@ export default function ShopHero() {
                 key={card.id}
                 onMouseEnter={() => setActive(card.id)}
                 onMouseLeave={() => setActive(null)}
-                className={`
-          transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
+                className={`transition-all duration-300 ease-in-out cursor-pointer rounded-2xl border p-4 shadow-xl backdrop-blur-md group w-full md:w-1/3
           
-          ${isDimmed ? "opacity-40 scale-[0.98]" : "opacity-100 scale-100"}
+          ${isDimmed ? "opacity-70 scale-[0.98]" : "opacity-100 scale-100"}
           
           bg-primary border-0 hover:-translate-y-1`}
               >
                 <div className="text-3xl mb-2">{card.emoji}</div>
                 <h3 className="font-semibold text-primary-foreground text-lg mb-1">
-                  {card.title}
+                  {t(`cards.${card.titleKey}.title`)}
                 </h3>
                 <p
                   className={`text-sm mt-2 transition-all duration-300
@@ -75,7 +73,7 @@ export default function ShopHero() {
             }
           `}
                 >
-                  {card.text}
+                  {t(`cards.${card.titleKey}.text`)}
                 </p>
               </div>
             );

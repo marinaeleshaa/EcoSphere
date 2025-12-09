@@ -11,5 +11,6 @@ export const PROTECTED_ROUTES = [
 // Role-based rules (optional, but scalable)
 export const ROLE_ROUTES: Record<string, string[]> = {
 	"/admin": ["admin"],
-	"/vendor": ["vendor", "admin"],
+	"/organizer": ["organizer"],
+	"/vendor": ["vendor"],
 };

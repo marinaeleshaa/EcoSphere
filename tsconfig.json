@@ -33,6 +33,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/components/layout/Dashboard/Events/DisplayEvents"  ],
   "exclude": ["node_modules"]
 }

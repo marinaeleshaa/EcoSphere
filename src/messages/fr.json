@@ -1,0 +1,424 @@
+{
+  "Home": {
+    "hero": {
+      "subtitle": "#Rejoignez le mouvement",
+      "title": "Les collectes de fonds réussies commencent ici",
+      "cta": "En savoir plus sur EcoSphere"
+    }
+  },
+  "Layout": {
+    "Sidebar": {
+      "groups": {
+        "application": "Application",
+        "dashboard": "Tableau de bord"
+      },
+      "menu": {
+        "home": "Accueil",
+        "shops": "Boutiques",
+        "events": "Événements",
+        "recycle": "Recycler",
+        "news": "Actualités",
+        "store": "Magasin",
+        "game": "Jeu",
+        "about": "À propos"
+      },
+      "dashboard": {
+        "overview": "Aperçu",
+        "addEvent": "Ajouter un événement",
+        "browseEvents": "Parcourir les événements",
+        "eventDetails": "Détails de l’événement"
+      },
+      "footer": {
+        "favorite": "Favoris",
+        "cart": "Panier",
+        "login": "Connexion"
+      }
+    },
+    "UserBtn": {
+      "subscribe": "S’abonner",
+      "profile": "Profil",
+      "notifications": "Notifications",
+      "logout": "Déconnexion"
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "Notre Boutique",
+      "subtitle": "EcoSphere est votre destination de confiance pour des produits écologiques, des cadeaux durables et des choix verts intelligents. Parcourez une variété d’articles respectueux de la planète conçus pour vous aider à vivre plus sainement, mieux et de manière plus naturelle chaque jour."
+    },
+    "story": {
+      "label": "À propos de nous",
+      "title": "Construire ensemble un avenir plus vert, pour toujours",
+      "description": "EcoSphere a été créée pour rendre le shopping durable simple, fiable et accessible. Avec la montée du greenwashing, les consommateurs se sentent dépassés ou incertains quant à ceux en qui ils peuvent avoir confiance. EcoSphere comble cette lacune — en connectant des entreprises vérifiées et respectueuses de la planète avec une communauté grandissante de personnes souhaitant consommer de manière responsable."
+    },
+    "mission": {
+      "label": "Notre Mission",
+      "title": "Rendre la durabilité",
+      "titleHighlight": "simple et fiable.",
+      "description": "EcoSphere relie les consommateurs conscients aux entreprises éthiques. Nous éliminons les approximations du « greenwashing » en offrant une marketplace rigoureusement vérifiée où chaque choix représente un pas authentifié vers une planète meilleure.",
+      "forConsumers": {
+        "title": "Pour les Consommateurs",
+        "description": "Accès instantané à des produits transparents et centrés sur la planète — sans la fatigue liée aux recherches."
+      },
+      "forBusinesses": {
+        "title": "Pour les Entreprises",
+        "description": "Une visibilité accrue pour les marques qui privilégient l’intégrité plutôt que les profits faciles."
+      }
+    },
+    "vision": {
+      "label": "Notre Vision",
+      "title": "Un monde où",
+      "titleHighlight": "le durable est la norme.",
+      "description": "Notre vision est de contribuer à créer une économie mondiale interconnectée où le commerce durable et régénératif devient",
+      "descriptionHighlight": "la norme, et non l’exception."
+    },
+    "values": {
+      "label": "Nos Valeurs Fondamentales",
+      "title": "Préserver la Terre pour les générations futures",
+      "cards": {
+        "planetFirst": {
+          "title": "La Planète d’Abord",
+          "text": "Chaque action est évaluée selon son bénéfice environnemental et son engagement envers la régénération."
+        },
+        "integrity": {
+          "title": "Intégrité & Confiance",
+          "text": "Nous exigeons une transparence totale de nos partenaires et communiquons ouvertement avec nos utilisateurs."
+        },
+        "accessibility": {
+          "title": "Accessibilité",
+          "text": "Nous nous efforçons de rendre les choix durables les plus simples et les plus pratiques possibles."
+        },
+        "community": {
+          "title": "Communauté",
+          "text": "Nous privilégions la mise en relation d’entreprises éthiques avec des clients engagés."
+        }
+      }
+    },
+    "verification": {
+      "label": "Vérification",
+      "title": "La",
+      "titleHighlight": "Vérification EcoSphere.",
+      "description": "Chaque partenaire doit passer un système de vérification structuré combinant documentation, certifications tierces et évaluations de durabilité selon quatre piliers :",
+      "items": {
+        "documentation": "Examen de la Documentation",
+        "certification": "Évaluation des Certifications Tierces",
+        "questionnaire": "Questionnaire d’Impact Détaillé",
+        "monitoring": "Suivi Continu de la Conformité"
+      }
+    },
+    "keyPillars": {
+      "label": "Nos Normes",
+      "title": "Piliers Clés",
+      "description": "Nous ne nous contentons pas des déclarations des marques. Nous évaluons rigoureusement chaque partenaire selon quatre standards non négociables.",
+      "pillars": {
+        "environmental": {
+          "title": "Impact Environnemental",
+          "text": "Utilisation de matériaux biologiques ou recyclés, avec un focus sur la neutralité carbone et la réduction des déchets."
+        },
+        "ethical": {
+          "title": "Travail Éthique",
+          "text": "Garantir des salaires équitables, des conditions sûres — sans travail forcé ni travail des enfants."
+        },
+        "transparency": {
+          "title": "Transparence de la Chaîne d’Approvisionnement",
+          "text": "Fournir des preuves vérifiables et une transparence totale concernant l’approvisionnement, le traitement et la logistique."
+        },
+        "quality": {
+          "title": "Durabilité & Qualité",
+          "text": "Des produits conçus pour durer, réparables et favorisant l’économie circulaire — pour lutter contre la culture du gaspillage."
+        }
+      }
+    }
+  },
+  "Shop": {
+    "hero": {
+      "title": "Boutiques",
+      "subtitle": "Boutiques proposant des produits écologiques et des cadeaux conçus pour notre planète."
+    },
+    "quality": {
+      "title": "Une qualité de confiance",
+      "description": "Nous vérifions chaque boutique pour garantir qualité, durabilité et transparence. Survolez une carte pour en savoir plus !",
+      "cards": {
+        "planetFriendly": {
+          "title": "Produits respectueux de la planète",
+          "text": "Chaque boutique privilégie des produits durables minimisant l’impact environnemental."
+        },
+        "ecoConscious": {
+          "title": "Approvisionnement écoresponsable",
+          "text": "Nos partenaires assurent un approvisionnement éthique utilisant des matériaux recyclés, renouvelables ou à faible impact."
+        },
+        "commitment": {
+          "title": "Engagement envers vous",
+          "text": "Les produits sont soigneusement sélectionnés pour être sûrs, sains et promouvoir un mode de vie durable."
+        }
+      }
+    },
+    "filter": {
+      "sortBy": "Trier par :",
+      "sortOptions": {
+        "default": "Par défaut",
+        "highestRating": "Note la plus élevée",
+        "lowestRating": "Note la plus basse"
+      },
+      "noProducts": "Aucun produit ne correspond à vos critères de recherche actuels."
+    }
+  },
+  "Store": {
+    "hero": {
+      "title": "Notre Boutique",
+      "subtitle": "EcoSphere est votre destination fiable pour des produits durables et intelligents pour la planète."
+    },
+    "slider": {
+      "title": "Nos boutiques partenaires",
+      "scrollHint": "Faites défiler pour en découvrir davantage"
+    },
+    "product": {
+      "addedToFavorites": "Ajouté aux favoris",
+      "removedFromFavorites": "Retiré des favoris"
+    }
+  },
+  "Favorites": {
+    "hero": {
+      "title": "Favoris",
+      "breadcrumb": {
+        "home": "Accueil",
+        "favorite": "Favoris"
+      }
+    },
+    "emptyState": {
+      "title": "Aucun favori pour le moment",
+      "description": "Ajoutez des produits à vos favoris pour les voir ici",
+      "browseButton": "Parcourir les produits"
+    },
+    "card": {
+      "addToCart": "Ajouter au panier",
+      "removedFromFavorites": "Retiré des favoris"
+    }
+  },
+  "ProductDetails": {
+    "hero": {
+      "title": "Boutique",
+      "breadcrumb": {
+        "home": "Accueil",
+        "store": "Boutique",
+        "product": "Produit"
+      }
+    },
+    "card": {
+      "description": "Description",
+      "quantity": "Quantité :",
+      "addToCart": "Ajouter au panier",
+      "addedToFavorites": "Ajouté aux favoris",
+      "removedFromFavorites": "Retiré des favoris"
+    },
+    "tabs": {
+      "description": "description",
+      "reviews": "avis",
+      "reviewsComingSoon": "la section des avis arrive bientôt..."
+    },
+    "related": {
+      "title": "Produits similaires",
+      "subtitle": "découvrez notre large gamme de produits similaires"
+    }
+  },
+  "ShopDetails": {
+    "hero": {
+      "title": "Magasin",
+      "breadcrumb": {
+        "home": "Accueil",
+        "shop": "Magasin",
+        "defaultShop": "Magasin"
+      }
+    },
+    "card": {
+      "workingHours": "Heures d'ouverture :",
+      "about": "À propos",
+      "visitShop": "Visiter le magasin",
+      "contact": "Contact"
+    },
+    "reviews": {
+      "title": "Avis",
+      "noReviews": "Aucun avis pour le moment. Soyez le premier à donner votre avis !"
+    },
+    "related": {
+      "title": "Magasins similaires",
+      "subtitle": "découvrez notre large gamme de magasins similaires"
+    },
+    "products": {
+      "title": "Produits du magasin",
+      "subtitle": "découvrez les produits de ce magasin",
+      "noProducts": "Aucun produit disponible pour ce magasin."
+    }
+  },
+  "Auth": {
+    "page": {
+      "newToEcosphere": "Nouveau sur Ecosphere ?",
+      "signUpText": "inscrivez-vous pour commencer avec Ecosphere",
+      "signUp": "Créer un compte",
+      "oneOfUs": "Déjà l’un des nôtres ?",
+      "signInText": "nous sommes heureux de vous revoir",
+      "signIn": "Se connecter"
+    },
+    "login": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de passe",
+      "forgetPassword": "Mot de passe oublié",
+      "or": "ou",
+      "newToEcosphere": "Nouveau sur EcoSphere ?",
+      "signUp": "Créer un compte"
+    },
+    "signup": {
+      "oneOfUs": "Déjà l’un des nôtres ?",
+      "login": "Se connecter"
+    },
+    "steps": {
+      "step1": {
+        "title": "Créer un compte",
+        "user": "utilisateur normal",
+        "organizer": "organisateur d'événements",
+        "shop": "boutique"
+      },
+      "userStep2": {
+        "title": "Détails de l'utilisateur",
+        "firstName": "Entrez votre prénom",
+        "lastName": "Entrez votre nom",
+        "phoneNumber": "Entrez votre numéro de téléphone",
+        "female": "Femme",
+        "male": "Homme"
+      },
+      "shopStep2": {
+        "title": "Détails de la boutique",
+        "name": "Entrez le nom de la boutique",
+        "description": "Description",
+        "phoneNumber": "Numéro de téléphone",
+        "hotline": "Hotline"
+      },
+      "shopStep3": {
+        "title": "Détails de la boutique",
+        "location": "Entrez l’emplacement de la boutique",
+        "workingHours": "ex. : Lun–Ven 9h00 – 18h00"
+      },
+      "lastStep": {
+        "title": "Étape finale",
+        "email": "Email",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmez le mot de passe"
+      }
+    }
+  },
+  "Profile": {
+    "page": {
+      "pleaseLogin": "Veuillez vous connecter pour voir votre profil."
+    },
+    "common": {
+      "editProfile": "Modifier le profil",
+      "changePassword": "Changer le mot de passe",
+      "personalInformation": "Informations personnelles",
+      "email": "Email",
+      "phoneNumber": "Numéro de téléphone",
+      "address": "Adresse",
+      "birthDate": "Date de naissance",
+      "gender": "Genre",
+      "ecoPoints": "EcoPoints",
+      "na": "N/A",
+      "cancel": "Annuler",
+      "saveChanges": "Enregistrer les modifications",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "selectGender": "Sélectionnez le genre",
+      "male": "Homme",
+      "female": "Femme"
+    },
+    "customer": {
+      "role": "Client",
+      "orderHistory": "Historique des commandes",
+      "orderCount": "Vous avez {count} commande(s) passée(s).",
+      "noOrders": "Aucune commande pour le moment",
+      "noOrdersDescription": "Ajoutez des produits à vos commandes pour les voir ici",
+      "browseOrders": "Voir les commandes",
+      "editModalTitle": "Modifier le profil"
+    },
+    "organizer": {
+      "role": "Organisateur d'événements",
+      "organizationName": "Nom de l'organisation",
+      "eventsOrganized": "Événements organisés",
+      "editModalTitle": "Modifier le profil",
+      "subscriptionManagement": "Gestion d'abonnement",
+      "expiryDate": "Date d'expiration",
+      "renewSubscription": "Renouveler l'abonnement"
+    },
+    "restaurant": {
+      "role": "Restaurant",
+      "shopName": "Nom du magasin",
+      "description": "Description",
+      "location": "Emplacement",
+      "workingHours": "Heures d'ouverture",
+      "hotline": "Hotline",
+      "editModalTitle": "Modifier le profil du magasin"
+    }
+  },
+  "Cart": {
+    "hero": {
+      "title": "Panier",
+      "home": "Accueil",
+      "cart": "Panier"
+    },
+    "productsSection": {
+      "product": "Produit",
+      "productCode": "Code produit",
+      "quantity": "Quantité",
+      "total": "Total",
+      "action": "Action",
+      "clearAll": "Tout effacer",
+      "emptyCart": "Votre panier est vide"
+    },
+    "removeButton": {
+      "confirm": "Confirmer ?",
+      "removeItem": "Supprimer l'article",
+      "clickToConfirm": "Cliquez encore une fois pour confirmer"
+    },
+    "quantitySelector": {
+      "decrease": "Réduire la quantité",
+      "increase": "Augmenter la quantité"
+    },
+    "orderSummary": {
+      "title": "Récapitulatif de la commande",
+      "promoCode": "Code promo",
+      "apply": "Appliquer",
+      "couponApplied": "Code promo appliqué !",
+      "subTotal": "Sous-total",
+      "discount": "Réduction ({percent}%)",
+      "deliveryFee": "Frais de livraison",
+      "total": "Total",
+      "warranty": "Garantie limitée de 90 jours couvrant les éléments du fabricant",
+      "details": "Détails",
+      "checkoutNow": "Passer à la commande"
+    }
+  },
+  "Dashboard": {
+    "overview": {
+      "title": "Aperçu du tableau de bord",
+      "quickActions": "Actions rapides",
+      "createNewEvent": "Créer un nouvel événement",
+      "viewAllEvents": "Voir tous les événements",
+      "browseEvents": "Parcourir les événements",
+      "keyMetrics": "Indicateurs clés",
+      "realTimeData": "Données en temps réel",
+      "totalTicketSales": "Total des ventes de billets",
+      "fromLastWeek": "depuis la semaine dernière",
+      "totalRevenue": "Revenu total",
+      "confirmedAttendees": "Participants confirmés",
+      "activeEvents": "Événements actifs",
+      "upcomingEvents": "Événements à venir",
+      "viewAll": "voir tout",
+      "manage": "Gérer",
+      "noUpcomingEvents": "Aucun événement à venir."
+    },
+    "displayEvents": {
+      "title": "Affichage des événements du tableau de bord",
+      "ticketLeft": "Billets restants",
+      "sold": "{percent}% vendu"
+    }
+  }
+}

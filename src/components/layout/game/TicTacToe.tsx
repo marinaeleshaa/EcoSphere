@@ -7,8 +7,10 @@ import { RiRobot3Line } from "react-icons/ri";
 import { FaHandshakeSimple, FaPlay } from "react-icons/fa6";
 import { FaRegSmileWink } from "react-icons/fa";
 import { GiTrophy } from "react-icons/gi";
+import { useTranslations } from 'next-intl';
 
 export default function TicTacToe() {
+  const t = useTranslations('Game');
   type Player = "X" | "O" | null;
   type Difficulty = "easy" | "medium" | "hard";
   // -------------------------
@@ -270,7 +272,7 @@ export default function TicTacToe() {
       if (winner === "Draw")
         return (
           <div className="flex items-center gap-2 justify-center">
-            Draw <FaHandshakeSimple className="mt-1" />
+            {t('status.draw')} <FaHandshakeSimple className="mt-1" />
           </div>
         );
       return (
@@ -278,12 +280,12 @@ export default function TicTacToe() {
           {winner === "X" ? (
             <div className="flex items-center gap-3 justify-center">
               <FaRegSmileWink />
-              You Win
+              {t('status.youWin')}
             </div>
           ) : (
             <div className="flex items-center gap-3 justify-center">
               <RiRobot3Line />
-              AI Win
+              {t('status.aiWin')}
             </div>
           )}
         </span>
@@ -293,12 +295,12 @@ export default function TicTacToe() {
       return (
         <div className="flex items-center gap-3 justify-center">
           <RiRobot3Line />
-          AI think...
+          {t('status.aiThinking')}
         </div>
       );
     return (
       <div className="flex items-center justify-center">
-        Your turn <BiSolidLeaf className="text-primary ml-3" />
+        {t('status.yourTurn')} <BiSolidLeaf className="text-primary ml-3" />
       </div>
     );
   };
@@ -354,16 +356,14 @@ export default function TicTacToe() {
                     bg-linear-to-br from-primary via-primary to-primary/80 
                     rounded-3xl flex items-center justify-center shadow-xl
                     transition-all duration-300 ease-out
-                    ${
-                      !value && !winner && !isAiTurn
-                        ? "hover:scale-110 hover:shadow-2xl hover:rotate-3 active:scale-95"
-                        : ""
+                    ${!value && !winner && !isAiTurn
+                      ? "hover:scale-110 hover:shadow-2xl hover:rotate-3 active:scale-95"
+                      : ""
                     }
                     ${value ? "scale-100" : "scale-95"}
-                    ${
-                      isAiTurn || winner
-                        ? "cursor-not-allowed opacity-60"
-                        : "cursor-pointer"
+                    ${isAiTurn || winner
+                      ? "cursor-not-allowed opacity-60"
+                      : "cursor-pointer"
                     }
                   `}
                 >
@@ -381,7 +381,7 @@ export default function TicTacToe() {
                   active:scale-95 transition-all duration-200 shadow-xl hover:shadow-2xl"
               >
                 <FaPlay />
-                Play Again
+                {t('actions.playAgain')}
               </button>
             )}
           </div>
@@ -397,14 +397,14 @@ export default function TicTacToe() {
                 style={{ animationDuration: "4s" }}
               />
               <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                You
+                {t('hero.you')}
               </span>
             </div>
-            <span className="text-gray-400 md:text-2xl">vs</span>
+            <span className="text-gray-400 md:text-2xl">{t('hero.vs')}</span>
             <div className="flex items-center gap-1.5">
               <MdDoNotDisturbAlt className="text-xl md:text-4xl text-primary animate-pulse" />
               <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                AI
+                {t('hero.ai')}
               </span>
             </div>
           </div>
@@ -418,7 +418,7 @@ export default function TicTacToe() {
                   onChange={handleDifficultyChange}
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">Easy</span>
+                <span className="text-primary">{t('difficulty.easy')}</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
@@ -430,7 +430,7 @@ export default function TicTacToe() {
                   defaultChecked
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">Medium</span>
+                <span className="text-primary">{t('difficulty.medium')}</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
@@ -441,7 +441,7 @@ export default function TicTacToe() {
                   onChange={handleDifficultyChange}
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">Hard</span>
+                <span className="text-primary">{t('difficulty.hard')}</span>
               </label>
             </div>
           </div>
@@ -451,7 +451,7 @@ export default function TicTacToe() {
             <div className="flex items-center justify-center gap-3 mb-6">
               <GiTrophy className="text-3xl text-primary animate-bounce" />
               <h2 className="text-2xl font-black dark:text-secondary-foreground">
-                SCORE BOARD
+                {t('scoreBoard.title')}
               </h2>
             </div>
 
@@ -462,7 +462,7 @@ export default function TicTacToe() {
                     <div className="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center">
                       <FaRegSmileWink className="text-xl" />
                     </div>
-                    <span className="font-bold text-lg text-primary">You</span>
+                    <span className="font-bold text-lg text-primary">{t('scoreBoard.you')}</span>
                   </div>
                   <span className="text-3xl font-black text-primary">
                     {scores.player}
@@ -477,7 +477,7 @@ export default function TicTacToe() {
                       <FaHandshakeSimple className="text-xl" />
                     </div>
                     <span className="font-bold text-lg text-yellow-600">
-                      Draws
+                      {t('scoreBoard.draws')}
                     </span>
                   </div>
                   <span className="text-3xl font-black text-yellow-600">
@@ -492,7 +492,7 @@ export default function TicTacToe() {
                     <div className="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
                       <RiRobot3Line className="text-xl" />
                     </div>
-                    <span className="font-bold text-lg text-red-600">AI</span>
+                    <span className="font-bold text-lg text-red-600">{t('scoreBoard.ai')}</span>
                   </div>
                   <span className="text-3xl font-black text-red-600">
                     {scores.ai}
@@ -506,7 +506,7 @@ export default function TicTacToe() {
               className="mt-6 w-full py-3 rounded-xl bg-linear-to-r from-primary to-primary/80 text-primary-foreground font-bold
                 hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all shadow-lg"
             >
-              Reset Scores
+              {t('actions.resetScores')}
             </button>
           </div>
         </div>

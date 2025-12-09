@@ -17,13 +17,13 @@ class RegistrationFactory implements IRegistrationFactory {
 	) {}
 
 	getStrategy(userType: string): IRegistrationStrategy {
-		console.log(userType);
 		switch (userType) {
       case "customer":
         return this.userStrategy;
       case "organizer":
         return this.organizerStrategy;
       case "shop":
+      case "restaurant":
         return this.shopStrategy;
       default:
         throw new Error("Invalid user type, from strategy factory");
