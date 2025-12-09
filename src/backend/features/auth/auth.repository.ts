@@ -41,7 +41,7 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.findOne({ email })
       .select(
-        `+password _id email role lastName accountProvider avatar ${
+        `password _id email role lastName accountProvider avatar ${
           keys || ""
         }`
       )
@@ -51,7 +51,7 @@ class AuthRepository {
   async findShopByEmail(email: string, keys?: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.findOne({ email })
-      .select(`+password _id email name avatar ${keys || ""}`)
+      .select(`password _id email name avatar ${keys || ""}`)
       .exec();
   }
 

@@ -20,6 +20,8 @@ import { ProductRepository } from "../features/product/product.repository";
 import { ProductService } from "../features/product/product.service";
 import { RecycleService } from "../features/recycle/recycle.service";
 import { RecycleRepository } from "../features/recycle/recycle.repository";
+import { OrderRepository } from "../features/orders/order.repository";
+import { OrderService } from "../features/orders/order.service";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
@@ -29,6 +31,8 @@ container.registerSingleton("IEventRepository", EventRepository);
 container.registerSingleton("IAuthRepository", AuthRepository);
 container.registerSingleton("IRestaurantService", RestaurantService);
 container.registerSingleton("IRestaurantRepository", RestaurantRepository);
+container.registerSingleton("OrderRepository", OrderRepository);
+container.registerSingleton("OrderService", OrderService);
 container.registerSingleton("RegistrationService", RegistrationService);
 container.registerSingleton("RegistrationFactory", RegistrationFactory);
 container.registerSingleton("EndUserRegistration", EndUserRegistration);
