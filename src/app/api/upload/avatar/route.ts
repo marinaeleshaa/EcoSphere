@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { NextRequest } from "next/server";
 import { container } from "tsyringe";
 import { UploadController } from "@/backend/features/upload/upload.controller";

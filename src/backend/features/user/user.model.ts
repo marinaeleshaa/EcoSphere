@@ -1,7 +1,7 @@
 import mongoose, { Document, model, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
-export type UserRole = "customer" | "organizer" | "admin";
+export type UserRole = "customer" | "organizer" | "admin" | "recycleMan";
 
 export type Gender = "male" | "female";
 
@@ -126,7 +126,7 @@ const userSchema = new Schema<IUser>(
     accountProvider: { type: String, required: false },
     role: {
       type: String,
-      enum: ["customer", "organizer", "admin"],
+      enum: ["customer", "organizer", "admin", "recycleMan"],
       default: "customer",
     },
     favoritesIds: { type: [String], default: [] },
@@ -151,6 +151,11 @@ userSchema.methods.comparePassword = async function (
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };
+
+userSchema.index({ role: 1 })
+userSchema.index({ createdAt: -1 });
+userSchema.index({ updatedAt: -1 });
+userSchema.index({ subscriptionPeriod: -1 });
 
 export const UserModel =
   mongoose.models.User || model<IUser>("User", userSchema);

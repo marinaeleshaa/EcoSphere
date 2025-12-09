@@ -1,3 +1,5 @@
+import { EventResponse } from "@/backend/features/event/events.types";
+
 export interface MetricData {
   id: number;
   title: string;
@@ -26,7 +28,7 @@ export interface IEventDetails {
   _id: string;
   name: string;
   type: string;
-  avatar?: string | File | undefined;
+  avatar?: string | File | FileList | undefined;
   description?: string;
   locate: string;
   eventDate: string;
@@ -39,9 +41,9 @@ export interface IEventDetails {
 }
 
 export interface EventProps {
-  events: IEventDetails[];
+  events: EventResponse[];
 }
 
-export type EventListItemProps = Pick<IEventDetails, '_id' | 'name' | 'eventDate' | 'startTime' | 'endTime' | 'locate'> & {
+export type EventListItemProps = Pick<IEventDetails,  '_id' | 'name' | 'eventDate' | 'startTime' | 'endTime' | 'locate'> & {
   avatar: string | undefined;
 };

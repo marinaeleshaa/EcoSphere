@@ -1,0 +1,45 @@
+import { injectable } from "tsyringe";
+import { IRecycle, RecycleModel } from "./recycle.model";
+
+export interface IRecycleRepository {
+	createRecycleEntry(data: Partial<IRecycle>): Promise<IRecycle>;
+	getRecycleEntryById(id: string): Promise<IRecycle>;
+	updateRecycleEntry(id: string, data: Partial<IRecycle>): Promise<IRecycle>;
+	deleteRecycleEntry(id: string): Promise<IRecycle>;
+	listRecycleEntries(): Promise<IRecycle[]>;
+}
+
+@injectable()
+export class RecycleRepository implements IRecycleRepository {
+	async createRecycleEntry(data: Partial<IRecycle>): Promise<IRecycle> {
+		return await RecycleModel.create(data);
+	}
+
+	async getRecycleEntryById(id: string): Promise<IRecycle> {
+		const response = await RecycleModel.findById(id).lean<IRecycle>().exec();
+		return response!;
+	}
+
+	async updateRecycleEntry(
+		id: string,
+		data: Partial<IRecycle>
+	): Promise<IRecycle> {
+		const response = await RecycleModel.findByIdAndUpdate(id, data, {
+			new: true,
+		})
+			.lean<IRecycle>()
+			.exec();
+		return response!;
+	}
+
+	async deleteRecycleEntry(id: string): Promise<IRecycle> {
+		const response = await RecycleModel.findByIdAndDelete(id)
+			.lean<IRecycle>()
+			.exec();
+		return response!;
+	}
+
+	async listRecycleEntries(): Promise<IRecycle[]> {
+		return await RecycleModel.find().lean<IRecycle[]>().exec();
+	}
+}

@@ -42,7 +42,36 @@ import { eventSchema} from '@/frontend/schema/event.schema';
 import { PostEvent } from '@/frontend/api/Events';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { log } from 'console';
+function createFormData(data: Partial<IEventDetails>): FormData {
+  const formData = new FormData();
+  const file = data.avatar instanceof FileList ? data.avatar[0] : null;
 
+  // 1. Append the file if it exists
+  if (file) {
+    formData.append("avatar", file, file.name);
+  }
+
+  // 2. Append all other fields, converting complex types like sections to a JSON string
+  for (const key in data) {
+    if (key === 'avatar' || key === '_id' || !data[key as keyof typeof data]) continue;
+
+    const value = data[key as keyof typeof data];
+
+    if (key === 'sections') {
+      // Convert the array of sections into a JSON string
+      formData.append(key, JSON.stringify(value));
+    } else if (key === 'capacity' || key === 'ticketPrice') {
+      // Ensure numbers are sent as strings in FormData
+      formData.append(key, String(Number(value)));
+    } else {
+      // Append all other simple string/number fields
+      formData.append(key, String(value));
+    }
+  }
+
+  return formData;
+}
 export default function ManageEvent() {
   const form = useForm<IEventDetails>({
     resolver: zodResolver(eventSchema),
@@ -86,18 +115,21 @@ const router = useRouter();
   }, [ticketType, form]);
 
   // --- 5. Submission Handler ---
-   async function onSubmit(data:Partial<IEventDetails>) {
-    const file = data.avatar instanceof FileList ? data.avatar[0] : null;
-    const {  ...restOfData } = data;
-    const eventData = {
-      ...restOfData,
-      capacity: Number(restOfData.capacity),
-      ticketPrice: Number(restOfData.ticketPrice),
-      avatar: file || restOfData.avatar,
-    };
-    console.log("--- Event Details (excluding file/upload details) ---", eventData);
+   async function handleEvent(data:Partial<IEventDetails>) {
+    console.log(data);
+    
+    // const file = data.avatar instanceof FileList ? data.avatar[0] : null;
+    // const {  ...restOfData } = data;
+    // const eventData = {
+    //   ...restOfData,
+    //   capacity: Number(restOfData.capacity),
+    //   ticketPrice: Number(restOfData.ticketPrice),
+    //   avatar: file || restOfData.avatar,
+    // };
+     const formData = createFormData(data);
+    console.log("--- Event Details (excluding file/upload details) ---", formData);
     try {
-      await PostEvent(eventData);
+      await PostEvent(formData);
       toast.success("Event added successfully", {
         position: "bottom-right",
         duration: 3000,
@@ -112,28 +144,27 @@ const router = useRouter();
   }
 
   return (
-    <div className='min-h-screen py-12 px-4 sm:px-6 lg:px-8 '>
-      <div className='max-w-4xl mx-auto'>
-        <h1 className='font-extrabold text-5xl text-gray-900 mb-8 text-center'>
+    <div className="min-h-screen py-8 w-[85%] mx-auto flex flex-col  gap-6" >
+      <h1 className='capitalize font-bold text-4xl  text-foreground'>
           Create/Edit Event
         </h1>
 
-        <div className="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl border-t-4 border-indigo-500">
+        <div className=" p-6 sm:p-10 rounded-2xl shadow-2xl border-2 border-primary">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(handleEvent)} className="space-y-8">
 
               {/* --- SECTION 1: Event Details --- */}
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 flex items-center">
-                  <Ticket className="w-5 h-5 mr-2 text-indigo-500" />
+                  <Ticket className="w-5 h-5 mr-2 text-primary" />
                   Primary Event Information
                 </h2>
-
+                <div className='grid grid-cols-6 gap-2' >
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className='col-span-4'>
                       <FormLabel>Event Title</FormLabel>
                       <FormControl>
                         <div className="relative">
@@ -145,16 +176,15 @@ const router = useRouter();
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
                   name="type"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className='col-span-2 w-full'>
                       <FormLabel>Event Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <div className="relative">
+                      <Select onValueChange={field.onChange} defaultValue={field.value} >
+                        <FormControl >
+                          <div className="relative w-full">
                             <SelectTrigger className="pl-9">
                               <Tag className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground z-10" />
                               <SelectValue placeholder="Select event type" />
@@ -171,6 +201,8 @@ const router = useRouter();
                     </FormItem>
                   )}
                 />
+                </div>
+
 
                 <FormField
                   control={form.control}
@@ -222,7 +254,7 @@ const router = useRouter();
               {/* --- SECTION 2: Location & Time --- */}
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 flex items-center">
-                  <MapPin className="w-5 h-5 mr-2 text-indigo-500" />
+                  <MapPin className="w-5 h-5 mr-2 text-primary" />
                   Venue and Schedule
                 </h2>
 
@@ -298,7 +330,7 @@ const router = useRouter();
               {/* --- SECTION 3: Capacity & Sales --- */}
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-indigo-500" />
+                  <Users className="w-5 h-5 mr-2 text-primary" />
                   Capacity and Sales
                 </h2>
 
@@ -411,7 +443,7 @@ const router = useRouter();
               {/* --- SECTION 4: Detailed Agenda/Schedule --- */}
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold text-gray-800 border-b pb-2 flex items-center">
-                  <ListOrdered className="w-5 h-5 mr-2 text-indigo-500" />
+                  <ListOrdered className="w-5 h-5 mr-2 text-primary" />
                   Detailed Event Schedule (Agenda Items)
                 </h2>
 
@@ -436,7 +468,6 @@ const router = useRouter();
                       </Button>
                     </div>
 
-                    {/* Title Input */}
                     <FormField
                       control={form.control}
                       name={`sections.${index}.title`}
@@ -451,7 +482,6 @@ const router = useRouter();
                       )}
                     />
 
-                    {/* Description Textarea */}
                     <FormField
                       control={form.control}
                       name={`sections.${index}.description`}
@@ -466,7 +496,7 @@ const router = useRouter();
                       )}
                     />
 
-                    {/* Start and End Time Inputs */}
+                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
                         control={form.control}
@@ -499,7 +529,7 @@ const router = useRouter();
                   </div>
                 ))}
 
-                {/* Button to Add New Section */}
+                
                 <Button
                   type="button"
                   variant="outline"
@@ -517,9 +547,9 @@ const router = useRouter();
               <Button
                 type="submit"
                 className="w-full h-12 text-lg bg-indigo-600 hover:bg-indigo-700"
-                // disabled={form.formState.isSubmitting}
+                disabled={form.formState.isSubmitting}
               >
-                {/* {form.formState.isSubmitting ? (
+                {form.formState.isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Saving Event...
@@ -529,15 +559,14 @@ const router = useRouter();
                     <Send className="mr-2 h-4 w-4" />
                     Save Event Details
                     </>
-                    )} */}
-                    <Send className="mr-2 h-4 w-4" />
-                    Save Event Details
+                    )}
+                    
               </Button>
             </form>
           </Form>
         </div>
       </div>
-    </div>
+
   );
 }
 

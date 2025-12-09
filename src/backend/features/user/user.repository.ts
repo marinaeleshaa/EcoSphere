@@ -1,10 +1,13 @@
 import { injectable } from "tsyringe";
 import { IUser, UserModel } from "./user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
+import { PipelineStage } from "mongoose";
+import { DashboardData } from "./user.types";
 
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
+  getDashBoardData(page: number, skip: number): Promise<any>
   getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
@@ -12,22 +15,49 @@ export interface IUserRepository {
 }
 
 @injectable()
-class UserRepository {
+class UserRepository implements IUserRepository{
   async getAll(): Promise<IUser[]> {
     await DBInstance.getConnection();
     return await UserModel.find({}, { password: 0 });
   }
-
+  
   async getById(id: string): Promise<IUser> {
     await DBInstance.getConnection();
     const user = await UserModel.findById(id, { password: 0 });
-
     if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
-
     return user;
   }
+
+  async getDashBoardData(page: number, skip: number): Promise<any> {
+    await DBInstance.getConnection();
+    const roles = ["admin", "organizer", "recycleMan"];
+
+    const pipeline = UserModel.aggregate<DashboardData>().facet(
+      Object.fromEntries(
+        roles.map((role) => [
+          role,
+          UserModel.aggregate()
+            .match({ role })
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .project({
+              _id: 1,
+              email: 1,
+              firstName: 1,
+              lastName: 1,
+              avatar: 1,
+              role: 1,
+              createdAt: 1,
+            })
+            .pipeline() as PipelineStage.FacetPipelineStage[]
+        ])
+      )
+    ).exec();
+    return pipeline;
+  }
+
   async getUserIdByEmail(email: string): Promise<IUser> {
     return await UserModel.findOne({ email }).select("_id").exec()
   }

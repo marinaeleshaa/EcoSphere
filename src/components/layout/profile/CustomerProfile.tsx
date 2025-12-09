@@ -135,6 +135,7 @@ export default function CustomerProfile({ id, role }: { id: string; role: string
       );
       setIsEditing(false);
     }
+  }
 
     const handleImageUpdate = (newUrl: string) => {
       dispatch(updateProfile({ avatar: newUrl }));
@@ -477,4 +478,3 @@ export default function CustomerProfile({ id, role }: { id: string; role: string
       </div>
     );
   };
-}
