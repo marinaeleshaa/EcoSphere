@@ -33,7 +33,7 @@ const ResetPassword = ({
     setPasswordMatch(e.target.value === confirmPassword);
     // Validate password requirements whenever it changes
     const val = e.target.value;
-    const hasNumber = /[0-9]/.test(val);
+    const hasNumber = /\d/.test(val);
     const hasSpecial = /[^A-Za-z0-9]/.test(val);
     const minLength = val.length >= 8;
     setPasswordValid(hasNumber && hasSpecial && minLength);

@@ -5,7 +5,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import EmailVerification from "@/components/layout/ForgotPassword/EmailVerification";
 import ResetPassword from "@/components/layout/ForgotPassword/ResetPassword";
-import { getCoords, ICoords } from "@/frontend/Actions/GetCoords";
+import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
 
 const ForgotPasswordPage = () => {
   const controls = useAnimation();

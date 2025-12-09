@@ -29,7 +29,6 @@ const LogIn = () => {
 	const [loginForm, setLoginForm] = useState(initLoginData);
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginState, setLoginState] = useState(initiateData);
-	// console.log(loginForm, "loginForm"); // leave here to show the rerender 1000 times
 	const t = useTranslations("Auth.login");
 
 	const handleToggle = () => {
@@ -89,18 +88,18 @@ const LogIn = () => {
 					)}
 				</button>
 			</div>
-			{/* forget password */}
+			{/* forgot password */}
 			<div className="flex justify-end items-center gap-6">
 				{loginState.error && (
 					<span className="text-red-500 text-center">
 						Invalid email or password
 					</span>
 				)}
-				<Link href="#">
+				<Link href="/forgot-password">
 					<div className="flex justify-end px-5">
 						<div className="flex gap-1 justify-center items-center text-sm group cursor-pointer">
 							<p className="text-secondary-foreground transition-all duration-300 ">
-								{t("forgetPassword")}
+								{t("forgotPassword")}
 							</p>
 							<IoIosArrowRoundForward className=" transform transition-all duration-300 ease-out group-hover:translate-x-1 " />
 						</div>
