@@ -69,7 +69,6 @@ export default function Verification() {
     shadow-lg dark:shadow-primary/30 
     ring-2 ring-primary/40 dark:ring-primary/60 
     transform transition-transform hover:scale-[1.02] duration-500 
-    bg-card
   "
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
