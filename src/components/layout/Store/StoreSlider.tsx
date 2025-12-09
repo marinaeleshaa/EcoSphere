@@ -42,8 +42,8 @@ const StoreSlider = () => {
     <div className="w-full overflow-x-hidden">
       <section className="py-16  relative">
         {/* Decorative elements */}
-        <div className="dark:hidden absolute top-0 left-0 w-64 h-64 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="dark:hidden absolute bottom-0 right-0 w-96 h-96 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="dark:bg-primary/10 absolute top-0 left-0 w-64 h-64 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="dark:bg-primary/10 absolute bottom-0 right-0 w-96 h-96 bg-primary/30 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
