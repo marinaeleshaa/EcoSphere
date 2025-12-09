@@ -182,9 +182,9 @@ const router = useRouter();
                   render={({ field }) => (
                     <FormItem className='col-span-2 w-full'>
                       <FormLabel>Event Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl className='w-full'>
-                          <div className="relative">
+                      <Select onValueChange={field.onChange} defaultValue={field.value} >
+                        <FormControl >
+                          <div className="relative w-full">
                             <SelectTrigger className="pl-9">
                               <Tag className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground z-10" />
                               <SelectValue placeholder="Select event type" />
