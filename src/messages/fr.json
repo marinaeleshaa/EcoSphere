@@ -444,49 +444,54 @@
       "sold": "{percent}% vendu"
     }
   },
-  "subscribe": [
-    {
-      "title": "Formule Débutant",
-      "subtitle": "Idéale pour les petites boutiques ou les nouveaux organisateurs d'événements.",
-      "price": "9$ / mois",
-      "btnText": "Commencer",
-      "features": [
-        "Téléverser jusqu'à 10 produits ou événements",
-        "Accès au tableau de bord basique",
-        "Aperçu simple des analyses",
-        "Support standard",
-        "Badge écologique inclus"
-      ],
-      "icon": "leaf"
-    },
+  "subscribe": {
+      "titleFirst": "Sélectionnez le ",
+    "boldTitle": "plan parfait",
+    "titleLast": " pour vos besoins",
+    "plans": [
+      {
+        "title": "Formule Débutant",
+        "subtitle": "Idéale pour les petites boutiques ou les nouveaux organisateurs d'événements.",
+        "price": "9$ / mois",
+        "btnText": "Commencer",
+        "features": [
+          "Téléverser jusqu'à 10 produits ou événements",
+          "Accès au tableau de bord basique",
+          "Aperçu simple des analyses",
+          "Support standard",
+          "Badge écologique inclus"
+        ],
+        "icon": "leaf"
+      },
 
-    {
-      "title": "Formule Pro",
-      "subtitle": "Pour les boutiques professionnelles et les grands organisateurs d'événements.",
-      "price": "59$ / mois",
-      "btnText": "Passer en Pro",
-      "features": [
-        "Produits ou événements illimités",
-        "Personnalisation complète du tableau de bord",
-        "Analyses avancées avec IA",
-        "Support dédié 24/7",
-        "Accès à tous les outils premium Écosphère"
-      ],
-      "icon": "eco-pro"
-    },
-    {
-      "title": "Formule Croissance",
-      "subtitle": "Parfaite pour les boutiques en expansion ou les organisateurs actifs.",
-      "price": "29$ / mois",
-      "btnText": "Mettre à niveau",
-      "features": [
-        "Téléverser jusqu'à 50 produits ou événements",
-        "Gestion avancée du contenu",
-        "Tableau de bord analytique complet",
-        "Support prioritaire",
-        "Accès aux outils d'éco-événements"
-      ],
-      "icon": "growth"
-    }
-  ]
+      {
+        "title": "Formule Pro",
+        "subtitle": "Pour les boutiques professionnelles et les grands organisateurs d'événements.",
+        "price": "59$ / mois",
+        "btnText": "Passer en Pro",
+        "features": [
+          "Produits ou événements illimités",
+          "Personnalisation complète du tableau de bord",
+          "Analyses avancées avec IA",
+          "Support dédié 24/7",
+          "Accès à tous les outils premium Écosphère"
+        ],
+        "icon": "eco-pro"
+      },
+      {
+        "title": "Formule Croissance",
+        "subtitle": "Parfaite pour les boutiques en expansion ou les organisateurs actifs.",
+        "price": "29$ / mois",
+        "btnText": "Mettre à niveau",
+        "features": [
+          "Téléverser jusqu'à 50 produits ou événements",
+          "Gestion avancée du contenu",
+          "Tableau de bord analytique complet",
+          "Support prioritaire",
+          "Accès aux outils d'éco-événements"
+        ],
+        "icon": "growth"
+      }
+    ]
+  }
 }

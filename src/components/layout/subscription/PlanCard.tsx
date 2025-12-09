@@ -1,22 +1,8 @@
 import React from "react";
 import { Check, Leaf } from "lucide-react";
+import { ISubscribePlan } from "@/types/SubscribePlan";
 
-export default function PlanCard({ plan }: { plan: ISubscribePlan }) {
-  // const plan = {
-  //   title: "Pro Ecosphere Plan",
-  //   subtitle: "For professional stores and large event organizers.",
-  //   price: "$59 / month",
-  //   btnText: "Go Pro",
-  //   features: [
-  //     "Unlimited products or events",
-  //     "Full control panel customization",
-  //     "Deep AI-powered analytics",
-  //     "24/7 dedicated support",
-  //     "Access to all ecosphere premium tools",
-  //   ],
-  //   icon: "eco-pro",
-  // };
-
+export default async function  PlanCard({ plan , locale  }: Readonly<{ plan: ISubscribePlan , locale: string }>) {
   return (
     <div className="">
       <div className="bg-background rounded-2xl   shadow-xl max-w-sm w-full overflow-hidden transform transition-all hover:scale-105 duration-300 flex flex-col justify-between">
@@ -33,11 +19,11 @@ export default function PlanCard({ plan }: { plan: ISubscribePlan }) {
 
         {/* Price section */}
         <div className="px-8 py-6 bg-linear-to-b from-primary/20 to-background ">
-          <div className="text-center">
-            <span className="text-5xl font-bold text-foreground">
+          <div dir={locale === "ar" ? "rtl" : "ltr"} className="text-center">
+            <span className="text-5xl font-bold text-foreground ">
               {plan.price.split(" / ")[0]}
             </span>
-            <span className="text-xl text-primary ml-2">
+            <span className="text-xl text-primary mx-2">
               / {plan.price.split(" / ")[1]}
             </span>
           </div>
@@ -61,9 +47,7 @@ export default function PlanCard({ plan }: { plan: ISubscribePlan }) {
 
         {/* CTA Button */}
         <div className="px-8 pb-8">
-          <button className="w-full myBtnPrimary">
-            {plan.btnText}
-          </button>
+          <button className="w-full myBtnPrimary">{plan.btnText}</button>
         </div>
       </div>
     </div>
