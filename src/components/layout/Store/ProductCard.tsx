@@ -62,11 +62,11 @@ const ProductCard = (product: IProduct) => {
           description: productDescription,
           image: productImg,
         })
-	);
-	toast.success("added to cart");
-} else {
-	dispatch(removeItem(id));
-	toast.success("removed from cart");
+      );
+      toast.success("added to cart");
+    } else {
+      dispatch(removeItem(id));
+      toast.success("removed from cart");
     }
     // if (isFav) {
     // 	toast.success("Removed from favorites");
@@ -126,7 +126,8 @@ const ProductCard = (product: IProduct) => {
         </div>
         <div className="flex justify-between items-center">
           <p className="text-lg font-semibold mt-auto ml-10">
-            ${productPrice.toFixed(2)}
+            {productPrice.toFixed(2)}
+            <span className="text-primary ml-1">EGP</span>
           </p>
           <div className=" flex gap-3 text-2xl">
             <button
