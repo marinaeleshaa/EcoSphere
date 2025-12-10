@@ -2,10 +2,17 @@ import { inject, injectable } from "tsyringe";
 import type { IUserRepository } from "./user.repository";
 import { IUser } from "./user.model";
 import { ImageService } from "../../services/image.service";
+import { DashboardUsers } from "./user.types";
 
 export interface IUserService {
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
+  getDashBoardData(
+    limit?: number,
+    sortBy?: string,
+    sortOrder?: 1 | -1,
+    selectFields?: string | Record<string, 0 | 1>
+  ): Promise<DashboardUsers>;
   getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
@@ -13,7 +20,7 @@ export interface IUserService {
 }
 
 @injectable()
-class UserService {
+class UserService implements IUserService {
   constructor(
     @inject("IUserRepository") private readonly userRepository: IUserRepository,
     @inject("ImageService") private readonly imageService: ImageService
@@ -22,6 +29,21 @@ class UserService {
   async getAll(): Promise<IUser[]> {
     const users = await this.userRepository.getAll();
     return await Promise.all(users.map((user) => this.populateAvatar(user)));
+  }
+
+  async getDashBoardData(
+    limit?: number,
+    sortBy?: string,
+    sortOrder?: 1 | -1,
+    selectFields?: string | Record<string, 0 | 1>
+  ): Promise<DashboardUsers> {
+    const result = await this.userRepository.getUsersByRoleAdvanced({
+      limit,
+      sortBy,
+      sortOrder,
+      selectFields,
+    });
+    return result;
   }
 
   async getById(id: string): Promise<IUser> {

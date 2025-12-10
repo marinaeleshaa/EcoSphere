@@ -1,13 +1,17 @@
 import { injectable } from "tsyringe";
-import { IUser, UserModel } from "./user.model";
+import { IUser, UserModel, UserRole } from "./user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
-import { PipelineStage } from "mongoose";
-import { DashboardData } from "./user.types";
+import { DashboardUsers } from "./user.types";
 
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
   getById(id: string): Promise<IUser>;
-  getDashBoardData(page: number, skip: number): Promise<any>
+  getUsersByRoleAdvanced(options?: {
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: 1 | -1;
+    selectFields?: string | Record<string, 0 | 1>;
+  }): Promise<DashboardUsers>;
   getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
@@ -18,44 +22,54 @@ export interface IUserRepository {
 class UserRepository implements IUserRepository{
   async getAll(): Promise<IUser[]> {
     await DBInstance.getConnection();
-    return await UserModel.find({}, { password: 0 });
+    return await UserModel.find({}, { password: 0 }).lean<IUser[]>().exec();
   }
   
   async getById(id: string): Promise<IUser> {
     await DBInstance.getConnection();
-    const user = await UserModel.findById(id, { password: 0 });
+    const user = await UserModel.findById(id, { password: 0 })
+      .lean<IUser>()
+      .exec();
     if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
     return user;
   }
 
-  async getDashBoardData(page: number, skip: number): Promise<any> {
+  async getUsersByRoleAdvanced(options?: {
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: 1 | -1;
+    selectFields?: string | Record<string, 0 | 1>;
+  }): Promise<DashboardUsers> {
     await DBInstance.getConnection();
-    const roles = ["admin", "organizer", "recycleMan"];
+    const {
+      limit = 5,
+      sortBy = "createdAt",
+      sortOrder = -1,
+      selectFields = "-password -cart -paymentHistory",
+    } = options || {};
 
-    const pipeline = UserModel.aggregate<DashboardData>().facet(
-      Object.fromEntries(
-        roles.map((role) => [
-          role,
-          UserModel.aggregate()
-            .match({ role })
-            .sort({ createdAt: -1 })
-            .limit(5)
-            .project({
-              _id: 1,
-              email: 1,
-              firstName: 1,
-              lastName: 1,
-              avatar: 1,
-              role: 1,
-              createdAt: 1,
-            })
-            .pipeline() as PipelineStage.FacetPipelineStage[]
-        ])
-      )
-    ).exec();
-    return pipeline;
+    const roles: UserRole[] = ["organizer", "admin", "recycleMan"];
+    // Convert selectFields to $project format
+    const projectStage = this.parseSelectFields(selectFields);
+
+    const facets = roles.reduce((acc, role) => {
+      acc[role] = [
+        { $match: { role } },
+        { $sort: { [sortBy]: sortOrder } },
+        { $limit: limit },
+        { $project: projectStage }
+      ];
+      return acc;
+    }, {} as Record<string, any[]>);
+
+    const result = await UserModel.aggregate()
+      .match({ role: { $ne: "customer" } })
+      .facet(facets)
+      .exec();
+
+    return result[0] as DashboardUsers;
   }
 
   async getUserIdByEmail(email: string): Promise<IUser> {
@@ -79,7 +93,9 @@ class UserRepository implements IUserRepository{
       { _id: id, favoritesIds: { $ne: item } },
       { $addToSet: { favoritesIds: item } },
       { new: true }
-    );
+    ) 
+      .lean<IUser>()
+      .exec();
 
     if (updatedUser) {
       return updatedUser;
@@ -90,9 +106,11 @@ class UserRepository implements IUserRepository{
       id,
       { $pull: { favoritesIds: item } },
       { new: true }
-    );
+    )
+      .lean<IUser>()
+      .exec();
 
-    return updatedUser;
+    return updatedUser!;
   }
 
   async deleteById(id: string): Promise<IUser> {
@@ -102,6 +120,32 @@ class UserRepository implements IUserRepository{
       throw new Error(`User with id ${id} not found`);
     }
     return await user.deleteOne();
+  }
+  
+  // Helper function to convert Mongoose select syntax to $project
+  private parseSelectFields(
+    selectFields: string | Record<string, 0 | 1>
+  ): Record<string, 0 | 1> {
+    // If already an object, return as is
+    if (typeof selectFields === "object") {
+      return selectFields;
+    }
+
+    // Parse string format like "-password -cart" or "email firstName lastName"
+    const projection: Record<string, 0 | 1> = {};
+    const fields = selectFields.trim().split(/\s+/);
+
+    fields.forEach((field) => {
+      if (field.startsWith("-")) {
+        // Exclude field
+        projection[field.substring(1)] = 0;
+      } else if (field) {
+        // Include field
+        projection[field] = 1;
+      }
+    });
+
+    return projection;
   }
 }
 

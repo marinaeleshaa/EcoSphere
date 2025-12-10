@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IUserService } from "./user.service";
 import { IUser } from "./user.model";
+import { DashboardUsers } from "./user.types";
 
 @injectable()
 class UserController {
@@ -17,6 +18,22 @@ class UserController {
     const user = await this.userService.getById(id);
     return user;
   }
+
+  async getDashBoard(
+    limit?: number,
+    sortBy?: string,
+    sortOrder?: 1 | -1,
+    selectFields?: string | Record<string, 0 | 1>
+  ): Promise<DashboardUsers> {
+    const result = await this.userService.getDashBoardData(
+      limit,
+      sortBy,
+      sortOrder,
+      selectFields
+    );
+    return result;
+  }
+
   async getUserIdByEmail(email: string): Promise<IUser> {
     return await this.userService.getUserIdByEmail(email);
   }
