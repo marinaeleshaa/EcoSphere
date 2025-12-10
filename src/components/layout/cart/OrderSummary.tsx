@@ -1,17 +1,21 @@
 "use client";
-import { useAppSelector } from "@/frontend/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { selectCartTotal } from "@/frontend/redux/selector/cartSelector";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { toast } from "sonner";
+import { updateCartTotal } from "@/frontend/redux/Slice/CartSlice";
+import { useRouter } from "next/navigation";
 
 export default function OrderSummary() {
   const t = useTranslations("Cart.orderSummary");
-  const subtotalCents = useAppSelector(selectCartTotal);
+  const router = useRouter();
   const [couponCode, setCouponCode] = useState("");
   const [discountRate, setDiscountRate] = useState(0);
+
+  const subtotalCents = useAppSelector(selectCartTotal);
+  const dispatch = useAppDispatch();
 
   const discountCents = Math.round(subtotalCents * discountRate);
   const deliveryCents = 50;
@@ -20,15 +24,20 @@ export default function OrderSummary() {
   const handleApplyCoupon = () => {
     fetch(`/api/discount/${couponCode.trim()}`, { method: "GET" })
       .then((res) => {
-        if (!res.ok) toast.message("not valid coupon");
-        else
+        if (res.ok)
           res.json().then((data) => {
             toast.success("Coupon Applied");
             setDiscountRate(data.rate ?? 0);
           });
+        else toast.message("not valid coupon");
       })
       .catch((err) => console.error(err));
     setCouponCode("");
+  };
+
+  const handleCheckout = () => {
+    dispatch(updateCartTotal({ cartTotal: total }));
+    router.push("/checkout");
   };
 
   return (
@@ -52,7 +61,7 @@ export default function OrderSummary() {
             {t("apply")}
           </button>
         </div>
-        {!!discountRate ? (
+        {discountRate ? (
           <p className="text-sm text-primary mt-2">{t("couponApplied")}</p>
         ) : (
           <p className="text-sm text-muted-foreground mt-2 capitalize">
@@ -94,12 +103,12 @@ export default function OrderSummary() {
           </button>
         </div>
       </div>
-      <Link
-        href="/checkout"
-        className="w-full py-3 hover:opacity-90 font-semibold bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4"
+      <button
+        onClick={handleCheckout}
+        className="myBtnPrimary w-full py-3 hover:opacity-90 font-semibold bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4"
       >
         {t("checkoutNow")}
-      </Link>
+      </button>
     </div>
   );
 }
