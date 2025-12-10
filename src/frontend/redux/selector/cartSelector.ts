@@ -4,6 +4,7 @@ import { createSelector } from "@reduxjs/toolkit";
 
 // Basic selector - just returns the data
 export const selectCartItems = (state: RootState) => state.cart.items;
+export const selectCartPrice = (state: RootState) => state.cart.totalAfterDiscount;
 
 // Memoized selector - only recalculates when cart.items changes
 export const selectCartItemsArray = createSelector([selectCartItems], (items) =>
