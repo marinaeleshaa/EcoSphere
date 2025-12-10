@@ -154,6 +154,7 @@
       }
     },
     "filter": {
+      "searchPlaceholder": "Rechercher des boutiques",
       "sortBy": "Trier par :",
       "sortOptions": {
         "default": "Par défaut",
@@ -493,5 +494,25 @@
         "icon": "growth"
       }
     ]
+  "AI": {
+    "button": {
+      "label": "Demander à l'IA"
+    },
+    "window": {
+      "title": "EcoSphere IA",
+      "subtitle": "Votre Assistant Vert",
+      "clearChat": "Effacer la discussion",
+      "emptyState": {
+        "title": "Comment puis-je vous aider à recycler aujourd'hui ?",
+        "subtitle": "Posez des questions sur des produits, des restaurants, ou des conseils de recyclage !"
+      },
+      "input": {
+        "placeholder": "Posez-moi n'importe quelle question..."
+      },
+      "disclaimer": "L'IA peut commettre des erreurs. Veuillez vérifier les informations importantes."
+    },
+    "errors": {
+      "connection": "J'ai des difficultés à me connecter en ce moment. Veuillez réessayer plus tard."
+    }
   }
 }

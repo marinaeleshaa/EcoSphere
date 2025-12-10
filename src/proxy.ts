@@ -18,9 +18,10 @@ export const proxy = auth((req) => {
   // If this is an API/static request, skip next-intl and let the request proceed
   if (
     pathname.startsWith("/api") ||
+    pathname.startsWith("/public") ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico" ||
-    /\.(svg|png|jpg|jpeg|gif|webp)$/.test(pathname)
+    /\.(svg|png|jpg|jpeg|gif|webp|mp3)$/.test(pathname)
   ) {
     return NextResponse.next();
   }
