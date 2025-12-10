@@ -7,9 +7,27 @@ import FilterBar from "./FilterBar";
 import BasicAnimatedWrapper from "../common/BasicAnimatedWrapper";
 import { IShop } from "@/types/ShopTypes";
 
-export const getAverageRating = (shop: IShop) =>
-  (shop.restaurantRating?.reduce((acc, r) => acc + r.rate, 0) ?? 0) /
-  (shop.restaurantRating?.length || 1);
+export const getAverageRating = (shop: IShop): number => {
+  const ratings = shop?.restaurantRating;
+
+  if (!ratings || ratings.length === 0) {
+    return 0;
+  }
+
+  const validRatings = ratings
+    .filter(
+      (r) => r && typeof r.rate === "number" && r.rate >= 1 && r.rate <= 5
+    )
+    .map((r) => r.rate);
+
+  if (validRatings.length === 0) {
+    return 0;
+  }
+
+  const sum = validRatings.reduce((acc, rate) => acc + rate, 0);
+  const average = sum / validRatings.length;
+  return average;
+};
 
 export default function ShopSection({ shops }: { shops: IShop[] }) {
   const t = useTranslations("Shop.filter");

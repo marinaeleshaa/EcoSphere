@@ -1,6 +1,4 @@
-"use client";
-
-import RecentlyAddedSection from "@/components/news/RecentlyAddedSection";
+import RecentlyAddedSection from "@/components/layout/news/RecentlyAddedSection";
 
 export default function NewsPage() {
   return (

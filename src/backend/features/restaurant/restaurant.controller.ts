@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IRestaurantService } from "./restaurant.service";
 import { IRestaurant } from "./restaurant.model";
-import "reflect-metadata";
 
 @injectable()
 class RestaurantController {

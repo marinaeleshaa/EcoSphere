@@ -184,6 +184,7 @@
       }
     },
     "filter": {
+      "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
       "sortOptions": {
         "default": "Default",
@@ -472,6 +473,27 @@
       "title": "Dashboard Display Events",
       "ticketLeft": "Ticket Left",
       "sold": "{percent}% Sold"
+    }
+  },
+  "AI": {
+    "button": {
+      "label": "Ask AI"
+    },
+    "window": {
+      "title": "EcoSphere AI",
+      "subtitle": "Your Green Assistant",
+      "clearChat": "Clear Chat",
+      "emptyState": {
+        "title": "How can I help you recycle today?",
+        "subtitle": "Ask about products, restaurants, or recycling tips!"
+      },
+      "input": {
+        "placeholder": "Ask me anything..."
+      },
+      "disclaimer": "AI can make mistakes. Please verify important info."
+    },
+    "errors": {
+      "connection": "I'm having trouble connecting right now. Please try again later."
     }
   }
 }

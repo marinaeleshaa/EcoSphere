@@ -88,10 +88,12 @@ export default function UserBtn({
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Sparkles />
-							{t('subscribe')}
-            </DropdownMenuItem>
+            <Link href="/subscription">
+              <DropdownMenuItem>
+                <Sparkles />
+                {t('subscribe')}
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

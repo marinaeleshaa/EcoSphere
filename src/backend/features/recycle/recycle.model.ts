@@ -50,4 +50,4 @@ export const recycleSchema = new Schema<IRecycle>(
 );
 
 export const RecycleModel =
-	models.recycle || model<IRecycle>("Recycle", recycleSchema);
+	models.Recycle || model<IRecycle>("Recycle", recycleSchema);

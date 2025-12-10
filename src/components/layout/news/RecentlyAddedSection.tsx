@@ -1,5 +1,3 @@
-"use client";
-
 import NewsCard from "./NewsCard";
 
 const RECENTLY_ADDED_DATA = [
