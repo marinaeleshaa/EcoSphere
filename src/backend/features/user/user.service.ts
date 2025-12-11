@@ -75,7 +75,7 @@ class UserService implements IUserService {
     } as ICoupon);
     await this.userRepository.redeemPoints(userId);
     // 7. Send email
-    await sendRedeemingMail(user.email, user.firstName, code, validTo);
+    await sendRedeemingMail(user.email, user.firstName, code, validTo, rate);
     // 8. Return response
     return {
       message: "A coupon has been sent to your email."
@@ -122,7 +122,7 @@ class UserService implements IUserService {
 
   private calculateRateFromPoints(points: number): number {
     const rate = points * 0.01; // 0.01% per point
-    return Math.min(rate, 20); // hard-cap to 70% max
+    return Math.min(rate, 30); // hard-cap to 30% max
   }
 
   private generateCode(): string {

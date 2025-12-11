@@ -81,13 +81,14 @@ export const sendRedeemingMail = async (
 	email: string,
 	name: string,
 	code: string,
-	validTo: Date
+	validTo: Date,
+	rate: number
 ) => {
 	await transporter
 		.sendMail({
 			to: email,
 			subject: "Your EcoSphere Reward Code 🎁",
-			html: redeemCouponTemplate(code, validTo, name),
+			html: redeemCouponTemplate(code, validTo, rate, name),
 		})
 		.catch((error) => console.error("Failed to send new event email:", error));
 };
