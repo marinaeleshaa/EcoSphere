@@ -25,3 +25,11 @@ export interface GeneralContextDTO {
   goal: string;
   features: string[];
 }
+
+export interface ChatRequestDTO {
+  message: string;
+  context?: { type: types; id?: string };
+  locale?: string;
+}
+
+export type types = "product" | "restaurant" | "static"

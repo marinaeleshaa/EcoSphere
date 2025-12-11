@@ -1,10 +1,12 @@
 import { injectable, inject } from "tsyringe";
 import { type IAIRepository } from "./ai.repository";
+import { types } from "./dto/ai-context.dto";
 
 export interface IAIService {
   generateResponse(
     userMessage: string,
-    context?: { type: "product" | "restaurant" | "static"; id?: string }
+    context?: { type: types; id?: string },
+    locale?: string
   ): Promise<string>;
 }
 
@@ -30,60 +32,30 @@ export class AIService implements IAIService {
       return "I am currently offline. Please configure my API token.";
     }
 
-    // 1. Fetch Context Data
+    // --- Prepare context ---
     const generalContext = this.aiRepository.getGeneralContext();
-    let contextData = { ...generalContext, pageContext: null as any };
-
-    if (context) {
-      if (context.type === "product" && context.id) {
-        const productInfo = await this.aiRepository.getProductContext(
-          context.id
-        );
-        if (productInfo) {
-          contextData.pageContext = { type: "product", data: productInfo };
-        }
-      } else if (context.type === "restaurant" && context.id) {
-        const restaurantInfo = await this.aiRepository.getRestaurantContext(
-          context.id
-        );
-        if (restaurantInfo) {
-          contextData.pageContext = {
-            type: "restaurant",
-            data: restaurantInfo,
-          };
-        }
-      } else if (context.type === "static" && context.id) {
-        const pageInfo = this.aiRepository.getStaticPageContext(context.id);
-        contextData.pageContext = { type: "static", info: pageInfo };
-      }
-    }
-
+    const pageContext = await this.resolveContext(context);
     const globalStructure = await this.aiRepository.getGlobalStructure();
 
-    // 2. Construct System Message
     const systemContent = `
       You are the EcoSphere Assistant, a helpful AI for a sustainability marketplace.
       Tone: Encouraging, green, and emoji-friendly 🌱.
       Constraint: Keep answers concise (under 3 sentences).
-      Constraint: Keep answers concise (under 3 sentences).
+      Reply in ${this.getLanguage(locale)}.
+
       Linking Rules:
-      1. When mentioning a restaurant, use this format: [Restaurant Name](/shop/ID).
-      2. When mentioning a product, use this format: [Product Name](/store/ID).
-      3. CRITICAL: NEVER show the ID in the visible text.
-         - BAD: "GreenBites (ID: 123)"
-         - GOOD: "[GreenBites](/shop/123)"
-      Language: Reply in ${
-        locale === "ar" ? "Arabic" : locale === "fr" ? "French" : "English"
-      }.
+      • Restaurants → [Name](/shop/ID)
+      • Products → [Name](/store/ID)
+      • NEVER show raw IDs in visible text.
+
       Knowledge Base: Use the provided JSON context to answer questions.
-      
+      GLOBAL SNAPSHOT:
       ${globalStructure}
 
-      CONTEXT DATA (JSON):
-      ${JSON.stringify(contextData, null, 2)}
-    `;
+      CONTEXT:
+      ${JSON.stringify({ generalContext, pageContext }, null, 2)}`;
 
-    // 3. Call Hugging Face API (OpenAI Compatible)
+    // --- Request HF Router ---
     try {
       const response = await fetch(this.apiUrl, {
         method: "POST",
@@ -102,26 +74,39 @@ export class AIService implements IAIService {
         }),
       });
 
-      if (!response.ok) {
-        const errText = await response.text();
-        console.error("Hugging Face API Error:", errText);
+      const data = await response.json();
 
-        if (response.status === 503) {
-          return "I am warming up. Please try again in 10 seconds.";
-        }
-        throw new Error(
-          `HF API Error: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const result = await response.json();
-      return (
-        result.choices?.[0]?.message?.content ||
-        "I'm sorry, I couldn't generate a response."
-      );
-    } catch (error: any) {
-      console.error("AI Service Error:", error);
-      throw new Error("Failed to communicate with AI service");
+      return data.choices?.[0]?.message?.content ?? "No response generated.";
+    } catch (error) {
+      console.error("AIService Error:", error);
+      return "The assistant is temporarily unavailable.";
     }
+  }
+
+  private async resolveContext(context?: {
+    type: "product" | "restaurant" | "static";
+    id?: string;
+  }) {
+    if (!context?.id) return null;
+
+    switch (context.type) {
+      case "product":
+        return this.aiRepository.getProductContext(context.id);
+      case "restaurant":
+        return this.aiRepository.getRestaurantContext(context.id);
+      case "static":
+        return this.aiRepository.getStaticPageContext(context.id);
+      default:
+        return null;
+    }
+  }
+
+  private getLanguage(loc: string): string {
+    const map: Record<string, string> = {
+      ar: "Arabic",
+      fr: "French",
+      en: "English",
+    };
+    return map[loc] ?? "English";
   }
 }

@@ -4,7 +4,7 @@ import RemoveButton from "./RemoveButton";
 import { CartItems as CI } from "@/types/cart";
 
 export default function CartItem({ item }: Readonly<{ item: CI }>) {
-	const totalPrice = (item.price * item.quantity) / 100;
+	const totalPrice = (item.price * item.quantity);
 	const productCode = item.id.slice(0, 8).toUpperCase();
 
 	return (
@@ -42,12 +42,12 @@ export default function CartItem({ item }: Readonly<{ item: CI }>) {
 			</div>
 
 			{/* Total */}
-			<div className="col-span-5 md:col-span-2 text-base font-semibold text-center">
+			<div className="col-span-5 md:col-span-2 text-base font-semibold text-center md:ml-5">
 				${totalPrice.toFixed(2)}
 			</div>
 
 			{/* Action */}
-			<div className="col-span-2 md:col-span-1 flex justify-center">
+			<div className="col-span-2 md:col-span-2 flex justify-center">
 				<RemoveButton id={item.id} />
 			</div>
 		</div>
