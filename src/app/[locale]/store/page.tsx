@@ -16,7 +16,7 @@ export default function Store() {
         subTitle={t('subtitle')}
       />
       <StoreSlider />
-      <ProductCardSection />\
+      <ProductCardSection />
     </div>
   );
 }

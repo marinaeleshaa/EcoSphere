@@ -13,8 +13,8 @@ class UserController {
     return users;
   }
 
-  async getById(id: string): Promise<IUser> {
-    const user = await this.userService.getById(id);
+  async getById(id: string, query?: string): Promise<IUser> {
+    const user = await this.userService.getById(id, query);
     return user;
   }
   async getUserIdByEmail(email: string): Promise<IUser> {

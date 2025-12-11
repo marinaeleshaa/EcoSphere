@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/frontend/redux/store";
-import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
+import { isInFavSelector, toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -42,7 +42,7 @@ const ProductCard = (product: IProduct) => {
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    dispatch(toggleFav(product));
+    dispatch(toggleFavoriteAsync(product));
     if (isFav) {
       toast.success(t("removedFromFavorites"));
     } else {

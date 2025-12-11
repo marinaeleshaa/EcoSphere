@@ -10,7 +10,7 @@ import CartSlice from "./Slice/CartSlice";
 const persistConfig = {
 	key: "root",
 	storage,
-	whitelist: ["cart"], // persist ONLY the cart slice
+	whitelist: ["cart", "fav"], // persist ONLY the cart slice
 };
 
 // Combine all reducers

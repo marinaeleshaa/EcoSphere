@@ -5,8 +5,8 @@ import { getCurrentUser } from "@/backend/utils/authHelper";
 import {
   ApiResponse,
   badRequest,
-  ok,
   serverError,
+  ok,
   unauthorized,
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,11 +19,9 @@ export const GET = async (
     return unauthorized();
   }
 
-  const query = _req.nextUrl.searchParams.get("q") || undefined;
-
   const controller = rootContainer.resolve(UserController);
   try {
-    const result = await controller.getById(session.id, query);
+    const result = await controller.getById(session.id, "favoritesIds");
     return ok(result);
   } catch (error) {
     console.error(error);
@@ -31,31 +29,23 @@ export const GET = async (
   }
 };
 
-export const PUT = async (
-  _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+export const PATCH = async (
+  _req: NextRequest
 ): Promise<NextResponse<ApiResponse<IUser>>> => {
-  const { id } = await context.params;
+  const session = await getCurrentUser();
+  if (!session?.id) {
+    return unauthorized();
+  }
   const body = await _req.json();
+  const { favoritesIds } = body as { favoritesIds?: string };
   const controller = rootContainer.resolve(UserController);
 
-  try {
-    const result = await controller.updateById(id, body);
-    return ok(result);
-  } catch (error) {
-    console.error(error);
-    return serverError("Something went wrong");
+  if (!favoritesIds) {
+    return badRequest("Missing favoritesIds");
   }
-};
 
-export const DELETE = async (
-  _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<IUser>>> => {
-  const { id } = await context.params;
-  const controller = rootContainer.resolve(UserController);
   try {
-    const result = await controller.deleteById(id);
+    const result = await controller.updateFavorites(session.id, favoritesIds);
     return ok(result);
   } catch (error) {
     console.error(error);

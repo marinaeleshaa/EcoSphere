@@ -5,7 +5,7 @@ import Image from "next/image";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { HiMiniTrash } from "react-icons/hi2";
-import { toggleFav } from "@/frontend/redux/Slice/FavSlice";
+import { toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner"
 import { useTranslations } from 'next-intl';
 
@@ -17,7 +17,7 @@ const FavCard = ({ product }: FavCardProps) => {
   const { view } = useSelector((state: RootState) => state.fav);
   const dispatch = useDispatch<AppDispatch>();
   const handleRemoveFromFav = () => {
-    dispatch(toggleFav(product));
+    dispatch(toggleFavoriteAsync(product));
     toast.success(t('removedFromFavorites'))
   };
   return (

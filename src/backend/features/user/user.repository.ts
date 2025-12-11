@@ -1,13 +1,13 @@
 import { injectable } from "tsyringe";
 import { IUser, UserModel } from "./user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
-import { PipelineStage } from "mongoose";
+import { PipelineStage, ProjectionFields } from "mongoose";
 import { DashboardData } from "./user.types";
 
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
-  getById(id: string): Promise<IUser>;
-  getDashBoardData(page: number, skip: number): Promise<any>
+  getById(id: string, query?: string): Promise<IUser>;
+  getDashBoardData(page: number, skip: number): Promise<any>;
   getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
@@ -15,15 +15,33 @@ export interface IUserRepository {
 }
 
 @injectable()
-class UserRepository implements IUserRepository{
+class UserRepository implements IUserRepository {
   async getAll(): Promise<IUser[]> {
     await DBInstance.getConnection();
     return await UserModel.find({}, { password: 0 });
   }
-  
-  async getById(id: string): Promise<IUser> {
+
+  async getById(
+    id: string,
+    query: string = "email firstName lastName avatar phoneNumber"
+  ): Promise<IUser> {
     await DBInstance.getConnection();
-    const user = await UserModel.findById(id, { password: 0 });
+    let projection: ProjectionFields<IUser> = {};
+
+    if (!query || query.trim() === "") {
+      projection = { password: 0 };
+    } else {
+      query
+        .trim()
+        .split(/\s+/)
+        .filter((f) => f !== "password")
+        .forEach((field) => {
+          projection[field] = 1;
+        });
+    }
+
+    const user = await UserModel.findById(id, projection);
+
     if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
@@ -34,33 +52,36 @@ class UserRepository implements IUserRepository{
     await DBInstance.getConnection();
     const roles = ["admin", "organizer", "recycleMan"];
 
-    const pipeline = UserModel.aggregate<DashboardData>().facet(
-      Object.fromEntries(
-        roles.map((role) => [
-          role,
-          UserModel.aggregate()
-            .match({ role })
-            .sort({ createdAt: -1 })
-            .limit(5)
-            .project({
-              _id: 1,
-              email: 1,
-              firstName: 1,
-              lastName: 1,
-              avatar: 1,
-              role: 1,
-              createdAt: 1,
-            })
-            .pipeline() as PipelineStage.FacetPipelineStage[]
-        ])
+    const pipeline = UserModel.aggregate<DashboardData>()
+      .facet(
+        Object.fromEntries(
+          roles.map((role) => [
+            role,
+            UserModel.aggregate()
+              .match({ role })
+              .sort({ createdAt: -1 })
+              .limit(5)
+              .project({
+                _id: 1,
+                email: 1,
+                firstName: 1,
+                lastName: 1,
+                avatar: 1,
+                role: 1,
+                createdAt: 1,
+              })
+              .pipeline() as PipelineStage.FacetPipelineStage[],
+          ])
+        )
       )
-    ).exec();
+      .exec();
     return pipeline;
   }
 
   async getUserIdByEmail(email: string): Promise<IUser> {
-    return await UserModel.findOne({ email }).select("_id").exec()
+    return await UserModel.findOne({ email }).select("_id").exec();
   }
+
   async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     await DBInstance.getConnection();
     const user = await this.getById(id);
@@ -78,7 +99,7 @@ class UserRepository implements IUserRepository{
     let updatedUser = await UserModel.findOneAndUpdate(
       { _id: id, favoritesIds: { $ne: item } },
       { $addToSet: { favoritesIds: item } },
-      { new: true }
+      { new: true, projection: { favoritesIds: 1, _id: 0 } }
     );
 
     if (updatedUser) {
@@ -89,7 +110,7 @@ class UserRepository implements IUserRepository{
     updatedUser = await UserModel.findByIdAndUpdate(
       id,
       { $pull: { favoritesIds: item } },
-      { new: true }
+      { new: true, projection: { favoritesIds: 1, _id: 0 } }
     );
 
     return updatedUser;

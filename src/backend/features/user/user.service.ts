@@ -5,7 +5,7 @@ import { ImageService } from "../../services/image.service";
 
 export interface IUserService {
   getAll(): Promise<IUser[]>;
-  getById(id: string): Promise<IUser>;
+  getById(id: string, query?: string): Promise<IUser>;
   getUserIdByEmail(email: string): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
@@ -24,8 +24,8 @@ class UserService {
     return await Promise.all(users.map((user) => this.populateAvatar(user)));
   }
 
-  async getById(id: string): Promise<IUser> {
-    const user = await this.userRepository.getById(id);
+  async getById(id: string, query?: string): Promise<IUser> {
+    const user = await this.userRepository.getById(id, query);
     return await this.populateAvatar(user);
   }
   async getUserIdByEmail(email: string): Promise<IUser> {
