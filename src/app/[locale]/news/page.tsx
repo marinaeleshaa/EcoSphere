@@ -1,16 +1,18 @@
 import RecentlyAddedSection from "@/components/layout/news/RecentlyAddedSection";
+import { useTranslations } from "next-intl";
 
 export default function NewsPage() {
+  const t = useTranslations("News.page");
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="bg-primary/5 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            News & Updates
+            {t("title")}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Stay up to date with the latest additions to EcoSphere. Discover new eco-friendly restaurants and shops joining our community.
+            {t("description")}
           </p>
         </div>
       </div>

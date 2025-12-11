@@ -5,9 +5,12 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import EmailVerification from "@/components/layout/ForgotPassword/EmailVerification";
 import ResetPassword from "@/components/layout/ForgotPassword/ResetPassword";
-import { getCoords, ICoords } from "@/frontend/Actions/GetCoords";
+import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
+import { useTranslations } from "next-intl";
+
 
 const ForgotPasswordPage = () => {
+  const t = useTranslations("Auth.forgotPassword.sidePanel");
   const controls = useAnimation();
 
   const [coords, setCoords] = useState<ICoords>({
@@ -160,13 +163,13 @@ const ForgotPasswordPage = () => {
       />
 
       <motion.div className="hidden sm:absolute top-30 left-0 md:left-30 lg:left-20  min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  " variants={toResetVariants} animate={step} initial={false} transition={{ duration: 2, delay: 0.5 }}>
-        <h2 className="text-2xl lg:text-2xl xl:text-3xl font-extrabold">Check Your Email</h2>
-        <p className="text-base lg:text-lg xl:text-xl">Follow the instructions to verify your address.</p>
+        <h2 className="text-2xl lg:text-2xl xl:text-3xl font-extrabold">{t('checkEmailTitle')}</h2>
+        <p className="text-base lg:text-lg xl:text-xl">{t('checkEmailDescription')}</p>
       </motion.div>
 
       <motion.div className=" hidden sm:absolute top-50 right-10 md:right-30 lg:top-40 lg:right-10 xl:right-30 xl:top-30 min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  " variants={toVerificationVariants} animate={step} initial={false} transition={{ duration: 2, delay: 0.5 }}>
-        <h2 className="text-2xl lg:text-xl xl:text-5xl font-extrabold">Reset</h2>
-        <p className="text-sm lg:text-xl xl:text-2xl">Enter your email and new password to reset.</p>
+        <h2 className="text-2xl lg:text-xl xl:text-5xl font-extrabold">{t('resetTitle')}</h2>
+        <p className="text-sm lg:text-xl xl:text-2xl">{t('resetDescription')}</p>
       </motion.div>
     </section>
   );

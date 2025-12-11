@@ -65,7 +65,7 @@ export default function OrderSummary() {
           <p className="text-sm text-primary mt-2">{t("couponApplied")}</p>
         ) : (
           <p className="text-sm text-muted-foreground mt-2 capitalize">
-            {"no coupon Applied"}
+            {t("no-coupon")}
           </p>
         )}
       </div>

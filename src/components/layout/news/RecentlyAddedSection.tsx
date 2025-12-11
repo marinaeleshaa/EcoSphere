@@ -1,4 +1,5 @@
 import NewsCard from "./NewsCard";
+import { useTranslations } from "next-intl";
 
 const RECENTLY_ADDED_DATA = [
     {
@@ -25,10 +26,11 @@ const RECENTLY_ADDED_DATA = [
 ];
 
 const RecentlyAddedSection = () => {
+    const t = useTranslations("News.recentlyAdded");
     return (
         <section className="py-12">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl font-bold mb-8 text-foreground">Recently Added</h2>
+                <h2 className="text-2xl font-bold mb-8 text-foreground">{t('title')}</h2>
                 <div className="flex flex-col gap-6">
                     {RECENTLY_ADDED_DATA.map((item) => (
                         <NewsCard

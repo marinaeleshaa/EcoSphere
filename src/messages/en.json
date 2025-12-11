@@ -324,7 +324,13 @@
       "login": "Login",
       "passwordResetSuccess": "Password Reset Successful",
       "passwordResetSuccessMessage": "Your password has been reset successfully. You can now log in with your new password.",
-      "passwordsDoNotMatch": "Passwords do not match"
+      "passwordsDoNotMatch": "Passwords do not match",
+      "sidePanel": {
+        "checkEmailTitle": "Check Your Email",
+        "checkEmailDescription": "Follow the instructions to verify your address.",
+        "resetTitle": "Reset",
+        "resetDescription": "Enter your email and new password to reset."
+      }
     },
     "steps": {
       "step1": {
@@ -447,7 +453,8 @@
       "total": "Total",
       "warranty": "90 Day Limited Warranty up to manufacturer's elements",
       "details": "Details",
-      "checkoutNow": "Checkout Now"
+      "checkoutNow": "Checkout Now",
+      "no-coupon": "No coupon applied"
     }
   },
   "Dashboard": {
@@ -544,6 +551,18 @@
     },
     "errors": {
       "connection": "I'm having trouble connecting right now. Please try again later."
+    }
+  },
+  "News": {
+    "page": {
+      "title": "News & Updates",
+      "description": "Stay up to date with the latest additions to EcoSphere. Discover new eco-friendly restaurants and shops joining our community."
+    },
+    "recentlyAdded": {
+      "title": "Recently Added"
+    },
+    "card": {
+      "viewMore": "View More"
     }
   }
 }

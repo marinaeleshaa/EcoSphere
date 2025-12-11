@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface NewsCardProps {
 	title: string;
@@ -15,8 +16,10 @@ const NewsCard = ({
 	description,
 	image,
 	link,
-	buttonText = "View More",
+	buttonText,
 }: NewsCardProps) => {
+	const t = useTranslations("News.card");
+	const displayButtonText = buttonText || t("viewMore");
 	return (
 		<div className="bg-card text-card-foreground rounded-xl border border-border shadow-sm p-6 flex flex-col md:flex-row items-center gap-6 transition-all hover:shadow-md">
 			{/* Avatar / Image Section */}
@@ -36,9 +39,9 @@ const NewsCard = ({
 			<div className="shrink-0">
 				<Link
 					href={link}
-					className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-medium hover:bg-primary/90 transition-colors"
+					className="myBtnPrimary"
 				>
-					{buttonText}
+					{displayButtonText}
 					<ArrowRight className="w-4 h-4" />
 				</Link>
 			</div>

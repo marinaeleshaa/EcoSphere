@@ -294,7 +294,13 @@
       "login": "Se connecter",
       "passwordResetSuccess": "Mot de passe réinitialisé avec succès",
       "passwordResetSuccessMessage": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
-      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "sidePanel": {
+        "checkEmailTitle": "Vérifiez votre e-mail",
+        "checkEmailDescription": "Suivez les instructions pour vérifier votre adresse.",
+        "resetTitle": "Réinitialiser",
+        "resetDescription": "Entrez votre e-mail et votre nouveau mot de passe pour réinitialiser."
+      }
     },
     "steps": {
       "step1": {
@@ -417,7 +423,8 @@
       "total": "Total",
       "warranty": "Garantie limitée de 90 jours couvrant les éléments du fabricant",
       "details": "Détails",
-      "checkoutNow": "Passer à la commande"
+      "checkoutNow": "Passer à la commande",
+      "no-coupon": "Aucun coupon appliqué"
     }
   },
   "Dashboard": {
@@ -513,6 +520,18 @@
     },
     "errors": {
       "connection": "J'ai des difficultés à me connecter en ce moment. Veuillez réessayer plus tard."
+    }
+  },
+  "News": {
+    "page": {
+      "title": "Actualités & Mises à jour",
+      "description": "Restez à jour avec les dernières nouveautés sur EcoSphere. Découvrez les nouveaux restaurants et boutiques écoresponsables qui rejoignent notre communauté."
+    },
+    "recentlyAdded": {
+      "title": "Récemment ajoutés"
+    },
+    "card": {
+      "viewMore": "Voir plus"
     }
   }
 }
