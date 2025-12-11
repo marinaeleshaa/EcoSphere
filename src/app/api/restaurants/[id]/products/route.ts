@@ -3,7 +3,6 @@ import { ProductController } from "@/backend/features/product/product.controller
 import { IRestaurant } from "@/backend/features/restaurant/restaurant.model";
 import {
   ProductResponse,
-  CreateProductDTO,
   PaginatedProductResponse,
 } from "@/backend/features/product/dto/product.dto";
 import { ApiResponse, ok, serverError, badRequest } from "@/types/api-helpers";
