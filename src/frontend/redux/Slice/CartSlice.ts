@@ -4,10 +4,12 @@ import { RootState } from "../store";
 
 type CartState = {
   items: Record<string, CartItems>;
+  totalAfterDiscount: number;
 };
 
 const initialState: CartState = {
   items: {},
+  totalAfterDiscount: 0,
 };
 
 const cartSlice = createSlice({
@@ -35,7 +37,7 @@ const cartSlice = createSlice({
     },
     updateQuantity(
       state,
-      action: PayloadAction<{ id: string; quantity: number }>
+      action: PayloadAction<{ id: string; quantity: number }>,
     ) {
       const { id, quantity } = action.payload;
       // Item doesn't exist or invalid quantity
@@ -48,10 +50,13 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.items = {};
     },
+    updateCartTotal(state, action: PayloadAction<{ cartTotal: number}>) {
+      state.totalAfterDiscount = action.payload.cartTotal;
+    },
   },
 });
 
-export const { hydrateCart, addItem, updateQuantity, removeItem, clearCart } =
+export const { hydrateCart, addItem, updateQuantity, removeItem, clearCart, updateCartTotal } =
   cartSlice.actions;
 export default cartSlice.reducer;
 

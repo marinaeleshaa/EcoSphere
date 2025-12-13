@@ -1,10 +1,11 @@
 export interface IProduct {
-  id: string;
-  shopName: string;
-  shopSubtitle: string;
-  productImg: string;
-  productName: string;
-  productPrice: number;
-  productSubtitle: string;
-  productDescription: string;
+  _id: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  avatar?: {
+    key: string;
+    url?: string;
+  };
+  availableOnline: boolean;
 }

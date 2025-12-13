@@ -1,7 +1,6 @@
 import CardsView from "@/components/layout/fav/CardsView";
-import FavCardsSection from "@/components/layout/fav/favCardsSection";
 import FavHero from "@/components/layout/fav/FavHero";
-import React from "react";
+import { FavCardsClient } from "@/components/layout/fav/FavCardsClient";
 
 export default function Fav() {
   return (
@@ -9,8 +8,7 @@ export default function Fav() {
       <FavHero />
       <div className="w-[80%] mx-auto mt-10">
         <CardsView />
-        
-      <FavCardsSection />
+        <FavCardsClient />
       </div>
 
     </div>

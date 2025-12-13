@@ -1,40 +1,38 @@
 "use client";
-import { IShop } from "@/types/ShopTypes";
-import { motion } from "framer-motion";
+import { IReview } from "@/types/ShopTypes";
 import { Star } from "lucide-react";
 import { useTranslations } from "next-intl";
+import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
 
-const ShopTextComponent = ({ shop }: { shop: IShop }) => {
+interface ShopTextComponentProps {
+  reviews: IReview[];
+}
+
+const ShopTextComponent = ({ reviews }: ShopTextComponentProps) => {
   const t = useTranslations("ShopDetails.reviews");
-  // Get top 3 reviews sorted by rating (highest first)
-  const topReviews = shop.restaurantRating
-    ? [...shop.restaurantRating].sort((a, b) => b.rate - a.rate).slice(0, 3)
-    : [];
+
+  const validReviews = reviews.filter(
+    (r): r is IReview =>
+      r && typeof r.rate === "number" && typeof r.review === "string"
+  );
+
+  const displayReviews = validReviews.slice();
 
   return (
-    <section className="my-10 overflow-hidden">
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
+    <section className="my-2 overflow-hidden">
+      <BasicAnimatedWrapper>
         <div className="flex items-center justify-center gap-5 capitalize text-foreground text-lg md:text-xl border-b-2 p-5 border-primary">
           <h2 className="text-primary font-semibold">{t("title")}</h2>
         </div>
-        <div className="my-5">
-          {topReviews.length > 0 ? (
+
+        <div className="my-5 max-h-[260px] overflow-y-auto">
+          {displayReviews.length > 0 ? (
             <div className="space-y-6">
-              {topReviews.map((review, index) => (
-                <motion.div
-                  key={review.userId}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeOut",
-                    delay: index * 0.1,
-                  }}
-                  viewport={{ once: true }}
+              {displayReviews.map((review, index) => (
+                <BasicAnimatedWrapper
+                  key={review.review}
+                  index={index}
+                  delay={0.1}
                   className="border-b border-border pb-6 last:border-b-0 last:pb-0"
                 >
                   <div className="flex items-start gap-4">
@@ -65,7 +63,7 @@ const ShopTextComponent = ({ shop }: { shop: IShop }) => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </BasicAnimatedWrapper>
               ))}
             </div>
           ) : (
@@ -74,7 +72,7 @@ const ShopTextComponent = ({ shop }: { shop: IShop }) => {
             </div>
           )}
         </div>
-      </motion.div>
+      </BasicAnimatedWrapper>
     </section>
   );
 };

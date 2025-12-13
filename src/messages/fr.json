@@ -26,7 +26,9 @@
         "overview": "Aperçu",
         "addEvent": "Ajouter un événement",
         "browseEvents": "Parcourir les événements",
-        "eventDetails": "Détails de l’événement"
+        "eventDetails": "Détails de l’événement",
+        "products": "Produits",
+        "orders": "Commandes"
       },
       "footer": {
         "favorite": "Favoris",
@@ -130,6 +132,39 @@
       }
     }
   },
+  "Game": {
+    "hero": {
+      "title": "Morpion",
+      "you": "Vous",
+      "vs": "contre",
+      "ai": "IA"
+    },
+    "status": {
+      "draw": "Match nul",
+      "youWin": "Vous avez gagné",
+      "aiWin": "L’IA a gagné",
+      "aiThinking": "L’IA réfléchit...",
+      "yourTurn": "À votre tour",
+      "pointsAdded": "{points} points ajoutés à vos EcoPoints !",
+      "updatePoints": "Erreur lors de la mise à jour des EcoPoints. Veuillez réessayer.",
+      "loginForPoints": "Connectez-vous pour gagner des EcoPoints !"
+    },
+    "difficulty": {
+      "easy": "Facile",
+      "medium": "Moyen",
+      "hard": "Difficile"
+    },
+    "actions": {
+      "playAgain": "Rejouer",
+      "resetScores": "Réinitialiser les scores"
+    },
+    "scoreBoard": {
+      "title": "TABLEAU DES SCORES",
+      "you": "Vous",
+      "draws": "Matchs nuls",
+      "ai": "IA"
+    }
+  },
   "Shop": {
     "hero": {
       "title": "Boutiques",
@@ -154,6 +189,7 @@
       }
     },
     "filter": {
+      "searchPlaceholder": "Rechercher des boutiques",
       "sortBy": "Trier par :",
       "sortOptions": {
         "default": "Par défaut",
@@ -250,6 +286,62 @@
       "noProducts": "Aucun produit disponible pour ce magasin."
     }
   },
+  "Restaurant": {
+    "Products": {
+      "title": "Produits",
+      "subtitle": "Gérez les articles du menu de votre restaurant",
+      "addProduct": "Ajouter un produit",
+      "searchPlaceholder": "Rechercher des produits...",
+      "noProducts": "Aucun produit trouvé. Ajoutez votre premier produit !",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page {current} sur {total}",
+      "unavailable": "Indisponible",
+      "noImage": "Pas d'image",
+      "currency": "EGP",
+      "actions": {
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "cancel": "Annuler",
+        "save": "Enregistrer le produit",
+        "saving": "Enregistrement...",
+        "deleting": "Suppression..."
+      },
+      "popup": {
+        "addTitle": "Ajouter un nouveau produit",
+        "editTitle": "Modifier le produit",
+        "addDescription": "Ajoutez un nouvel article à votre menu",
+        "editDescription": "Mettre à jour les détails du produit",
+        "titleLabel": "Titre",
+        "titlePlaceholder": "ex : Pizza Margherita",
+        "subtitleLabel": "Sous-titre",
+        "subtitlePlaceholder": "Courte description...",
+        "priceLabel": "Prix (EGP)",
+        "imageLabel": "Image du produit",
+        "availableLabel": "Disponible en ligne",
+        "errors": {
+          "titleRequired": "Le titre est requis",
+          "subtitleRequired": "Le sous-titre est requis",
+          "priceRequired": "Le prix est requis"
+        }
+      },
+      "deleteDialog": {
+        "title": "Supprimer le produit",
+        "description": "Êtes-vous sûr de vouloir supprimer <bold>{name}</bold> ? Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "thisProduct": "ce produit"
+      },
+      "toasts": {
+        "loadError": "Échec du chargement des produits",
+        "createSuccess": "Produit créé avec succès",
+        "createError": "Échec de la création du produit",
+        "updateSuccess": "Produit mis à jour avec succès",
+        "updateError": "Échec de la mise à jour du produit",
+        "deleteSuccess": "Produit supprimé avec succès",
+        "deleteError": "Échec de la suppression du produit"
+      }
+    }
+  },
   "Auth": {
     "page": {
       "newToEcosphere": "Nouveau sur Ecosphere ?",
@@ -293,7 +385,13 @@
       "login": "Se connecter",
       "passwordResetSuccess": "Mot de passe réinitialisé avec succès",
       "passwordResetSuccessMessage": "Votre mot de passe a été réinitialisé avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.",
-      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
+      "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
+      "sidePanel": {
+        "checkEmailTitle": "Vérifiez votre e-mail",
+        "checkEmailDescription": "Suivez les instructions pour vérifier votre adresse.",
+        "resetTitle": "Réinitialiser",
+        "resetDescription": "Entrez votre e-mail et votre nouveau mot de passe pour réinitialiser."
+      }
     },
     "steps": {
       "step1": {
@@ -416,7 +514,8 @@
       "total": "Total",
       "warranty": "Garantie limitée de 90 jours couvrant les éléments du fabricant",
       "details": "Détails",
-      "checkoutNow": "Passer à la commande"
+      "checkoutNow": "Passer à la commande",
+      "no-coupon": "Aucun coupon appliqué"
     }
   },
   "Dashboard": {
@@ -444,54 +543,93 @@
       "sold": "{percent}% vendu"
     }
   },
-  "subscribe": {
-      "titleFirst": "Sélectionnez le ",
-    "boldTitle": "plan parfait",
-    "titleLast": " pour vos besoins",
-    "plans": [
-      {
-        "title": "Formule Débutant",
-        "subtitle": "Idéale pour les petites boutiques ou les nouveaux organisateurs d'événements.",
-        "price": "9$ / mois",
-        "btnText": "Commencer",
-        "features": [
-          "Téléverser jusqu'à 10 produits ou événements",
-          "Accès au tableau de bord basique",
-          "Aperçu simple des analyses",
-          "Support standard",
-          "Badge écologique inclus"
-        ],
-        "icon": "leaf"
+  "AI": {
+    "button": {
+      "label": "Demander à l'IA"
+    },
+    "window": {
+      "title": "EcoSphere IA",
+      "subtitle": "Votre Assistant Vert",
+      "clearChat": "Effacer la discussion",
+      "emptyState": {
+        "title": "Comment puis-je vous aider à recycler aujourd'hui ?",
+        "subtitle": "Posez des questions sur des produits, des restaurants, ou des conseils de recyclage !"
       },
-
-      {
-        "title": "Formule Pro",
-        "subtitle": "Pour les boutiques professionnelles et les grands organisateurs d'événements.",
-        "price": "59$ / mois",
-        "btnText": "Passer en Pro",
-        "features": [
-          "Produits ou événements illimités",
-          "Personnalisation complète du tableau de bord",
-          "Analyses avancées avec IA",
-          "Support dédié 24/7",
-          "Accès à tous les outils premium Écosphère"
-        ],
-        "icon": "eco-pro"
+      "input": {
+        "placeholder": "Posez-moi n'importe quelle question..."
       },
-      {
-        "title": "Formule Croissance",
-        "subtitle": "Parfaite pour les boutiques en expansion ou les organisateurs actifs.",
-        "price": "29$ / mois",
-        "btnText": "Mettre à niveau",
-        "features": [
-          "Téléverser jusqu'à 50 produits ou événements",
-          "Gestion avancée du contenu",
-          "Tableau de bord analytique complet",
-          "Support prioritaire",
-          "Accès aux outils d'éco-événements"
-        ],
-        "icon": "growth"
+      "disclaimer": "L'IA peut commettre des erreurs. Veuillez vérifier les informations importantes."
+    },
+    "errors": {
+      "connection": "J'ai des difficultés à me connecter en ce moment. Veuillez réessayer plus tard."
+    }
+  },
+  "News": {
+    "page": {
+      "title": "Actualités & Mises à jour",
+      "description": "Restez à jour avec les dernières nouveautés sur EcoSphere. Découvrez les nouveaux restaurants et boutiques écoresponsables qui rejoignent notre communauté."
+    },
+    "recentlyAdded": {
+      "title": "Récemment ajoutés"
+    },
+    "card": {
+      "viewMore": "Voir plus"
+    }
+  },
+  "ForgotPassword": {
+    "logoAlt": "Logo EcoSphere",
+    "forgotPasswordImageAlt": "Illustration Mot de passe oublié",
+    "verifyEmailImageAlt": "Illustration Vérifier l'e-mail",
+    "emailStep": {
+      "title": "Vérifiez votre e-mail",
+      "description": "Entrez votre e-mail pour recevoir un code de vérification."
+    },
+    "resetStep": {
+      "title": "Réinitialiser le mot de passe",
+      "description": "Créez un nouveau mot de passe sécurisé pour votre compte."
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "description": "Créez un nouveau mot de passe sécurisé pour votre compte",
+      "newPassword": {
+        "label": "Nouveau mot de passe",
+        "placeholder": "Entrez le nouveau mot de passe"
+      },
+      "confirmPassword": {
+        "label": "Confirmer le mot de passe",
+        "placeholder": "Confirmez le nouveau mot de passe",
+        "mismatch": "Les mots de passe ne correspondent pas"
+      },
+      "requirements": {
+        "minLength": "Au moins 8 caractères",
+        "hasNumber": "Contient un chiffre",
+        "hasSpecial": "Contient un caractère spécial"
+      },
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "submitButton": "Réinitialiser le mot de passe",
+      "success": {
+        "title": "Mot de passe changé !",
+        "description": "Votre mot de passe a été changé avec succès. Vous serez redirigé vers la page de connexion sous peu.",
+        "button": "Aller à la connexion"
       }
-    ]
+    },
+    "emailVerification": {
+      "emailStep": {
+        "title": "Vérifier l'e-mail",
+        "description": "Entrez votre adresse e-mail et nous vous enverrons un code de vérification à 6 chiffres.",
+        "placeholder": "Entrez votre e-mail",
+        "sendButton": "Envoyer le code",
+        "backButton": "Retour à la connexion"
+      },
+      "codeStep": {
+        "title": "Entrer le code",
+        "description": "Nous avons envoyé un code à 6 chiffres à {email}",
+        "inputLabel": "Chiffre {position}",
+        "error": "Veuillez entrer les 6 chiffres.",
+        "verifyButton": "Vérifier le code",
+        "changeEmailButton": "Changer l'e-mail"
+      }
+    }
   }
 }

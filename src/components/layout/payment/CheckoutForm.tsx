@@ -30,14 +30,14 @@ export const CheckoutForm = ({ amount, onSuccess }: CheckoutFormProps) => {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/payment/success`,
+          return_url: `${globalThis.location.origin}/payment/success`,
         },
         redirect: "if_required",
       });
 
       if (error) {
         setErrorMessage(error.message || "An unexpected error occurred.");
-      } else if (paymentIntent && paymentIntent.status === "succeeded") {
+      } else if (paymentIntent?.status === "succeeded") {
         setIsSuccess(true);
         if (onSuccess) onSuccess();
       }

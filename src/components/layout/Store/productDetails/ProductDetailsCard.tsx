@@ -6,7 +6,7 @@ import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
-import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
+import { isInFavSelector, toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 import { useTranslations } from 'next-intl';
 
@@ -27,7 +27,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const isFav = useSelector((state: RootState) => isInFavSelector(state, id));
   const dispatch = useDispatch<AppDispatch>()
   const handleFav = () => {
-    dispatch(toggleFav(product));
+    dispatch(toggleFavoriteAsync(product));
     if (isFav) {
       toast.success(t('removedFromFavorites'));
     } else {

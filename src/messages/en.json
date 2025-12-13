@@ -26,7 +26,9 @@
         "overview": "OverView",
         "addEvent": "Add Event",
         "browseEvents": "Browse Events",
-        "eventDetails": "Event Details"
+        "eventDetails": "Event Details",
+        "products": "Products",
+        "orders": "Orders"
       },
       "footer": {
         "favorite": "Favorite",
@@ -142,7 +144,10 @@
       "youWin": "You Win",
       "aiWin": "AI Win",
       "aiThinking": "AI think...",
-      "yourTurn": "Your turn"
+      "yourTurn": "Your turn",
+      "pointsAdded": "{points} points added to your EcoPoints!",
+      "updatePoints": "Error updating EcoPoints. Please try again.",
+      "loginForPoints": "Login to earn EcoPoints!"
     },
     "difficulty": {
       "easy": "Easy",
@@ -184,6 +189,7 @@
       }
     },
     "filter": {
+      "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
       "sortOptions": {
         "default": "Default",
@@ -191,6 +197,62 @@
         "lowestRating": "Lowest Rating"
       },
       "noProducts": "No products match your current search criteria."
+    }
+  },
+  "Restaurant": {
+    "Products": {
+      "title": "Products",
+      "subtitle": "Manage your restaurant menu items",
+      "addProduct": "Add Product",
+      "searchPlaceholder": "Search products...",
+      "noProducts": "No products found. Add your first product!",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}",
+      "unavailable": "Unavailable",
+      "noImage": "No Image",
+      "currency": "EGP",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save Product",
+        "saving": "Saving...",
+        "deleting": "Deleting..."
+      },
+      "popup": {
+        "addTitle": "Add New Product",
+        "editTitle": "Edit Product",
+        "addDescription": "Add a new item to your menu",
+        "editDescription": "Update product details",
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. Margherita Pizza",
+        "subtitleLabel": "Subtitle",
+        "subtitlePlaceholder": "Short description...",
+        "priceLabel": "Price (EGP)",
+        "imageLabel": "Product Image",
+        "availableLabel": "Available Online",
+        "errors": {
+          "titleRequired": "Title is required",
+          "subtitleRequired": "Subtitle is required",
+          "priceRequired": "Price is required"
+        }
+      },
+      "deleteDialog": {
+        "title": "Delete Product",
+        "description": "Are you sure you want to delete <bold>{name}</bold>? This action cannot be undone.",
+        "confirm": "Delete",
+        "thisProduct": "this product"
+      },
+      "toasts": {
+        "loadError": "Failed to load products",
+        "createSuccess": "Product created successfully",
+        "createError": "Failed to create product",
+        "updateSuccess": "Product updated successfully",
+        "updateError": "Failed to update product",
+        "deleteSuccess": "Product deleted successfully",
+        "deleteError": "Failed to delete product"
+      }
     }
   },
   "Store": {
@@ -323,7 +385,13 @@
       "login": "Login",
       "passwordResetSuccess": "Password Reset Successful",
       "passwordResetSuccessMessage": "Your password has been reset successfully. You can now log in with your new password.",
-      "passwordsDoNotMatch": "Passwords do not match"
+      "passwordsDoNotMatch": "Passwords do not match",
+      "sidePanel": {
+        "checkEmailTitle": "Check Your Email",
+        "checkEmailDescription": "Follow the instructions to verify your address.",
+        "resetTitle": "Reset",
+        "resetDescription": "Enter your email and new password to reset."
+      }
     },
     "steps": {
       "step1": {
@@ -446,7 +514,8 @@
       "total": "Total",
       "warranty": "90 Day Limited Warranty up to manufacturer's elements",
       "details": "Details",
-      "checkoutNow": "Checkout Now"
+      "checkoutNow": "Checkout Now",
+      "no-coupon": "No coupon applied"
     }
   },
   "Dashboard": {
@@ -474,55 +543,93 @@
       "sold": "{percent}% Sold"
     }
   },
-  "subscribe": {
-    "titleFirst": "Select the ",
-    "boldTitle": "best plan",
-    "titleLast": " for your needs",
-
-    "plans": [
-      {
-        "title": "Starter Plan",
-        "subtitle": "Perfect for small shops or new event organizers.",
-        "price": "$9 / month",
-        "btnText": "Get Started",
-        "features": [
-          "Upload up to 10 products or events",
-          "Basic dashboard access",
-          "Simple analytics overview",
-          "Standard support",
-          "Eco-friendly badge included"
-        ],
-        "icon": "leaf"
+  "AI": {
+    "button": {
+      "label": "Ask AI"
+    },
+    "window": {
+      "title": "EcoSphere AI",
+      "subtitle": "Your Green Assistant",
+      "clearChat": "Clear Chat",
+      "emptyState": {
+        "title": "How can I help you recycle today?",
+        "subtitle": "Ask about products, restaurants, or recycling tips!"
       },
-
-      {
-        "title": "Pro Plan",
-        "subtitle": "For professional stores and large event organizers.",
-        "price": "$59 / month",
-        "btnText": "Go Pro",
-        "features": [
-          "Unlimited products or events",
-          "Full control panel customization",
-          "Deep AI-powered analytics",
-          "24/7 dedicated support",
-          "Access to all ecosphere premium tools"
-        ],
-        "icon": "eco-pro"
+      "input": {
+        "placeholder": "Ask me anything..."
       },
-      {
-        "title": "Growth Plan",
-        "subtitle": "Great for expanding stores or active event organizers.",
-        "price": "$29 / month",
-        "btnText": "Upgrade Now",
-        "features": [
-          "Upload up to 50 products or events",
-          "Advanced content management",
-          "Full analytics dashboard",
-          "Priority support",
-          "Access to eco-event tools"
-        ],
-        "icon": "growth"
+      "disclaimer": "AI can make mistakes. Please verify important info."
+    },
+    "errors": {
+      "connection": "I'm having trouble connecting right now. Please try again later."
+    }
+  },
+  "News": {
+    "page": {
+      "title": "News & Updates",
+      "description": "Stay up to date with the latest additions to EcoSphere. Discover new eco-friendly restaurants and shops joining our community."
+    },
+    "recentlyAdded": {
+      "title": "Recently Added"
+    },
+    "card": {
+      "viewMore": "View More"
+    }
+  },
+  "ForgotPassword": {
+    "logoAlt": "EcoSphere Logo",
+    "forgotPasswordImageAlt": "Forgot Password Illustration",
+    "verifyEmailImageAlt": "Verify Email Illustration",
+    "emailStep": {
+      "title": "Verify Your Email",
+      "description": "Enter your email to receive a verification code."
+    },
+    "resetStep": {
+      "title": "Reset Password",
+      "description": "Create a new secure password for your account."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Create a new secure password for your account",
+      "newPassword": {
+        "label": "New Password",
+        "placeholder": "Enter new password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Confirm new password",
+        "mismatch": "Passwords do not match"
+      },
+      "requirements": {
+        "minLength": "At least 8 characters",
+        "hasNumber": "Contains a number",
+        "hasSpecial": "Contains a special character"
+      },
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submitButton": "Reset Password",
+      "success": {
+        "title": "Password Changed!",
+        "description": "Your password has been successfully changed. You will be redirected to the login page shortly.",
+        "button": "Go to Login"
       }
-    ]
+    },
+    "emailVerification": {
+      "emailStep": {
+        "title": "Verify Email",
+        "description": "Enter your email address and we'll send you a 6-digit verification code.",
+        "placeholder": "Enter your email",
+        "sendButton": "Send Code",
+        "backButton": "Back to Login"
+      },
+      "codeStep": {
+        "title": "Enter Code",
+        "description": "We've sent a 6-digit code to {email}",
+        "inputLabel": "Digit {position}",
+        "error": "Please enter all 6 digits.",
+        "verifyButton": "Verify Code",
+        "changeEmailButton": "Change Email"
+      }
+    }
   }
 }

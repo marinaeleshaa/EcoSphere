@@ -19,3 +19,19 @@ export interface CreateProductDTO {
 }
 
 export interface UpdateProductDTO extends Partial<CreateProductDTO> {}
+
+export interface ProductPageOptions {
+  page?: number;
+  limit?: number;
+  search?: string;
+}
+
+export interface PaginatedProductResponse {
+  data: ProductResponse[];
+  metadata: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}

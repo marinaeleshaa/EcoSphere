@@ -8,6 +8,7 @@ import { SidebarInset } from "@/components/ui/sidebar";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import SidebarTriggerBtn from "@/components/layout/SideBar/SidebarTriggerBtn/SidebarTriggerBtn";
+import { AIChatWidget } from "@/components/layout/ai/AIChatWidget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,13 +41,18 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f6f6f6]`}
       >
-        <NextIntlClientProvider messages={messages} locale={locale} key={locale}>
+        <NextIntlClientProvider 
+          messages={messages}
+          locale={locale}
+          key={locale}
+        >
           <Providers>
             <Toaster position="top-right" />
             <SideBar />
             <SidebarInset>
-              <SidebarTriggerBtn/>
+              <SidebarTriggerBtn />
               {children}
+              <AIChatWidget />
             </SidebarInset>
           </Providers>
         </NextIntlClientProvider>

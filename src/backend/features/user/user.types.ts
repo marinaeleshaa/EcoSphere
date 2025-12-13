@@ -1,7 +1,3 @@
-import { IUser } from "./user.model";
+import { IUser, UserRole } from "./user.model";
 
-export type DashboardData = {
-	organizer: IUser[];
-	recycleMan: IUser[];
-	admin: IUser[];
-};
+export type DashboardUsers = Record<UserRole, IUser[]>;

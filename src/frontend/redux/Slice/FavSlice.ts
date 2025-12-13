@@ -1,18 +1,61 @@
 import { IProduct } from "@/types/ProductType";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/frontend/redux/store";
 
 interface FavState {
   view: "grid" | "horizontal";
   favProducts: IProduct[];
+  status: "idle" | "loading" | "succeeded" | "failed";
 }
-
-const savedFavs = typeof window !== "undefined" ? localStorage.getItem("favProducts") : null;
 
 const initialState: FavState = {
   view: "grid",
-  favProducts: savedFavs ? JSON.parse(savedFavs) : [],
+  favProducts: [],
+  status: "idle",
 };
+
+export const getFavorites = createAsyncThunk(
+  "fav/getFavorites",
+  async (_, { getState }) => {
+    const res = await fetch("/api/users/favorites", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch favorites");
+
+    const { data } = await res.json();
+
+    const state = getState() as RootState;
+    const existingFavs = state.fav.favProducts || [];
+
+    const merged = Array.from(
+      new Map(
+        [...existingFavs, ...data].map((item) => [item._id, item])
+      ).values()
+    );
+
+    return merged;
+  }
+);
+
+export const toggleFavoriteAsync = createAsyncThunk(
+  "fav/toggleFavoriteAsync",
+  async (product: Partial<IProduct>) => {
+    const res = await fetch("/api/users/favorites", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ ids: product._id }),
+    });
+
+    if (!res.ok) throw new Error("Failed to toggle favorite");
+
+    const { data } = await res.json();
+    return data;
+  }
+);
 
 const FavSlice = createSlice({
   name: "fav",
@@ -21,30 +64,32 @@ const FavSlice = createSlice({
     toggleFavView(state) {
       state.view = state.view === "grid" ? "horizontal" : "grid";
     },
-
-    toggleFav(state, action: PayloadAction<IProduct>) {
-      const found = state.favProducts.some((p) => p.id === action.payload.id);
-
-      if (!found) {
-        state.favProducts.push(action.payload);
-      } else {
-        state.favProducts = state.favProducts.filter(
-          (product) => product.id !== action.payload.id
-        );
-      }
-
-      localStorage.setItem("favProducts", JSON.stringify(state.favProducts));
-    },
-
     clearFav(state) {
       state.favProducts = [];
-      localStorage.removeItem("favProducts");
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getFavorites.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getFavorites.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.favProducts = action.payload;
+      })
+      .addCase(getFavorites.rejected, (state) => {
+        state.status = "failed";
+      })
+
+      .addCase(toggleFavoriteAsync.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.favProducts = action.payload;
+      });
   },
 });
 
-export const { toggleFavView, toggleFav, clearFav } = FavSlice.actions;
+export const { toggleFavView, clearFav } = FavSlice.actions;
 export default FavSlice.reducer;
 
 export const isInFavSelector = (state: RootState, productId: string) =>
-  state.fav.favProducts.some((p) => p.id === productId);
+  state.fav.favProducts.some((p) => p._id === productId);

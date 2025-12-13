@@ -29,7 +29,7 @@ import {
 	SidebarTrigger,
 	SidebarMenuBadge,
 } from "@/components/ui/sidebar";
-import { MdOutlineAddToPhotos, MdOutlineEventRepeat } from "react-icons/md";
+import { MdOutlineAddToPhotos, MdOutlineEventRepeat, MdRestaurantMenu, MdAssignment } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import Link from "next/link";
 import ThemeBtn from "../ThemeBtn/ThemeBtn";
@@ -115,6 +115,19 @@ export default function SideBar() {
 			icon: PiListMagnifyingGlassBold,
 		},
 	];
+	// Restaurant dashboard items.
+	const restaurantItems = [
+		{
+			title: t('dashboard.products'),
+			url: "/restaurant/products",
+			icon: MdRestaurantMenu,
+		},
+		{
+			title: t('dashboard.orders'),
+			url: "/restaurant/orders",
+			icon: MdAssignment,
+		},
+	];
 	const pathname = usePathname();
 	const { favProducts } = useSelector((state: RootState) => state.fav);
 
@@ -150,6 +163,26 @@ export default function SideBar() {
 						<SidebarGroupContent>
 							<SidebarMenu>
 								{dashboardItems.map((item) => (
+									<SidebarMenuItem key={item.title}>
+										<SidebarMenuButton asChild isActive={matchPathWithOptionalLocale(pathname, item.url)}>
+											<Link href={item.url}>
+												<item.icon />
+												<span className="capitalize">{item.title}</span>
+											</Link>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								))}
+							</SidebarMenu>
+						</SidebarGroupContent>
+					</SidebarGroup>
+				}
+				{
+					session?.user.role == 'shop' &&
+					<SidebarGroup>
+						<SidebarGroupLabel>{t('groups.dashboard')}</SidebarGroupLabel>
+						<SidebarGroupContent>
+							<SidebarMenu>
+								{restaurantItems.map((item) => (
 									<SidebarMenuItem key={item.title}>
 										<SidebarMenuButton asChild isActive={matchPathWithOptionalLocale(pathname, item.url)}>
 											<Link href={item.url}>

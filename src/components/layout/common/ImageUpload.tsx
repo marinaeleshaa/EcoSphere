@@ -8,15 +8,19 @@ import { toast } from "sonner";
 interface ImageUploadProps {
     currentImageUrl?: string;
     onImageUpdate: (newUrl: string) => void;
+    onUploadComplete?: (data: { key: string; url: string }) => void;
     endpoint?: string;
     className?: string;
+    variant?: "circle" | "square";
 }
 
 export default function ImageUpload({
     currentImageUrl,
     onImageUpdate,
+    onUploadComplete,
     endpoint = "/api/upload/avatar",
     className = "",
+    variant = "circle",
 }: Readonly<ImageUploadProps>) {
     const [isUploading, setIsUploading] = useState(false);
     const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl || null);
@@ -60,7 +64,25 @@ export default function ImageUpload({
             }
 
             toast.success("Image uploaded successfully");
-            onImageUpdate(data.data.avatar.url);
+            
+            // Handle different response structures
+            if (data.data?.avatar?.url) {
+                // Classic Avatar Response
+                onImageUpdate(data.data.avatar.url);
+                if (onUploadComplete && data.data.avatar.key) {
+                    onUploadComplete({ key: data.data.avatar.key, url: data.data.avatar.url });
+                }
+            } else if (data.data?.url) {
+                // Generic Upload Response
+                onImageUpdate(data.data.url);
+                if (onUploadComplete && data.data.key) {
+                    onUploadComplete({ key: data.data.key, url: data.data.url });
+                }
+            } else {
+                 // Fallback or Error
+                 console.warn("Unexpected upload response structure", data);
+            }
+
         } catch (error) { 
             console.error("Upload error:", error);
             toast.error("Failed to upload image");
@@ -93,8 +115,8 @@ export default function ImageUpload({
     };
 
     return (
-        <div className={`relative group w-48 h-48 shrink-0 ${className}`}>
-            <div className="w-full h-full rounded-full overflow-hidden border-4 border-background shadow-xl relative bg-muted">
+        <div className={`relative group shrink-0 ${variant === 'circle' ? 'w-48 h-48' : 'w-full h-full'} ${className}`}>
+            <div className={`w-full h-full overflow-hidden border-4 border-background shadow-xl relative bg-muted ${variant === 'circle' ? 'rounded-full' : 'rounded-lg'}`}>
                 {previewUrl ? (
                     <Image
                         src={previewUrl}
@@ -111,6 +133,7 @@ export default function ImageUpload({
                 {/* Overlay */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
+                        type="button"
                         onClick={() => fileInputRef.current?.click()}
                         className="p-2 bg-white/20 hover:bg-white/40 rounded-full text-white transition-colors"
                         disabled={isUploading}
@@ -119,6 +142,7 @@ export default function ImageUpload({
                     </button>
                     {previewUrl && (
                         <button
+                            type="button"
                             onClick={handleDelete}
                             className="p-2 bg-red-500/20 hover:bg-red-500/40 rounded-full text-white transition-colors"
                             disabled={isUploading}

@@ -4,24 +4,21 @@ import { useTheme } from "next-themes";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect, useState } from "react";
-import { CheckoutForm } from "@/components/payment/CheckoutForm";
+import { CheckoutForm } from "@/components/layout/payment/CheckoutForm";
 import { createPaymentIntent } from "@/frontend/api/Payment";
 import { Loader2, CreditCard, Banknote } from "lucide-react";
 import { useAppSelector } from "@/frontend/redux/hooks";
-import { selectCartTotal } from "@/frontend/redux/selector/cartSelector";
+import { selectCartPrice } from "@/frontend/redux/selector/cartSelector";
 
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_sample"
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_test_sample",
 );
 
 type PaymentMethod = "card" | "cash";
 
 export default function CheckoutPage() {
-  const subtotalCents = useAppSelector(selectCartTotal);
-  const discountCents = Math.round(subtotalCents * 0.1);
-  const deliveryCents = 5000; // 50 EGP (Stripe requires minimum charge of ~$0.50)
-
-  const amount = subtotalCents - discountCents + deliveryCents;
+  const total = useAppSelector(selectCartPrice);
+  const amount = total * 100;
 
   const { theme, systemTheme } = useTheme();
 
@@ -44,7 +41,7 @@ export default function CheckoutPage() {
           console.error("Failed to init payment:", err);
           setError(
             err.message ||
-              "Failed to initialize payment session. Is the backend running?"
+              "Failed to initialize payment session. Is the backend running?",
           );
         } finally {
           setLoadingSecret(false);
@@ -53,6 +50,8 @@ export default function CheckoutPage() {
       initPayment();
     }
   }, [amount, paymentMethod, clientSecret, loadingSecret, error]);
+
+  if (!total) return <p>something went wrong</p>;
 
   if (error) {
     return (
@@ -137,7 +136,10 @@ export default function CheckoutPage() {
             </div>
             <h3 className="text-lg font-bold mb-2">Cash on Delivery</h3>
             <p className="text-zinc-500 dark:text-zinc-400 mb-6 px-4">
-              You will pay <strong className="text-primary">{(amount / 100).toFixed(2)}EGP</strong>{" "}
+              You will pay{" "}
+              <strong className="text-primary">
+                {(amount / 100).toFixed(2)}EGP
+              </strong>{" "}
               directly to the courier upon delivery.
             </p>
             <button

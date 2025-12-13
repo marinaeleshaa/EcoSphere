@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { IProduct } from "@/types/ProductType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/frontend/redux/store";
-import { isInFavSelector, toggleFav } from "@/frontend/redux/Slice/FavSlice";
+import { isInFavSelector, toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { IoHeartCircleOutline, IoHeartCircleSharp } from "react-icons/io5";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -20,29 +20,27 @@ import {
 const ProductCard = (product: IProduct) => {
   const t = useTranslations("Store.product");
   const {
-    id,
-    shopName,
-    shopSubtitle,
-    productImg,
-    productName,
-    productPrice,
-    productSubtitle,
-    productDescription,
+    _id,
+    title,
+    subtitle,
+    price,
+    avatar,
+    availableOnline,
   } = product;
 
   const router = useRouter();
 
   const dispatch = useAppDispatch();
   const isFav = useSelector((state: RootState) =>
-    isInFavSelector(state, product.id)
+    isInFavSelector(state, _id)
   );
   const isInCart = useSelector((state: RootState) =>
-    isInCartSelector(state, product.id)
+    isInCartSelector(state, _id)
   );
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    dispatch(toggleFav(product));
+    dispatch(toggleFavoriteAsync(product));
     if (isFav) {
       toast.success(t("removedFromFavorites"));
     } else {
@@ -55,30 +53,25 @@ const ProductCard = (product: IProduct) => {
     if (!isInCart) {
       dispatch(
         addItem({
-          id: id,
-          price: productPrice,
+          id: _id,
+          price,
           quantity: 1,
-          title: productName,
-          description: productDescription,
-          image: productImg,
+          title,
+          description: subtitle,
+          image: avatar?.url || "/store img/2.jpg",
         })
       );
       toast.success("added to cart");
     } else {
-      dispatch(removeItem(id));
+      dispatch(removeItem(_id));
       toast.success("removed from cart");
     }
-    // if (isFav) {
-    // 	toast.success("Removed from favorites");
-    // } else {
-    // 	toast.success("Added to favorites");
-    // }
   };
 
   return (
     <motion.div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer"
-      onClick={() => router.push(`/store/${id}`)}
+      onClick={() => router.push(`/store/${_id}`)}
     >
       {/* header - fixed height */}
       <div className="flex justify-between items-center p-5 min-h-20">
@@ -86,16 +79,16 @@ const ProductCard = (product: IProduct) => {
           <Image
             width={1000}
             height={1000}
-            src="/store img/avatar.jpg"
-            alt="avatar"
+            src={avatar?.url || "/store img/2.jpg"}
+            alt={title}
             className="w-10 h-10 rounded-full shrink-0"
           />
           <div className="min-w-0 flex-1">
             <p className="line-clamp-1 font-medium text-sm leading-tight">
-              {shopName}
+              {title}
             </p>
             <p className="text-xs text-secondary-foreground line-clamp-1">
-              {shopSubtitle}
+              {subtitle}
             </p>
           </div>
         </div>
@@ -107,7 +100,7 @@ const ProductCard = (product: IProduct) => {
         <Image
           width={1000}
           height={1000}
-          src={productImg}
+          src={avatar?.url || "/store img/2.jpg"}
           alt="product"
           className="w-full h-full object-cover"
         />
@@ -115,18 +108,15 @@ const ProductCard = (product: IProduct) => {
 
       {/* product details - flexible but controlled */}
       <div className="p-5 flex flex-col flex-1 min-h-0">
-        <p className="text-lg font-semibold line-clamp-1 mb-1">{productName}</p>
-        <p className="text-sm text-secondary-foreground/80 line-clamp-1 mb-2">
-          {productSubtitle}
-        </p>
+        <p className="text-lg font-semibold line-clamp-1 mb-1">{title}</p>
         <div className="grow ">
           <p className="text-sm text-secondary-foreground/90 line-clamp-3 mb-3   ">
-            {productDescription}
+            {subtitle}
           </p>
         </div>
         <div className="flex justify-between items-center">
           <p className="text-lg font-semibold mt-auto ml-10">
-            {productPrice.toFixed(2)}
+            {price.toFixed(2)}
             <span className="text-primary ml-1">EGP</span>
           </p>
           <div className=" flex gap-3 text-2xl">

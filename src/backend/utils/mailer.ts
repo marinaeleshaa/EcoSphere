@@ -5,6 +5,7 @@ import {
 	type UserType,
 	newEventSubject,
 	newEventTemplate,
+	redeemCouponTemplate,
 } from "./mailTemplates";
 
 const transporter = nodemailer.createTransport({
@@ -18,7 +19,11 @@ const transporter = nodemailer.createTransport({
 });
 
 function ensureSmtpConfigured() {
-	if (!process.env.SMTP_SERVICE || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+	if (
+		!process.env.SMTP_SERVICE ||
+		!process.env.SMTP_USER ||
+		!process.env.SMTP_PASS
+	) {
 		console.warn("SMTP env vars missing; skipping email send.");
 		return false;
 	}
@@ -72,3 +77,18 @@ export async function sendNewEventEmail(
 	}
 }
 
+export const sendRedeemingMail = async (
+	email: string,
+	name: string,
+	code: string,
+	validTo: Date,
+	rate: number
+) => {
+	await transporter
+		.sendMail({
+			to: email,
+			subject: "Your EcoSphere Reward Code 🎁",
+			html: redeemCouponTemplate(code, validTo, rate, name),
+		})
+		.catch((error) => console.error("Failed to send new event email:", error));
+};

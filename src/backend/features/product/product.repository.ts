@@ -6,12 +6,17 @@ import {
   ProductResponse,
   CreateProductDTO,
   UpdateProductDTO,
+  PaginatedProductResponse,
+  ProductPageOptions,
 } from "./dto/product.dto";
 
 export interface IProductRepository {
   findAllProducts(): Promise<ProductResponse[]>;
   findProductById(productId: string): Promise<ProductResponse | null>;
-  findProductsByRestaurantId(restaurantId: string): Promise<ProductResponse[]>;
+  findProductsByRestaurantId(
+    restaurantId: string,
+    options?: ProductPageOptions
+  ): Promise<PaginatedProductResponse | ProductResponse[]>;
   addProduct(
     restaurantId: string,
     productData: CreateProductDTO
@@ -73,10 +78,36 @@ export class ProductRepository implements IProductRepository {
   }
 
   async findProductsByRestaurantId(
-    restaurantId: string
-  ): Promise<ProductResponse[]> {
+    restaurantId: string,
+    options?: ProductPageOptions
+  ): Promise<PaginatedProductResponse | ProductResponse[]> {
     await DBInstance.getConnection();
-    return await RestaurantModel.aggregate<ProductResponse>([
+
+    // If options are not provided or don't include page/limit, return simple list (legacy behavior)
+    if (!options || (!options.page && !options.limit)) {
+      return await RestaurantModel.aggregate<ProductResponse>([
+        { $match: { _id: new mongoose.Types.ObjectId(restaurantId) } },
+        { $unwind: "$menus" },
+        {
+          $project: {
+            _id: "$menus._id",
+            restaurantId: "$_id",
+            restaurantName: "$name",
+            title: "$menus.title",
+            subtitle: "$menus.subtitle",
+            price: "$menus.price",
+            avatar: "$menus.avatar",
+            availableOnline: "$menus.availableOnline",
+            itemRating: "$menus.itemRating",
+          },
+        },
+      ]).exec();
+    }
+
+    const { page = 1, limit = 10, search = "" } = options;
+    const skip = (page - 1) * limit;
+
+    const pipeline: any[] = [
       { $match: { _id: new mongoose.Types.ObjectId(restaurantId) } },
       { $unwind: "$menus" },
       {
@@ -92,7 +123,38 @@ export class ProductRepository implements IProductRepository {
           itemRating: "$menus.itemRating",
         },
       },
-    ]).exec();
+    ];
+
+    pipeline.push({
+      $match: {
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { subtitle: { $regex: search, $options: "i" } },
+          // Add description if it exists in the schema, though subtitle seems to be the one used for description in this context
+        ],
+      },
+    });
+
+    pipeline.push({
+      $facet: {
+        metadata: [{ $count: "total" }],
+        data: [{ $skip: skip }, { $limit: limit }],
+      },
+    });
+
+    const result = await RestaurantModel.aggregate(pipeline).exec();
+    const data = result[0]?.data || [];
+    const total = result[0]?.metadata[0]?.total || 0;
+
+    return {
+      data,
+      metadata: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async addProduct(

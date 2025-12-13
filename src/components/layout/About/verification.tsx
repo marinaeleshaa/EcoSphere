@@ -28,8 +28,8 @@ export default function Verification() {
                   {t('label')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  The EcoSphere <br />
-                  <span className="text-accent-foreground">Verification.</span>
+                  {t('title')} <br />
+                  <span className="text-accent-foreground">{t('titleHighlight')}</span>
                 </h2>
               </div>
 
