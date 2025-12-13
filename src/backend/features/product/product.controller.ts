@@ -7,6 +7,7 @@ import {
   UpdateProductDTO,
   ProductPageOptions,
   PaginatedProductResponse,
+  mapResponseToIProduct,
 } from "./dto/product.dto";
 
 @injectable()
@@ -16,7 +17,8 @@ export class ProductController {
   ) {}
 
   async getAll(): Promise<ProductResponse[]> {
-    return await this.productService.getAllProducts();
+    const products = await this.productService.getAllProducts();
+    return products.map(product => mapResponseToIProduct(product));
   }
 
   async getById(id: string): Promise<ProductResponse | null> {

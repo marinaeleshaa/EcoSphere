@@ -1,8 +1,8 @@
 import StoreSlider from "@/components/layout/Store/StoreSlider";
 import HeroSection from "@/components/layout/common/HeroSection";
 import { useTranslations } from 'next-intl';
-import { ProductCardSectionClient } from "@/components/layout/Store/ProductCardSectionClient";
 import { getProducts } from "@/frontend/api/Store";
+import ProductCardSection from "@/components/layout/Store/ProductCardSection";
 
 export default function Store() {
   const t = useTranslations('Store.hero');
@@ -17,7 +17,7 @@ export default function Store() {
         subTitle={t('subtitle')}
       />
       <StoreSlider />
-      <ProductCardSectionClient products={products} />
+      <ProductCardSection products={products} />
     </div>
   );
 }

@@ -32,7 +32,7 @@ export const getFavorites = createAsyncThunk(
 
     const merged = Array.from(
       new Map(
-        [...existingFavs, ...data].map((item) => [item._id, item])
+        [...existingFavs, ...data].map((item) => [item.id, item])
       ).values()
     );
 
@@ -47,7 +47,7 @@ export const toggleFavoriteAsync = createAsyncThunk(
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ ids: product._id }),
+      body: JSON.stringify({ ids: product.id }),
     });
 
     if (!res.ok) throw new Error("Failed to toggle favorite");
@@ -92,4 +92,4 @@ export const { toggleFavView, clearFav } = FavSlice.actions;
 export default FavSlice.reducer;
 
 export const isInFavSelector = (state: RootState, productId: string) =>
-  state.fav.favProducts.some((p) => p._id === productId);
+  state.fav.favProducts.some((p) => p.id === productId);

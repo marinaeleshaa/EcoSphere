@@ -32,7 +32,7 @@ const FavCard = ({ product }: FavCardProps) => {
         className={`${view === "grid" ? "w-full h-[250px]" : "w-1/3 h-full"}`}
       >
         <Image
-          src={product.avatar?.url || "/store img/2.png"}
+          src={product.productImg || "/store img/2.png"}
           alt="product img"
           width={300}
           height={300}
@@ -40,7 +40,7 @@ const FavCard = ({ product }: FavCardProps) => {
         />
       </div>
       <div className="p-3 capitalize flex-1 flex flex-col justify-between gap-2">
-        <h3 className="text-foreground text-md md:text-lg">{product.title}</h3>
+        <h3 className="text-foreground text-md md:text-lg">{product.productName}</h3>
         {view === "horizontal" && (
           <>
             <div className="flex items-center gap-2">
@@ -55,7 +55,7 @@ const FavCard = ({ product }: FavCardProps) => {
               <span className="text-sm text-muted-foreground">(5.0)</span>
             </div>
 
-            <p className="text-primary">{product.subtitle}</p>
+            <p className="text-primary">{product.productDescription}</p>
           </>
         )}
         {/* <p className="text-primary">${product.price.toFixed(2)}</p> */}

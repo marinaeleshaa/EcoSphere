@@ -9,7 +9,7 @@ const ProductCardSection = async ({ products }: { products: Promise<IProduct[]> 
       <div className="w-[80%] mx-auto">
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-15">
           {data.map((product, index) => (
-            <BasicAnimatedWrapper key={product._id} index={index}>
+            <BasicAnimatedWrapper key={product.id} index={index}>
               <ProductCard {...product} />
             </BasicAnimatedWrapper>
           ))}
