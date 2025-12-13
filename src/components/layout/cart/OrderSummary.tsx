@@ -18,7 +18,10 @@ export default function OrderSummary() {
   const dispatch = useAppDispatch();
 
   const discountCents = Math.round(subtotalCents * discountRate);
-  const deliveryCents = 50;
+  let deliveryCents = 0;
+
+  if (subtotalCents) deliveryCents = 50;
+  
   const total = subtotalCents - discountCents + deliveryCents;
 
   const handleApplyCoupon = () => {
