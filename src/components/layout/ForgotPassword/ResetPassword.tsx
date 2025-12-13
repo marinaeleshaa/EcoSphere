@@ -2,190 +2,189 @@
 
 import { useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { Eye, EyeOff, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, Lock, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 
 interface ResetPasswordProps {
-  onPasswordReset?: (email: string) => void;
-  isLoading?: boolean;
-  error?: string;
+  onPasswordReset: () => void;
 }
 
-const ResetPassword = ({
+export default function ResetPassword({
   onPasswordReset,
-  isLoading = false,
-  error = "",
-}: ResetPasswordProps) => {
-  const t = useTranslations("Auth.forgotPassword");
-  const [email, setEmail] = useState("");
-  const [emailValid, setEmailValid] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isPasswordReset, setIsPasswordReset] = useState(false);
-  const [passwordMatch, setPasswordMatch] = useState(true);
+}: ResetPasswordProps) {
+  const [step, setStep] = useState<"reset" | "success">("reset");
+  const [newPass, setNewPass] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-    setPasswordMatch(e.target.value === confirmPassword);
-    // Validate password requirements whenever it changes
-    const val = e.target.value;
-    const hasNumber = /\d/.test(val);
-    const hasSpecial = /[^A-Za-z0-9]/.test(val);
-    const minLength = val.length >= 8;
-    setPasswordValid(hasNumber && hasSpecial && minLength);
+  // Password validation
+  const hasMinLength = newPass.length >= 8;
+  const hasNumber = /\d/.test(newPass);
+  const hasSpecial = /[^A-Za-z0-9]/.test(newPass);
+  const passValid = hasMinLength && hasNumber && hasSpecial;
+  const match = newPass === confirm && confirm !== "";
+
+  const handleSubmit = () => {
+    if (!passValid || !match) return;
+    
+    // Simulate password reset (backend would handle this)
+    console.log("Password reset successful");
+    setStep("success");
+    
+    // Auto-redirect after 3 seconds
+    setTimeout(() => {
+      onPasswordReset();
+    }, 3000);
   };
 
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value);
-    setPasswordMatch(newPassword === e.target.value);
+  const variants = {
+    initial: { opacity: 0, x: 40 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -40 },
   };
-
-  const handleResetPassword = async () => {
-    if (!emailValid || !newPassword || !confirmPassword) return;
-    if (!passwordMatch || !passwordValid) return;
-
-    // TODO: Call your password reset API here
-    // await resetPassword({
-    //   email,
-    //   verificationCode,
-    //   newPassword,
-    // });
-
-    setIsPasswordReset(true);
-    onPasswordReset?.(email);
-  };
-
-  if (isPasswordReset) {
-    return (
-      <div className="flex sm:flex gap-5 flex-col">
-        <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
-            <CheckCircle2 className="w-8 h-8 text-primary" />
-          </div>
-          <h2 className="capitalize text-center font-extrabold text-secondary-foreground text-2xl">
-            {t("passwordResetSuccess")}
-          </h2>
-          <p className="text-muted-foreground text-sm">
-            {t("passwordResetSuccessMessage")}
-          </p>
-        </div>
-
-        <Link href="/auth">
-          <button className="w-full bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-105 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4">
-            {t("backToLogin")}
-            <IoIosArrowRoundForward />
-          </button>
-        </Link>
-      </div>
-    );
-  }
 
   return (
-    <div className="flex sm:flex gap-5 flex-col">
-      <p className="capitalize text-center font-extrabold mb-5 text-secondary-foreground text-4xl">
-        {t("resetPassword")}
-      </p>
-
-      <p className="text-center text-muted-foreground text-sm">
-        {t("enterEmailDescription")}
-      </p>
-
-      {error && <p className="text-red-500 text-center text-sm">{error}</p>}
-
-      {/* Email Input */}
-      <input
-        type="email"
-        placeholder={t("email")}
-        value={email}
-        onChange={(e) => {
-          const value = e.target.value;
-          setEmail(value);
-          const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-          setEmailValid(isValid);
-        }}
-        className={`bg-input text-input-foreground p-3 rounded-full transition duration-300 focus:outline-none pl-10 ${email && !emailValid ? "border-2 border-red-500" : ""}`}
-      />
-
-      {email && !emailValid && (
-        <p className="text-red-500 text-sm text-center">Please enter a valid email address.</p>
-      )}
-
-      {/* (No verification code input - code is sent after reset) */}
-      {/* New Password Input */}
-      <div className="relative">
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder={t("newPassword")}
-          value={newPassword}
-          onChange={handlePasswordChange}
-          className={`bg-input text-input-foreground w-full p-3 rounded-full transition duration-300 focus:outline-none pl-10 pr-12 ${newPassword && !passwordValid ? "border-2 border-red-500" : ""}`}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 cursor-pointer -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+    <AnimatePresence mode="wait">
+      {step === "reset" ? (
+        // Step 1: Reset Password Form
+        <motion.div
+          key="reset"
+          variants={variants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+          className="flex flex-col gap-6"
         >
-          {showPassword ? (
-            <Eye size={20} className="text-black" />
-          ) : (
-            <EyeOff size={20} className="text-black" />
-          )}
-        </button>
-      </div>
+          <div className="flex flex-col items-center text-center gap-4">
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+              <Lock className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="font-extrabold text-3xl text-foreground">
+              Reset Password
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Create a new secure password for your account
+            </p>
+          </div>
 
-      {newPassword && !passwordValid && (
-        <p className="text-red-500 text-sm text-center">Password must be at least 8 characters and include a number and a special character.</p>
-      )}
+          {/* New Password */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-foreground">
+              New Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPass ? "text" : "password"}
+                placeholder="Enter new password"
+                value={newPass}
+                onChange={(e) => setNewPass(e.target.value)}
+                className="bg-input text-input-foreground p-3 rounded-full w-full border-2 border-border pr-12 focus:border-primary outline-none transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+              >
+                {showPass ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+            </div>
 
-      {/* Confirm Password Input */}
-      <div className="relative">
-        <input
-          type={showConfirmPassword ? "text" : "password"}
-          placeholder={t("confirmPassword")}
-          value={confirmPassword}
-          onChange={handleConfirmPasswordChange}
-          className={`bg-input text-input-foreground w-full p-3 rounded-full transition duration-300 focus:outline-none pl-10 pr-12 ${confirmPassword && !passwordMatch ? "border-2 border-red-500" : ""}`}
-        />
-        <button
-          type="button"
-          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          className="absolute right-4 top-1/2 cursor-pointer -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {showConfirmPassword ? (
-            <Eye size={20} className="text-black" />
-          ) : (
-            <EyeOff size={20} className="text-black" />
-          )}
-        </button>
-      </div>
+            {/* Password Requirements */}
+            {newPass && (
+              <div className="text-xs space-y-1 mt-2">
+                <div className={`flex items-center gap-2 ${hasMinLength ? "text-green-600" : "text-muted-foreground"}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full ${hasMinLength ? "bg-green-600" : "bg-muted-foreground"}`} />
+                  At least 8 characters
+                </div>
+                <div className={`flex items-center gap-2 ${hasNumber ? "text-green-600" : "text-muted-foreground"}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full ${hasNumber ? "bg-green-600" : "bg-muted-foreground"}`} />
+                  Contains a number
+                </div>
+                <div className={`flex items-center gap-2 ${hasSpecial ? "text-green-600" : "text-muted-foreground"}`}>
+                  <div className={`w-1.5 h-1.5 rounded-full ${hasSpecial ? "bg-green-600" : "bg-muted-foreground"}`} />
+                  Contains a special character
+                </div>
+              </div>
+            )}
+          </div>
 
-      {confirmPassword && !passwordMatch && (
-        <p className="text-red-500 text-sm text-center">{t("passwordsDoNotMatch")}</p>
-      )}
+          {/* Confirm Password */}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-foreground">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <input
+                type={showConfirm ? "text" : "password"}
+                placeholder="Confirm new password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                className={`bg-input text-input-foreground p-3 rounded-full w-full border-2 pr-12 outline-none transition ${
+                  confirm && !match ? "border-red-500" : "border-border focus:border-primary"
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm(!showConfirm)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+              >
+                {showConfirm ? <Eye size={20} /> : <EyeOff size={20} />}
+              </button>
+            </div>
 
-      <button
-        onClick={handleResetPassword}
-        disabled={isLoading || !emailValid || !passwordValid || !passwordMatch}
-        className="bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-105 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 disabled:opacity-50"
-      >
-        {isLoading ? t("resettingPassword") + "..." : t("resetPassword")}
-        {!isLoading && <IoIosArrowRoundForward />}
-      </button>
+            {confirm && !match && (
+              <p className="text-xs text-destructive bg-destructive/10 p-2 rounded-lg mt-1">
+                Passwords do not match
+              </p>
+            )}
+          </div>
 
-      <Link href="/auth">
-        <p className="text-center text-stone-600 space-x-1">
-          <span>{t("rememberPassword")}</span>
-          <button className="text-primary cursor-pointer font-semibold">
-            {t("login")}
+          <button
+            disabled={!passValid || !match}
+            onClick={handleSubmit}
+            className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all mt-4"
+          >
+            Reset Password <IoIosArrowRoundForward className="text-2xl" />
           </button>
-        </p>
-      </Link>
-    </div>
-  );
-};
+        </motion.div>
+      ) : (
+        // Step 2: Success Screen
+        <motion.div
+          key="success"
+          variants={variants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={{ duration: 0.3 }}
+          className="flex flex-col gap-6"
+        >
+          <div className="flex flex-col items-center text-center gap-4">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+              className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center"
+            >
+              <CheckCircle2 className="w-10 h-10 text-green-500" />
+            </motion.div>
+            <h2 className="font-extrabold text-3xl text-foreground">
+              Password Changed!
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Your password has been successfully changed. You will be redirected to the login page shortly.
+            </p>
+          </div>
 
-export default ResetPassword;
+          <Link href="/auth" className="w-full">
+            <button className="w-full bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-all">
+              Go to Login <IoIosArrowRoundForward className="text-2xl" />
+            </button>
+          </Link>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

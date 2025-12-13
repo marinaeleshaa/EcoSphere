@@ -32,13 +32,13 @@ export default function KeyPillars() {
                     {/* Header Section */}
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <span className="text-xl font-bold tracking-[0.2em] text-accent-foreground uppercase mb-3 block">
-                            Our Standards
+                            {t('label')}
                         </span>
                         <h2 className="text-3xl md:text-5xl font-bold text-foreground leading-tight">
                             {t('title')}
                         </h2>
                         <p className="mt-4 text-foreground max-w-2xl mx-auto">
-                            We don&apos;t just take a brand&apos;s word for it. We rigorously evaluate every partner against these four non-negotiable standards.
+                            {t('description')}
                         </p>
                     </div>
 
@@ -46,7 +46,7 @@ export default function KeyPillars() {
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {pillars.map((pillar, i) => (
                             <motion.div
-                                key={i}
+                                key={pillar.key}
                                 initial={{ opacity: 0, y: 18 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.16 }}

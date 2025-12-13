@@ -26,9 +26,10 @@ export default function Mission() {
                   {t('label')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Making sustainability <br />
-                  <span className="text-primary">effortless & trustworthy.</span>
+                  {t('title')} <br />
+                  <span className="text-primary">{t('titleHighlight')}</span>
                 </h2>
+                              
               </div>
 
               {/* Summarized Text */}
