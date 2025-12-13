@@ -111,6 +111,7 @@ const LogIn = () => {
 				onClick={handleLogin}
 				disabled={!!(!loginForm.email || !loginForm.password)}
 				className="myBtnPrimary disabled:opacity-50"
+				onKeyDown={(e)=> e.key === "enter" && handleLogin }
 			>
 				{t("title")}
 				<Image

@@ -193,10 +193,10 @@ const RecycleForm = () => {
               <button
                 type="button"
                 onClick={() => setEntryMethod("manual")}
-                className={`px-6 py-2 rounded-full font-bold transition-all ${
+                className={`px-6 py-2  font-bold transition-all cursor-pointer ${
                   entryMethod === "manual"
-                    ? "bg-primary-foreground text-primary"
-                    : "text-primary-foreground hover:bg-primary-foreground/10"
+                    ? "bg-primary-foreground text-primary border-b-2 border-primary"
+                    : " hover:bg-primary-foreground/10 text-foreground border-0"
                 }`}
               >
                 Manual
@@ -204,10 +204,10 @@ const RecycleForm = () => {
               <button
                 type="button"
                 onClick={() => setEntryMethod("vision")}
-                className={`px-6 py-2 rounded-full font-bold transition-all ${
+                className={`px-6 py-2  font-bold transition-all cursor-pointer ${
                   entryMethod === "vision"
-                    ? "bg-primary-foreground text-primary"
-                    : "text-primary-foreground hover:bg-primary-foreground/10"
+                    ? "bg-primary-foreground text-primary border-b-2 border-primary"
+                    : " hover:bg-primary-foreground/10 text-foreground border-0"
                 }`}
               >
                 AI Scan

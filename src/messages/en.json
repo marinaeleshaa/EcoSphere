@@ -564,6 +564,57 @@
       "connection": "I'm having trouble connecting right now. Please try again later."
     }
   },
+  "subscribe": {
+    "titleFirst": "Select the ",
+    "boldTitle": "best plan",
+    "titleLast": " for your needs",
+
+    "plans": [
+      {
+        "title": "Starter Plan",
+        "subtitle": "Perfect for small shops or new event organizers.",
+        "price": "$9 / month",
+        "btnText": "Get Started",
+        "features": [
+          "Upload up to 10 products or events",
+          "Basic dashboard access",
+          "Simple analytics overview",
+          "Standard support",
+          "Eco-friendly badge included"
+        ],
+        "icon": "leaf"
+      },
+
+      {
+        "title": "Pro Plan",
+        "subtitle": "For professional stores and large event organizers.",
+        "price": "$59 / month",
+        "btnText": "Go Pro",
+        "features": [
+          "Unlimited products or events",
+          "Full control panel customization",
+          "Deep AI-powered analytics",
+          "24/7 dedicated support",
+          "Access to all ecosphere premium tools"
+        ],
+        "icon": "eco-pro"
+      },
+      {
+        "title": "Growth Plan",
+        "subtitle": "Great for expanding stores or active event organizers.",
+        "price": "$29 / month",
+        "btnText": "Upgrade Now",
+        "features": [
+          "Upload up to 50 products or events",
+          "Advanced content management",
+          "Full analytics dashboard",
+          "Priority support",
+          "Access to eco-event tools"
+        ],
+        "icon": "growth"
+      }
+    ]
+  },
   "News": {
     "page": {
       "title": "News & Updates",
