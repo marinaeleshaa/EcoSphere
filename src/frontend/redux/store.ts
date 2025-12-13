@@ -1,5 +1,5 @@
 import { configureStore, combineReducers, Reducer } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistStore, persistReducer, PersistedState } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import FavSlice from "./Slice/FavSlice";
 import AuthSlice from "./Slice/AuthSlice";
@@ -10,7 +10,7 @@ import CartSlice from "./Slice/CartSlice";
 const persistConfig = {
 	key: "root",
 	storage,
-	whitelist: ["cart"], // persist ONLY the cart slice
+	whitelist: ["cart", "fav"], // persist ONLY the cart slice
 };
 
 // Combine all reducers
@@ -41,5 +41,7 @@ export const store = configureStore({
 export const persister = persistStore(store);
 
 // TS Types
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer> & PersistedState
 export type AppDispatch = typeof store.dispatch;
+
+export const selectIsHydrated = (state: RootState) => state._persist.rehydrated;

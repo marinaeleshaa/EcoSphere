@@ -1,12 +1,13 @@
-"use client";
-
 import StoreSlider from "@/components/layout/Store/StoreSlider";
-import ProductCardSection from "@/components/layout/Store/ProductCardSection";
 import HeroSection from "@/components/layout/common/HeroSection";
 import { useTranslations } from 'next-intl';
+import { ProductCardSectionClient } from "@/components/layout/Store/ProductCardSectionClient";
+import { getProducts } from "@/frontend/api/Store";
 
 export default function Store() {
   const t = useTranslations('Store.hero');
+
+  const products = getProducts().then((res) => res.data);
 
   return (
     <div className="space-y-5 md:space-y-10">
@@ -16,7 +17,7 @@ export default function Store() {
         subTitle={t('subtitle')}
       />
       <StoreSlider />
-      <ProductCardSection />\
+      <ProductCardSectionClient products={products} />
     </div>
   );
 }

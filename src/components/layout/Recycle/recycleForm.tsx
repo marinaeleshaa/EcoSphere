@@ -3,11 +3,19 @@
 import React, { useState, useTransition } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { recycleFormSchema, type RecycleFormValues } from "@/frontend/schema/recycle.schema";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  recycleFormSchema,
+  type RecycleFormValues,
+} from "@/frontend/schema/recycle.schema";
 import PersonalInfoSection from "./personalInfoSection";
 import AddressSection from "./addressSection";
 import MaterialSection from "./MaterialSection";
+import { useRecycleAnalysis } from "@/hooks/useRecycleAnalysis";
+import VisionUploadArea from "./VisionUploadArea";
+import { Scan, FileText, CheckCircle2, Sparkles, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { updateUserPoints } from "@/frontend/api/Users";
 
 type MaterialItem = {
   id: number;
@@ -19,7 +27,12 @@ const RecycleForm = () => {
   const [materials, setMaterials] = useState<MaterialItem[]>([
     { id: 1, type: "", amount: 1 },
   ]);
+  const [entryMethod, setEntryMethod] = useState<"manual" | "vision">("manual");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isPending] = useTransition();
+
+  const { analyzeImages, isAnalyzing, error, clearResult } =
+    useRecycleAnalysis();
 
   const {
     register,
@@ -30,12 +43,12 @@ const RecycleForm = () => {
     resolver: zodResolver(recycleFormSchema),
   });
 
+  // Helper to add material row
   const addMaterial = () =>
     setMaterials([...materials, { id: Date.now(), type: "", amount: 1 }]);
 
   const removeMaterial = (id: number) =>
-    materials.length > 1 &&
-    setMaterials(materials.filter((m) => m.id !== id));
+    materials.length > 1 && setMaterials(materials.filter((m) => m.id !== id));
 
   const updateAmount = (index: number, delta: number) => {
     const updated = [...materials];
@@ -43,18 +56,100 @@ const RecycleForm = () => {
     setMaterials(updated);
   };
 
+  const updateType = (index: number, newType: string) => {
+    const updated = [...materials];
+    updated[index].type = newType;
+    setMaterials(updated);
+  };
+
   const handleNumberInput = (e: React.FormEvent<HTMLInputElement>) => {
     e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
   };
 
-  const onSubmit: SubmitHandler<RecycleFormValues> = async (data) => {
-    await new Promise((res) => setTimeout(res, 1500));
-    console.log({ ...data, materials });
-    reset();
-    setMaterials([{ id: 1, type: "", amount: 1 }]);
+  const onSubmit: SubmitHandler<RecycleFormValues> = async (formData) => {
+    // 1. Determine Analysis/Calculation Data
+    let finalItems: any[] = [];
+    let carbonSaved = 0;
+
+    try {
+      if (entryMethod === "manual") {
+        // Manual Mode: Calculate Carbon using existing materials
+        if (materials.length === 0 || !materials[0].type) {
+          toast.error("Please add at least one item.");
+          return;
+        }
+
+        const response = await fetch("/api/recycle/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ items: materials }),
+        });
+        const data = await response.json();
+        finalItems = data.items;
+        carbonSaved = data.estimatedCarbonSaved;
+      } else {
+        // Vision Mode: Analyze Images
+        if (imageFiles.length === 0) {
+          toast.error("Please upload at least one image.");
+          return;
+        }
+        const data = await analyzeImages(imageFiles); // Now returns data
+        if (!data) return; // Error handled in hook
+        finalItems = data.items;
+        carbonSaved = data.estimatedCarbonSaved;
+      }
+
+      // 2. Submit Final Entry
+      const payload = {
+        ...formData,
+        items: finalItems,
+        totalCarbonSaved: carbonSaved,
+        isVerified: true,
+      };
+
+      const createResponse = await fetch("/api/recycle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (createResponse.ok) {
+        // 3. Gamification: Calculate Points & Update User
+        const pointsEarned = Math.round(carbonSaved * 100);
+
+        try {
+          await updateUserPoints(pointsEarned);
+          toast.success(`Recycling Request Submitted!`, {
+            description: `You saved ${carbonSaved.toFixed(
+              2
+            )}kg of CO2 and earned ${pointsEarned} Eco Points! 🎉`,
+            duration: 5000,
+          });
+        } catch (pointError) {
+          console.error("Failed to update points", pointError);
+          // Fallback toast without points
+          toast.success("Recycling Request Submitted!", {
+            description: `You saved ${carbonSaved.toFixed(2)}kg of CO2!`,
+          });
+        }
+
+        reset();
+        setMaterials([{ id: 1, type: "", amount: 1 }]);
+        setImageFiles([]);
+        clearResult();
+        setEntryMethod("manual"); // Reset to manual view
+      } else {
+        console.error("Submission failed");
+        toast.error("Failed to submit recycling request. Please try again.");
+      }
+    } catch (err) {
+      console.error("Process failed", err);
+      toast.error("An unexpected error occurred.");
+    }
   };
 
   const isSubmitting = isPending || isHFSubmitting;
+  const isBusinessProcessing = isSubmitting || isAnalyzing;
 
   return (
     <div className="w-full min-h-screen bg-background text-foreground flex flex-col items-center py-20">
@@ -83,21 +178,95 @@ const RecycleForm = () => {
 
           <AddressSection register={register} errors={errors} />
 
-          <MaterialSection
-            materials={materials}
-            removeMaterial={removeMaterial}
-            updateAmount={updateAmount}
-            register={register}
-            addMaterial={addMaterial}
-            errors={errors}
-          />
+          {/* Entry Method Selection */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 pb-3 border-b-2 border-primary-foreground/30">
+              <Sparkles className="w-6 h-6" />
+              <span className="text-sm font-extrabold uppercase">
+                Add Items
+              </span>
+            </div>
+
+            <div className="flex gap-4 p-1 bg-primary-foreground/10 rounded-full w-fit">
+              <button
+                type="button"
+                onClick={() => setEntryMethod("manual")}
+                className={`px-6 py-2 rounded-full font-bold transition-all ${
+                  entryMethod === "manual"
+                    ? "bg-primary-foreground text-primary"
+                    : "text-primary-foreground hover:bg-primary-foreground/10"
+                }`}
+              >
+                Manual
+              </button>
+              <button
+                type="button"
+                onClick={() => setEntryMethod("vision")}
+                className={`px-6 py-2 rounded-full font-bold transition-all ${
+                  entryMethod === "vision"
+                    ? "bg-primary-foreground text-primary"
+                    : "text-primary-foreground hover:bg-primary-foreground/10"
+                }`}
+              >
+                AI Scan
+              </button>
+            </div>
+          </div>
+
+          {/* Conditional Method Rendering */}
+          <AnimatePresence mode="wait">
+            {entryMethod === "vision" ? (
+              <motion.div
+                key="vision"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+              >
+                <div className="bg-primary-foreground/5 p-8 rounded-[2rem] border-2 border-dashed border-primary-foreground/20">
+                  <VisionUploadArea
+                    onFilesChange={setImageFiles}
+                    error={error}
+                  />
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="manual"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+              >
+                <MaterialSection
+                  materials={materials}
+                  removeMaterial={removeMaterial}
+                  updateAmount={updateAmount}
+                  updateType={updateType}
+                  register={register}
+                  addMaterial={addMaterial}
+                  errors={errors}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Analysis Summary (Optional: Show if result available) */}
+          {/* Note: In one-shot flow, result might only show AFTER submit if we don't redirect. 
+              If we want checking before submit, we need the old buttons. 
+              Assuming user wants one-shot "Submit", we might show success state instead. */}
 
           <button
             type="submit"
-            disabled={isSubmitting}
-            className="w-full py-4 text-xl font-bold rounded-full bg-primary-foreground text-primary border-4 disabled:opacity-50"
+            disabled={isBusinessProcessing}
+            className="w-full py-4 text-xl font-bold rounded-full bg-primary-foreground text-primary border-4 disabled:opacity-50 hover:scale-[1.02] transition-transform active:scale-[0.98] flex items-center justify-center gap-3"
           >
-            {isSubmitting ? "Processing..." : "Submit Recycling Request"}
+            {isBusinessProcessing ? (
+              <>
+                <Loader2 className="w-6 h-6 animate-spin" />
+                Processing Request...
+              </>
+            ) : (
+              "Submit Recycling Request"
+            )}
           </button>
         </form>
       </motion.div>

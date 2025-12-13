@@ -5,27 +5,51 @@ import Reveal from "@/components/ui/reveal";
 import { Sprout, HeartHandshake, Search, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 export default function KeyPillars() {
-    const t = useTranslations('About.keyPillars');
+  const t = useTranslations("About.keyPillars");
 
-    const pillars = [
-        { key: 'environmental', icon: <Sprout className="w-8 h-8 text-accent-foreground" /> },
-        { key: 'ethical', icon: <HeartHandshake className="w-8 h-8 text-accent-foreground" /> },
-        { key: 'transparency', icon: <Search className="w-8 h-8 text-accent-foreground" /> },
-        { key: 'quality', icon: <ShieldCheck className="w-8 h-8 text-accent-foreground" /> },
-    ];
+  const pillars = [
+    {
+      key: "environmental",
+      icon: <Sprout className="w-8 h-8 text-accent-foreground" />,
+    },
+    {
+      key: "ethical",
+      icon: <HeartHandshake className="w-8 h-8 text-accent-foreground" />,
+    },
+    {
+      key: "transparency",
+      icon: <Search className="w-8 h-8 text-accent-foreground" />,
+    },
+    {
+      key: "quality",
+      icon: <ShieldCheck className="w-8 h-8 text-accent-foreground" />,
+    },
+  ];
 
-    return (
-        <section className="relative py-20 text-foreground overflow-hidden">
-            {/* Decorative Corner Leaves (Rotated for variety compared to Values component) */}
-                                    <div className="absolute top-0 right-0 w-48 opacity-10 translate-x-12 -translate-y-8 rotate-90 pointer-events-none mix-blend-multiply">
-                                        <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-contain" unoptimized/>
-                                    </div>
-                                    <div className="absolute bottom-0 left-0 w-64 opacity-10 -translate-x-20 translate-y-20 -rotate-45 pointer-events-none mix-blend-multiply">
-                                        <Image src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent" alt="" fill className="object-contain" unoptimized/>
-                                    </div>
+  return (
+    <section className="relative py-20 text-foreground overflow-hidden">
+      {/* Decorative Corner Leaves (Rotated for variety compared to Values component) */}
+      <div className="absolute top-0 right-0 w-48 opacity-10 translate-x-12 -translate-y-8 rotate-90 pointer-events-none mix-blend-multiply">
+        <Image
+          src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent"
+          alt=""
+          fill
+          className="object-contain"
+          unoptimized
+        />
+      </div>
+      <div className="absolute bottom-0 left-0 w-64 opacity-10 -translate-x-20 translate-y-20 -rotate-45 pointer-events-none mix-blend-multiply">
+        <Image
+          src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent"
+          alt=""
+          fill
+          className="object-contain"
+          unoptimized
+        />
+      </div>
 
             <div className="mx-auto w-[80%] px-4 relative z-10">
                 <Reveal>
@@ -59,18 +83,18 @@ export default function KeyPillars() {
                                     {pillar.icon}
                                 </motion.div>
 
-                                <h3 className="font-bold text-xl text-foreground mb-3">
-                                    {t(`pillars.${pillar.key}.title`)}
-                                </h3>
-                                
-                                <p className="text-sm text-foreground leading-relaxed">
-                                    {t(`pillars.${pillar.key}.text`)}
-                                </p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </Reveal>
-            </div>
-        </section>
-    );
+                <h3 className="font-bold text-xl text-foreground mb-3">
+                  {t(`pillars.${pillar.key}.title`)}
+                </h3>
+
+                <p className="text-sm text-foreground leading-relaxed">
+                  {t(`pillars.${pillar.key}.text`)}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
 }

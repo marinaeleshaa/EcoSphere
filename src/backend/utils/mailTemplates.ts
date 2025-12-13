@@ -12,9 +12,9 @@ type EventInfo = {
 const baseStyles = {
   wrapper:
     "font-family: Arial, sans-serif; line-height: 1.6; color: #1f2933; background-color: #f9fafb; padding: 24px;",
-  card:
-    "max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 24px 28px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);",
-  title: "font-size: 22px; font-weight: 700; color: #14532d; margin-bottom: 12px;",
+  card: "max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; padding: 24px 28px; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);",
+  title:
+    "font-size: 22px; font-weight: 700; color: #14532d; margin-bottom: 12px;",
   subtitle: "font-size: 16px; margin-bottom: 12px;",
   paragraph: "font-size: 14px; margin: 0 0 10px;",
   footer:
@@ -127,7 +127,10 @@ export function shopWelcomeTemplate(user: BasicUserInfo): string {
   `;
 }
 
-export function getRegistrationTemplate(userType: UserType, user: BasicUserInfo): string {
+export function getRegistrationTemplate(
+  userType: UserType,
+  user: BasicUserInfo,
+): string {
   switch (userType) {
     case "customer":
       return customerWelcomeTemplate(user);
@@ -151,7 +154,10 @@ export function newEventSubject(event: Partial<EventInfo>): string {
   return `New event: ${event.title} 🌿`;
 }
 
-export function newEventTemplate(user: BasicUserInfo, event: EventInfo): string {
+export function newEventTemplate(
+  user: BasicUserInfo,
+  event: EventInfo,
+): string {
   const name = formatName(user.name);
 
   const datePart = event.date
@@ -187,3 +193,65 @@ export function newEventTemplate(user: BasicUserInfo, event: EventInfo): string 
   </div>
   `;
 }
+
+export const redeemCouponTemplate = (
+  code: string,
+  validTo: Date,
+  rate: number,
+  name: string = "EcoSphere friend",
+): string => {
+  return `
+    <div style="${baseStyles.wrapper}">
+      <div style="${baseStyles.card}">
+        <h2 style="${baseStyles.title}">
+          Your EcoSphere Reward is Ready! 🎁
+        </h2>
+
+        <p style="${baseStyles.paragraph}">
+          Hi <strong>${name}</strong>, thank you for being an active EcoSphere member!
+        </p>
+
+        <p style="${baseStyles.paragraph}">
+          You've successfully redeemed your points and unlocked a special reward.
+          Here is your <strong>exclusive 6-digit coupon code</strong>:
+        </p>
+
+        <h1 style="
+          font-size: 32px;
+          font-weight: bold;
+          letter-spacing: 8px;
+          text-align: center;
+          color: #14532d;
+          margin: 20px 0;
+        ">
+          ${code}
+        </h1>
+
+        <p style="${baseStyles.paragraph}">
+          This coupon gives you a <strong>${rate}% discount</strong> on purchases
+          above <strong>200 EGP</strong>, with a maximum discount of
+          <strong>up to 50 EGP</strong>.
+        </p>
+
+        <p style="${baseStyles.paragraph}">
+          The code is <strong>unique to you</strong> and can be used
+          <strong>only once</strong>. No one else can use it.
+        </p>
+
+        <p style="${baseStyles.paragraph}">
+          You can use this coupon in our <strong>online store</strong>
+          or at any <strong>EcoSphere partner shop</strong>.
+        </p>
+
+        <p style="${baseStyles.paragraph}">
+          Please make sure to use it before
+          <strong>${validTo.toDateString()}</strong>.
+        </p>
+
+        <div style="${baseStyles.footer}">
+          You received this email because you redeemed your EcoSphere points.
+        </div>
+      </div>
+    </div>
+  `;
+};

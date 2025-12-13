@@ -1,4 +1,4 @@
-import mongoose, { Document, model, Schema } from "mongoose";
+import { Document, model, models, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 export type UserRole = "customer" | "organizer" | "admin" | "recycleMan";
@@ -39,7 +39,7 @@ export interface IEvent extends Document {
 }
 
 export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId;
+  _id: Types.ObjectId;
   email: string;
   firstName: string;
   lastName: string;
@@ -152,10 +152,9 @@ userSchema.methods.comparePassword = async function (
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
-userSchema.index({ role: 1 })
+userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
 userSchema.index({ updatedAt: -1 });
 userSchema.index({ subscriptionPeriod: -1 });
 
-export const UserModel =
-  mongoose.models.User || model<IUser>("User", userSchema);
+export const UserModel = models.User || model<IUser>("User", userSchema);

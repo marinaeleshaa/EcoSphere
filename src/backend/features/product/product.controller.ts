@@ -5,6 +5,8 @@ import {
   ProductResponse,
   CreateProductDTO,
   UpdateProductDTO,
+  ProductPageOptions,
+  PaginatedProductResponse,
 } from "./dto/product.dto";
 
 @injectable()
@@ -21,8 +23,14 @@ export class ProductController {
     return await this.productService.getProductById(id);
   }
 
-  async getByRestaurantId(restaurantId: string): Promise<ProductResponse[]> {
-    return await this.productService.getProductsByRestaurantId(restaurantId);
+  async getByRestaurantId(
+    restaurantId: string,
+    options?: ProductPageOptions
+  ): Promise<PaginatedProductResponse | ProductResponse[]> {
+    return await this.productService.getProductsByRestaurantId(
+      restaurantId,
+      options
+    );
   }
 
   async addProduct(

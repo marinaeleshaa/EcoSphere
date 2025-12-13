@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 const FavCardsSection = () => {
   const t = useTranslations('Favorites.emptyState');
   const { view, favProducts } = useSelector((state: RootState) => state.fav);
+
   return (
     <section>
       {favProducts.length === 0 && (
@@ -36,12 +37,12 @@ const FavCardsSection = () => {
       {favProducts.length > 0 && (
         <div
           className={`${view === "grid"
-              ? "grid grid-cols-4 gap-5 mb-10"
+              ? "grid grid-cols-4 gap-15 mb-10"
               : "flex flex-col gap-5 mb-10 w-[90%] mx-auto"
             } my-10 p-10 bg-primary/10 rounded-xl `}
         >
           {favProducts.map((product) => (
-            <FavCard key={product.id} product={product} />
+            <FavCard key={product._id} product={product} />
           ))}
         </div>
       )}

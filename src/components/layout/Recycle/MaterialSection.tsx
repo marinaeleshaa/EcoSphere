@@ -16,6 +16,7 @@ interface MaterialSectionProps {
   materials: MaterialItem[];
   removeMaterial: (id: number) => void;
   updateAmount: (index: number, delta: number) => void;
+  updateType: (index: number, newType: string) => void;
   register: UseFormRegister<RecycleFormValues>;
   addMaterial: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -26,16 +27,12 @@ const MaterialSection = ({
   materials,
   removeMaterial,
   updateAmount,
+  updateType,
   register,
   addMaterial,
   errors,
 }: MaterialSectionProps) => (
   <div className="space-y-6">
-    <div className="flex items-center gap-3 pb-3 border-b-2 border-primary-foreground/30">
-      <Package className="w-6 h-6" />
-      <span className="text-sm font-extrabold uppercase">Recycling Info</span>
-    </div>
-
     <div className="space-y-8">
       {materials.map((m: MaterialItem, index: number) => (
         <ItemCard
@@ -45,6 +42,7 @@ const MaterialSection = ({
           total={materials.length}
           onRemove={removeMaterial}
           onAmountChange={updateAmount}
+          onTypeChange={updateType}
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           register={register as unknown as (name: string) => any}
           error={errors[`type-${m.id}`]?.message as string | undefined}

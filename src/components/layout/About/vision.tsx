@@ -47,7 +47,7 @@ export default function Vision() {
                             </div>
 
                             {/* Main Image Container */}
-                            <motion.div className="relative z-10 overflow-hidden rounded-xl p-4 bg-card/50 border border-theme shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30"
+                            <motion.div className="relative z-10 overflow-hidden rounded-xl p-4  shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30"
                                 initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7 }}>
                                 <div className="relative w-full h-full min-h-80 md:min-h-[420px]">
                                     <Image
