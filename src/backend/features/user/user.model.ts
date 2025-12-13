@@ -14,6 +14,12 @@ export type EventType =
   | "Private Party"
   | "Other";
 
+export interface ICart extends Document {
+  restaurantId: Types.ObjectId | string;
+  productId: string;
+  quantity: number;
+}
+
 export interface ISection extends Document {
   title: string;
   description: string;
@@ -58,13 +64,31 @@ export interface IUser extends Document {
     url?: string;
   };
   favoritesIds?: string[];
-  cart?: string[];
+  cart?: ICart[];
   paymentHistory?: string[];
   events?: IEvent[];
   createdAt?: Date;
   updatedAt?: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
+
+const cartSchema = new Schema<ICart>({
+  restaurantId: {
+    type: Types.ObjectId,
+    ref: "Restaurant",
+    required: true,
+  },
+  productId: {
+    type: String,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+    default: 1,
+  },
+}, { _id: false });
 
 export const sectionsSchema = new Schema<ISection>(
   {
@@ -73,7 +97,7 @@ export const sectionsSchema = new Schema<ISection>(
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export const eventSchema = new Schema<IEvent>(
@@ -104,7 +128,7 @@ export const eventSchema = new Schema<IEvent>(
     endTime: { type: String, required: true },
     eventDate: { type: Date, required: true },
   },
-  { _id: true, timestamps: true }
+  { _id: true, timestamps: true },
 );
 
 const userSchema = new Schema<IUser>(
@@ -130,24 +154,24 @@ const userSchema = new Schema<IUser>(
       default: "customer",
     },
     favoritesIds: { type: [String], default: [] },
-    cart: { type: [String], default: [] },
+    cart: { type: [cartSchema], default: [] },
     paymentHistory: { type: [String], default: [] },
     events: { type: [eventSchema], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.pre<IUser>("save", function (): Promise<void> | undefined {
   this.createdAt ??= new Date();
   if (!this.isModified("password")) return;
-  
+
   return bcrypt.hash(this.password, 10).then((hashedPassword) => {
     this.password = hashedPassword;
   });
 });
 
 userSchema.methods.comparePassword = async function (
-  candidatePassword: string
+  candidatePassword: string,
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };

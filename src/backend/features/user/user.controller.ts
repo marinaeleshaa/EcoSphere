@@ -1,12 +1,13 @@
 import { inject, injectable } from "tsyringe";
 import type { IUserService } from "./user.service";
-import { IUser } from "./user.model";
+import { ICart, IUser } from "./user.model";
 import { DashboardUsers } from "./user.types";
+import { IProductCart } from "@/types/ProductType";
 
 @injectable()
 class UserController {
   constructor(
-    @inject("IUserService") private readonly userService: IUserService
+    @inject("IUserService") private readonly userService: IUserService,
   ) {}
 
   async getAll(): Promise<IUser[]> {
@@ -23,13 +24,13 @@ class UserController {
     limit?: number,
     sortBy?: string,
     sortOrder?: 1 | -1,
-    selectFields?: string | Record<string, 0 | 1>
+    selectFields?: string | Record<string, 0 | 1>,
   ): Promise<DashboardUsers> {
     const result = await this.userService.getDashBoardData(
       limit,
       sortBy,
       sortOrder,
-      selectFields
+      selectFields,
     );
     return result;
   }
@@ -43,11 +44,24 @@ class UserController {
   async getUserIdByEmail(email: string): Promise<IUser> {
     return await this.userService.getUserIdByEmail(email);
   }
+
+  async getUserCart(
+    userId: string
+  ): Promise<{ success: boolean; items: IProductCart[] }> {
+    const cart = await this.userService.getCart(userId);
+    return cart;
+  }
   async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     const user = await this.userService.updateById(id, data);
     // Use DTO factory method to map user to profile with avatar URL
     return user;
   }
+
+  async saveUserCart(userId: string, cart: ICart[]): Promise<IUser> {
+    const user = await this.userService.saveUserCart(userId, cart);
+    return user;
+  }
+
   async updateFavorites(id: string, data: string): Promise<IUser> {
     const user = await this.userService.updateFavorites(id, data);
     return user;
