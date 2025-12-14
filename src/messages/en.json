@@ -28,7 +28,10 @@
         "browseEvents": "Browse Events",
         "eventDetails": "Event Details",
         "products": "Products",
-        "orders": "Orders"
+        "orders": "Orders",
+        "shops":"Shops",
+        "events":"Events",
+        "recycling":"Recycling"
       },
       "footer": {
         "favorite": "Favorite",

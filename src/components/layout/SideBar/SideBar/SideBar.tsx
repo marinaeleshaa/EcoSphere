@@ -34,7 +34,7 @@ import {
   MdOutlineEventRepeat,
   MdRestaurantMenu,
   MdAssignment,
-  MdEventAvailable 
+  MdEventAvailable,
 } from "react-icons/md";
 import { FaShop } from "react-icons/fa6";
 import { RxDashboard } from "react-icons/rx";
@@ -140,19 +140,27 @@ export default function SideBar() {
   // admin dashboard items.
   const adminItems = [
     {
-      title: "Shops",
+      title: t("dashboard.shops"),
       url: "/admin/shop",
       icon: FaShop,
     },
     {
-      title: "Events",
+      title: t("dashboard.events"),
       url: "/admin/event",
       icon: MdEventAvailable,
     },
   ];
+
+  const recycleItems = [
+    {
+      title: t("menu.recycle"),
+      url: "/recycleDash",
+      icon: Recycle,
+    },
+  ];
+
   const pathname = usePathname();
   const { favProducts } = useSelector((state: RootState) => state.fav);
-console.log(session?.user);
   return (
     <Sidebar collapsible="icon" variant="floating" className="bg-background ">
       <SidebarHeader>
@@ -231,6 +239,30 @@ console.log(session?.user);
             <SidebarGroupContent>
               <SidebarMenu>
                 {adminItems.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={matchPathWithOptionalLocale(pathname, item.url)}
+                    >
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span className="capitalize">{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {/* **! change the role to be recycleMan */}
+        {session?.user.role == "admin" && (
+          <SidebarGroup>
+            <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {recycleItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild

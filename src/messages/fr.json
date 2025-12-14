@@ -28,8 +28,12 @@
         "browseEvents": "Parcourir les événements",
         "eventDetails": "Détails de l’événement",
         "products": "Produits",
-        "orders": "Commandes"
+        "orders": "Commandes",
+        "shops": "Boutiques",
+        "events": "Événements",
+        "recycling": "Recyclage"
       },
+
       "footer": {
         "favorite": "Favoris",
         "cart": "Panier",
