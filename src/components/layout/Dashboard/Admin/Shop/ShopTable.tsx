@@ -58,49 +58,48 @@ const ShopTable = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      {/* Hero Section */}
+    <div >
      
 
       {/* Table Section */}
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="bg-secondary rounded-xl shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                <tr className="bg-primary border-b border-background text-primary-foreground">
+                  <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">
                     Shop Name
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-semibold  uppercase tracking-wider">
                     Visibility
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-primary">
                 {shops.map((shop) => (
-                  <tr key={shop.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={shop.id} className="hover:bg-primary/10 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
-                          <Store className="w-5 h-5 text-indigo-600" />
+                        <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                          <Store className="w-5 h-5 text-primary-foreground" />
                         </div>
-                        <span className="font-medium text-gray-900">{shop.name}</span>
+                        <span className="font-medium text-foreground">{shop.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-foreground/60">
                       {shop.email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-foreground/60">
                       {shop.phone}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -111,10 +110,10 @@ const ShopTable = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
                         onClick={() => toggleVisibility(shop.id)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium cursor-pointer hover:scale-105 transition-all ${
                           shop.hidden
-                            ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
+                            ? 'bg-primary/20 text-foreground hover:bg-primary/30'
+                            : 'bg-primary text-primary-foreground hover:bg-primary/80'
                         }`}
                       >
                         {shop.hidden ? (
