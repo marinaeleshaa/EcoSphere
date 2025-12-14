@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Mail, Phone, MapPin, Ticket, Check, X } from "lucide-react";
+import { Mail, Phone, MapPin, Ticket, Check, X,User  } from "lucide-react";
 import Pagination from "@/components/ui/Pagination";
 
 const EventCard = () => {
@@ -8,6 +8,7 @@ const EventCard = () => {
     {
       id: 1,
       name: "Summer Music Festival",
+      organizer: "Music Fest",
       email: "contact@summerfest.com",
       phone: "+1 (555) 123-4567",
       location: "Central Park, New York",
@@ -17,6 +18,7 @@ const EventCard = () => {
     {
       id: 2,
       name: "Tech Conference 2024",
+      organizer: "Music Fest",
       email: "info@techconf.com",
       phone: "+1 (555) 234-5678",
       location: "Convention Center, San Francisco",
@@ -26,6 +28,7 @@ const EventCard = () => {
     {
       id: 3,
       name: "Food & Wine Expo",
+      organizer: "Music Fest",
       email: "hello@foodexpo.com",
       phone: "+1 (555) 345-6789",
       location: "Grand Hotel, Chicago",
@@ -68,6 +71,15 @@ const EventCard = () => {
 
               {/* Content */}
               <div className="p-5 space-y-3">
+                <div className="flex items-start gap-3">
+                  <User className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-muted-foreground mb-1">Organizer</p>
+                    <p className="text-sm text-foreground/60 truncate">
+                      {event.organizer}
+                    </p>
+                  </div>
+                </div>
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
