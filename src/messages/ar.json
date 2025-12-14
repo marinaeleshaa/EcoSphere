@@ -28,7 +28,10 @@
         "browseEvents": "تصفح الفعاليات",
         "eventDetails": "تفاصيل الفعالية",
         "products": "المنتجات",
-        "orders": "الطلبات"
+        "orders": "الطلبات",
+         "shops":"المتاجر",
+        "events":"الفعاليات",
+        "recycling":"التدوير"
       },
       "footer": {
         "favorite": "المفضلة",

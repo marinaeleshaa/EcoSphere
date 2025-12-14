@@ -1,9 +1,16 @@
-import React from 'react'
+import EventCard from "@/components/layout/Dashboard/Admin/Event/EventCard";
+import EventHero from "@/components/layout/Dashboard/Admin/Event/EventHero";
+import Pagination from "@/components/ui/Pagination";
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <EventHero />
+      <div className="w-[80%] mx-auto py-10">
+        <EventCard />
+      </div>
+    </div>
+  );
+};
 
-export default page
+export default page;
