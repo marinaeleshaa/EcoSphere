@@ -152,7 +152,6 @@ export default function SideBar() {
   ];
   const pathname = usePathname();
   const { favProducts } = useSelector((state: RootState) => state.fav);
-console.log(session?.user);
   return (
     <Sidebar collapsible="icon" variant="floating" className="bg-background ">
       <SidebarHeader>
