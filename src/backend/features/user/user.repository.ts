@@ -25,6 +25,11 @@ export interface IUserRepository {
     code: string,
     validTo: Date
   ): Promise<void>;
+  changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<boolean>;
 }
 
 @injectable()
@@ -207,6 +212,26 @@ class UserRepository implements IUserRepository {
       { resetCode: { code, validTo } },
       { new: true }
     );
+  }
+
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string)
+  : Promise<boolean> {
+    await DBInstance.getConnection();
+    const user = await UserModel.findById(userId).select("password");
+
+    const isMatch = await user.comparePassword(currentPassword);
+
+    if (!isMatch) {
+      return false;
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return true
   }
 
   // Helper function to convert Mongoose select syntax to $project

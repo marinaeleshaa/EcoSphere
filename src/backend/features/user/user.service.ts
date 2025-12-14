@@ -6,7 +6,10 @@ import { ImageService } from "../../services/image.service";
 import { DashboardUsers } from "./user.types";
 import { randomInt } from "node:crypto";
 import { ICoupon } from "../discountCoupon/coupon.model";
-import { sendForgetPasswordMail, sendRedeemingMail } from "@/backend/utils/mailer";
+import {
+  sendForgetPasswordMail,
+  sendRedeemingMail,
+} from "@/backend/utils/mailer";
 import { IMenuItem } from "../restaurant/restaurant.model";
 
 export interface IUserService {
@@ -28,6 +31,11 @@ export interface IUserService {
   verifyCode(email: string, code: string): Promise<{ message: string }>;
   resetPassword(
     email: string,
+    newPassword: string
+  ): Promise<{ message: string }>;
+  changePassword(
+    userId: string,
+    currentPassword: string,
     newPassword: string
   ): Promise<{ message: string }>;
 }
@@ -116,10 +124,37 @@ class UserService implements IUserService {
     const userId = await this.userRepository.getUserIdByEmail(email);
     if (!userId) throw new Error("User not found");
 
-    await this.userRepository.updateById(userId._id.toString(), {password: newPassword});
+    await this.userRepository.updateById(userId._id.toString(), {
+      password: newPassword,
+    });
 
     return {
       message: "Password has been reset successfully.",
+    };
+  }
+
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<{ message: string }> {
+    const user = await this.userRepository.getById(userId, "password");
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    const isMatch = await this.userRepository.changePassword(
+      userId,
+      currentPassword,
+      newPassword
+    );
+
+    if (!isMatch) {
+      throw new Error("Current password is incorrect.");
+    }
+
+    return {
+      message: "Password changed successfully.",
     };
   }
 

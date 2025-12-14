@@ -73,3 +73,20 @@ export const resetPassword = async (email: string, newPassword: string) => {
   }
   return await response.json();
 };
+
+export const changeUserPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  const response = await fetch(`/api/users/change-password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to change password");
+  }
+  return response.json();
+};

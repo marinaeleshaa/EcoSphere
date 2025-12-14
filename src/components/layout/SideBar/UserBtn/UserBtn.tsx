@@ -103,10 +103,10 @@ export default function UserBtn({
 								{t('profile')}
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <Bell />
 							{t('notifications')}
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>

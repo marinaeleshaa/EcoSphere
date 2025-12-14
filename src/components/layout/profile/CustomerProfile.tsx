@@ -11,8 +11,9 @@ import ImageUpload from "@/components/layout/common/ImageUpload";
 import OrderHistoryEmptyState from "./OrderHistoryEmptyState";
 import { Edit, Eye, EyeOff } from "lucide-react";
 import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
-import { getUserData } from "@/frontend/api/Users";
+import { changeUserPassword, getUserData } from "@/frontend/api/Users";
 import { User } from "@/types/UserTypes";
+import { toast } from "sonner";
 
 export default function CustomerProfile({
   id,
@@ -81,7 +82,7 @@ export default function CustomerProfile({
     return true;
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     setTouched({
       currentPassword: true,
       newPassword: true,
@@ -92,21 +93,29 @@ export default function CustomerProfile({
       return;
     }
 
-    // Dispatch password change logic here
-    // For now, we'll just simulate success or dispatch if needed
-    // Note: The actual API call needs to be implemented in the slice/thunk
-    alert("Password change validation passed! (API integration pending)");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-    setErrors({});
-    setTouched({
-      currentPassword: false,
-      newPassword: false,
-      confirmPassword: false,
-    });
+    try {
+      const response = await changeUserPassword(
+        passwordData.currentPassword,
+        passwordData.newPassword
+      );
+      if (response.success) {
+        toast.success("Password changed successfully");
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+        setErrors({});
+        setTouched({
+          currentPassword: false,
+          newPassword: false,
+          confirmPassword: false,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to change password", error);
+      toast.error("Failed to change password");
+    }
   };
 
   const handleEditClick = () => {
