@@ -15,7 +15,6 @@ const getCartFromServer = async (): Promise<{
   const user = await getCurrentUser();
   if (!user) return { success: true, items: [] };
   const data = await rootContainer.resolve(UserController).getUserCart(user.id);
-  console.log(data, "form server component");
   return data;
 };
 
