@@ -69,13 +69,13 @@ export const mapToUserPublicProfile = (
     id: `${user._id}`,
     email: user.email!,
     image: user.avatar?.url,
-    name: isUser(user) ? user.lastName! : user.name!,
+    name: isUser(user) ? user.firstName! : user.name!,
     role: isUser(user) ? user.role! : "shop",
-  };
+  };;
 };
 
 const isUser = (
   u: Partial<IUser> | Partial<IRestaurant>
 ): u is Partial<IUser> => {
-  return "lastName" in u;
+  return "firstName" in u;
 };

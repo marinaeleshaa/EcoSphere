@@ -41,7 +41,7 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.findOne({ email })
       .select(
-        `password _id email role lastName accountProvider avatar ${
+        `password _id email role firstName accountProvider avatar ${
           keys || ""
         }`
       )
