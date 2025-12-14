@@ -38,6 +38,8 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher'
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useTranslations } from 'next-intl';
+import { useAppSelector } from "@/frontend/redux/hooks";
+import { selectCartItemCount } from "@/frontend/redux/selector/cartSelector";
 
 export default function SideBar() {
 	
@@ -49,6 +51,7 @@ export default function SideBar() {
 		const fr = `\\/fr\\${targetSegment}`;
 		return new RegExp(`^(${base}|${ar}?|${fr}?)$`).test(pathname);
 	};
+	const cartCount = useAppSelector(selectCartItemCount);
 	// User items.
 	const useritems = [
 		{
@@ -220,7 +223,7 @@ export default function SideBar() {
 											<span>{t('footer.cart')}</span>
 										</Link>
 									</SidebarMenuButton>
-									<SidebarMenuBadge>24</SidebarMenuBadge>
+									<SidebarMenuBadge>{cartCount}</SidebarMenuBadge>
 								</SidebarMenuItem>
 							</SidebarMenu>
 						)
