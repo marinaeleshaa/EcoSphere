@@ -61,6 +61,10 @@ export interface IUser extends Document {
   cart?: string[];
   paymentHistory?: string[];
   events?: IEvent[];
+  resetCode?: {
+    code: string;
+    validTo: Date;
+  };
   createdAt?: Date;
   updatedAt?: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -133,6 +137,10 @@ const userSchema = new Schema<IUser>(
     cart: { type: [String], default: [] },
     paymentHistory: { type: [String], default: [] },
     events: { type: [eventSchema], default: [] },
+    resetCode: {
+      code: { type: String, required: false },
+      validTo: { type: Date, required: false },
+    },
   },
   { timestamps: true }
 );

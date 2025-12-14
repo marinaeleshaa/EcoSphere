@@ -5,17 +5,16 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { Eye, EyeOff, Lock, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 interface ResetPasswordProps {
-  onPasswordReset: () => void;
+  onPasswordReset: (newPass: string) => void;
 }
 
-export default function ResetPassword({
-  onPasswordReset,
-}: ResetPasswordProps) {
-  const t = useTranslations('ForgotPassword.resetPassword');
-  
+export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
+  const t = useTranslations("ForgotPassword.resetPassword");
+
   const [step, setStep] = useState<"reset" | "success">("reset");
   const [newPass, setNewPass] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -31,12 +30,9 @@ export default function ResetPassword({
 
   const handleSubmit = () => {
     if (!passValid || !match) return;
-    
-    console.log("Password reset successful");
     setStep("success");
-    
     setTimeout(() => {
-      onPasswordReset();
+      onPasswordReset(newPass);
     }, 3000);
   };
 
@@ -64,22 +60,22 @@ export default function ResetPassword({
               <Lock className="w-8 h-8 text-primary" />
             </div>
             <h2 className="font-extrabold text-3xl text-foreground">
-              {t('title')}
+              {t("title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              {t('description')}
+              {t("description")}
             </p>
           </div>
 
           {/* New Password */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-foreground">
-              {t('newPassword.label')}
+              {t("newPassword.label")}
             </label>
             <div className="relative">
               <input
                 type={showPass ? "text" : "password"}
-                placeholder={t('newPassword.placeholder')}
+                placeholder={t("newPassword.placeholder")}
                 value={newPass}
                 onChange={(e) => setNewPass(e.target.value)}
                 className="bg-input text-input-foreground p-3 rounded-full w-full border-2 border-border pr-12 focus:border-primary outline-none transition"
@@ -88,7 +84,7 @@ export default function ResetPassword({
                 type="button"
                 onClick={() => setShowPass(!showPass)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
-                aria-label={showPass ? t('hidePassword') : t('showPassword')}
+                aria-label={showPass ? t("hidePassword") : t("showPassword")}
               >
                 {showPass ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
@@ -97,17 +93,41 @@ export default function ResetPassword({
             {/* Password Requirements */}
             {newPass && (
               <div className="text-xs space-y-1 mt-2">
-                <div className={`flex items-center gap-2 ${hasMinLength ? "text-green-600" : "text-muted-foreground"}`}>
-                  <div className={`w-1.5 h-1.5 rounded-full ${hasMinLength ? "bg-green-600" : "bg-muted-foreground"}`} />
-                  {t('requirements.minLength')}
+                <div
+                  className={`flex items-center gap-2 ${
+                    hasMinLength ? "text-green-600" : "text-muted-foreground"
+                  }`}
+                >
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      hasMinLength ? "bg-green-600" : "bg-muted-foreground"
+                    }`}
+                  />
+                  {t("requirements.minLength")}
                 </div>
-                <div className={`flex items-center gap-2 ${hasNumber ? "text-green-600" : "text-muted-foreground"}`}>
-                  <div className={`w-1.5 h-1.5 rounded-full ${hasNumber ? "bg-green-600" : "bg-muted-foreground"}`} />
-                  {t('requirements.hasNumber')}
+                <div
+                  className={`flex items-center gap-2 ${
+                    hasNumber ? "text-green-600" : "text-muted-foreground"
+                  }`}
+                >
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      hasNumber ? "bg-green-600" : "bg-muted-foreground"
+                    }`}
+                  />
+                  {t("requirements.hasNumber")}
                 </div>
-                <div className={`flex items-center gap-2 ${hasSpecial ? "text-green-600" : "text-muted-foreground"}`}>
-                  <div className={`w-1.5 h-1.5 rounded-full ${hasSpecial ? "bg-green-600" : "bg-muted-foreground"}`} />
-                  {t('requirements.hasSpecial')}
+                <div
+                  className={`flex items-center gap-2 ${
+                    hasSpecial ? "text-green-600" : "text-muted-foreground"
+                  }`}
+                >
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      hasSpecial ? "bg-green-600" : "bg-muted-foreground"
+                    }`}
+                  />
+                  {t("requirements.hasSpecial")}
                 </div>
               </div>
             )}
@@ -116,23 +136,25 @@ export default function ResetPassword({
           {/* Confirm Password */}
           <div className="flex flex-col gap-2">
             <label className="text-sm font-semibold text-foreground">
-              {t('confirmPassword.label')}
+              {t("confirmPassword.label")}
             </label>
             <div className="relative">
               <input
                 type={showConfirm ? "text" : "password"}
-                placeholder={t('confirmPassword.placeholder')}
+                placeholder={t("confirmPassword.placeholder")}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 className={`bg-input text-input-foreground p-3 rounded-full w-full border-2 pr-12 outline-none transition ${
-                  confirm && !match ? "border-red-500" : "border-border focus:border-primary"
+                  confirm && !match
+                    ? "border-red-500"
+                    : "border-border focus:border-primary"
                 }`}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
-                aria-label={showConfirm ? t('hidePassword') : t('showPassword')}
+                aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
               >
                 {showConfirm ? <Eye size={20} /> : <EyeOff size={20} />}
               </button>
@@ -140,7 +162,7 @@ export default function ResetPassword({
 
             {confirm && !match && (
               <p className="text-xs text-destructive bg-destructive/10 p-2 rounded-lg mt-1">
-                {t('confirmPassword.mismatch')}
+                {t("confirmPassword.mismatch")}
               </p>
             )}
           </div>
@@ -150,7 +172,7 @@ export default function ResetPassword({
             onClick={handleSubmit}
             className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all mt-4"
           >
-            {t('submitButton')} <IoIosArrowRoundForward className="text-2xl" />
+            {t("submitButton")} <IoIosArrowRoundForward className="text-2xl" />
           </button>
         </motion.div>
       ) : (
@@ -174,16 +196,17 @@ export default function ResetPassword({
               <CheckCircle2 className="w-10 h-10 text-green-500" />
             </motion.div>
             <h2 className="font-extrabold text-3xl text-foreground">
-              {t('success.title')}
+              {t("success.title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              {t('success.description')}
+              {t("success.description")}
             </p>
           </div>
 
           <Link href="/auth" className="w-full">
             <button className="w-full bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-all">
-              {t('success.button')} <IoIosArrowRoundForward className="text-2xl" />
+              {t("success.button")}{" "}
+              <IoIosArrowRoundForward className="text-2xl" />
             </button>
           </Link>
         </motion.div>

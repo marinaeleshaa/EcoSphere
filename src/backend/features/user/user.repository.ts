@@ -20,6 +20,16 @@ export interface IUserRepository {
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
+  savePasswordResetCode(
+    userId: string,
+    code: string,
+    validTo: Date
+  ): Promise<void>;
+  changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<boolean>;
 }
 
 @injectable()
@@ -50,7 +60,6 @@ class UserRepository implements IUserRepository {
 
     const user = await UserModel.findById(id, projection)
       .populate("favoritesIds")
-      .lean<IUser>()
       .exec();
 
     if (!user) {
@@ -119,12 +128,17 @@ class UserRepository implements IUserRepository {
 
   async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
     await DBInstance.getConnection();
-    const updatedUser = await UserModel.findByIdAndUpdate(id, data, {
-      new: true,
-    });
-    if (!updatedUser) {
+
+    const user = await UserModel.findById(id);
+
+    if (!user) {
       throw new Error(`User with id ${id} not found`);
     }
+
+    Object.assign(user, data);
+
+    const updatedUser = await user.save();
+
     return updatedUser;
   }
 
@@ -185,6 +199,39 @@ class UserRepository implements IUserRepository {
       throw new Error(`User with id ${id} not found`);
     }
     return await user.deleteOne();
+  }
+
+  async savePasswordResetCode(
+    userId: string,
+    code: string,
+    validTo: Date
+  ): Promise<void> {
+    await DBInstance.getConnection();
+    await UserModel.findByIdAndUpdate(
+      userId,
+      { resetCode: { code, validTo } },
+      { new: true }
+    );
+  }
+
+  async changePassword(
+    userId: string,
+    currentPassword: string,
+    newPassword: string)
+  : Promise<boolean> {
+    await DBInstance.getConnection();
+    const user = await UserModel.findById(userId).select("password");
+
+    const isMatch = await user.comparePassword(currentPassword);
+
+    if (!isMatch) {
+      return false;
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return true
   }
 
   // Helper function to convert Mongoose select syntax to $project

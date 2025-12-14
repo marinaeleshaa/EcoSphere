@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import EmailVerification from "@/components/layout/ForgotPassword/EmailVerification";
 import ResetPassword from "@/components/layout/ForgotPassword/ResetPassword";
 import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { resetPassword } from "@/frontend/api/Users";
+import { toast } from "sonner";
 
 const ForgotPasswordPage = () => {
-  const t = useTranslations('ForgotPassword');
+  const t = useTranslations("ForgotPassword");
   const controls = useAnimation();
 
   const [coords, setCoords] = useState<ICoords>({
@@ -113,15 +115,19 @@ const ForgotPasswordPage = () => {
     setStep("reset");
   };
 
-  const handlePasswordResetComplete = () => {
-    // Auto-redirect handled in ResetPassword component
+  const handlePasswordResetComplete = async (newPassword: string) => {
+    try {
+      await resetPassword(email, newPassword);
+    } catch (error) {
+      console.error("Password reset failed:", error);
+      toast.error(t("resetStep.errors.resetFailed"));
+    }
   };
 
   return (
     <section className="relative overflow-hidden bg-background">
       <div className="w-[80%] m-auto relative z-10">
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center min-h-screen">
-          
           {/* Reset Password Form - Shows on LEFT */}
           <motion.div
             className={`flex sm:flex gap-5 flex-col p-5 lg:w-[45%] md:w-[50%] w-full rounded-2xl ${
@@ -174,7 +180,7 @@ const ForgotPasswordPage = () => {
           src="/logo.png"
           width={250}
           height={250}
-          alt={t('logoAlt')}
+          alt={t("logoAlt")}
           className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
         />
       </motion.div>
@@ -184,7 +190,7 @@ const ForgotPasswordPage = () => {
         src="/forgot-password.png"
         width={300}
         height={350}
-        alt={t('forgotPasswordImageAlt')}
+        alt={t("forgotPasswordImageAlt")}
         className="sm:absolute sm:block hidden absolute bottom-50 right-0 sm:-right-2 md:-right-10 lg:right-10 xl:-right-10 xl:w-[350px]"
         variants={imgLoginVariants}
         initial={false}
@@ -197,7 +203,7 @@ const ForgotPasswordPage = () => {
         src="/verify-email.png"
         width={350}
         height={400}
-        alt={t('verifyEmailImageAlt')}
+        alt={t("verifyEmailImageAlt")}
         className="sm:absolute sm:block hidden absolute bottom-0 right-0 md:w-[320px] md:h-[300px] lg:w-[450px] lg:h-[350px]"
         variants={imgSignupVariants}
         initial={false}
@@ -214,10 +220,10 @@ const ForgotPasswordPage = () => {
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-2xl xl:text-3xl font-extrabold">
-          {t('emailStep.title')}
+          {t("emailStep.title")}
         </h2>
         <p className="text-base lg:text-lg xl:text-xl">
-          {t('emailStep.description')}
+          {t("emailStep.description")}
         </p>
       </motion.div>
 
@@ -230,10 +236,10 @@ const ForgotPasswordPage = () => {
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-xl xl:text-5xl font-extrabold">
-          {t('resetStep.title')}
+          {t("resetStep.title")}
         </h2>
         <p className="text-sm lg:text-xl xl:text-2xl">
-          {t('resetStep.description')}
+          {t("resetStep.description")}
         </p>
       </motion.div>
     </section>

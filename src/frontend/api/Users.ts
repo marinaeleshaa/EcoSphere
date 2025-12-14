@@ -31,3 +31,62 @@ export const updateUserPoints = async (points: number) => {
   }
   return response.json();
 };
+
+export const sendCode = async (email: string) => {
+  const response = await fetch("/api/auth/send-code", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to send code");
+  }
+  return await response.json();
+};
+
+export const verify = async (email: string, code: string) => {
+  const response = await fetch("/api/auth/verify-code", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, code }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to verify code");
+  }
+  return await response.json();
+};
+
+export const resetPassword = async (email: string, newPassword: string) => {
+  const response = await fetch("/api/auth/reset-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, newPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to reset password");
+  }
+  return await response.json();
+};
+
+export const changeUserPassword = async (
+  currentPassword: string,
+  newPassword: string
+) => {
+  const response = await fetch(`/api/users/change-password`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to change password");
+  }
+  return response.json();
+};
