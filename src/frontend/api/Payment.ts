@@ -1,11 +1,16 @@
+import { IOrder } from "@/backend/features/orders/order.model";
+import { OrderRequestItem } from "@/backend/features/orders/order.types";
+import { ApiResponse } from "@/types/api-helpers";
+
 export const createPaymentIntent = async (
   amount: number,
-  currency: string = "usd"
+  metaData: Record<string, string>,
+  currency: string = "usd",
 ): Promise<{ clientSecret: string }> => {
   const response = await fetch("/api/stripe/payment-intent", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount, currency }),
+    body: JSON.stringify({ amount, currency, metaData }),
   });
 
   if (!response.ok) {
@@ -14,4 +19,18 @@ export const createPaymentIntent = async (
   }
 
   return response.json();
+};
+
+export const createOrder = async (
+  items: OrderRequestItem[],
+): Promise<ApiResponse<IOrder> | undefined> => {
+  const response = await fetch("/api/orders", {
+    method: "POST",
+    body: JSON.stringify(items),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    return data;
+  }
 };
