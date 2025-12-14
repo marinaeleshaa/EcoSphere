@@ -129,7 +129,7 @@ export function shopWelcomeTemplate(user: BasicUserInfo): string {
 
 export function getRegistrationTemplate(
   userType: UserType,
-  user: BasicUserInfo,
+  user: BasicUserInfo
 ): string {
   switch (userType) {
     case "customer":
@@ -156,7 +156,7 @@ export function newEventSubject(event: Partial<EventInfo>): string {
 
 export function newEventTemplate(
   user: BasicUserInfo,
-  event: EventInfo,
+  event: EventInfo
 ): string {
   const name = formatName(user.name);
 
@@ -198,7 +198,7 @@ export const redeemCouponTemplate = (
   code: string,
   validTo: Date,
   rate: number,
-  name: string = "EcoSphere friend",
+  name: string = "EcoSphere friend"
 ): string => {
   return `
     <div style="${baseStyles.wrapper}">
@@ -250,6 +250,58 @@ export const redeemCouponTemplate = (
 
         <div style="${baseStyles.footer}">
           You received this email because you redeemed your EcoSphere points.
+        </div>
+      </div>
+    </div>
+  `;
+};
+
+export const forgetPasswordTemplate = (
+  code: string,
+  validTo: Date,
+  name: string = "EcoSphere friend"
+): string => {
+  return `
+    <div style="${baseStyles.wrapper}">
+      <div style="${baseStyles.card}">
+        <h2 style="${baseStyles.title}">
+          Password Reset Request 🔒
+        </h2>
+        <p style="${baseStyles.paragraph}">
+          Hi <strong>${name}</strong>,
+        </p>
+        <p style="${baseStyles.paragraph}">
+          We received a request to reset your EcoSphere account password.
+          Use the secure code below to proceed with resetting your password:
+        </p>
+        <h1 style="
+          font-size: 32px;
+          font-weight: bold;
+          letter-spacing: 8px;
+          text-align: center;
+          color: #14532d;
+          margin: 20px 0;
+        ">
+          ${code}
+        </h1>
+        <p style="${baseStyles.paragraph}">
+          This code is valid until <strong>${validTo.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}</strong>.
+          Please do not share this code with anyone.
+        </p>
+        <p style="${baseStyles.paragraph}">
+          If you did not request a password reset, please ignore this email.
+        </p>
+        <p style="${baseStyles.paragraph}">
+          Stay safe,
+        </p>
+        <p style="${baseStyles.paragraph}">
+          <strong>The EcoSphere Team</strong>
+        </p>
+        <div style="${baseStyles.footer}">
+          You received this email because you requested a password reset for your EcoSphere account.
         </div>
       </div>
     </div>

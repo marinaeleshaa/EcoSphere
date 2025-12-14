@@ -23,11 +23,11 @@ export default function Vision() {
                                   <motion.span initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center">
                                     <Eye className="w-6 h-6" />
                                   </motion.span>
-                                  Our Vision
+                                  {t('label')}
                                 </span>
                                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                                    A world where <br />
-                                    <span className="text-accent-foreground">sustainable is standard.</span>
+                                    {t('title')} <br />
+                                    <span className="text-accent-foreground">{t('titleHighlight')}</span>
                                 </h2>
                             </div>
 

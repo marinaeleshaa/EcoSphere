@@ -12,7 +12,6 @@ export const recycleFormSchema = z.object({
   building: z.string().optional(),
   floor: z.string().optional(),
   apartment: z.string().optional(),
-  type: z.string().min(1, "Please select a recycle type"),
 });
 
 export type RecycleFormValues = z.infer<typeof recycleFormSchema>;

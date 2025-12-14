@@ -1,6 +1,6 @@
 import { rootContainer } from "@/backend/config/container";
 import EventController from "@/backend/features/event/event.controller";
-import { IEvent } from "@/backend/features/user/user.model";
+import { EventResponse } from "@/backend/features/event/events.types";
 import { getCurrentUser } from "@/backend/utils/authHelper";
 import {
   ApiResponse,
@@ -13,7 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async (
   req: NextRequest,
   context: { params: Promise<{ eventId: string }> }
-): Promise<NextResponse<ApiResponse<IEvent>>> => {
+): Promise<NextResponse<ApiResponse<EventResponse>>> => {
   try {
     const { eventId } = await context.params;
     const user = await getCurrentUser();

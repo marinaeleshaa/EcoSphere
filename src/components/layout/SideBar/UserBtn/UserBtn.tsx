@@ -25,26 +25,26 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
-export default function UserBtn({
-	session,
-}: Readonly<{ session: Session; }>) {
+export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const { isMobile } = useSidebar();
   const router = useRouter();
-	const t = useTranslations('Layout.UserBtn');
+  const t = useTranslations("Layout.UserBtn");
 
   const handleLogout = () => {
     signOut({ redirect: false });
-		router.replace("/")
+    router.replace("/");
   };
 
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton size="lg"
-						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+          <SidebarMenuButton
+            size="lg"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
             <Avatar className="h-8 w-8 rounded-lg flex justify-center">
               <AvatarImage
                 src={session?.user.image ?? ""}
@@ -79,14 +79,15 @@ export default function UserBtn({
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-								<span className="truncate font-medium">{session?.user.name}</span>
-								<span className="truncate text-xs">
-									{session?.user.email}
+                <span className="truncate font-medium">
+                  {session?.user.name}
                 </span>
+                <span className="truncate text-xs">{session?.user.email}</span>
               </div>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
+
+          {/*<DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href="/subscription">
               <DropdownMenuItem>
@@ -94,24 +95,24 @@ export default function UserBtn({
                 {t('subscribe')}
               </DropdownMenuItem>
             </Link>
-          </DropdownMenuGroup>
+          </DropdownMenuGroup>*/}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href="/profile">
               <DropdownMenuItem>
                 <BadgeCheck />
-								{t('profile')}
+                {t("profile")}
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>
+            {/* <DropdownMenuItem>
               <Bell />
 							{t('notifications')}
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut />
-						<span>{t('logout')}</span>
+            <span>{t("logout")}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

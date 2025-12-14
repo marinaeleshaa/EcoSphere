@@ -5,8 +5,11 @@ import Reveal from "@/components/ui/reveal";
 import { ClipboardCheck, ShieldCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from 'next-intl';
 
 export default function Standard() {
+  const t = useTranslations('About.standard');
+
   return (
     <section className="relative w-full bg-card text-card-foreground py-16 md:py-24 overflow-hidden">
       <div className="mx-auto w-[80%] px-4 md:px-6">
@@ -20,33 +23,25 @@ export default function Standard() {
                   <motion.span initial={{ opacity: 0, x: -6 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center">
                     <ClipboardCheck className="w-4 h-4" />
                   </motion.span>
-                  Verification
+                  {t('label')}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
-                  The EcoSphere <br />
-                  <span className="text-primary">Verification.</span>
+                  {t('title')} <br />
+                  <span className="text-primary">{t('description')}</span>
                 </h2>
               </div>
 
               <div className="space-y-6 text-muted text-lg leading-relaxed">
-                <p>
-                  In an age of greenwashing, we believe verification is mandatory. 
-                  The EcoSphere Standard is our rigorous <strong className="text-foreground">multi-point review system </strong> 
-                  ensuring every product listed meets strict verifiable criteria. 
-                  This transforms our promise of sustainability into a demonstrable process.
-                </p>
+
                 
                 <p>
-                 Every partner must pass a structured verification system combining documentation, third-party certifications, and sustainability assessments across four pillars:
+                 {t('description')}
                 </p>
 
                 {/* Feature List */}
                 <ul className="space-y-3 pt-2">
                   {[
-                    "Documentation Review",
-                    "Third-Party Certification Assessment",
-                    "Detailed Impact Questionnaire",
-                    "Continuous Compliance Monitoring"
+               
                   ].map((item, index) => (
                     <li key={index} className="flex items-center gap-3">
                       <div className="shrink-0 w-6 h-6 rounded-full bg-[var(--primary-foreground)/0.12] flex items-center justify-center">

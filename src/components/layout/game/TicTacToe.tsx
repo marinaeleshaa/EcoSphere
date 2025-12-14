@@ -7,15 +7,19 @@ import { RiRobot3Line } from "react-icons/ri";
 import { FaHandshakeSimple, FaPlay } from "react-icons/fa6";
 import { FaRegSmileWink } from "react-icons/fa";
 import { GiTrophy } from "react-icons/gi";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { updateUserPoints } from "@/frontend/api/Users";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 export default function TicTacToe() {
-  const t = useTranslations('Game');
+  const t = useTranslations("Game");
   type Player = "X" | "O" | null;
   type Difficulty = "easy" | "medium" | "hard";
   // -------------------------
   // 🧩 STATES
   // -------------------------
+  const { status } = useSession();
   const [board, setBoard] = useState<Player[]>(new Array(9).fill(null));
   const [winner, setWinner] = useState<Player | "Draw">(null);
   const [isAiTurn, setIsAiTurn] = useState(false);
@@ -26,7 +30,9 @@ export default function TicTacToe() {
   // 💾 LOAD SCORES FROM STORAGE
   // -------------------------
   useEffect(() => {
-    mainAudioRef.current!.volume = 0.5;
+    if (mainAudioRef.current) {
+      mainAudioRef.current.volume = 0.1;
+    }
     const savedScores = localStorage.getItem("tictactoe_scores");
     if (savedScores) {
       setTimeout(() => {
@@ -114,10 +120,25 @@ export default function TicTacToe() {
   };
 
   // -------------------------
+  // 🎯 UPDATE USER POINTS
+  // -------------------------
+  const updateUser = useCallback(async () => {
+    const pointsToAdd =
+      difficulty === "easy" ? 100 : difficulty === "medium" ? 250 : 500;
+    try {
+      await updateUserPoints(pointsToAdd);
+      toast.success(t("status.pointsAdded", { points: pointsToAdd }));
+    } catch (error) {
+      console.error("Error updating user points:", error);
+      toast.error(t("status.updatePoints"));
+    }
+  }, [difficulty, t]);
+
+  // -------------------------
   // 🏆 CHECK WINNER (SET STATE)
   // -------------------------
   const checkWinner = useCallback(
-    (b: Player[]) => {
+    async (b: Player[]) => {
       const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -133,7 +154,12 @@ export default function TicTacToe() {
         if (b[x] && b[x] === b[y] && b[y] === b[z]) {
           setWinner(b[x]);
           updateScores(b[x]);
-          return;
+          //Update user points based on the diffculty
+          if (b[x] === "X" && status === "authenticated") {
+            await updateUser();
+          } else if (b[x] === "X" && status === "unauthenticated"){
+            toast.info(t("status.loginForPoints"));
+          } return;
         }
       }
 
@@ -143,7 +169,7 @@ export default function TicTacToe() {
         updateScores("Draw");
       }
     },
-    [updateScores]
+    [updateScores, status, updateUser, t]
   );
 
   // -------------------------
@@ -195,7 +221,7 @@ export default function TicTacToe() {
     }
 
     setIsAiTurn(false);
-  }, [board, checkWinner, getAvailableMoves, difficulty]);
+  }, [difficulty, getAvailableMoves, board, checkWinner, minimax]);
 
   // -------------------------
   // 🎮 PLAYER MOVE
@@ -272,7 +298,7 @@ export default function TicTacToe() {
       if (winner === "Draw")
         return (
           <div className="flex items-center gap-2 justify-center">
-            {t('status.draw')} <FaHandshakeSimple className="mt-1" />
+            {t("status.draw")} <FaHandshakeSimple className="mt-1" />
           </div>
         );
       return (
@@ -280,12 +306,12 @@ export default function TicTacToe() {
           {winner === "X" ? (
             <div className="flex items-center gap-3 justify-center">
               <FaRegSmileWink />
-              {t('status.youWin')}
+              {t("status.youWin")}
             </div>
           ) : (
             <div className="flex items-center gap-3 justify-center">
               <RiRobot3Line />
-              {t('status.aiWin')}
+              {t("status.aiWin")}
             </div>
           )}
         </span>
@@ -295,13 +321,13 @@ export default function TicTacToe() {
       return (
         <div className="flex items-center gap-3 justify-center">
           <RiRobot3Line />
-          {t('status.aiThinking')}
+          {t("status.aiThinking")}
         </div>
       );
     return (
-      <div className="flex items-center justify-center">
-        {t('status.yourTurn')} <BiSolidLeaf className="text-primary ml-3" />
-      </div>
+      <p className="flex items-center justify-center">
+        {t("status.yourTurn")} <BiSolidLeaf className="text-primary ml-3" />
+      </p>
     );
   };
 
@@ -329,18 +355,11 @@ export default function TicTacToe() {
       <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-6 lg:p-12 relative z-10">
         {/* Right Section - Game Board */}
         <div className="w-fit lg:w-auto shrink-0">
-          {/* Mobile Title */}
-          {/* <div className="lg:hidden text-center mb-6">
-            <h1 className="text-4xl font-black bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent mb-2">
-              TIC TAC TOE
-            </h1>
-          </div> */}
-
           {/* Status Card */}
           <div className="bg-primary/10 backdrop-blur-md rounded-3xl py-4 px-6 shadow-2xl mb-6 text-center">
-            <p className="text-2xl lg:text-3xl font-black dark:text-secondary-foreground">
+            <div className="text-2xl lg:text-3xl font-black dark:text-secondary-foreground">
               {getGameStatus()}
-            </p>
+            </div>
           </div>
 
           {/* Game Board */}
@@ -356,14 +375,16 @@ export default function TicTacToe() {
                     bg-linear-to-br from-primary via-primary to-primary/80 
                     rounded-3xl flex items-center justify-center shadow-xl
                     transition-all duration-300 ease-out
-                    ${!value && !winner && !isAiTurn
-                      ? "hover:scale-110 hover:shadow-2xl hover:rotate-3 active:scale-95"
-                      : ""
+                    ${
+                      !value && !winner && !isAiTurn
+                        ? "hover:scale-110 hover:shadow-2xl hover:rotate-3 active:scale-95"
+                        : ""
                     }
                     ${value ? "scale-100" : "scale-95"}
-                    ${isAiTurn || winner
-                      ? "cursor-not-allowed opacity-60"
-                      : "cursor-pointer"
+                    ${
+                      isAiTurn || winner
+                        ? "cursor-not-allowed opacity-60"
+                        : "cursor-pointer"
                     }
                   `}
                 >
@@ -376,12 +397,12 @@ export default function TicTacToe() {
             {winner && (
               <button
                 onClick={restartGame}
-                className="w-full bg-gradient-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-2xl font-black text-xl
+                className="w-full bg-linear-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-2xl font-black text-xl
                   hover:from-primary/90 hover:to-primary/70 flex items-center justify-center gap-3 cursor-pointer 
                   active:scale-95 transition-all duration-200 shadow-xl hover:shadow-2xl"
               >
                 <FaPlay />
-                {t('actions.playAgain')}
+                {t("actions.playAgain")}
               </button>
             )}
           </div>
@@ -397,14 +418,14 @@ export default function TicTacToe() {
                 style={{ animationDuration: "4s" }}
               />
               <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                {t('hero.you')}
+                {t("hero.you")}
               </span>
             </div>
-            <span className="text-gray-400 md:text-2xl">{t('hero.vs')}</span>
+            <span className="text-gray-400 md:text-2xl">{t("hero.vs")}</span>
             <div className="flex items-center gap-1.5">
               <MdDoNotDisturbAlt className="text-xl md:text-4xl text-primary animate-pulse" />
               <span className="text-sm md:text-3xl font-semibold text-secondary-foreground">
-                {t('hero.ai')}
+                {t("hero.ai")}
               </span>
             </div>
           </div>
@@ -418,7 +439,7 @@ export default function TicTacToe() {
                   onChange={handleDifficultyChange}
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">{t('difficulty.easy')}</span>
+                <span className="text-primary">{t("difficulty.easy")}</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
@@ -430,7 +451,7 @@ export default function TicTacToe() {
                   defaultChecked
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">{t('difficulty.medium')}</span>
+                <span className="text-primary">{t("difficulty.medium")}</span>
               </label>
 
               <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
@@ -441,7 +462,7 @@ export default function TicTacToe() {
                   onChange={handleDifficultyChange}
                   className="accent-primary scale-125"
                 />
-                <span className="text-primary">{t('difficulty.hard')}</span>
+                <span className="text-primary">{t("difficulty.hard")}</span>
               </label>
             </div>
           </div>
@@ -451,7 +472,7 @@ export default function TicTacToe() {
             <div className="flex items-center justify-center gap-3 mb-6">
               <GiTrophy className="text-3xl text-primary animate-bounce" />
               <h2 className="text-2xl font-black dark:text-secondary-foreground">
-                {t('scoreBoard.title')}
+                {t("scoreBoard.title")}
               </h2>
             </div>
 
@@ -462,7 +483,9 @@ export default function TicTacToe() {
                     <div className="bg-primary text-white rounded-full w-10 h-10 flex items-center justify-center">
                       <FaRegSmileWink className="text-xl" />
                     </div>
-                    <span className="font-bold text-lg text-primary">{t('scoreBoard.you')}</span>
+                    <span className="font-bold text-lg text-primary">
+                      {t("scoreBoard.you")}
+                    </span>
                   </div>
                   <span className="text-3xl font-black text-primary">
                     {scores.player}
@@ -477,7 +500,7 @@ export default function TicTacToe() {
                       <FaHandshakeSimple className="text-xl" />
                     </div>
                     <span className="font-bold text-lg text-yellow-600">
-                      {t('scoreBoard.draws')}
+                      {t("scoreBoard.draws")}
                     </span>
                   </div>
                   <span className="text-3xl font-black text-yellow-600">
@@ -492,7 +515,9 @@ export default function TicTacToe() {
                     <div className="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center">
                       <RiRobot3Line className="text-xl" />
                     </div>
-                    <span className="font-bold text-lg text-red-600">{t('scoreBoard.ai')}</span>
+                    <span className="font-bold text-lg text-red-600">
+                      {t("scoreBoard.ai")}
+                    </span>
                   </div>
                   <span className="text-3xl font-black text-red-600">
                     {scores.ai}
@@ -506,7 +531,7 @@ export default function TicTacToe() {
               className="mt-6 w-full py-3 rounded-xl bg-linear-to-r from-primary to-primary/80 text-primary-foreground font-bold
                 hover:from-primary/90 hover:to-primary/70 hover:scale-105 transition-all shadow-lg"
             >
-              {t('actions.resetScores')}
+              {t("actions.resetScores")}
             </button>
           </div>
         </div>

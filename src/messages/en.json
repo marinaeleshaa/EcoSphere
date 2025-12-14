@@ -28,7 +28,10 @@
         "browseEvents": "Browse Events",
         "eventDetails": "Event Details",
         "products": "Products",
-        "orders": "Orders"
+        "orders": "Orders",
+        "shops":"Shops",
+        "events":"Events",
+        "recycling":"Recycling"
       },
       "footer": {
         "favorite": "Favorite",
@@ -144,7 +147,10 @@
       "youWin": "You Win",
       "aiWin": "AI Win",
       "aiThinking": "AI think...",
-      "yourTurn": "Your turn"
+      "yourTurn": "Your turn",
+      "pointsAdded": "{points} points added to your EcoPoints!",
+      "updatePoints": "Error updating EcoPoints. Please try again.",
+      "loginForPoints": "Login to earn EcoPoints!"
     },
     "difficulty": {
       "easy": "Easy",
@@ -540,6 +546,27 @@
       "sold": "{percent}% Sold"
     }
   },
+  "AI": {
+    "button": {
+      "label": "Ask AI"
+    },
+    "window": {
+      "title": "EcoSphere AI",
+      "subtitle": "Your Green Assistant",
+      "clearChat": "Clear Chat",
+      "emptyState": {
+        "title": "How can I help you recycle today?",
+        "subtitle": "Ask about products, restaurants, or recycling tips!"
+      },
+      "input": {
+        "placeholder": "Ask me anything..."
+      },
+      "disclaimer": "AI can make mistakes. Please verify important info."
+    },
+    "errors": {
+      "connection": "I'm having trouble connecting right now. Please try again later."
+    }
+  },
   "subscribe": {
     "titleFirst": "Select the ",
     "boldTitle": "best plan",
@@ -560,6 +587,7 @@
         ],
         "icon": "leaf"
       },
+
       {
         "title": "Pro Plan",
         "subtitle": "For professional stores and large event organizers.",
@@ -590,27 +618,6 @@
       }
     ]
   },
-  "AI": {
-    "button": {
-      "label": "Ask AI"
-    },
-    "window": {
-      "title": "EcoSphere AI",
-      "subtitle": "Your Green Assistant",
-      "clearChat": "Clear Chat",
-      "emptyState": {
-        "title": "How can I help you recycle today?",
-        "subtitle": "Ask about products, restaurants, or recycling tips!"
-      },
-      "input": {
-        "placeholder": "Ask me anything..."
-      },
-      "disclaimer": "AI can make mistakes. Please verify important info."
-    },
-    "errors": {
-      "connection": "I'm having trouble connecting right now. Please try again later."
-    }
-  },
   "News": {
     "page": {
       "title": "News & Updates",
@@ -621,6 +628,64 @@
     },
     "card": {
       "viewMore": "View More"
+    }
+  },
+  "ForgotPassword": {
+    "logoAlt": "EcoSphere Logo",
+    "forgotPasswordImageAlt": "Forgot Password Illustration",
+    "verifyEmailImageAlt": "Verify Email Illustration",
+    "emailStep": {
+      "title": "Verify Your Email",
+      "description": "Enter your email to receive a verification code."
+    },
+    "resetStep": {
+      "title": "Reset Password",
+      "description": "Create a new secure password for your account."
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Create a new secure password for your account",
+      "newPassword": {
+        "label": "New Password",
+        "placeholder": "Enter new password"
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Confirm new password",
+        "mismatch": "Passwords do not match"
+      },
+      "requirements": {
+        "minLength": "At least 8 characters",
+        "hasNumber": "Contains a number",
+        "hasSpecial": "Contains a special character"
+      },
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submitButton": "Reset Password",
+      "success": {
+        "title": "Password Changed!",
+        "description": "Your password has been successfully changed. You will be redirected to the login page shortly.",
+        "button": "Go to Login"
+      }
+    },
+    "emailVerification": {
+      "emailStep": {
+        "title": "Verify Email",
+        "description": "Enter your email address and we'll send you a 6-digit verification code.",
+        "placeholder": "Enter your email",
+        "sendButton": "Send Code",
+        "backButton": "Back to Login",
+        "sendError": "Wrong email address. Please try again."
+      },
+      "codeStep": {
+        "title": "Enter Code",
+        "description": "We've sent a 6-digit code to {email}",
+        "inputLabel": "Digit {position}",
+        "error": "Please enter all 6 digits.",
+        "verifyButton": "Verify Code",
+        "changeEmailButton": "Change Email",
+        "responseError": "Invalid verification code. Please try again."
+      }
     }
   }
 }
