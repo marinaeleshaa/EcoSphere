@@ -670,7 +670,8 @@
         "description": "Entrez votre adresse e-mail et nous vous enverrons un code de vérification à 6 chiffres.",
         "placeholder": "Entrez votre e-mail",
         "sendButton": "Envoyer le code",
-        "backButton": "Retour à la connexion"
+        "backButton": "Retour à la connexion",
+        "sendError": "Adresse e-mail incorrecte. Veuillez réessayer."
       },
       "codeStep": {
         "title": "Entrer le code",
@@ -678,7 +679,8 @@
         "inputLabel": "Chiffre {position}",
         "error": "Veuillez entrer les 6 chiffres.",
         "verifyButton": "Vérifier le code",
-        "changeEmailButton": "Changer l'e-mail"
+        "changeEmailButton": "Changer l'e-mail",
+        "responseError": "Code de vérification invalide. Veuillez réessayer."
       }
     }
   }

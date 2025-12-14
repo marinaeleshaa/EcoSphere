@@ -21,9 +21,9 @@ export default function CustomerProfile({
   id: string;
   role: string;
 }) {
+  const dispatch = useDispatch<AppDispatch>();
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Partial<User>>({});
   const [passwordData, setPasswordData] = useState({

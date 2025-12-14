@@ -5,7 +5,9 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { sendCode, verify } from "@/frontend/api/Users";
 
 interface EmailVerificationProps {
   email: string;
@@ -18,18 +20,24 @@ export default function EmailVerification({
   setEmail,
   onVerified,
 }: EmailVerificationProps) {
-  const t = useTranslations('ForgotPassword.emailVerification');
-  
+  const t = useTranslations("ForgotPassword.emailVerification");
+
   const [emailValid, setEmailValid] = useState(false);
   const [codeSent, setCodeSent] = useState(false);
   const [userCode, setUserCode] = useState(["", "", "", "", "", ""]);
   const [codeError, setCodeError] = useState("");
 
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (!emailValid) return;
-    
-    console.log("Code sent to:", email);
-    setCodeSent(true);
+
+    try {
+      const result = await sendCode(email);
+      toast.success(result.data.message);
+      setCodeSent(true);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("emailStep.sendError"));
+    }
   };
 
   const handleCodeChange = (value: string, index: number) => {
@@ -45,23 +53,31 @@ export default function EmailVerification({
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === "Backspace" && !userCode[index] && index > 0) {
       const prev = document.getElementById(`code-${index - 1}`);
       prev?.focus();
     }
   };
 
-  const verifyCode = () => {
+  const verifyCode = async () => {
     const code = userCode.join("");
-    
+
     if (code.length !== 6) {
-      setCodeError(t('codeStep.error'));
+      setCodeError(t("codeStep.error"));
       return;
     }
-    
-    setCodeError("");
-    onVerified();
+    try {
+      await verify(email, code);
+      setCodeError("");
+      onVerified();
+    } catch (error) {
+      console.error(error);
+      setCodeError(t("codeStep.responseError"));
+    }
   };
 
   const pageVariants = {
@@ -88,17 +104,17 @@ export default function EmailVerification({
               <Mail className="w-8 h-8 text-primary" />
             </div>
             <h2 className="font-extrabold text-3xl text-foreground">
-              {t('emailStep.title')}
+              {t("emailStep.title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              {t('emailStep.description')}
+              {t("emailStep.description")}
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
             <input
               type="email"
-              placeholder={t('emailStep.placeholder')}
+              placeholder={t("emailStep.placeholder")}
               value={email}
               onChange={(e) => {
                 const val = e.target.value;
@@ -115,12 +131,13 @@ export default function EmailVerification({
               onClick={handleSendCode}
               className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all"
             >
-              {t('emailStep.sendButton')} <IoIosArrowRoundForward className="text-2xl" />
+              {t("emailStep.sendButton")}{" "}
+              <IoIosArrowRoundForward className="text-2xl" />
             </button>
 
             <Link href="/auth">
               <button className="w-full bg-secondary text-secondary-foreground font-semibold p-3 rounded-full hover:scale-105 transition-all">
-                {t('emailStep.backButton')}
+                {t("emailStep.backButton")}
               </button>
             </Link>
           </div>
@@ -141,10 +158,10 @@ export default function EmailVerification({
               <Mail className="w-8 h-8 text-primary" />
             </div>
             <h2 className="font-extrabold text-3xl text-foreground">
-              {t('codeStep.title')}
+              {t("codeStep.title")}
             </h2>
             <p className="text-sm text-muted-foreground max-w-sm">
-              {t('codeStep.description', { email })}
+              {t("codeStep.description", { email })}
             </p>
           </div>
 
@@ -158,7 +175,7 @@ export default function EmailVerification({
                 onChange={(e) => handleCodeChange(e.target.value, i)}
                 onKeyDown={(e) => handleKeyDown(e, i)}
                 className="w-12 h-14 text-center text-2xl font-bold bg-input text-input-foreground rounded-xl border-2 border-border focus:border-primary outline-none transition"
-                aria-label={t('codeStep.inputLabel', { position: i + 1 })}
+                aria-label={t("codeStep.inputLabel", { position: i + 1 })}
               />
             ))}
           </div>
@@ -174,7 +191,8 @@ export default function EmailVerification({
             onClick={verifyCode}
             className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all"
           >
-            {t('codeStep.verifyButton')} <IoIosArrowRoundForward className="text-2xl" />
+            {t("codeStep.verifyButton")}{" "}
+            <IoIosArrowRoundForward className="text-2xl" />
           </button>
 
           <button
@@ -185,7 +203,7 @@ export default function EmailVerification({
             }}
             className="text-sm text-muted-foreground hover:text-foreground transition underline"
           >
-            {t('codeStep.changeEmailButton')}
+            {t("codeStep.changeEmailButton")}
           </button>
         </motion.div>
       )}

@@ -671,7 +671,8 @@
         "description": "Enter your email address and we'll send you a 6-digit verification code.",
         "placeholder": "Enter your email",
         "sendButton": "Send Code",
-        "backButton": "Back to Login"
+        "backButton": "Back to Login",
+        "sendError": "Wrong email address. Please try again."
       },
       "codeStep": {
         "title": "Enter Code",
@@ -679,7 +680,8 @@
         "inputLabel": "Digit {position}",
         "error": "Please enter all 6 digits.",
         "verifyButton": "Verify Code",
-        "changeEmailButton": "Change Email"
+        "changeEmailButton": "Change Email",
+        "responseError": "Invalid verification code. Please try again."
       }
     }
   }

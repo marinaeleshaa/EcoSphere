@@ -6,6 +6,7 @@ import {
 	newEventSubject,
 	newEventTemplate,
 	redeemCouponTemplate,
+	forgetPasswordTemplate,
 } from "./mailTemplates";
 
 const transporter = nodemailer.createTransport({
@@ -92,3 +93,25 @@ export const sendRedeemingMail = async (
 		})
 		.catch((error) => console.error("Failed to send new event email:", error));
 };
+
+export async function sendForgetPasswordMail(
+	email: string,
+	name: string,
+	code: string,
+	validTo: Date
+) {
+	if (!ensureSmtpConfigured()) return;
+
+	const mailOptions = {
+    from: `"EcoSphere" <no-reply@ecosphere.com>`,
+    to: email,
+    subject: "Reset your EcoSphere password",
+    html: forgetPasswordTemplate(code, validTo, name),
+  };
+
+	try {
+		await transporter.sendMail(mailOptions);
+	} catch (error) {
+		console.error("Failed to send forget password email:", error);
+	}
+}

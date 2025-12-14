@@ -64,6 +64,24 @@ class UserController {
     const user = await this.userService.deleteById(id);
     return user;
   }
+
+  async sendForgetPasswordEmail(email: string): Promise<{ message: string }> {
+    const result = await this.userService.sendForgetPasswordEmail(email);
+    return result;
+  }
+
+  async verifyCode(email: string, code: string): Promise<{ message: string }> {
+    const result = await this.userService.verifyCode(email, code);
+    return result;
+  }
+
+  async resetPassword(
+    email: string,
+    newPassword: string
+  ): Promise<{ message: string }> {
+    const result = await this.userService.resetPassword(email, newPassword);
+    return result;
+  }
 }
 
 export default UserController;

@@ -6,7 +6,7 @@ import { ImageService } from "../../services/image.service";
 import { DashboardUsers } from "./user.types";
 import { randomInt } from "node:crypto";
 import { ICoupon } from "../discountCoupon/coupon.model";
-import { sendRedeemingMail } from "@/backend/utils/mailer";
+import { sendForgetPasswordMail, sendRedeemingMail } from "@/backend/utils/mailer";
 import { IMenuItem } from "../restaurant/restaurant.model";
 
 export interface IUserService {
@@ -24,6 +24,12 @@ export interface IUserService {
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
+  sendForgetPasswordEmail(email: string): Promise<{ message: string }>;
+  verifyCode(email: string, code: string): Promise<{ message: string }>;
+  resetPassword(
+    email: string,
+    newPassword: string
+  ): Promise<{ message: string }>;
 }
 
 @injectable()
@@ -59,8 +65,66 @@ class UserService implements IUserService {
     return result;
   }
 
+  async sendForgetPasswordEmail(email: string): Promise<{ message: string }> {
+    const userId = await this.userRepository.getUserIdByEmail(email);
+    if (!userId) throw new Error("User not found");
+
+    const user = await this.getById(userId._id.toString(), "firstName");
+
+    const code = this.generateCode();
+    const validTo = new Date();
+    validTo.setMinutes(validTo.getMinutes() + 15); // 15 Minutes validity
+
+    await this.userRepository.savePasswordResetCode(
+      userId._id.toString(),
+      code,
+      validTo
+    );
+
+    // Send Email
+    await sendForgetPasswordMail(email, user.firstName, code, validTo);
+
+    return {
+      message: "A password reset code has been sent to your email.",
+    };
+  }
+
+  async verifyCode(email: string, code: string): Promise<{ message: string }> {
+    const userId = await this.userRepository.getUserIdByEmail(email);
+    if (!userId) throw new Error("User not found");
+
+    const user = await this.getById(userId._id.toString(), "resetCode");
+
+    const isValid =
+      user.resetCode?.code === code &&
+      user.resetCode?.validTo &&
+      new Date() < new Date(user.resetCode.validTo);
+
+    if (!isValid) {
+      throw new Error("Invalid or expired code.");
+    }
+
+    return {
+      message: "Code verified successfully.",
+    };
+  }
+
+  async resetPassword(
+    email: string,
+    newPassword: string
+  ): Promise<{ message: string }> {
+    const userId = await this.userRepository.getUserIdByEmail(email);
+    if (!userId) throw new Error("User not found");
+
+    await this.userRepository.updateById(userId._id.toString(), {password: newPassword});
+
+    return {
+      message: "Password has been reset successfully.",
+    };
+  }
+
   async redeemUserPoints(userId: string): Promise<{ message: string }> {
-    const user = await this.getById(userId ); // "points email firstName as a second param"
+    const user = await this.getById(userId); // "points email firstName as a second param"
     if (!user.points || user.points <= 0) {
       throw new Error("User has no enough points to redeem.");
     }
@@ -78,17 +142,17 @@ class UserService implements IUserService {
       numberOfUse: 0,
       maxNumberOfUse: 1,
       createdBy: userId,
-      source: "redeem"
+      source: "redeem",
     } as ICoupon);
     await this.userRepository.redeemPoints(userId);
     // 7. Send email
     await sendRedeemingMail(user.email, user.firstName, code, validTo, rate);
     // 8. Return response
     return {
-      message: "A coupon has been sent to your email."
+      message: "A coupon has been sent to your email.",
     };
   }
-  
+
   async getUserIdByEmail(email: string): Promise<IUser> {
     const user = await this.userRepository.getUserIdByEmail(email);
     if (!user) throw new Error("User not found");
