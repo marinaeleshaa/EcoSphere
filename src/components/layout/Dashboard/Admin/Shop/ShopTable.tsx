@@ -1,0 +1,144 @@
+"use client";
+import React, { useState } from 'react';
+import { Eye, EyeOff, Store } from 'lucide-react';
+
+const ShopTable = () => {
+  const [shops, setShops] = useState([
+    {
+      id: 1,
+      name: "Tech Haven",
+      email: "contact@techhaven.com",
+      phone: "+1 (555) 123-4567",
+      status: "active",
+      hidden: false
+    },
+    {
+      id: 2,
+      name: "Fashion Forward",
+      email: "info@fashionforward.com",
+      phone: "+1 (555) 234-5678",
+      status: "pending",
+      hidden: false
+    },
+    {
+      id: 3,
+      name: "Home Essentials",
+      email: "support@homeessentials.com",
+      phone: "+1 (555) 345-6789",
+      status: "active",
+      hidden: true
+    },
+    {
+      id: 4,
+      name: "Sports Zone",
+      email: "hello@sportszone.com",
+      phone: "+1 (555) 456-7890",
+      status: "inactive",
+      hidden: false
+    }
+  ]);
+
+  const toggleVisibility = (id) => {
+    setShops(shops.map(shop => 
+      shop.id === id ? { ...shop, hidden: !shop.hidden } : shop
+    ));
+  };
+
+  const getStatusColor = (status) => {
+    switch(status) {
+      case 'active':
+        return 'bg-green-100 text-green-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'inactive':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      {/* Hero Section */}
+     
+
+      {/* Table Section */}
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Shop Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Email
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Phone
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                    Visibility
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {shops.map((shop) => (
+                  <tr key={shop.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                          <Store className="w-5 h-5 text-indigo-600" />
+                        </div>
+                        <span className="font-medium text-gray-900">{shop.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                      {shop.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">
+                      {shop.phone}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(shop.status)}`}>
+                        {shop.status.charAt(0).toUpperCase() + shop.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => toggleVisibility(shop.id)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                          shop.hidden
+                            ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            : 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200'
+                        }`}
+                      >
+                        {shop.hidden ? (
+                          <>
+                            <EyeOff className="w-4 h-4" />
+                            Hidden
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            Visible
+                          </>
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ShopTable;

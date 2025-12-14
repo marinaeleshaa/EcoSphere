@@ -1,7 +1,11 @@
-import React from 'react'
+import React from "react";
 
-export default function Overview() {
+const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <div ></div>
+    </div>
+  );
+};
+
+export default page;
