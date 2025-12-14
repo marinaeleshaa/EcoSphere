@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { createPaymentIntent } from "@/frontend/api/Payment";
+import { createOrder, createPaymentIntent } from "@/frontend/api/Payment";
+import { useAppSelector } from "@/frontend/redux/hooks";
+import { selectCartItemsArray } from "@/frontend/redux/selector/cartSelector";
+import { mapCartBackendData } from "@/frontend/redux/middleware/cartSyncMiddleware";
 
 interface UsePaymentIntentResult {
   clientSecret: string | null;
@@ -14,6 +17,7 @@ export function usePaymentIntent(
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const cartItems = mapCartBackendData(useAppSelector(selectCartItemsArray));
 
   useEffect(() => {
     if (!enabled || amount <= 0) return;
@@ -25,7 +29,15 @@ export function usePaymentIntent(
       setError(null);
 
       try {
-        const { clientSecret } = await createPaymentIntent(amount, "egp");
+        const response = await createOrder(cartItems);
+        const { clientSecret } = await createPaymentIntent(
+          amount,
+          {
+            orderId: `${response!.data!._id}`,
+            userId: `${response!.data!.userId}`, // leave it like this for safety
+          },
+          "EGP",
+        );
         if (isMounted) setClientSecret(clientSecret);
       } catch (err: any) {
         if (isMounted) {
