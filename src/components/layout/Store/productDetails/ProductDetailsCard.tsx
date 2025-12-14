@@ -13,18 +13,16 @@ import { useTranslations } from 'next-intl';
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const t = useTranslations('ProductDetails.card');
   const {
-    id,
-    shopName,
-    shopSubtitle,
-    productImg,
-    productName,
-    productPrice,
-    productSubtitle,
-    productDescription,
+    _id,
+    title,
+    subtitle,
+    avatar,
+    price,
+    availableOnline
   } = product;
 
   const [count, setCount] = useState(1);
-  const isFav = useSelector((state: RootState) => isInFavSelector(state, id));
+  const isFav = useSelector((state: RootState) => isInFavSelector(state, _id));
   const dispatch = useDispatch<AppDispatch>()
   const handleFav = () => {
     dispatch(toggleFavoriteAsync(product));
@@ -52,8 +50,8 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           <Image
             width={600}
             height={400}
-            src={productImg}
-            alt={productName}
+            src={avatar?.url || "/store img/product-placeholder.png"}
+            alt={title}
             className="w-[500px] rounded-lg "
           />
           {/* top right decorative SVG */}
@@ -99,10 +97,10 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
               />
               <div className="hidden sm:block">
                 <h2 className="text-base font-bold text-primary-foreground ">
-                  {shopName}
+                  {"Tech Store"}
                 </h2>
                 <p className="text-primary-foreground/80 text-sm">
-                  {shopSubtitle}
+                  {availableOnline ? t('availableOnline') : t('notAvailableOnline')}
                 </p>
               </div>
             </div>
@@ -114,9 +112,9 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           {/* Product name and subtitle */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {productName}
+              {title}
             </h1>
-            <p className="text-lg text-muted-foreground">{productSubtitle}</p>
+            <p className="text-lg text-muted-foreground">{subtitle}</p>
           </div>
 
           {/* Rating */}
@@ -134,14 +132,14 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Price */}
           <div className="text-3xl font-bold text-primary">
-            ${productPrice.toFixed(2)}
+            ${price.toFixed(2)}
           </div>
 
           {/* Description */}
           <div>
             <h3 className="text-lg font-semibold mb-2">{t('description')}</h3>
             <p className="text-muted-foreground leading-relaxed">
-              {productDescription}
+              {subtitle}
             </p>
           </div>
 
