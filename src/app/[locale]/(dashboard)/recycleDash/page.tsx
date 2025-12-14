@@ -1,9 +1,11 @@
-import React from 'react'
+import RecycleDashboard from "@/components/layout/Dashboard/Recycle/RecycleDashboard";
 
 const page = () => {
   return (
-    <div>page</div>
-  )
-}
+    <div>
+      <RecycleDashboard />
+    </div>
+  );
+};
 
-export default page
+export default page;
