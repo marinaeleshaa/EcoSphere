@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -32,12 +31,10 @@ const formInput = ({
     <label className="text-sm  font-bold uppercase ml-2 text-primary">
       {label} {required && <span className="text-red-500 ml-2">*</span>}
     </label>
-
     <div className="relative w-full">
       {Icon && (
         <Icon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-black pointer-events-none" />
       )}
-
       <input
         {...register}
         placeholder={placeholder}
@@ -46,14 +43,13 @@ const formInput = ({
         onInput={onInput}
         className={`
           myInput 
-           placeholder:text-foreground
+          placeholder:text-foreground
           ${Icon ? "pl-12!" : "pl-4"}
           ${error ? "ring-2 ring-red-400 border-red-400" : ""}
           ${className}
         `}
       />
     </div>
-
     {error && (
       <span className="text-[11px] text-red-100 font-bold ml-2 bg-red-500/20 px-2 py-0.5 rounded-md w-fit">
         {error}

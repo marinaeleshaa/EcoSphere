@@ -49,17 +49,18 @@ import { useAppSelector } from "@/frontend/redux/hooks";
 import { selectCartItemCount } from "@/frontend/redux/selector/cartSelector";
 
 export default function SideBar() {
-	const { data: session, status } = useSession();
 	const cartItemsCount = useAppSelector(selectCartItemCount);
+	const { data: session, status } = useSession();
 	const t = useTranslations("Layout.Sidebar");
 	const matchPathWithOptionalLocale = (
 		pathname: string,
 		targetSegment: string
 	) => {
 		const base = `\\${targetSegment}`;
+		const en = `\\/en\\${targetSegment}`;
 		const ar = `\\/ar\\${targetSegment}`;
 		const fr = `\\/fr\\${targetSegment}`;
-		return new RegExp(`^(${base}|${ar}?|${fr}?)$`).test(pathname);
+		return new RegExp(`^(${base}|${en}?|${ar}?|${fr}?)$`).test(pathname);
 	};
 	// User items.
 	const useritems = [
@@ -153,7 +154,7 @@ export default function SideBar() {
 			icon: MdEventAvailable,
 		},
 	];
-
+	// recycle dashboard items.
 	const recycleItems = [
 		{
 			title: t("menu.recycle"),

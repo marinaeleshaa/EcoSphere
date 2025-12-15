@@ -76,7 +76,7 @@ const VisionUploadArea = ({ onFilesChange, error }: VisionUploadAreaProps) => {
         className={`relative group cursor-pointer flex flex-col items-center justify-center w-full h-64 rounded-4xl border-4 border-dashed transition-all duration-300 ${
           dragActive
             ? "border-primary-foreground bg-primary-foreground/10 scale-[1.01]"
-            : "border-primary-foreground/30 hover:border-primary-foreground/60 hover:bg-primary-foreground/5"
+            : "border-primary-foreground/30 hover:border-foreground/60 hover:bg-foreground/5"
         }`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
@@ -95,10 +95,10 @@ const VisionUploadArea = ({ onFilesChange, error }: VisionUploadAreaProps) => {
 
         <div className="text-center space-y-2 max-w-md px-4 pointer-events-none">
           <div className="w-16 h-16 mx-auto rounded-full bg-primary-foreground/10 flex items-center justify-center mb-4">
-            <Upload className="w-8 h-8 text-primary-foreground" />
+            <Upload className="w-8 h-8 text-foreground" />
           </div>
           <h3 className="text-xl font-bold">Add Images</h3>
-          <p className="text-primary-foreground/70 text-sm">
+          <p className="text-foreground/70 text-sm">
             Drag & drop or click to upload
           </p>
         </div>

@@ -28,7 +28,7 @@ export interface IEventDetails {
   _id: string;
   name: string;
   type: string;
-  avatar?: string | File | FileList | undefined;
+  avatar?: File | { url: string; key: string } | null;
   description?: string;
   locate: string;
   eventDate: string;
@@ -44,6 +44,9 @@ export interface EventProps {
   events: EventResponse[];
 }
 
-export type EventListItemProps = Pick<IEventDetails,  '_id' | 'name' | 'eventDate' | 'startTime' | 'endTime' | 'locate'> & {
-  avatar: string | undefined;
+export type EventListItemProps = Pick<
+  IEventDetails,
+  "_id" | "name" | "eventDate" | "startTime" | "endTime" | "locate"
+> & {
+  avatar?: { url: string; key: string } | string;
 };

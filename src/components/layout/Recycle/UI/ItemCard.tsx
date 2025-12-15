@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import { Minus, Plus, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import SelectField from "./selectField";
 
 type MaterialItem = {
@@ -30,6 +32,9 @@ const ItemCard = ({
   register,
   error,
 }: Props) => {
+  const t = useTranslations("RecycleForm.itemCard");
+  const tMaterials = useTranslations("RecycleForm.materialTypes");
+
   const typeRegistration = register(`type`);
 
   return (
@@ -43,21 +48,19 @@ const ItemCard = ({
           <X size={16} />
         </button>
       )}
-
       <div className="font-bold text-primary/80 uppercase">
-        Material Item {index + 1}
+        {t("title", { number: index + 1 })}
       </div>
-
       <div className="grid md:grid-cols-2 gap-8">
         <SelectField
-          label="Type"
+          label={t("typeLabel")}
           options={[
-            "Plastic",
-            "Paper",
-            "Glass",
-            "Electronic Waste",
-            "Metal",
-            "Mixed",
+            tMaterials("plastic"),
+            tMaterials("paper"),
+            tMaterials("glass"),
+            tMaterials("electronic"),
+            tMaterials("metal"),
+            tMaterials("mixed"),
           ]}
           register={{
             ...typeRegistration,
@@ -68,10 +71,9 @@ const ItemCard = ({
           }}
           error={error}
         />
-
         <div className="flex flex-col space-y-2">
           <label className="text-xs font-bold text-muted-foreground uppercase ml-2">
-            Est. Weight (kg)
+            {t("weightLabel")}
           </label>
 
           <div className="flex items-center justify-between p-2 rounded-full border border-primary/50 ">
@@ -86,7 +88,6 @@ const ItemCard = ({
             <span className=" font-bold text-primary text-xl w-12 text-center">
               {item.amount}
             </span>
-
             <button
               type="button"
               onClick={() => onAmountChange(index, +1)}

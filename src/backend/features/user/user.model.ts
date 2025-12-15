@@ -32,8 +32,11 @@ export interface IEvent extends Document {
 	locate: string;
 	ticketPrice: number;
 	description: string;
-	avatar?: string;
-	attenders: string[];
+	avatar?: {
+    key: string;
+    url?: string;
+  };
+  attenders?: string[];
 	capacity: number;
 	sections?: ISection[];
 	eventDate: Date;
@@ -113,8 +116,12 @@ export const eventSchema = new Schema<IEvent>(
 		name: { type: String, required: true },
 		locate: { type: String, required: true },
 		ticketPrice: { type: Number, required: true },
-		avatar: { type: String, required: true },
-		attenders: { type: [String], default: [] },
+		description: { type: String, required: true },
+    avatar: {
+      key: { type: String, required: true },
+      url: { type: String, required: false },
+    },
+    attenders: { type: [Schema.Types.ObjectId], ref: "User", default: [] },
 		capacity: { type: Number, required: true },
 		sections: { type: [sectionsSchema], default: [] },
 		createdAt: { type: Date, required: true, default: Date.now() },

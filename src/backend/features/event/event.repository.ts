@@ -81,6 +81,7 @@ class EventRepository {
       .lean<{ events: IEvent[] }>()
       .exec();
 
+      console.log(result);
     if (!result?.events || result.events.length === 0) {
       throw new Error(`Event with ID ${eventId} not found for user ${userId}.`);
     }

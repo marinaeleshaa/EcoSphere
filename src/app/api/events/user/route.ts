@@ -10,6 +10,9 @@ import {
   unauthorized,
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
+import { ImageService } from "@/backend/services/image.service";
+
+const imageService = rootContainer.resolve(ImageService);
 
 export const GET = async (
   req: NextRequest

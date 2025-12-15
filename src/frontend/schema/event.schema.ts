@@ -1,99 +1,102 @@
-import * as z from "zod";
+import z from "zod";
 
-const createDateTime = (date: string, time: string) => {
-    // Note: Concatenating date and time strings works for standard ISO format parsing
-    return new Date(`${date}T${time}:00`);
+const createDateTime = (date?: string, time?: string) => {
+  if (!date || !time) return null;
+  const d = new Date(`${date}T${time}:00`);
+  return isNaN(d.getTime()) ? null : d;
 };
 
-export const subEventSchema = z.object({
-    title: z.string().min(2, { message: "Section title is required." }),
-    description: z.string().optional(),
-    startTime: z.string().min(1, { message: "Start time is required." }),
-    endTime: z.string().min(1, { message: "End time is required." }),
+export const agendaSectionSchema = z.object({
+  title: z.string().min(1, "Agenda title is required"),
+  description: z.string().min(1, "Agenda description is required"),
+  startTime: z.string().min(1, "Start time is required"),
+  endTime: z.string().min(1, "End time is required"),
 });
 
-export const eventSchema = z
-    .object({
-        _id: z.string(),
-        name: z
-            .string()
-            .min(2, { message: "Event name must be at least 2 characters." }),
-        type: z.string({ message: "Please enter a valid Name." }),
-        avatar: z
-            .any()
-            .optional()
-            .refine(
-                (value) => {
-                    // Check if value is a FileList and has at least one file, or if it's an empty string (optional).
-                    return (
-                        (value instanceof FileList && value.length > 0) ||
-                        value === "" ||
-                        typeof value === "string"
-                    );
-                },
-                {
-                    message: "Image URL must be a valid file or an empty string.",
-                }
-            ),
-        description: z.string().optional(),
-        locate: z.string().min(2, { message: "Location is required." }),
-        eventDate: z
-            .string()
-            .refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
-        startTime: z.string(),
-        endTime: z.string(),
-        capacity: z.coerce.number<number>().min(0),
-        ticketType: z.enum(["Priced", "Free"]),
-        ticketPrice: z.coerce.number<number>().min(0),
-        sections: z.array(subEventSchema).optional()
-    })
-    .refine(
-        (data) => {
-            // Skip validation if the subEvents array is empty or undefined
-            if (!data.sections || data.sections.length === 0) {
-                return true;
-            }
+export const eventSchema = z.object({
+  _id: z.string().optional(),
 
-            // 1. Calculate Main Event Boundaries
-            const mainEventStart = createDateTime(data.eventDate, data.startTime);
-            const mainEventEnd = createDateTime(data.eventDate, data.endTime);
+  name: z.string().min(2, "Event name is required"),
 
-            // Check for general validity (should be caught by individual field validation, but good to check)
-            if (isNaN(mainEventStart.getTime()) || isNaN(mainEventEnd.getTime())) {
-                return true;
-            }
+  type: z.string().min(1, "Event type is required"),
 
-            // 2. Iterate through all Sub-Events and check against boundaries
-            for (const subEvent of data.sections) {
-                const subEventStart = createDateTime(
-                    data.eventDate,
-                    subEvent.startTime
-                );
-                const subEventEnd = createDateTime(data.eventDate, subEvent.endTime);
+  avatar: z.union([
+    z.string().url().optional(),// existing image (edit mode)
+		z.object({
+      url: z.string().url(),
+      key: z.string(),
+    }),
+    z.instanceof(File).optional(), // new upload
+  ]).optional(),
 
-                // a) Check if sub-event starts before the main event
-                if (subEventStart.getTime() < mainEventStart.getTime()) {
-                    return false;
-                }
+  description: z.string().min(10, "Description must be at least 10 characters"),
 
-                // b) Check if sub-event ends after the main event
-                if (subEventEnd.getTime() > mainEventEnd.getTime()) {
-                    return false;
-                }
+  locate: z.string().min(2, "Location is required"),
 
-                // c) (Bonus) Check if sub-event ends before it starts
-                if (subEventEnd.getTime() <= subEventStart.getTime()) {
-                    return false;
-                }
-            }
+  eventDate: z
+			.string()
+			.refine((val) => !isNaN(Date.parse(val)), { message: "Invalid date" }),
 
-            return true; // All sub-events are within bounds
-        },
-        {
-            // This message is applied to the whole form, but it's the only way to apply
-            // a global constraint message.
-            message:
-                "A schedule item is outside the main event's start and end times, or its end time is before its start time.",
-            path: ["sections"], // Display error message near the subEvents section
-        }
-    );
+  startTime: z.string().min(1, "Start time is required"),
+
+  endTime: z.string().min(1, "End time is required"),
+
+  capacity: z.coerce.number<number>().min(1, "Capacity must be at least 1"),
+
+  ticketType: z.enum(["Free", "Priced"]),
+
+  ticketPrice: z.coerce.number<number>().min(0),
+
+  sections: z.array(agendaSectionSchema).optional(),
+})
+.superRefine((data, ctx) => {
+  // Validation rule: if ticket is "Priced" but price is empty or 0 → error
+  if (data.ticketType === "Priced" && (!data.ticketPrice || data.ticketPrice <= 0)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["ticketPrice"],
+      message: "Ticket price is required for priced events",
+    });
+  }
+	 // Skip if no sections
+    if (!data.sections || data.sections.length === 0) return;
+
+    const mainStart = createDateTime(data.eventDate, data.startTime);
+    const mainEnd = createDateTime(data.eventDate, data.endTime);
+
+    if (!mainStart || !mainEnd) return;
+
+    data.sections.forEach((section, index) => {
+      const secStart = createDateTime(data.eventDate, section.startTime);
+      const secEnd = createDateTime(data.eventDate, section.endTime);
+
+      if (!secStart || !secEnd) return;
+
+      // ❌ Section starts before event
+      if (secStart < mainStart) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["sections", index, "startTime"],
+          message: "Section starts before the main event",
+        });
+      }
+
+      // ❌ Section ends after event
+      if (secEnd > mainEnd) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["sections", index, "endTime"],
+          message: "Section ends after the main event",
+        });
+      }
+
+      // ❌ Section end before start
+      if (secEnd <= secStart) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["sections", index, "endTime"],
+          message: "End time must be after start time",
+        });
+      }
+    });
+});

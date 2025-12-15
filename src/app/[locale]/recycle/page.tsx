@@ -3,6 +3,7 @@ import HeroSection from "@/components/layout/common/HeroSection";
 import { Metrics } from '@/components/layout/Recycle/Metrics';
 import RecycleForm from '@/components/layout/Recycle/recycleForm';
 
+
 export default function Recycle() {
   return (
     <div className="scroll-smooth">

@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useRef, useEffect } from "react";
 import {
   motion,
@@ -8,6 +7,7 @@ import {
   useTransform,
   animate,
 } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { Recycle, Package, Users, BarChart4 } from "lucide-react";
 
 // ---- Reveal Wrapper ----
@@ -54,10 +54,17 @@ const Counter = ({ value }: { value: number }) => {
 
 // ---- Main Component ----
 export const Metrics = () => {
+  const t = useTranslations("Metrics");
+
   const metrics = [
-    { label: "Tons Recycled", value: 1500, suffix: "+", Icon: Package },
-    { label: "Partners", value: 450, suffix: "+", Icon: Users },
-    { label: "Waste Diverted", value: 92, suffix: "%", Icon: BarChart4 },
+    { label: t("tonsRecycled.label"), value: 1500, suffix: "+", Icon: Package },
+    { label: t("partners.label"), value: 450, suffix: "+", Icon: Users },
+    {
+      label: t("wasteDiverted.label"),
+      value: 92,
+      suffix: "%",
+      Icon: BarChart4,
+    },
   ];
 
   return (
@@ -67,11 +74,10 @@ export const Metrics = () => {
         <Reveal>
           <div className="text-center mb-16 space-y-4">
             <span className="inline-flex items-center gap-2 text-xl font-bold tracking-widest uppercase text-primary">
-              <Recycle className="w-6 h-6" /> Our Impact
+              <Recycle className="w-6 h-6" /> {t("title")}
             </span>
-
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
-              Key Metrics
+              {t("subtitle")}
             </h2>
           </div>
         </Reveal>
@@ -90,7 +96,6 @@ export const Metrics = () => {
                 relative 
                 
                 /* --- Stronger light-mode presence --- */
-               
                 border border-primary/50 
                 shadow-[0_4px_14px_rgba(0,0,0,0.08)] 
                 hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] 

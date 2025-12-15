@@ -3,7 +3,8 @@
 import React, { useState, useTransition } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import {
   recycleFormSchema,
   type RecycleFormValues,
@@ -24,6 +25,8 @@ type MaterialItem = {
 };
 
 const RecycleForm = () => {
+  const t = useTranslations("RecycleForm");
+
   const [materials, setMaterials] = useState<MaterialItem[]>([
     { id: 1, type: "", amount: 1 },
   ]);
@@ -75,7 +78,7 @@ const RecycleForm = () => {
       if (entryMethod === "manual") {
         // Manual Mode: Calculate Carbon using existing materials
         if (materials.length === 0 || !materials[0].type) {
-          toast.error("Please add at least one item.");
+          toast.error(t("errors.addItem"));
           return;
         }
 
@@ -90,7 +93,7 @@ const RecycleForm = () => {
       } else {
         // Vision Mode: Analyze Images
         if (imageFiles.length === 0) {
-          toast.error("Please upload at least one image.");
+          toast.error(t("errors.uploadImage"));
           return;
         }
         const data = await analyzeImages(imageFiles); // Now returns data
@@ -119,17 +122,20 @@ const RecycleForm = () => {
 
         try {
           await updateUserPoints(pointsEarned);
-          toast.success(`Recycling Request Submitted!`, {
-            description: `You saved ${carbonSaved.toFixed(
-              2
-            )}kg of CO2 and earned ${pointsEarned} Eco Points! 🎉`,
+          toast.success(t("success.title"), {
+            description: t("success.descriptionWithPoints", {
+              carbonSaved: carbonSaved.toFixed(2),
+              points: pointsEarned,
+            }),
             duration: 5000,
           });
         } catch (pointError) {
           console.error("Failed to update points", pointError);
           // Fallback toast without points
-          toast.success("Recycling Request Submitted!", {
-            description: `You saved ${carbonSaved.toFixed(2)}kg of CO2!`,
+          toast.success(t("success.title"), {
+            description: t("success.description", {
+              carbonSaved: carbonSaved.toFixed(2),
+            }),
           });
         }
 
@@ -140,11 +146,11 @@ const RecycleForm = () => {
         setEntryMethod("manual"); // Reset to manual view
       } else {
         console.error("Submission failed");
-        toast.error("Failed to submit recycling request. Please try again.");
+        toast.error(t("errors.submissionFailed"));
       }
     } catch (err) {
       console.error("Process failed", err);
-      toast.error("An unexpected error occurred.");
+      toast.error(t("errors.unexpected"));
     }
   };
 
@@ -152,7 +158,7 @@ const RecycleForm = () => {
   const isBusinessProcessing = isSubmitting || isAnalyzing;
 
   return (
-    <div className="w-full min-h-screen  text-foreground flex flex-col items-center py-20">
+    <div className="w-full min-h-screen text-foreground flex flex-col items-center py-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -161,15 +167,13 @@ const RecycleForm = () => {
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full space-y-12   p-8 md:p-16 rounded-[3rem] border-2  border-primary/80 shadow-2xl"
+          className="w-full space-y-12 p-8 md:p-16 rounded-[3rem] border-2 border-primary/80 shadow-2xl"
         >
           <div className="text-center space-y-4 animate-bounce">
             <h2 className="text-5xl font-extrabold text-primary">
-              Recycle Request
+              {t("title")}
             </h2>
-            <p className="text-primary/80">
-              Schedule your pickup. Eco-friendly and easy.
-            </p>
+            <p className="text-primary/80">{t("description")}</p>
           </div>
 
           <PersonalInfoSection
@@ -185,7 +189,7 @@ const RecycleForm = () => {
             <div className="flex items-center gap-3 pb-3 border-b-2 border-primary-foreground/30">
               <Sparkles className="w-6 h-6" />
               <span className="text-sm font-extrabold uppercase">
-                Add Items
+                {t("entryMethod.title")}
               </span>
             </div>
 
@@ -193,24 +197,24 @@ const RecycleForm = () => {
               <button
                 type="button"
                 onClick={() => setEntryMethod("manual")}
-                className={`px-6 py-2  font-bold transition-all cursor-pointer ${
+                className={`px-6 py-2 font-bold transition-all cursor-pointer ${
                   entryMethod === "manual"
                     ? "bg-primary-foreground text-primary border-b-2 border-primary"
-                    : " hover:bg-primary-foreground/10 text-foreground border-0"
+                    : "hover:bg-primary-foreground/10 text-foreground border-0"
                 }`}
               >
-                Manual
+                {t("entryMethod.manual")}
               </button>
               <button
                 type="button"
                 onClick={() => setEntryMethod("vision")}
-                className={`px-6 py-2  font-bold transition-all cursor-pointer ${
+                className={`px-6 py-2 font-bold transition-all cursor-pointer ${
                   entryMethod === "vision"
                     ? "bg-primary-foreground text-primary border-b-2 border-primary"
-                    : " hover:bg-primary-foreground/10 text-foreground border-0"
+                    : "hover:bg-primary-foreground/10 text-foreground border-0"
                 }`}
               >
-                AI Scan
+                {t("entryMethod.aiScan")}
               </button>
             </div>
           </div>
@@ -224,7 +228,7 @@ const RecycleForm = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
               >
-                <div className="bg-primary-foreground/5 p-8 rounded-[2rem] border-2 border-dashed border-primary-foreground/20">
+                <div className="bg-primary-foreground/5 p-8 rounded-4xl border-2 border-dashed border-primary-foreground/20">
                   <VisionUploadArea
                     onFilesChange={setImageFiles}
                     error={error}
@@ -264,10 +268,10 @@ const RecycleForm = () => {
             {isBusinessProcessing ? (
               <>
                 <Loader2 className="w-6 h-6 animate-spin" />
-                Processing Request...
+                {t("submit.processing")}
               </>
             ) : (
-              "Submit Recycling Request"
+              t("submit.default")
             )}
           </button>
         </form>

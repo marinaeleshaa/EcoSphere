@@ -527,7 +527,7 @@
       "title": "Aperçu du tableau de bord",
       "quickActions": "Actions rapides",
       "createNewEvent": "Créer un nouvel événement",
-      "viewAllEvents": "Voir tous les événements",
+      "viewAllEvents": "Voir vos événements",
       "browseEvents": "Parcourir les événements",
       "keyMetrics": "Indicateurs clés",
       "realTimeData": "Données en temps réel",
@@ -685,7 +685,162 @@
         "verifyButton": "Vérifier le code",
         "changeEmailButton": "Changer l'e-mail",
         "responseError": "Code de vérification invalide. Veuillez réessayer."
+      },
+      "Recycle": {
+        "form": {
+          "title": "Demande de recyclage",
+          "subtitle": "Planifiez votre collecte facilement et écologiquement."
+        },
+
+        "items": {
+          "title": "Ajouter des éléments",
+          "manual": "Manuel",
+          "vision": "Scan IA"
+        },
+
+        "buttons": {
+          "submit": "Soumettre la demande",
+          "processing": "Traitement en cours..."
+        },
+
+        "success": {
+          "title": "Demande de recyclage envoyée !",
+          "withPoints": "Vous avez économisé {carbon} kg de CO₂ et gagné {points} points éco !",
+          "withoutPoints": "Vous avez économisé {carbon} kg de CO₂ !"
+        },
+
+        "errors": {
+          "noItem": "Veuillez ajouter au moins un élément.",
+          "noImage": "Veuillez télécharger au moins une image.",
+          "submitFailed": "Échec de l’envoi de la demande. Veuillez réessayer.",
+          "unexpected": "Une erreur inattendue s’est produite."
+        }
       }
     }
+  },
+  "RecycleForm": {
+    "title": "Demande de Recyclage",
+    "description": "Planifiez votre collecte. Écologique et simple.",
+    "submit": {
+      "default": "Soumettre la Demande de Recyclage",
+      "processing": "Traitement de la demande en cours..."
+    },
+    "entryMethod": {
+      "title": "Ajouter des Articles",
+      "manual": "Manuel",
+      "aiScan": "Scan IA"
+    },
+    "errors": {
+      "addItem": "Veuillez ajouter au moins un article.",
+      "uploadImage": "Veuillez télécharger au moins une image.",
+      "submissionFailed": "Échec de l'envoi de la demande de recyclage. Veuillez réessayer.",
+      "unexpected": "Une erreur inattendue s'est produite."
+    },
+    "success": {
+      "title": "Demande de Recyclage Soumise !",
+      "description": "Vous avez économisé {carbonSaved}kg de CO2 !",
+      "descriptionWithPoints": "Vous avez économisé {carbonSaved}kg de CO2 et gagné {points} Eco Points ! 🎉"
+    },
+    "personalInfoSection": {
+      "title": "Informations Personnelles",
+      "fields": {
+        "firstName": {
+          "label": "Prénom",
+          "placeholder": "Entrez votre prénom"
+        },
+        "lastName": {
+          "label": "Nom de famille",
+          "placeholder": "Entrez votre nom de famille"
+        },
+        "email": {
+          "label": "Adresse e-mail",
+          "placeholder": "Entrez l'adresse e-mail"
+        },
+        "phone": {
+          "label": "Numéro de téléphone",
+          "placeholder": "Entrez le numéro de téléphone"
+        }
+      }
+    },
+    "addressSection": {
+      "title": "Détails de l'Adresse",
+      "fields": {
+        "city": {
+          "label": "Ville",
+          "placeholder": "Entrez le nom de la ville"
+        },
+        "neighborhood": {
+          "label": "Quartier",
+          "placeholder": "Entrez le quartier"
+        },
+        "street": {
+          "label": "Rue",
+          "placeholder": "Entrez l'adresse de la rue"
+        },
+        "building": {
+          "label": "Bâtiment",
+          "placeholder": "N° Bâtiment"
+        },
+        "floor": {
+          "label": "Étage",
+          "placeholder": "N° Étage"
+        },
+        "apartment": {
+          "label": "Appartement",
+          "placeholder": "N° Appartement"
+        }
+      }
+    },
+    "materialSection": {
+      "addButton": "Ajouter un autre élément",
+      "typeLabel": "Type",
+      "weightLabel": "Poids estimé (kg)",
+      "title": "Articles à Recycler"
+    },
+    "selectField": {
+      "selectOption": "Sélectionner une option"
+    },
+    "itemCard": {
+      "title": "Article Matériel {number}",
+      "typeLabel": "Type",
+      "weightLabel": "Poids estimé (kg)"
+    },
+    "materialTypes": {
+      "plastic": "Plastique",
+      "paper": "Papier",
+      "glass": "Verre",
+      "electronic": "Déchets Électroniques",
+      "metal": "Métal",
+      "mixed": "Mixte"
+    }
+  },
+  "Metrics": {
+    "title": "Notre Impact",
+    "subtitle": "Indicateurs Clés",
+    "tonsRecycled": {
+      "label": "Tonnes Recyclées"
+    },
+    "partners": {
+      "label": "Partenaires"
+    },
+    "wasteDiverted": {
+      "label": "Déchets Détournés"
+    }
+  },
+  "NotFound": {
+    "imageAlt": "Illustration de page 404 introuvable",
+    "title": "Oups ! Page introuvable",
+    "description": "La page que vous recherchez n'existe pas ou a été déplacée. Ne vous inquiétez pas, remettons-vous sur la bonne voie !",
+    "goBack": "Retour",
+    "goHome": "Aller à l'accueil",
+    "helpText": "Si vous pensez qu'il s'agit d'une erreur, veuillez contacter notre équipe d'assistance."
+  },
+  "Unauthorized": {
+    "imageAlt": "Accès non autorisé",
+    "title": "Non autorisé",
+    "description": "Vous n’avez pas la permission d’accéder à cette page.",
+    "goBack": "Retour",
+    "goHome": "Accueil",
+    "helpText": "Si vous pensez qu’il s’agit d’une erreur, contactez le support."
   }
 }
