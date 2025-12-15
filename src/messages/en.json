@@ -48,7 +48,8 @@
         "news": "News",
         "store": "Store",
         "game": "Game",
-        "about": "About"
+        "about": "About",
+        "recipes": "Recipes"
       },
       "dashboard": {
         "overview": "OverView",

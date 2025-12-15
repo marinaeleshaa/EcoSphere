@@ -48,7 +48,8 @@
         "news": "الأخبار",
         "store": "المتجر",
         "game": "اللعبة",
-        "about": "من نحن"
+        "about": "من نحن",
+        "recipes": "الوصفات"
       },
       "dashboard": {
         "overview": "نظرة عامة",
@@ -245,24 +246,6 @@
       "addedToCart": "تمت الإضافة للسلة",
       "removedFromCart": "تمت الإزالة من السلة",
       "currency": "ج.م"
-    }
-  },
-  "Favorites": {
-    "hero": {
-      "title": "المفضلة",
-      "breadcrumb": {
-        "home": "الرئيسية",
-        "favorite": "المفضلة"
-      }
-    },
-    "emptyState": {
-      "title": "لا توجد منتجات مفضلة بعد",
-      "description": "ابدأ بإضافة المنتجات إلى المفضلة لتظهر هنا",
-      "browseButton": "تصفح المنتجات"
-    },
-    "card": {
-      "addToCart": "أضف إلى السلة",
-      "removedFromFavorites": "تمت الإزالة من المفضلة"
     }
   },
   "ProductDetails": {
