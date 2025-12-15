@@ -17,7 +17,7 @@ let syncTimeout: NodeJS.Timeout | null = null;
 let isSyncing = false;
 
 export const cartSyncMiddleware: Middleware =
-  (store) => (next) => async (action) => {
+  (store) => (next) => async (action: any) => {
     const result = next(action);
 
     // Determine if we should sync and how long to wait
