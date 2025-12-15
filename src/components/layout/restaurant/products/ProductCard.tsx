@@ -13,6 +13,13 @@ interface ProductCardProps {
   onDelete: (productId: string) => void;
 }
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 export default function ProductCard({
   product,
   onEdit,
@@ -20,8 +27,14 @@ export default function ProductCard({
 }: ProductCardProps) {
   const t = useTranslations("Restaurant.Products");
 
+  const getScoreColor = (score: number) => {
+    if (score >= 8) return "bg-green-500 text-white";
+    if (score >= 5) return "bg-yellow-500 text-black";
+    return "bg-red-500 text-white";
+  };
+
   return (
-    <div className="bg-card text-card-foreground rounded-xl shadow-sm border border-border overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+    <div className="bg-card text-card-foreground rounded-xl shadow-sm border border-border overflow-hidden flex flex-col hover:shadow-md transition-shadow relative group">
       <div className="relative h-48 w-full bg-muted">
         {product.avatar?.url ? (
           <Image
@@ -35,6 +48,31 @@ export default function ProductCard({
             {t("noImage")}
           </div>
         )}
+
+        {/* Sustainability Badge with Shadcn Tooltip */}
+        {product.sustainabilityScore && (
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div
+                  className={`absolute top-2 left-2 z-10 px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
+                    product.sustainabilityScore
+                  )}`}
+                >
+                  <span>🌿</span>
+                  <span>{product.sustainabilityScore}/10</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                side="right"
+                className="max-w-[200px] text-xs bg-black/90 text-white border-none"
+              >
+                <p>{product.sustainabilityReason}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+
         {!product.availableOnline && (
           <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
             {t("unavailable")}

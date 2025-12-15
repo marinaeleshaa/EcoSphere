@@ -8,6 +8,10 @@ export interface IAIService {
     context?: { type: types; id?: string },
     locale?: string
   ): Promise<string>;
+  generateSustainabilityScore(
+    title: string,
+    subtitle: string
+  ): Promise<{ score: number; reason: string }>;
 }
 
 @injectable()
@@ -98,6 +102,71 @@ export class AIService implements IAIService {
         return this.aiRepository.getStaticPageContext(context.id);
       default:
         return null;
+    }
+  }
+
+  async generateSustainabilityScore(
+    title: string,
+    subtitle: string
+  ): Promise<{ score: number; reason: string }> {
+    if (!this.hfToken) {
+      return { score: 0, reason: "AI Service Unavailable" };
+    }
+
+    const systemPrompt = `
+      You are a sustainability expert.
+      Analyze this product item and rate its environmental sustainability from 1 to 10.
+      
+      Rules:
+      - Consider carbon footprint, meat vs plant-based (if food), packaging, and general eco-impact.
+      - Be strict but fair.
+      - Output strictly valid JSON.
+
+      Format:
+      {
+        "score": number,
+        "reason": "short explanation (under 15 words)"
+      }
+    `;
+
+    const userMessage = `
+      Product:
+      Title: ${title}
+      Subtitle: ${subtitle}
+    `;
+
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.hfToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: this.model,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userMessage },
+          ],
+          max_tokens: 100,
+          temperature: 0.3, // Lower temperature for consistent scoring
+        }),
+      });
+
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content;
+
+      if (!content) throw new Error("No content received");
+
+      // Parse JSON from MD block if present
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      return JSON.parse(content);
+    } catch (error) {
+      console.error("AI Sustainability Score Error:", error);
+      return { score: 0, reason: "Analysis Failed" };
     }
   }
 

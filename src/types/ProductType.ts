@@ -9,6 +9,8 @@ export interface IProduct {
   };
   price: number;
   availableOnline?: boolean;
+  sustainabilityScore?: number;
+  sustainabilityReason?: string;
 }
 
 export interface IProductCart extends IProduct {

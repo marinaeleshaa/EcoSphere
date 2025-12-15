@@ -2,6 +2,7 @@ import { injectable, inject } from "tsyringe";
 import { type IProductRepository } from "./product.repository";
 import { IRestaurant } from "../restaurant/restaurant.model";
 import { ImageService } from "@/backend/services/image.service";
+import { type IAIService } from "../ai/ai.service";
 import {
   ProductResponse,
   CreateProductDTO,
@@ -34,7 +35,8 @@ export class ProductService implements IProductService {
   constructor(
     @inject("ProductRepository")
     private readonly productRepository: IProductRepository,
-    @inject("ImageService") private readonly imageService: ImageService
+    @inject("ImageService") private readonly imageService: ImageService,
+    @inject("AIService") private readonly aiService: IAIService
   ) {}
 
   private async attachSignedUrl(
@@ -103,6 +105,29 @@ export class ProductService implements IProductService {
     ) {
       throw new Error("Title, subtitle, and price are required");
     }
+
+    // Generate Sustainability Score (Automatic)
+    try {
+      const { score, reason } =
+        await this.aiService.generateSustainabilityScore(
+          productData.title,
+          productData.subtitle
+        );
+      productData.sustainabilityScore = score;
+      productData.sustainabilityReason = reason;
+    } catch (error) {
+      console.error("Failed to generate sustainability score:", error);
+      // Fallback for debugging
+      productData.sustainabilityScore = -1;
+      productData.sustainabilityReason =
+        "AI Analysis Failed. Check server logs.";
+    }
+
+    console.log(
+      "Adding Product with Data:",
+      JSON.stringify(productData, null, 2)
+    );
+
     const result = await this.productRepository.addProduct(
       restaurantId,
       productData

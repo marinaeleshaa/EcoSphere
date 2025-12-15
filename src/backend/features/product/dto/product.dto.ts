@@ -10,18 +10,17 @@ export type ProductResponse = IMenuItem & {
 
 export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
   return {
-    id: `${res._id}`,
+    _id: `${res._id}`,
     restaurantId: `${res.restaurantId}`,
-    shopName: res.restaurantName,
-    shopSubtitle: res.subtitle,
-    productImg: res.avatar?.url || "",
-    productName: res.title,
-    productPrice: res.price,
-    productSubtitle: res.subtitle,
-    productDescription: "", // res.description is not available in ProductResponse
+    title: res.title,
+    subtitle: res.subtitle,
+    avatar: res.avatar,
+    price: res.price,
     availableOnline: res.availableOnline,
-  }
-}
+    sustainabilityScore: res.sustainabilityScore,
+    sustainabilityReason: res.sustainabilityReason,
+  };
+};
 
 export interface CreateProductDTO {
   title: string;
@@ -32,6 +31,8 @@ export interface CreateProductDTO {
     url?: string;
   };
   availableOnline?: boolean; // Optional - defaults to true in schema
+  sustainabilityScore?: number;
+  sustainabilityReason?: string;
 }
 
 export interface UpdateProductDTO extends Partial<CreateProductDTO> {}

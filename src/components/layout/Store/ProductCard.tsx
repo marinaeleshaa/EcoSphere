@@ -20,9 +20,25 @@ import {
   removeItem,
 } from "@/frontend/redux/Slice/CartSlice";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 const ProductCard = (product: IProduct) => {
   const t = useTranslations("Store.product");
-  const { _id, title, subtitle, availableOnline, avatar, price } = product;
+  const {
+    _id,
+    title,
+    subtitle,
+    availableOnline,
+    avatar,
+    price,
+    sustainabilityScore,
+    sustainabilityReason,
+  } = product;
 
   const router = useRouter();
 
@@ -53,11 +69,42 @@ const ProductCard = (product: IProduct) => {
     }
   };
 
+  // Determine badge color
+  const getScoreColor = (score: number) => {
+    if (score >= 8) return "bg-green-500 text-white";
+    if (score >= 5) return "bg-yellow-500 text-black";
+    return "bg-red-500 text-white";
+  };
+
   return (
     <motion.div
-      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer"
+      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-[440px] flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group"
       onClick={() => router.push(`/store/${_id}`)}
     >
+      {/* Sustainability Badge with Shadcn Tooltip */}
+      {sustainabilityScore && (
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <div
+                className={`absolute top-4 right-4 z-10 px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
+                  sustainabilityScore
+                )}`}
+              >
+                <span>🌿</span>
+                <span>{sustainabilityScore}/10</span>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent
+              side="left"
+              className="max-w-[200px] text-xs z-50 bg-black/90 text-white border-none"
+            >
+              <p>{sustainabilityReason}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+
       {/* header - fixed height */}
       <div className="flex justify-between items-center p-5 min-h-20">
         <div className="flex gap-3 items-center flex-1 min-w-0">
@@ -77,6 +124,7 @@ const ProductCard = (product: IProduct) => {
             </p>
           </div>
         </div>
+        {/* Removed blue dot since badge is better indicator, or keep it if it means 'active' */}
         <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
       </div>
 
