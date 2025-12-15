@@ -15,6 +15,6 @@ export const POST = async (req: NextRequest) => {
 		return ok(order);
 	} catch (error) {
 		console.error(error);
-		serverError(error.message);
+		serverError();
 	}
 };

@@ -2,9 +2,11 @@
 import { Recycle, CheckCircle, Clock, Truck, Eye } from "lucide-react";
 import { useState } from "react";
 
+export type requestState = "completed" | "reviewing" | "pending" | "out for delivery";
+
 const RecycleDashboard = () => {
   const [activeTab, setActiveTab] = useState("pending");
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [requests, setRequests] = useState([
     {
       id: 1,
@@ -12,7 +14,7 @@ const RecycleDashboard = () => {
       email: "john.smith@email.com",
       phone: "+1 (555) 123-4567",
       location: "123 Main St, New York, NY",
-      status: "reviewing"
+      status: "reviewing" as requestState,
     },
     {
       id: 2,
@@ -20,7 +22,7 @@ const RecycleDashboard = () => {
       email: "sarah.j@email.com",
       phone: "+1 (555) 234-5678",
       location: "456 Oak Ave, Los Angeles, CA",
-      status: "pending"
+      status: "pending" as requestState
     },
     {
       id: 3,
@@ -28,7 +30,7 @@ const RecycleDashboard = () => {
       email: "mike.brown@email.com",
       phone: "+1 (555) 345-6789",
       location: "789 Pine Rd, Chicago, IL",
-      status: "completed"
+      status: "completed" as requestState
     },
     {
       id: 4,
@@ -36,7 +38,7 @@ const RecycleDashboard = () => {
       email: "emily.d@email.com",
       phone: "+1 (555) 456-7890",
       location: "321 Elm St, Houston, TX",
-      status: "out for delivery"
+      status: "out for delivery" as requestState
     },
     {
       id: 5,
@@ -44,14 +46,14 @@ const RecycleDashboard = () => {
       email: "david.w@email.com",
       phone: "+1 (555) 567-8901",
       location: "654 Maple Dr, Phoenix, AZ",
-      status: "completed"
+      status: "completed" as requestState
     }
   ]);
 
   const pendingRequests = requests.filter(r => r.status !== "completed");
   const completedRequests = requests.filter(r => r.status === "completed");
 
-  const handleStatusChange = (id, newStatus) => {
+  const handleStatusChange = (id: number, newStatus: requestState) => {
     setRequests(requests.map(req => 
       req.id === id ? { ...req, status: newStatus } : req
     ));
@@ -62,7 +64,7 @@ const RecycleDashboard = () => {
     }
   };
 
-  const toggleDropdown = (id) => {
+  const toggleDropdown = (id: number) => {
     setOpenDropdown(openDropdown === id ? null : id);
   };
 
@@ -73,7 +75,7 @@ const RecycleDashboard = () => {
     { value: 'completed', label: 'Completed', icon: <CheckCircle className="w-4 h-4" /> },
   ];
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: requestState) => {
     switch(status) {
       case 'completed':
         return 'bg-green-100 text-green-800';
@@ -119,7 +121,7 @@ const RecycleDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-12 px-4 sm:px-6">
+      <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
           <div className="flex items-center gap-3 mb-3">
             <Recycle className="w-8 h-8" />
@@ -251,12 +253,12 @@ const RecycleDashboard = () => {
                                 {statusOptions.map((option) => (
                                   <button
                                     key={option.value}
-                                    onClick={() => handleStatusChange(request.id, option.value)}
+                                    onClick={() => handleStatusChange(request.id, option.value as requestState)}
                                     className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
                                       request.status === option.value ? 'bg-gray-50 font-medium' : ''
                                     }`}
                                   >
-                                    <span className={getStatusColor(option.value).replace('bg-', 'text-').replace('/100', '-600')}>
+                                    <span className={getStatusColor(option.value as requestState).replace('bg-', 'text-').replace('/100', '-600')}>
                                       {option.icon}
                                     </span>
                                     <span className="text-gray-700">{option.label}</span>

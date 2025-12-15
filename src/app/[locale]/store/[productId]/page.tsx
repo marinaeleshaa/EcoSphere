@@ -5,15 +5,15 @@ import TextComponent from "@/components/layout/Store/productDetails/TextComponen
 import { products } from "@/data/products";
 
 interface Props {
-  params: {
+  params: Promise<{
     productId: string;
-  };
+  }>;
 }
 
 const ProductPage = async ({ params }: Props) => {
   const { productId } = await params;
 
-  const product = products.find((p) => p._id === productId);
+  const product = products.find((p) => p.id === productId);
 
   if (!product) {
     return <div>Product not found</div>;

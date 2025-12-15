@@ -30,7 +30,7 @@ export interface IRestaurant extends Document {
   subscribed: boolean;
   subscriptionPeriod?: Date;
   menus?: Types.DocumentArray<IMenuItem>;
-  restaurantRating?: Types.DocumentArray<IRating>;
+  restaurantRating?: IRating[];
   avatar?: {
     key: string;
     url?: string;
