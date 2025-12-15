@@ -28,6 +28,9 @@ import { CouponService } from "../features/discountCoupon/coupon.service";
 import { AIRepository } from "../features/ai/ai.repository";
 import { AIService } from "../features/ai/ai.service";
 
+import { RecipeRepository } from "../features/recipe/recipe.repository";
+import { RecipeService } from "../features/recipe/recipe.service";
+
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
 container.registerSingleton("IUserService", UserService);
@@ -56,5 +59,7 @@ container.registerSingleton("CouponRepository", CouponRepository);
 container.registerSingleton("CouponService", CouponService);
 container.registerSingleton("AIRepository", AIRepository);
 container.registerSingleton("AIService", AIService);
+container.registerSingleton("RecipeRepository", RecipeRepository);
+container.registerSingleton("RecipeService", RecipeService);
 
 export { container as rootContainer } from "tsyringe";
