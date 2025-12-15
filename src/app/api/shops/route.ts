@@ -4,9 +4,7 @@ import RestaurantController from "@/backend/features/restaurant/restaurant.contr
 import { ApiResponse, created, ok } from "@/types/api-helpers";
 import { IRestaurant } from "@/backend/features/restaurant/restaurant.model";
 
-export const GET = async (
-  req: NextRequest
-): Promise<NextResponse<ApiResponse<IRestaurant[]>>> => {
+export const GET = async (): Promise<NextResponse<ApiResponse<IRestaurant[]>>> => {
   const controller = rootContainer.resolve(RestaurantController);
   const result = await controller.getAll();
   return ok(result);

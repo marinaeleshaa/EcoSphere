@@ -15,7 +15,7 @@ export default function LanguageSwitcher() {
     const locale = useLocale();
     const router = useRouter();
     const pathname = usePathname();
-    const [isPending, startTransition] = useTransition();
+    const [, startTransition] = useTransition();
 
     const onSelectChange = (nextLocale: "en" | "ar" | "fr") => {
         startTransition(() => {

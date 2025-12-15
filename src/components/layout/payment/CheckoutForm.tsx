@@ -43,6 +43,7 @@ export const CheckoutForm = ({ amount, onSuccess }: CheckoutFormProps) => {
       }
     } catch (e) {
       setErrorMessage("An unexpected error occurred.");
+      console.error(e);
     }
 
     setIsLoading(false);

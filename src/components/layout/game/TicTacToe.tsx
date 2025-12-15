@@ -14,8 +14,6 @@ import { useSession } from "next-auth/react";
 
 export default function TicTacToe() {
   const t = useTranslations("Game");
-  type Player = "X" | "O" | null;
-  type Difficulty = "easy" | "medium" | "hard";
   // -------------------------
   // 🧩 STATES
   // -------------------------
@@ -57,72 +55,9 @@ export default function TicTacToe() {
   }, []);
 
   // -------------------------
-  // 🧩 HELPERS
-  // -------------------------
-  const checkWinnerReturn = useCallback((b: Player[]): Player => {
-    const lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (const [x, y, z] of lines) {
-      if (b[x] && b[x] === b[y] && b[y] === b[z]) return b[x];
-    }
-    return null;
-  }, []);
-
-  const getAvailableMoves = useCallback((b: Player[]) => {
-    const moves: number[] = [];
-    b.forEach((cell, i) => {
-      if (cell === null) moves.push(i);
-    });
-    return moves;
-  }, []);
-
-  // -------------------------
-  // 🧠 MINIMAX (recursive, دالة عادية)
-  // -------------------------
-  const minimax = (
-    b: Player[],
-    depth: number,
-    isMaximizing: boolean
-  ): number => {
-    const winnerNow = checkWinnerReturn(b);
-
-    if (winnerNow === "X") return -10 + depth;
-    if (winnerNow === "O") return 10 - depth;
-    if (getAvailableMoves(b).length === 0) return 0;
-
-    if (isMaximizing) {
-      let bestScore = -Infinity;
-      for (const move of getAvailableMoves(b)) {
-        const boardCopy = [...b];
-        boardCopy[move] = "O";
-        const score = minimax(boardCopy, depth + 1, false);
-        bestScore = Math.max(score, bestScore);
-      }
-      return bestScore;
-    } else {
-      let bestScore = Infinity;
-      for (const move of getAvailableMoves(b)) {
-        const boardCopy = [...b];
-        boardCopy[move] = "X";
-        const score = minimax(boardCopy, depth + 1, true);
-        bestScore = Math.min(score, bestScore);
-      }
-      return bestScore;
-    }
-  };
-
-  // -------------------------
   // 🎯 UPDATE USER POINTS
   // -------------------------
-  const updateUser = useCallback(async () => {
+  const updateUser = async () => {
     const pointsToAdd =
       difficulty === "easy" ? 100 : difficulty === "medium" ? 250 : 500;
     try {
@@ -132,8 +67,8 @@ export default function TicTacToe() {
       console.error("Error updating user points:", error);
       toast.error(t("status.updatePoints"));
     }
-  }, [difficulty, t]);
-
+  };
+  
   // -------------------------
   // 🏆 CHECK WINNER (SET STATE)
   // -------------------------
@@ -221,7 +156,7 @@ export default function TicTacToe() {
     }
 
     setIsAiTurn(false);
-  }, [difficulty, getAvailableMoves, board, checkWinner, minimax]);
+  }, [difficulty, board, checkWinner]);
 
   // -------------------------
   // 🎮 PLAYER MOVE
@@ -250,7 +185,7 @@ export default function TicTacToe() {
   // -------------------------
   // 🎨 ICON RENDER
   // -------------------------
-  const renderIcon = (value: Player) => {
+  const renderIcon = useCallback((value: Player) => {
     if (value === "X")
       return (
         <BiSolidLeaf
@@ -263,7 +198,7 @@ export default function TicTacToe() {
         <MdDoNotDisturbAlt className="text-primary-foreground text-4xl sm:text-5xl md:text-6xl lg:text-7xl animate-pulse" />
       );
     return null;
-  };
+  }, []);
 
   // -------------------------
   // 🔄 restart game
@@ -353,7 +288,7 @@ export default function TicTacToe() {
         style={{ animationDelay: "2s" }}
       ></div>
       <div className="min-h-screen flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 p-6 lg:p-12 relative z-10">
-        {/* Right Section - Game Board */}
+        {/* left Section - Game Board */}
         <div className="w-fit lg:w-auto shrink-0">
           {/* Status Card */}
           <div className="bg-primary/10 backdrop-blur-md rounded-3xl py-4 px-6 shadow-2xl mb-6 text-center">
@@ -364,7 +299,7 @@ export default function TicTacToe() {
 
           {/* Game Board */}
           <div className="bg-primary/10 backdrop-blur-md rounded-3xl p-8 lg:p-10 shadow-2xl">
-            <div className="grid grid-cols-3 gap-2 lg:gap-6 mb-8">
+            <div className="grid grid-cols-3 gap-2 lg:gap-6">
               {board.map((value, index) => (
                 <button
                   key={index}
@@ -408,7 +343,7 @@ export default function TicTacToe() {
           </div>
         </div>
 
-        {/* Left Section - Score Board */}
+        {/* right Section - Score Board */}
         <div className="w-full  sm:w-[60%] md:w-[50%] lg:w-80 space-y-6">
           {/* Title Card - Only on large screens */}
           <div className="hidden  bg-primary/10 lg:flex justify-evenly backdrop-blur-md rounded-3xl p-8 shadow-2xl text-center transform hover:scale-105 transition-transform">
@@ -539,3 +474,72 @@ export default function TicTacToe() {
     </div>
   );
 }
+
+// -------------------------
+// 🧩 TYPES
+// -------------------------
+type Player = "X" | "O" | null;
+type Difficulty = "easy" | "medium" | "hard";
+
+// -------------------------
+// 🧩 HELPERS
+// -------------------------
+const checkWinnerReturn = (b: Player[]): Player => {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (const [x, y, z] of lines) {
+    if (b[x] && b[x] === b[y] && b[y] === b[z]) return b[x];
+  }
+  return null;
+};
+
+const getAvailableMoves = (b: Player[]) => {
+  const moves: number[] = [];
+  b.forEach((cell, i) => {
+    if (cell === null) moves.push(i);
+  });
+  return moves;
+};
+
+// -------------------------
+// 🧠 MINIMAX (recursive, دالة عادية)
+// -------------------------
+const minimax = (
+  b: Player[],
+  depth: number,
+  isMaximizing: boolean
+): number => {
+  const winnerNow = checkWinnerReturn(b);
+
+  if (winnerNow === "X") return -10 + depth;
+  if (winnerNow === "O") return 10 - depth;
+  if (getAvailableMoves(b).length === 0) return 0;
+
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (const move of getAvailableMoves(b)) {
+      const boardCopy = [...b];
+      boardCopy[move] = "O";
+      const score = minimax(boardCopy, depth + 1, false);
+      bestScore = Math.max(score, bestScore);
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (const move of getAvailableMoves(b)) {
+      const boardCopy = [...b];
+      boardCopy[move] = "X";
+      const score = minimax(boardCopy, depth + 1, true);
+      bestScore = Math.min(score, bestScore);
+    }
+    return bestScore;
+  }
+};

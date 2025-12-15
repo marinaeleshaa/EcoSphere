@@ -3,6 +3,7 @@
 import React, { useRef, useState } from "react";
 import { Upload, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface VisionUploadAreaProps {
   onFilesChange: (files: File[]) => void;
@@ -111,12 +112,13 @@ const VisionUploadArea = ({ onFilesChange, error }: VisionUploadAreaProps) => {
           <div className="flex items-center gap-3 px-5 py-2 bg-primary-foreground/10 rounded-full border border-primary-foreground/20">
             <div className="flex -space-x-2">
               {previews.slice(0, 3).map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt="thumb"
-                  className="w-8 h-8 rounded-full border-2 border-background object-cover"
-                />
+                // <img
+                //   key={i}
+                //   src={src}
+                //   alt="thumb"
+                //   className="w-8 h-8 rounded-full border-2 border-background object-cover"
+                // />
+                <Image key={i} src={src} alt="thumb" width={32} height={32} className="w-8 h-8 rounded-full border-2 border-background object-cover"/>
               ))}
               {files.length > 3 && (
                 <div className="w-8 h-8 rounded-full bg-primary-foreground text-primary text-xs font-bold flex items-center justify-center border-2 border-background">
@@ -142,23 +144,23 @@ const VisionUploadArea = ({ onFilesChange, error }: VisionUploadAreaProps) => {
 };
 
 // Simple Sparkles icon locally since it wasn't imported
-const SparklesIcon = (props: any) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
-    <path d="M5 3v4" />
-    <path d="M9 5h4" />
-  </svg>
-);
+// const SparklesIcon = (props: any) => (
+//   <svg
+//     xmlns="http://www.w3.org/2000/svg"
+//     width="24"
+//     height="24"
+//     viewBox="0 0 24 24"
+//     fill="none"
+//     stroke="currentColor"
+//     strokeWidth="2"
+//     strokeLinecap="round"
+//     strokeLinejoin="round"
+//     {...props}
+//   >
+//     <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+//     <path d="M5 3v4" />
+//     <path d="M9 5h4" />
+//   </svg>
+// );
 
 export default VisionUploadArea;

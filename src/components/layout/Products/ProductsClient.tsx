@@ -69,6 +69,7 @@ export default function ProductsClient({
       }
     } catch (error) {
       toast.error(t("toasts.loadError"));
+      console.error(error);
     } finally {
       setLoading(false);
     }

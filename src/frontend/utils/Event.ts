@@ -1,16 +1,17 @@
-import { EventProps, IEventDetails } from "@/types/EventTypes";
+import { IEventDetails } from "@/types/EventTypes";
 
 export const formatTime = (time: string): string => {
   try {
     // Assuming time is in "HH:MM" format (24-hour)
     const [hours, minutes] = time.split(":");
-    const date = new Date(0, 0, 0, parseInt(hours), parseInt(minutes));
+    const date = new Date(0, 0, 0, +hours, +minutes);
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
     });
   } catch (e) {
+    console.error(e);
     return time; 
   }
 };
@@ -23,6 +24,7 @@ export const formatDate = (dateString: string): string => {
       day: "numeric",
     });
   } catch (e) {
+    console.error(e);
     return dateString;
   }
 };

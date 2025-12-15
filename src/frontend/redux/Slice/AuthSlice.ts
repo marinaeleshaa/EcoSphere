@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { setUser, UserState, logout as logoutUser } from "./UserSlice";
+import { setUser, logout as logoutUser } from "./UserSlice";
 
 interface ISecondUserStep {
   firstName: string;

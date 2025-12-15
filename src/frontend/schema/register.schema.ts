@@ -51,10 +51,10 @@ export const Step2ShopSchema = Z.object({
   hotline: Z.string().nonempty({ message: "Hotline is required" }),
 });
 
-const fileListSchema = Z.custom<FileList>(
-  (val) => typeof FileList !== "undefined" && val instanceof FileList,
-  { message: "Invalid file input" }
-);
+// const fileListSchema = Z.custom<FileList>(
+//   (val) => typeof FileList !== "undefined" && val instanceof FileList,
+//   { message: "Invalid file input" }
+// );
 
 export const Step3ShopSchema = Z.object({
   avatar: Z.string().nonempty({ message: "Avatar is required" }),

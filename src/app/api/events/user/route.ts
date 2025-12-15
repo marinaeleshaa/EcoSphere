@@ -10,13 +10,11 @@ import {
   unauthorized,
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
-import { ImageService } from "@/backend/services/image.service";
+// import { ImageService } from "@/backend/services/image.service";
 
-const imageService = rootContainer.resolve(ImageService);
+// const imageService = rootContainer.resolve(ImageService);
 
-export const GET = async (
-  req: NextRequest
-): Promise<NextResponse<ApiResponse<EventResponse[]>>> => {
+export const GET = async (): Promise<NextResponse<ApiResponse<EventResponse[]>>> => {
   try {
     const user = await getCurrentUser();
     if (!user?.id) {

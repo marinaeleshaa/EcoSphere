@@ -11,7 +11,6 @@ import {
   DollarSign,
   Send,
   Loader2,
-  Image as ImageIcon,
   Tag,
   Plus,
   X,
@@ -134,6 +133,7 @@ export default function ManageEvent({ initialData }: { initialData?: any }) {
       router.push("/organizer/details");
     } catch (err) {
       toast.error("Error saving event");
+      console.error(err);
     }
   }
 

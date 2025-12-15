@@ -3,10 +3,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/frontend/redux/store";
-import {
-  updateUserProfile,
-  updateProfile,
-} from "@/frontend/redux/Slice/UserSlice";
+import { updateProfile } from "@/frontend/redux/Slice/UserSlice";
 import ImageUpload from "@/components/layout/common/ImageUpload";
 import { Edit, Eye, EyeOff } from "lucide-react";
 import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";

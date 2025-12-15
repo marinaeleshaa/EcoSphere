@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 
-const RelatedShops = ({ currentShopId }: { currentShopId: number }) => {
+const RelatedShops = () => {
   const t = useTranslations("ShopDetails.related");
   return (
     <section className="mt-20 overflow-hidden">

@@ -33,8 +33,6 @@ export default function ProductPopup({
 	const {
 		register,
 		handleSubmit,
-		setValue,
-		watch,
 		reset,
 		formState: { errors, isSubmitting },
 	} = useForm<CreateProductDTO>({
@@ -137,7 +135,7 @@ export default function ProductPopup({
 							<ImageUpload
 								currentImageUrl={initialData?.avatar?.url}
 								variant="square"
-								onImageUpdate={(url: string) => {
+								onImageUpdate={() => {
 									// We primarily use onUploadComplete for the key
 								}}
 								onUploadComplete={(data) => {

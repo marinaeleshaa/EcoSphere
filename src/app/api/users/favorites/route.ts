@@ -1,7 +1,6 @@
 import { rootContainer } from "@/backend/config/container";
 import { IMenuItem } from "@/backend/features/restaurant/restaurant.model";
 import UserController from "@/backend/features/user/user.controller";
-import { IUser } from "@/backend/features/user/user.model";
 import { getCurrentUser } from "@/backend/utils/authHelper";
 import {
   ApiResponse,
@@ -12,9 +11,7 @@ import {
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (
-  _req: NextRequest
-): Promise<NextResponse<ApiResponse<IMenuItem[]>>> => {
+export const GET = async (): Promise<NextResponse<ApiResponse<IMenuItem[]>>> => {
   const session = await getCurrentUser();
   if (!session?.id) {
     return unauthorized();

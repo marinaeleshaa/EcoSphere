@@ -1,8 +1,6 @@
-import React from "react";
 import HomeHero from "./HomeHero";
 import LeftFloatingImg from "./LeftFloatingImg";
 import RightFloatingImg from "./RightFloatingImg";
-import TextHeroSection from "./TextHeroSection";
 import SolidContentSection from "./SolidContentSection";
 
 const HomeHeroLayout = () => {
