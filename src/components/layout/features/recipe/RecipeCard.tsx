@@ -8,11 +8,11 @@ import { IRecipe } from "@/backend/features/recipe/recipe.model";
 import { motion } from "framer-motion";
 
 interface RecipeCardProps {
-  readonly recipe: Partial<IRecipe>;
-  readonly onDelete?: (id: string) => void;
+  recipe: Partial<IRecipe>;
+  onDelete?: (id: string) => void;
 }
 
-export default function RecipeCard({ recipe, onDelete }: RecipeCardProps) {
+export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProps>) {
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
       case "Easy":

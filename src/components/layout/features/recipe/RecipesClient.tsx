@@ -10,16 +10,15 @@ import Pagination from "@/components/ui/Pagination";
 import { Button } from "@/components/ui/button";
 
 interface RecipesClientProps {
-  readonly initialRecipes: IRecipe[];
-  readonly userId: string;
+  initialRecipes: IRecipe[];
+  userId: string;
 }
 
 const ITEMS_PER_PAGE = 2;
 
 export default function RecipesClient({
   initialRecipes,
-  userId,
-}: RecipesClientProps) {
+}: Readonly<RecipesClientProps>) {
   const [recipes, setRecipes] = useState<IRecipe[]>(initialRecipes);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);

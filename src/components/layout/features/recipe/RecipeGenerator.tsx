@@ -14,7 +14,7 @@ interface RecipeGeneratorProps {
 
 export default function RecipeGenerator({
   onRecipeGenerated,
-}: RecipeGeneratorProps) {
+}: Readonly<RecipeGeneratorProps>) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [generatedRecipe, setGeneratedRecipe] = useState<IRecipe | null>(null);
@@ -52,6 +52,7 @@ export default function RecipeGenerator({
       setInput("");
     } catch (error) {
       toast.error("Failed to generate recipe. Please try again.");
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -71,7 +72,7 @@ export default function RecipeGenerator({
 
         <Textarea
           placeholder="e.g. Stale bread, 2 tomatoes, half an onion, cheddar cheese..."
-          className="min-h-[100px] text-base resize-none bg-input text-input-foreground focus:ring-primary"
+          className="min-h-25 text-base resize-none bg-input text-input-foreground focus:ring-primary"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
