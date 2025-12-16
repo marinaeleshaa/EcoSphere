@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslations } from "next-intl";
 import { Loader2, Sparkles, ChefHat } from "lucide-react";
 import { toast } from "sonner";
 import RecipeCard from "./RecipeCard";
@@ -19,6 +20,9 @@ export default function RecipeGenerator({
   const [loading, setLoading] = useState(false);
   const [generatedRecipe, setGeneratedRecipe] = useState<IRecipe | null>(null);
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const tRecipes = useTranslations("Recipes");
+
   const handleGenerate = async () => {
     if (!input.trim()) return;
 
@@ -29,7 +33,7 @@ export default function RecipeGenerator({
       .filter((i) => i.length > 0);
 
     if (ingredients.length === 0) {
-      toast.error("Please enter at least one ingredient");
+      toast.error(tRecipes("generator.toasts.emptyInput"));
       return;
     }
 
@@ -48,10 +52,10 @@ export default function RecipeGenerator({
       const data = await res.json();
       setGeneratedRecipe(data.data);
       onRecipeGenerated(data.data);
-      toast.success("Recipe generated successfully! 🍳");
+      toast.success(tRecipes("generator.toasts.success"));
       setInput("");
     } catch (error) {
-      toast.error("Failed to generate recipe. Please try again.");
+      toast.error(tRecipes("generator.toasts.error"));
       console.error(error);
     } finally {
       setLoading(false);
@@ -63,16 +67,17 @@ export default function RecipeGenerator({
       <div className="bg-card text-card-foreground border-border border rounded-xl p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <ChefHat className="text-primary w-6 h-6" />
-          <h2 className="text-xl font-semibold">Zero-Waste Chef</h2>
+          <h2 className="text-xl font-semibold">
+            {tRecipes("generator.title")}
+          </h2>
         </div>
         <p className="text-muted-foreground mb-4">
-          Enter your leftover ingredients below, and our AI will create a
-          delicious, zero-waste recipe for you.
+          {tRecipes("generator.description")}
         </p>
 
         <Textarea
-          placeholder="e.g. Stale bread, 2 tomatoes, half an onion, cheddar cheese..."
-          className="min-h-25 text-base resize-none bg-input text-input-foreground focus:ring-primary"
+          placeholder={tRecipes("generator.placeholder")}
+          className="min-h-[100px] text-base resize-none bg-input text-input-foreground focus:ring-primary"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -86,12 +91,12 @@ export default function RecipeGenerator({
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Cooking Magic...
+                {tRecipes("generator.generatingBtn")}
               </>
             ) : (
               <>
                 <Sparkles className="mr-2 h-4 w-4" />
-                Generate Recipe
+                {tRecipes("generator.generateBtn")}
               </>
             )}
           </Button>
@@ -100,7 +105,9 @@ export default function RecipeGenerator({
 
       {generatedRecipe && (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <h3 className="text-lg font-semibold mb-4">Just For You:</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            {tRecipes("generator.justForYou")}
+          </h3>
           <RecipeCard recipe={generatedRecipe} />
         </div>
       )}

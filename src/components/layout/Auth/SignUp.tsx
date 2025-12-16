@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 type StepKey = "step1" | "step2" | "step3" | "step4";
 
@@ -65,6 +66,7 @@ const SignUp = () => {
         redirect: false,
       });
       if (!response.error) router.push("/");
+      toast.success(t("successRegister"));
     }
   };
 

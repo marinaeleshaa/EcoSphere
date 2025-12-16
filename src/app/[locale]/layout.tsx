@@ -5,8 +5,6 @@ import { Providers } from "@/frontend/providers/Providers";
 import SideBar from "@/components/layout/SideBar/SideBar/SideBar";
 import { Toaster } from "sonner";
 import { SidebarInset } from "@/components/ui/sidebar";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import SidebarTriggerBtn from "@/components/layout/SideBar/SidebarTriggerBtn/SidebarTriggerBtn";
 import { AIChatWidget } from "@/components/layout/ai/AIChatWidget";
 
@@ -33,7 +31,6 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const messages = await getMessages({ locale });
 
   return (
     <html
@@ -45,21 +42,15 @@ export default async function RootLayout({
         suppressHydrationWarning={true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f6f6f6]`}
       >
-        <NextIntlClientProvider
-          messages={messages}
-          locale={locale}
-          key={locale}
-        >
-          <Providers>
-            <Toaster position="top-right" />
-            <SideBar />
-            <SidebarInset>
-              <SidebarTriggerBtn />
-              {children}
-              <AIChatWidget />
-            </SidebarInset>
-          </Providers>
-        </NextIntlClientProvider>
+        <Providers locale={locale}>
+          <Toaster position={locale === "ar" ? "top-left" : "top-right"} />
+          <SideBar />
+          <SidebarInset>
+            <SidebarTriggerBtn />
+            {children}
+            <AIChatWidget />
+          </SidebarInset>
+        </Providers>
       </body>
     </html>
   );

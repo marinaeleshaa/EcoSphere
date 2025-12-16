@@ -8,7 +8,7 @@ export default async function RecipesPage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth/signin"); // Or standard unauthorized page
+    redirect("/auth"); // Or standard unauthorized page
   }
 
   // Fetch initial data directly from controller (Server Action style) to avoid HTTP loop
@@ -16,7 +16,8 @@ export default async function RecipesPage() {
   const recipes = await controller.getAll(user.id);
 
   // Deep-clone data to make it safe for passing to a Client Component
-  const serializedRecipes = structuredClone(recipes);
+  // structuredClone fails with Mongoose documents, so we use JSON serialization
+  const serializedRecipes = JSON.parse(JSON.stringify(recipes));
 
   return <RecipesClient initialRecipes={serializedRecipes} userId={user.id} />;
 }

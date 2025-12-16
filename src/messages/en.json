@@ -66,13 +66,21 @@
         "favorite": "Favorite",
         "cart": "Cart",
         "login": "Login"
+      },
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System",
+        "label": "{theme} Theme"
       }
     },
     "UserBtn": {
       "subscribe": "Subscribe",
       "profile": "Profile",
       "notifications": "Notifications",
-      "logout": "Log out"
+      "logout": "Log out",
+      "logoutSuccess": "You have been logged out successfully.",
+      "logoutError": "Failed to log out. Please try again later."
     }
   },
   "About": {
@@ -88,7 +96,7 @@
     "mission": {
       "label": "Our Mission",
       "title": "Making sustainability",
-      "titleHighlight": "effortless & trustworthy.",
+      "titleHighlight": " effortless & trustworthy.",
       "description": "EcoSphere exists to bridge the gap between conscious consumers and ethical enterprises. We strip away the guesswork of \"greenwashing\" by providing a rigorously vetted marketplace where every choice is a verified step towards a better planet.",
       "forConsumers": {
         "title": "For Consumers",
@@ -102,7 +110,7 @@
     "vision": {
       "label": "Our Vision",
       "title": "A world where",
-      "titleHighlight": "sustainable is standard.",
+      "titleHighlight": " sustainable is standard.",
       "description": "Our vision is to help create an interconnected, global economy where sustainable and regenerative commerce is the",
       "descriptionHighlight": "standard, not the exception."
     },
@@ -131,7 +139,7 @@
     "verification": {
       "label": "Verification",
       "title": "The EcoSphere",
-      "titleHighlight": "Verification.",
+      "titleHighlight": " Verification.",
       "description": "Every partner must pass a structured verification system combining documentation, third-party certifications, and sustainability assessments across four pillars:",
       "items": {
         "documentation": "Documentation Review",
@@ -306,7 +314,6 @@
       "currency": "EGP"
     }
   },
-
   "ProductDetails": {
     "hero": {
       "title": "Store",
@@ -375,19 +382,22 @@
     },
     "login": {
       "title": "Login",
+      "titleLogging": "Logging in...",
       "email": "Email",
       "password": "Password",
       "forgetPassword": "Forget Password",
       "forgotPassword": "Forgot Password",
       "or": "or",
       "newToEcosphere": "New to EcoSphere ?",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "successLogin": "You have successfully logged in"
     },
     "signup": {
       "oneOfUs": "One of us ?",
       "login": "Login",
       "registering": "Registering...",
-      "continue": "Continue"
+      "continue": "Continue",
+      "successRegister": "You have successfully registered"
     },
     "forgotPassword": {
       "title": "Forgot Password",
@@ -1099,5 +1109,44 @@
     "goBack": "Go Back",
     "goHome": "Go Home",
     "helpText": "If you think this is a mistake, please contact support."
+  },
+  "Recipes": {
+    "hero": {
+      "title": "Zero-Waste Chef 🍳",
+      "subtitle": "Turn your leftovers into gourmet meals. Save money, save the planet."
+    },
+    "generator": {
+      "title": "Zero-Waste Chef",
+      "description": "Enter your leftover ingredients below, and our AI will create a delicious, zero-waste recipe for you.",
+      "placeholder": "e.g. Stale bread, 2 tomatoes, half an onion, cheddar cheese...",
+      "generateBtn": "Generate Recipe",
+      "generatingBtn": "Cooking Magic...",
+      "justForYou": "Just For You:",
+      "toasts": {
+        "emptyInput": "Please enter at least one ingredient",
+        "success": "Recipe generated successfully! 🍳",
+        "error": "Failed to generate recipe. Please try again."
+      }
+    },
+    "cookbook": {
+      "title": "Your Cookbook",
+      "savedCount": "{count} recipes saved",
+      "empty": "No recipes yet. Start cooking above! 👆"
+    },
+    "card": {
+      "prep": "Prep",
+      "cook": "Cook",
+      "instructions": "Instructions",
+      "tip": "Tip:",
+      "difficulty": {
+        "Easy": "Easy",
+        "Medium": "Medium",
+        "Hard": "Hard"
+      },
+      "toasts": {
+        "deleted": "Recipe deleted",
+        "deleteError": "Could not delete recipe"
+      }
+    }
   }
 }

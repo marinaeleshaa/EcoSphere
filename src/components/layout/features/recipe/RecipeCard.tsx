@@ -6,13 +6,20 @@ import { Clock, ChefHat, Leaf, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IRecipe } from "@/backend/features/recipe/recipe.model";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface RecipeCardProps {
   recipe: Partial<IRecipe>;
   onDelete?: (id: string) => void;
 }
 
-export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProps>) {
+export default function RecipeCard({
+  recipe,
+  onDelete,
+}: Readonly<RecipeCardProps>) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const tRecipes = useTranslations("Recipes");
+
   const getDifficultyColor = (difficulty?: string) => {
     switch (difficulty) {
       case "Easy":
@@ -39,7 +46,9 @@ export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProp
               variant="outline"
               className={getDifficultyColor(recipe.difficulty)}
             >
-              {recipe.difficulty}
+              {recipe.difficulty
+                ? tRecipes(`card.difficulty.${recipe.difficulty}` as any)
+                : recipe.difficulty}
             </Badge>
             {onDelete && recipe._id && (
               <Button
@@ -56,11 +65,15 @@ export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProp
           <div className="flex gap-4 text-sm text-muted-foreground mt-2">
             <div className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
-              <span>Prep: {recipe.prepTime}</span>
+              <span>
+                {tRecipes("card.prep")}: {recipe.prepTime}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <ChefHat className="w-4 h-4" />
-              <span>Cook: {recipe.cookTime}</span>
+              <span>
+                {tRecipes("card.cook")}: {recipe.cookTime}
+              </span>
             </div>
           </div>
         </CardHeader>
@@ -74,7 +87,7 @@ export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProp
           {/* Steps */}
           <div className="space-y-2">
             <h4 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-              Instructions
+              {tRecipes("card.instructions")}
             </h4>
             <ul className="space-y-2">
               {recipe.steps?.map((step, idx) => (
@@ -95,7 +108,7 @@ export default function RecipeCard({ recipe, onDelete }: Readonly<RecipeCardProp
           <div className="mt-auto pt-4 flex gap-4 text-xs text-muted-foreground border-t">
             {recipe.tips && (
               <p>
-                <strong>💡 Tip:</strong> {recipe.tips}
+                <strong>💡 {tRecipes("card.tip")}</strong> {recipe.tips}
               </p>
             )}
           </div>

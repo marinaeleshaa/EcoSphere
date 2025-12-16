@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Loader2, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import Pagination from "@/components/ui/Pagination";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface RecipesClientProps {
   initialRecipes: IRecipe[];
@@ -23,6 +24,9 @@ export default function RecipesClient({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isCookbookOpen, setIsCookbookOpen] = useState(true);
+
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const tRecipes = useTranslations("Recipes");
 
   const totalPages = Math.ceil(recipes.length / ITEMS_PER_PAGE);
   const currentRecipes = recipes.slice(
@@ -56,9 +60,9 @@ export default function RecipesClient({
         }
         return newRecipes;
       });
-      toast.success("Recipe deleted");
+      toast.success(tRecipes("card.toasts.deleted"));
     } catch (error) {
-      toast.error("Could not delete recipe");
+      toast.error(tRecipes("card.toasts.deleteError"));
       console.error(error);
     } finally {
       setDeletingId(null);
@@ -70,10 +74,10 @@ export default function RecipesClient({
       {/* Hero / Generator Section */}
       <div className="max-w-2xl mx-auto text-center space-y-4">
         <h1 className="text-4xl font-bold tracking-tight text-primary">
-          Zero-Waste Chef 🍳
+          {tRecipes("hero.title")}
         </h1>
         <p className="text-lg text-muted-foreground">
-          Turn your leftovers into gourmet meals. Save money, save the planet.
+          {tRecipes("hero.subtitle")}
         </p>
       </div>
 
@@ -100,9 +104,11 @@ export default function RecipesClient({
               <BookOpen className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold">Your Cookbook</h2>
+              <h2 className="text-2xl font-bold">
+                {tRecipes("cookbook.title")}
+              </h2>
               <p className="text-sm text-muted-foreground">
-                {recipes.length} recipes saved
+                {tRecipes("cookbook.savedCount", { count: recipes.length })}
               </p>
             </div>
           </div>
@@ -133,7 +139,7 @@ export default function RecipesClient({
                 {recipes.length === 0 ? (
                   <div className="text-center py-20 bg-muted/30 rounded-xl border border-dashed mt-6">
                     <p className="text-muted-foreground">
-                      No recipes yet. Start cooking above! 👆
+                      {tRecipes("cookbook.empty")}
                     </p>
                   </div>
                 ) : (

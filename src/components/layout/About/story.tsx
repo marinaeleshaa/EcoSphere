@@ -1,13 +1,10 @@
-"use client";
-
-import React from "react";
 import { Globe } from "lucide-react";
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import BasicAnimatedSpanWrapper from "../common/BasicAnimatiedSpanWrapper";
+import { getTranslations } from "next-intl/server";
 
-export default function About() {
-  const t = useTranslations("About.story");
+export default async function About() {
+  const t = await getTranslations("About.story");
 
   return (
     <section className="relative w-full text-foreground py-16 md:py-24 overflow-hidden">
@@ -18,8 +15,8 @@ export default function About() {
             <div className="absolute -left-4 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
 
             <div className="relative pl-4 md:pl-8">
-              <div className="relative z-10 overflow-hidden rounded-xl p-4   shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30">
-                <div className="relative w-full h-full min-h-80 md:min-h-[350px]">
+              <div className="relative z-10 overflow-hidden rounded-xl p-4 shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30">
+                <div className="relative w-full h-full min-h-80 md:min-h-87.5">
                   <Image
                     src="/story.png"
                     alt={t("title")}
@@ -52,20 +49,15 @@ export default function About() {
               </span>
               <div className="space-y-2">
                 <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground leading-tight">
-                  <motion.span
-                    initial={{ opacity: 0, x: -6 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="inline-block mr-3"
-                  >
+                  <BasicAnimatedSpanWrapper className="inline-block mr-3">
                     <Globe size={28} />
-                  </motion.span>
+                  </BasicAnimatedSpanWrapper>
                   {t("title")}
                 </h2>
               </div>
               <p className="text-foreground leading-relaxed">
                 {t("description")}
-              </p>{" "}
+              </p>
             </div>
           </div>
         </div>

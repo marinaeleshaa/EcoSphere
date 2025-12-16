@@ -20,6 +20,7 @@ import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const { isMobile } = useSidebar();
@@ -29,6 +30,7 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const handleLogout = () => {
     signOut({ redirect: false });
     router.replace("/");
+    toast.success(t("logoutSuccess"));
   };
 
   return (

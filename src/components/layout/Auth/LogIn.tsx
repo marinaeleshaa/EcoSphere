@@ -1,4 +1,5 @@
 "use client";
+
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/frontend/redux/hooks";
 import { useTranslations, useLocale } from "next-intl";
+import { toast } from "sonner";
 
 const initiateData: SignInResponse = {
   status: 200,
@@ -29,6 +31,7 @@ const LogIn = () => {
   const dispatch = useAppDispatch();
   const [loginForm, setLoginForm] = useState(initLoginData);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLogging, setIsLogging] = useState(false);
   const [loginState, setLoginState] = useState(initiateData);
   const t = useTranslations("Auth.login");
   const locale = useLocale();
@@ -46,6 +49,7 @@ const LogIn = () => {
   };
 
   const handleLogin = async () => {
+    setIsLogging(true);
     if (!loginForm.email || !loginForm.password) return;
     const response = await signIn("credentials", {
       email: loginForm.email,
@@ -53,6 +57,8 @@ const LogIn = () => {
       redirect: false,
     });
     if (!response.error) router.replace("/");
+    toast.success(t("successLogin"));
+    setIsLogging(false);
     setLoginState(response);
   };
 
@@ -119,7 +125,7 @@ const LogIn = () => {
         disabled={!!(!loginForm.email || !loginForm.password)}
         className="myBtnPrimary disabled:opacity-50"
       >
-        {t("title")}
+        {isLogging ? t("titleLogging") : t("title")}
         <Image
           src={"/leaf.png"}
           width={25}
