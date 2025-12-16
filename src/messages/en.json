@@ -88,7 +88,7 @@
     "mission": {
       "label": "Our Mission",
       "title": "Making sustainability",
-      "titleHighlight": "effortless & trustworthy.",
+      "titleHighlight": " effortless & trustworthy.",
       "description": "EcoSphere exists to bridge the gap between conscious consumers and ethical enterprises. We strip away the guesswork of \"greenwashing\" by providing a rigorously vetted marketplace where every choice is a verified step towards a better planet.",
       "forConsumers": {
         "title": "For Consumers",
@@ -102,7 +102,7 @@
     "vision": {
       "label": "Our Vision",
       "title": "A world where",
-      "titleHighlight": "sustainable is standard.",
+      "titleHighlight": " sustainable is standard.",
       "description": "Our vision is to help create an interconnected, global economy where sustainable and regenerative commerce is the",
       "descriptionHighlight": "standard, not the exception."
     },
@@ -131,7 +131,7 @@
     "verification": {
       "label": "Verification",
       "title": "The EcoSphere",
-      "titleHighlight": "Verification.",
+      "titleHighlight": " Verification.",
       "description": "Every partner must pass a structured verification system combining documentation, third-party certifications, and sustainability assessments across four pillars:",
       "items": {
         "documentation": "Documentation Review",
