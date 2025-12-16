@@ -2,8 +2,7 @@ import { inject, injectable } from "tsyringe";
 import type { IUserService } from "./user.service";
 import { ICart, IUser } from "./user.model";
 import { DashboardUsers } from "./user.types";
-import { IProductCart } from "@/types/ProductType";
-import { IMenuItem } from "../restaurant/restaurant.model";
+import { IProductCart, IProduct } from "@/types/ProductType";
 
 @injectable()
 class UserController {
@@ -68,7 +67,7 @@ class UserController {
     return user;
   }
 
-  getFavoriteMenuItems(itemIds: string[]): Promise<IMenuItem[]> {
+  getFavoriteMenuItems(itemIds: string[]): Promise<IProduct[]> {
     return this.userService.getFavoriteMenuItems(itemIds);
   }
 

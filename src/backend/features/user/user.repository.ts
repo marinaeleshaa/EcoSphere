@@ -4,11 +4,12 @@ import { DBInstance } from "@/backend/config/dbConnect";
 import { DashboardUsers } from "./user.types";
 import { ProjectionFields, Types } from "mongoose";
 import { IMenuItem, RestaurantModel } from "../restaurant/restaurant.model";
+import { ProductResponse } from "../product/dto/product.dto";
 
 export interface IUserRepository {
 	getAll(): Promise<IUser[]>;
 	getById(id: string, query?: string): Promise<IUser>;
-	getFavoriteMenuItems(itemIds: string[]): Promise<IMenuItem[]>;
+	getFavoriteMenuItems(itemIds: string[]): Promise<ProductResponse[]>;
 	getUsersByRoleAdvanced(options?: {
 		limit?: number;
 		sortBy?: string;
@@ -171,7 +172,7 @@ class UserRepository implements IUserRepository {
 		return updatedUser!;
 	}
 
-	async getFavoriteMenuItems(itemIds: string[]): Promise<IMenuItem[]> {
+	async getFavoriteMenuItems(itemIds: string[]): Promise<ProductResponse[]> {
 		if (itemIds.length === 0) return [];
 		await DBInstance.getConnection();
 
@@ -180,20 +181,45 @@ class UserRepository implements IUserRepository {
 		const restaurants = await RestaurantModel.find({
 			"menus._id": { $in: objectIds },
 		})
-			.select("menus")
+			.select("_id name menus")
 			.lean()
 			.exec();
 
-		const favoriteItems: IMenuItem[] = [];
+		const favoriteItems: ProductResponse[] = [];
 
 		restaurants.forEach((restaurant) => {
 			restaurant.menus.forEach((menu: IMenuItem) => {
 				if (objectIds.some((id) => id.equals(menu._id))) {
-					favoriteItems.push(menu);
+					console.log(
+						"[getFavoriteMenuItems] Menu item from DB:",
+						JSON.stringify(
+							{
+								menuId: menu._id?.toString(),
+								menuTitle: menu.title,
+								hasAvatar: !!menu.avatar,
+								avatar: menu.avatar,
+								avatarKey: menu.avatar?.key,
+								avatarUrl: menu.avatar?.url,
+							},
+							null,
+							2
+						)
+					);
+
+					favoriteItems.push({
+						...menu,
+						restaurantId: restaurant._id,
+						restaurantName: restaurant.name,
+					} as ProductResponse);
 				}
 			});
 		});
 
+		console.log(
+			"[getFavoriteMenuItems] Returning",
+			favoriteItems.length,
+			"items"
+		);
 		return favoriteItems;
 	}
 
