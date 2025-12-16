@@ -66,6 +66,12 @@
         "favorite": "Favorite",
         "cart": "Cart",
         "login": "Login"
+      },
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System",
+        "label": "{theme} Theme"
       }
     },
     "UserBtn": {
@@ -1099,5 +1105,44 @@
     "goBack": "Go Back",
     "goHome": "Go Home",
     "helpText": "If you think this is a mistake, please contact support."
+  },
+  "Recipes": {
+    "hero": {
+      "title": "Zero-Waste Chef 🍳",
+      "subtitle": "Turn your leftovers into gourmet meals. Save money, save the planet."
+    },
+    "generator": {
+      "title": "Zero-Waste Chef",
+      "description": "Enter your leftover ingredients below, and our AI will create a delicious, zero-waste recipe for you.",
+      "placeholder": "e.g. Stale bread, 2 tomatoes, half an onion, cheddar cheese...",
+      "generateBtn": "Generate Recipe",
+      "generatingBtn": "Cooking Magic...",
+      "justForYou": "Just For You:",
+      "toasts": {
+        "emptyInput": "Please enter at least one ingredient",
+        "success": "Recipe generated successfully! 🍳",
+        "error": "Failed to generate recipe. Please try again."
+      }
+    },
+    "cookbook": {
+      "title": "Your Cookbook",
+      "savedCount": "{count} recipes saved",
+      "empty": "No recipes yet. Start cooking above! 👆"
+    },
+    "card": {
+      "prep": "Prep",
+      "cook": "Cook",
+      "instructions": "Instructions",
+      "tip": "Tip:",
+      "difficulty": {
+        "Easy": "Easy",
+        "Medium": "Medium",
+        "Hard": "Hard"
+      },
+      "toasts": {
+        "deleted": "Recipe deleted",
+        "deleteError": "Could not delete recipe"
+      }
+    }
   }
 }

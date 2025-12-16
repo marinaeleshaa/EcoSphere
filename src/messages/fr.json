@@ -67,6 +67,12 @@
         "favorite": "Favoris",
         "cart": "Panier",
         "login": "Connexion"
+      },
+      "theme": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système",
+        "label": "Thème {theme}"
       }
     },
     "UserBtn": {
@@ -1093,5 +1099,44 @@
     "goBack": "Retour",
     "goHome": "Accueil",
     "helpText": "Si vous pensez qu’il s’agit d’une erreur, contactez le support."
+  },
+  "Recipes": {
+    "hero": {
+      "title": "Chef Zéro Déchet 🍳",
+      "subtitle": "Transformez vos restes en repas gastronomiques. Économisez de l'argent, sauvez la planète."
+    },
+    "generator": {
+      "title": "Chef Zéro Déchet",
+      "description": "Entrez vos ingrédients restants ci-dessous, et notre IA créera pour vous une délicieuse recette zéro déchet.",
+      "placeholder": "ex: Pain rassis, 2 tomates, un demi-oignon, fromage cheddar...",
+      "generateBtn": "Générer la recette",
+      "generatingBtn": "Magie en cuisine...",
+      "justForYou": "Juste pour vous :",
+      "toasts": {
+        "emptyInput": "Veuillez entrer au moins un ingrédient",
+        "success": "Recette générée avec succès ! 🍳",
+        "error": "Échec de la génération de la recette. Veuillez réessayer."
+      }
+    },
+    "cookbook": {
+      "title": "Votre Livre de Cuisine",
+      "savedCount": "{count} recettes enregistrées",
+      "empty": "Pas encore de recettes. Commencez à cuisiner ci-dessus ! 👆"
+    },
+    "card": {
+      "prep": "Prép",
+      "cook": "Cuisson",
+      "instructions": "Instructions",
+      "tip": "Astuce :",
+      "difficulty": {
+        "Easy": "Facile",
+        "Medium": "Moyen",
+        "Hard": "Difficile"
+      },
+      "toasts": {
+        "deleted": "Recette supprimée",
+        "deleteError": "Impossible de supprimer la recette"
+      }
+    }
   }
 }
