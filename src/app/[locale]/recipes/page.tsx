@@ -8,7 +8,7 @@ export default async function RecipesPage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/auth/signin"); // Or standard unauthorized page
+    redirect("/auth"); // Or standard unauthorized page
   }
 
   // Fetch initial data directly from controller (Server Action style) to avoid HTTP loop
