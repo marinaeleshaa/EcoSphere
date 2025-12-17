@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogClose,
@@ -14,18 +13,20 @@ import { Button } from "@/components/ui/button";
 import { formatDate, formatTime } from "@/frontend/utils/Event";
 import { FaLocationDot } from "react-icons/fa6";
 import { ISubEvent } from "@/types/EventTypes";
-import UpdateEventBtn from "./UpdateEventBtn";
-import DeleteEventBtn from "./DeleteEventBtn";
+import UpdateEventBtn from "../../Dashboard/Events/DisplayEvents/UpdateEventBtn";
+import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn";
 import AddAttendBtn from "./AddAttendBtn";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function EventDetailsCard({
   event,
-  state,
+  isOrganizerDetails,
+  canAttend,
   userId,
 }: {
   event: any;
-  state: boolean;
+  canAttend: boolean;
+  isOrganizerDetails: boolean;
   userId: string | "";
 }) {
   return (
@@ -170,20 +171,22 @@ export default function EventDetailsCard({
               )}
               {/* Footer Actions */}
               <div className="sticky bottom-1 bg-background pt-4">
-                {state ? (
+                {isOrganizerDetails ? (
                   <div className="grid grid-cols-2 w-full  gap-4">
                     <UpdateEventBtn id={event._id} detailscard={true} />
                     <DeleteEventBtn id={event._id} detailscard={true} />
                   </div>
                 ) : (
-                  <div className="flex gap-4">
-                    <AddAttendBtn
-                      eventId={event._id}
-                      isFree={event.ticketPrice === 0}
-                      attenders={event.attenders ?? []}
-                      userId={userId || ""}
-                    />
-                  </div>
+                  !canAttend && (
+                    <div className="flex gap-4">
+                      <AddAttendBtn
+                        eventId={event._id}
+                        isFree={event.ticketPrice === 0}
+                        attenders={event.attenders ?? []}
+                        userId={userId}
+                      />
+                    </div>
+                  )
                 )}
               </div>
             </div>

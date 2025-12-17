@@ -7,20 +7,33 @@ import { formatDate, formatTime } from "@/frontend/utils/Event";
 import { FaLocationDot } from "react-icons/fa6";
 import { FaCalendar } from "react-icons/fa";
 import EventDetailsCard from "./EventDetailsCard";
-import DeleteEventBtn from "./DeleteEventBtn";
-import UpdateEventBtn from "./UpdateEventBtn";
+import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn";
+import UpdateEventBtn from "../../Dashboard/Events/DisplayEvents/UpdateEventBtn";
 import { usePathname } from "next/navigation";
 import AddAttendBtn from "./AddAttendBtn";
 import { useSession } from "next-auth/react";
+import { EventStatus } from "@/types/EventTypes";
 
-export default function TicketCard({ event }: { event: any }) {
+export default function EventCard({ event }: { event: any }) {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
-  const session = useSession();
   const isOrganizerDetails =
     segments.length >= 2 &&
     segments[1] === "organizer" &&
     segments[2] === "details";
+  const isEventOrganizer = session?.user?.id === event.organizerId;
+  const canAttend = !isOrganizerDetails && !isEventOrganizer;
+  const status: EventStatus = event.isAccepted
+    ? "approved"
+    : event.isEventNew
+    ? "pending"
+    : "rejected";
+  const statusStyles: Record<EventStatus, string> = {
+    approved: "bg-green-600 text-white",
+    pending: "bg-yellow-500 text-white",
+    rejected: "bg-red-600 text-white",
+  };
 
   return (
     <div className="col-span-1 flex justify-center">
@@ -44,16 +57,10 @@ export default function TicketCard({ event }: { event: any }) {
               <div className="absolute top-4 left-4 z-20 ">
                 <p
                   className={`capitalize py-1 px-3 rounded-full text-sm font-medium bg-primary text-primary-foreground
-                      ${event.state === "pending" && "bg-yellow-500 text-white"}
-                      ${event.state === "approved" && "bg-primary text-white"}
-                      ${event.state === "rejected" && "bg-red-600 text-white"}
+                      ${statusStyles[status]}
                       `}
                 >
-                  {event.state == "pending"
-                    ? "pending..."
-                    : event.state == "approved"
-                    ? "approved"
-                    : "rejected"}
+                  {status === "pending" ? "pending..." : status}
                 </p>
               </div>
             </div>
@@ -88,15 +95,16 @@ export default function TicketCard({ event }: { event: any }) {
         <div className="flex m-2 gap-3">
           <EventDetailsCard
             event={event}
-            state={isOrganizerDetails}
-            userId={session.data?.user.id || ""}
+            isOrganizerDetails={isOrganizerDetails}
+            canAttend={canAttend}
+            userId={session?.user?.id || ""}
           />
-          {!isOrganizerDetails && session.data?.user.id !== event.user._id && (
+          {!isOrganizerDetails && !canAttend && (
             <AddAttendBtn
               eventId={event._id}
               isFree={event.ticketPrice === 0}
               attenders={event.attenders ?? []}
-              userId={session.data?.user.id || ""}
+              userId={session?.user?.id || ""}
             />
           )}
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { EventProps } from "@/types/EventTypes";
-import TicketCard from "@/components/layout/common/events/TicketCard";
+import EventCard from "@/components/layout/common/events/EventCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -27,7 +27,7 @@ export default function DisplayEvents({ events }: EventProps) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedEvents.map((event) => (
-            <TicketCard key={event._id} event={event} />
+            <EventCard key={event._id} event={event} />
           ))}
         </div>
       )}

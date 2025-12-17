@@ -57,3 +57,5 @@ export type EventListItemProps = Pick<
 > & {
   avatar?: { url: string; key: string } | string;
 };
+
+export type EventStatus = "approved" | "pending" | "rejected";
