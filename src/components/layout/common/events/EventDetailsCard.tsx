@@ -19,7 +19,7 @@ import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn"
 import AddAttendBtn from "./AddAttendBtn";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function EventDetailsCard({event,state,}: {event: any;state: boolean;}) {
+export default function EventDetailsCard({ event, isOrganizerDetails, canAttend }: { event: any; isOrganizerDetails: boolean; canAttend :boolean}) {
   return (
     <Dialog>
       <DialogTrigger className="flex-1 py-3 rounded-xl border border-primary font-semibold text-sm hover:bg-primary/10 transition">
@@ -162,12 +162,12 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
               )}
               {/* Footer Actions */}
               <div className="sticky bottom-1 bg-background pt-4">
-                {state ? (
+                {isOrganizerDetails ? (
                   <div className="grid grid-cols-2 w-full  gap-4">
                     <UpdateEventBtn id={event._id} detailscard={true} />
                     <DeleteEventBtn id={event._id} detailscard={true} />
                   </div>
-                ) : (
+                ) : (!canAttend &&
                   <div className="flex gap-4">
                     <AddAttendBtn/>
                   </div>

@@ -1,1 +1,0 @@
-// make a folder for each components according to this page here
