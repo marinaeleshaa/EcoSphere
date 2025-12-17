@@ -177,7 +177,7 @@ export default function EventDetailsCard({
                     <DeleteEventBtn id={event._id} detailscard={true} />
                   </div>
                 ) : (
-                  !canAttend && (
+                  canAttend && (
                     <div className="flex gap-4">
                       <AddAttendBtn
                         eventId={event._id}
