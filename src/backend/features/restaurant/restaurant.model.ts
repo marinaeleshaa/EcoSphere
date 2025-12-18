@@ -31,6 +31,7 @@ export interface IRestaurant extends Document {
   description: string;
   subscribed: boolean;
   subscriptionPeriod?: Date;
+  stripeCustomerId?: string;
   menus?: Types.DocumentArray<IMenuItem>;
   restaurantRating?: IRating[];
   avatar?: {
@@ -49,7 +50,7 @@ export const ratingSchema = new Schema<IRating>(
     rate: { type: Number, required: true },
     review: { type: String, required: false },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export const menuItemSchema = new Schema<IMenuItem>({
@@ -81,10 +82,11 @@ const restaurantSchema = new Schema<IRestaurant>(
     isHidden: { type: Boolean, default: false },
     subscribed: { type: Boolean, default: false },
     subscriptionPeriod: { type: Date, required: false, default: Date.now() },
+    stripeCustomerId: { type: String, required: false },
     menus: { type: [menuItemSchema], default: [] },
     restaurantRating: { type: [ratingSchema], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 restaurantSchema.pre<IRestaurant>("save", function ():
@@ -100,7 +102,7 @@ restaurantSchema.pre<IRestaurant>("save", function ():
 });
 
 restaurantSchema.methods.comparePassword = async function (
-  candidatePassword: string
+  candidatePassword: string,
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };

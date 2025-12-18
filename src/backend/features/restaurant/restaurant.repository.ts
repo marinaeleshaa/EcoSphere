@@ -12,11 +12,15 @@ export interface IRestaurantRepository {
     workingHours: string,
     phoneNumber: string,
     avatar: string,
-    description: string
+    description: string,
   ): Promise<IRestaurant>;
   getAll(): Promise<IRestaurant[]>;
   getById(id: string): Promise<IRestaurant>;
   getRestaurantsByIdes(restaurantIds: string[]): Promise<IRestaurant[]>;
+  // Find a restaurant by its Stripe customer id (used by subscription flow)
+  getRestaurantByStripeId(
+    stripeCustomerId: string,
+  ): Promise<IRestaurant | null>;
   updateById(id: string, data: Partial<IRestaurant>): Promise<IRestaurant>;
   updateFavoritedBy(userId: string, restaurantId: string): Promise<IRestaurant>;
   deleteById(id: string): Promise<IRestaurant>;
@@ -32,7 +36,7 @@ class RestaurantRepository {
     workingHours: string,
     phoneNumber: string,
     avatar: string,
-    description: string
+    description: string,
   ): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.create({
@@ -76,9 +80,21 @@ class RestaurantRepository {
       .exec();
   }
 
+  // New helper: find restaurant by Stripe customer id so subscription webhooks
+  // and checkout session metadata can be mapped back to a restaurant account.
+  async getRestaurantByStripeId(
+    stripeCustomerId: string,
+  ): Promise<IRestaurant | null> {
+    await DBInstance.getConnection();
+    const restaurant = await RestaurantModel.findOne({
+      stripeCustomerId,
+    }).exec();
+    return restaurant || null;
+  }
+
   async updateById(
     id: string,
-    data: Partial<IRestaurant>
+    data: Partial<IRestaurant>,
   ): Promise<IRestaurant> {
     await DBInstance.getConnection();
     const restaurant = await this.getById(id);
