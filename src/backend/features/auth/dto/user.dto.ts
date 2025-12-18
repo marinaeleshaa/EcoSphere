@@ -14,7 +14,7 @@ export type LoginResponse = {
   image?: string;
   // Optional subscription fields (populated for organizers, recycleMen and shops/restaurants)
   subscribed?: boolean;
-  subscriptionPeriod?: string | Date | null;
+  subscriptionPeriod?: string | Date;
 };
 
 export type RegisterResponseDTO = {
