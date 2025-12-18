@@ -623,7 +623,6 @@
       "keyMetrics": "Indicateurs clés",
       "realTimeData": "Données en temps réel",
       "totalTicketSales": "Total des ventes de billets",
-      "fromLastWeek": "depuis la semaine dernière",
       "totalRevenue": "Revenu total",
       "confirmedAttendees": "Participants confirmés",
       "activeEvents": "Événements actifs",
@@ -1043,7 +1042,8 @@
         "primary": "Informations Principales de l'Événement",
         "venue": "Lieu et Horaire",
         "capacity": "Capacité et Ventes",
-        "schedule": "Programme Détaillé de l'Événement"
+        "schedule": "Programme Détaillé de l'Événement",
+        "section":"la section"
       },
       "fields": {
         "title": "Titre de l'Événement",

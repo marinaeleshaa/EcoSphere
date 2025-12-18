@@ -13,32 +13,7 @@ import { EventListItemProps, EventProps, MetricData } from "@/types/EventTypes";
 import React from "react";
 import { formatDate, formatTime } from "@/frontend/utils/Event";
 
-const dashboardData: MetricData[] = [
-  {
-    id: 1,
-    title: "Total Ticket Sales",
-    value: "1,245",
-    change: "+12%",
-  },
-  {
-    id: 2,
-    title: "Total Revenue",
-    value: "EGP 45,200",
-    change: "+8%",
-  },
-  {
-    id: 3,
-    title: "Confirmed Attendees",
-    value: "890",
-    change: "+5%",
-  },
-  {
-    id: 4,
-    title: "Active Events",
-    value: "4",
-    change: null,
-  },
-];
+
 
 const MetricCard: React.FC<MetricData> = ({ title, value, change }) => {
   const isPositive = change && change.startsWith("+");
@@ -52,8 +27,8 @@ const MetricCard: React.FC<MetricData> = ({ title, value, change }) => {
       {/* Title */}
       <p className="text-foreground text-sm font-medium mb-1">{title}</p>
       {/* Value and Change */}
-      <div className="flex items-start gap-2 justify-between">
-        <h2 className="text-md md:text-2xl  font-bold text-foreground leading-none">
+      <div className="flex flex-col items-center gap-2 justify-center">
+        <h2 className="text-md md:text-xl  font-bold text-foreground leading-none">
           {value}
         </h2>
         {/* Change Indicator (only for cards that have a 'change' value) */}
@@ -86,13 +61,14 @@ const EventListItem: React.FC<EventListItemProps> = ({
   avatar,
 }) => {
   const t = useTranslations("Dashboard.overview");
+  
   const buttonText = t("manage");
   const lineColor = "bg-primary";
   const imageSource = avatar || "/events/defaultImgEvent.png";
   return (
     <div
       className="
-      flex items-center p-2 pr-6  rounded-xl shadow-md border-2 border-gray-100
+      flex items-center p-2 pr-6  rounded-xl shadow-md border-2 border-muted
       transition duration-200 hover:shadow-lg hover:border-primary
     "
     >
@@ -105,7 +81,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
       <Image
         src={typeof imageSource === "string" ? imageSource : imageSource.url}
         alt={`Image for ${name}`}
-        className="w-14 h-14 object-cover rounded-md mr-4 shrink-0"
+        className="w-14 h-14 object-cover rounded-md mr-4 ml-2 shrink-0"
         width={100}
         height={100}
       />
@@ -122,7 +98,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
         </div>
 
         {/* Location */}
-        <div className="flex justify-center items-center flex-col text-sm col-span-1">
+        <div className=" flex justify-center items-center flex-col text-sm col-span-1">
           <p className="text-sm text-gray-500 font-medium">
             {formatDate(eventDate)}
           </p>
@@ -158,6 +134,32 @@ const EventListItem: React.FC<EventListItemProps> = ({
 };
 export default function EventOverview({ events }: EventProps) {
   const t = useTranslations("Dashboard.overview");
+  const dashboardData: MetricData[] = [
+    {
+      id: 1,
+      title: t("totalTicketSales") ,
+      value: "1,245",
+      change: "+12%",
+    },
+    {
+      id: 2,
+      title: t("totalRevenue"),
+      value: "EGP 45,200",
+      change: "+8%",
+    },
+    {
+      id: 3,
+      title: t("confirmedAttendees"),
+      value: "890",
+      change: "+5%",
+    },
+    {
+      id: 4,
+      title: t("activeEvents"),
+      value: "4",
+      change: null,
+    },
+  ];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -216,7 +218,7 @@ export default function EventOverview({ events }: EventProps) {
           {dashboardData.map((data) => (
             <BackgroundGradient
               key={data.id}
-              className="col-span-1 rounded-4xl  p-2 h-full text-foreground bg-background"
+              className="col-span-1 rounded-4xl  px-2 h-full text-foreground bg-background"
             >
               <MetricCard
                 id={data.id}

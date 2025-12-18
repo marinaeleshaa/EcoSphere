@@ -624,7 +624,6 @@
       "keyMetrics": "Key Metrics",
       "realTimeData": "Real-time data",
       "totalTicketSales": "Total Ticket Sales",
-      "fromLastWeek": "from last week",
       "totalRevenue": "Total Revenue",
       "confirmedAttendees": "Confirmed Attendees",
       "activeEvents": "Active Events",
@@ -1048,7 +1047,8 @@
         "primary": "Primary Event Information",
         "venue": "Venue and Schedule",
         "capacity": "Capacity and Sales",
-        "schedule": "Detailed Event Schedule (Agenda Items)"
+        "schedule": "Detailed Event Schedule (Agenda Items)",
+        "section":"section"
       },
       "fields": {
         "title": "Event Title",
