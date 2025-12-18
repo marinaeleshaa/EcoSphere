@@ -1,290 +1,295 @@
 {
-	"Home": {
-		"hero": {
-			"subtitle": "#Join the movement",
-			"title": "Successful fundraisers start here",
-			"cta": "More About EcoSphere"
-		},
-		"marketplace": {
-			"title": "Our Store",
-			"description": "Shop 100% eco-friendly products and start your journey toward a more sustainable lifestyle. We offer a wide range of certified, toxin-free items carefully selected from trusted eco-friendly stores and partner farms across Egypt and beyond.",
-			"list": {
-				"natural": "Products made from natural, biodegradable, and recycled materials.",
-				"zeroWaste": "A full range of zero-waste essentials you can rely on every day.",
-				"farm": "Fresh and organic farm products sourced responsibly from local eco-farms."
-			},
-			"stats": {
-				"products": "300+ sustainable products",
-				"brands": "50+ green brands"
-			},
-			"cta": "Visit Store"
-		},
-		"partners": {
-			"title": "Eco-Friendly Partner Stores & Farms",
-			"description": "We proudly connect you with top eco-friendly stores and farms that share our mission of promoting a cleaner, more sustainable future. Our network is growing every day, making it easier for you to access trusted, safe, and environmentally responsible products from certified shops and passionate eco farms.",
-			"cta": "Visit Our Partners",
-			"stats": {
-				"partners": "50+",
-				"partnersDesc": "partners committed to sustainability",
-				"products": "1200+",
-				"productsDesc": "natural and toxin-free products",
-				"farms": "15+",
-				"farmsDesc": "certified local farms"
-			}
-		}
-	},
-	"Layout": {
-		"Sidebar": {
-			"groups": {
-				"application": "Application",
-				"dashboard": "Dashboard",
-				"admin": "Admin"
-			},
-			"menu": {
-				"home": "Home",
-				"shops": "Shops",
-				"events": "Events",
-				"recycle": "Recycle",
-				"news": "News",
-				"store": "Store",
-				"game": "Game",
-				"about": "About",
-				"recipes": "Recipes"
-			},
-			"dashboard": {
-				"overview": "OverView",
-				"addEvent": "Add Event",
-				"browseEvents": "Browse Events",
-				"eventDetails": "Event Details",
-				"products": "Products",
-				"orders": "Orders",
-				"shops": "Shops",
-				"events": "Events",
-				"recycling": "Recycling"
-			},
-			"footer": {
-				"favorite": "Favorite",
-				"cart": "Cart",
-				"login": "Login"
-			},
-			"theme": {
-				"light": "Light",
-				"dark": "Dark",
-				"system": "System",
-				"label": "{theme} Theme"
-			}
-		},
-		"UserBtn": {
-			"subscribe": "Subscribe",
-			"profile": "Profile",
-			"notifications": "Notifications",
-			"logout": "Log out",
-			"logoutSuccess": "You have been logged out successfully.",
-			"logoutError": "Failed to log out. Please try again later."
-		}
-	},
-	"About": {
-		"hero": {
-			"title": "Our Story",
-			"subtitle": "EcoSphere is your trusted destination for eco-friendly products, sustainable gifts, and smart green choices. Browse a variety of earth-conscious items made to help you live cleaner, better, and more naturally every day."
-		},
-		"story": {
-			"label": "About Us",
-			"title": "Building a greener future together Forever",
-			"description": "EcoSphere was created to make sustainable shopping simple, trustworthy, and accessible. With greenwashing becoming widespread, consumers are often overwhelmed or unsure who to trust."
-		},
-		"mission": {
-			"label": "Our Mission",
-			"title": "Making sustainability",
-			"titleHighlight": " effortless & trustworthy.",
-			"description": "EcoSphere exists to bridge the gap between conscious consumers and ethical enterprises. We strip away the guesswork of \"greenwashing\" by providing a rigorously vetted marketplace where every choice is a verified step towards a better planet.",
-			"forConsumers": {
-				"title": "For Consumers",
-				"description": "Instant access to transparent, planet-first products without the research fatigue."
-			},
-			"forBusinesses": {
-				"title": "For Businesses",
-				"description": "High-visibility growth for brands that prioritize integrity over easy profits."
-			}
-		},
-		"vision": {
-			"label": "Our Vision",
-			"title": "A world where",
-			"titleHighlight": " sustainable is standard.",
-			"description": "Our vision is to help create an interconnected, global economy where sustainable and regenerative commerce is the",
-			"descriptionHighlight": "standard, not the exception."
-		},
-		"values": {
-			"label": "Our Core Values",
-			"title": "Preserving The Earth For Future Generations",
-			"cards": {
-				"planetFirst": {
-					"title": "Planet-First",
-					"text": "Every action is measured by its environmental benefit and commitment to regeneration."
-				},
-				"integrity": {
-					"title": "Integrity & Trust",
-					"text": "We demand radical transparency from our partners and communicate openly with our users."
-				},
-				"accessibility": {
-					"title": "Accessibility",
-					"text": "We strive to make sustainable choices the easiest and most convenient option available."
-				},
-				"community": {
-					"title": "Community",
-					"text": "We prioritize connecting ethical enterprises with dedicated customers."
-				}
-			}
-		},
-		"verification": {
-			"label": "Verification",
-			"title": "The EcoSphere",
-			"titleHighlight": " Verification.",
-			"description": "Every partner must pass a structured verification system combining documentation, third-party certifications, and sustainability assessments across four pillars:",
-			"items": {
-				"documentation": "Documentation Review",
-				"certification": "Third-Party Certification Assessment",
-				"questionnaire": "Detailed Impact Questionnaire",
-				"monitoring": "Continuous Compliance Monitoring"
-			}
-		},
-		"keyPillars": {
-			"label": "Our Standards",
-			"title": "Key Pillars",
-			"description": "We don't just take a brand's word for it. We rigorously evaluate every partner against these four non-negotiable standards.",
-			"pillars": {
-				"environmental": {
-					"title": "Environmental Impact",
-					"text": "Sourcing organic, recycled materials with a focus on carbon neutrality and minimal waste."
-				},
-				"ethical": {
-					"title": "Ethical Labor",
-					"text": "Ensuring fair wages, safe working conditions, and absolutely no forced or child labor."
-				},
-				"transparency": {
-					"title": "Supply Chain Transparency",
-					"text": "Providing verifiable proof and complete openness about sourcing, processing, and logistics."
-				},
-				"quality": {
-					"title": "Durability & Quality",
-					"text": "Products designed for longevity, repairability, and circularity — actively fighting waste culture."
-				}
-			}
-		}
-	},
-	"Game": {
-		"hero": {
-			"title": "Tic Tac Toe",
-			"you": "You",
-			"vs": "vs",
-			"ai": "AI"
-		},
-		"status": {
-			"draw": "Draw",
-			"youWin": "You Win",
-			"aiWin": "AI Win",
-			"aiThinking": "AI think...",
-			"yourTurn": "Your turn",
-			"pointsAdded": "{points} points added to your EcoPoints!",
-			"updatePoints": "Error updating EcoPoints. Please try again.",
-			"loginForPoints": "Login to earn EcoPoints!"
-		},
-		"difficulty": {
-			"easy": "Easy",
-			"medium": "Medium",
-			"hard": "Hard"
-		},
-		"actions": {
-			"playAgain": "Play Again",
-			"resetScores": "Reset Scores"
-		},
-		"scoreBoard": {
-			"title": "SCORE BOARD",
-			"you": "You",
-			"draws": "Draws",
-			"ai": "AI"
-		}
-	},
-	"Shop": {
-		"hero": {
-			"title": "Shops",
-			"subtitle": "Shops for eco-friendly products and gifts made with love for our planet."
-		},
-		"quality": {
-			"title": "Quality You Can Trust",
-			"description": "We check every partner shop with real care keeping things healthy, planet-friendly, and a little fun along the way. Hover over a card to explore it!",
-			"cards": {
-				"planetFriendly": {
-					"title": "Planet-Friendly Products",
-					"text": "Each shop prioritizes items that are inherently sustainable and kind to the environment, minimizing ecological impact."
-				},
-				"ecoConscious": {
-					"title": "Eco-Conscious Sourcing",
-					"text": "They ensure full responsibility and ethical sourcing, favoring materials that are renewable, recycled, or low-waste."
-				},
-				"commitment": {
-					"title": "Commitment to You",
-					"text": "Products are carefully selected to be safe, kind to your health, and promote a holistic, sustainable lifestyle."
-				}
-			}
-		},
-		"filter": {
-			"searchPlaceholder": "Search shops",
-			"sortBy": "Sort by:",
-			"sortOptions": {
-				"default": "Default",
-				"highestRating": "Highest Rating",
-				"lowestRating": "Lowest Rating"
-			},
-			"noProducts": "No products match your current search criteria."
-		}
-	},
-	"Restaurant": {
-		"Products": {
-			"title": "Products",
-			"subtitle": "Manage your restaurant menu items",
-			"addProduct": "Add Product",
-			"searchPlaceholder": "Search products...",
-			"noProducts": "No products found. Add your first product!",
-			"previous": "Previous",
-			"next": "Next",
-			"page": "Page {current} of {total}",
-			"unavailable": "Unavailable",
-			"noImage": "No Image",
-			"currency": "$",
-			"actions": {
-				"edit": "Edit",
-				"delete": "Delete",
-				"cancel": "Cancel",
-				"save": "Save",
-				"saving": "Saving..."
-			},
-			"deleteDialog": {
-				"title": "Delete Product",
-				"description": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
-				"descriptionNoTitle": "Are you sure you want to delete this product? This action cannot be undone.",
-				"confirm": "Delete",
-				"cancel": "Cancel",
-				"deleting": "Deleting..."
-			},
-			"popup": {
-				"addTitle": "Add New Product",
-				"editTitle": "Edit Product",
-				"addDescription": "Add a new item to your menu",
-				"editDescription": "Update product details",
-				"titleLabel": "Title",
-				"titlePlaceholder": "e.g. Margherita Pizza",
-				"subtitleLabel": "Subtitle",
-				"subtitlePlaceholder": "Short description...",
-				"priceLabel": "Price (EGP)",
-				"imageLabel": "Product Image",
-				"availableLabel": "Available Online",
-				"errors": {
-					"titleRequired": "Title is required",
-					"subtitleRequired": "Subtitle is required",
-					"priceRequired": "Price is required"
-				}
-			},
+  "Home": {
+    "hero": {
+      "subtitle": "#Join the movement",
+      "title": "Successful fundraisers start here",
+      "cta": "More About EcoSphere"
+    },
+    "solidContent": {
+      "footprint": "reducing your carbon footprint by up to 30% with simple daily actions.",
+      "tips": "Discover over 100+ eco-friendly tips",
+      "community": "Become part of a growing community of more than 10,000 planet-lovers"
+    },
+    "marketplace": {
+      "title": "Our Store",
+      "description": "Shop 100% eco-friendly products and start your journey toward a more sustainable lifestyle. We offer a wide range of certified, toxin-free items carefully selected from trusted eco-friendly stores and partner farms across Egypt and beyond.",
+      "list": {
+        "natural": "Products made from natural, biodegradable, and recycled materials.",
+        "zeroWaste": "A full range of zero-waste essentials you can rely on every day.",
+        "farm": "Fresh and organic farm products sourced responsibly from local eco-farms."
+      },
+      "stats": {
+        "products": "300+ sustainable products",
+        "brands": "50+ green brands"
+      },
+      "cta": "Visit Store"
+    },
+    "partners": {
+      "title": "Eco-Friendly Partner Stores & Farms",
+      "description": "We proudly connect you with top eco-friendly stores and farms that share our mission of promoting a cleaner, more sustainable future. Our network is growing every day, making it easier for you to access trusted, safe, and environmentally responsible products from certified shops and passionate eco farms.",
+      "cta": "Visit Our Partners",
+      "stats": {
+        "partners": "50+",
+        "partnersDesc": "partners committed to sustainability",
+        "products": "1200+",
+        "productsDesc": "natural and toxin-free products",
+        "farms": "15+",
+        "farmsDesc": "certified local farms"
+      }
+    }
+  },
+  "Layout": {
+    "Sidebar": {
+      "groups": {
+        "application": "Application",
+        "dashboard": "Dashboard",
+        "admin": "Admin"
+      },
+      "menu": {
+        "home": "Home",
+        "shops": "Shops",
+        "events": "Events",
+        "recycle": "Recycle",
+        "news": "News",
+        "store": "Store",
+        "game": "Game",
+        "about": "About",
+        "recipes": "Recipes"
+      },
+      "dashboard": {
+        "overview": "OverView",
+        "addEvent": "Add Event",
+        "browseEvents": "Browse Events",
+        "eventDetails": "Event Details",
+        "products": "Products",
+        "orders": "Orders",
+        "shops": "Shops",
+        "events": "Events",
+        "recycling": "Recycling"
+      },
+      "footer": {
+        "favorite": "Favorite",
+        "cart": "Cart",
+        "login": "Login"
+      },
+      "theme": {
+        "light": "Light",
+        "dark": "Dark",
+        "system": "System",
+        "label": "{theme} Theme"
+      }
+    },
+    "UserBtn": {
+      "subscribe": "Subscribe",
+      "profile": "Profile",
+      "notifications": "Notifications",
+      "logout": "Log out",
+      "logoutSuccess": "You have been logged out successfully.",
+      "logoutError": "Failed to log out. Please try again later."
+    }
+  },
+  "About": {
+    "hero": {
+      "title": "Our Story",
+      "subtitle": "EcoSphere is your trusted destination for eco-friendly products, sustainable gifts, and smart green choices. Browse a variety of earth-conscious items made to help you live cleaner, better, and more naturally every day."
+    },
+    "story": {
+      "label": "About Us",
+      "title": "Building a greener future together Forever",
+      "description": "EcoSphere was created to make sustainable shopping simple, trustworthy, and accessible. With greenwashing becoming widespread, consumers are often overwhelmed or unsure who to trust."
+    },
+    "mission": {
+      "label": "Our Mission",
+      "title": "Making sustainability",
+      "titleHighlight": " effortless & trustworthy.",
+      "description": "EcoSphere exists to bridge the gap between conscious consumers and ethical enterprises. We strip away the guesswork of \"greenwashing\" by providing a rigorously vetted marketplace where every choice is a verified step towards a better planet.",
+      "forConsumers": {
+        "title": "For Consumers",
+        "description": "Instant access to transparent, planet-first products without the research fatigue."
+      },
+      "forBusinesses": {
+        "title": "For Businesses",
+        "description": "High-visibility growth for brands that prioritize integrity over easy profits."
+      }
+    },
+    "vision": {
+      "label": "Our Vision",
+      "title": "A world where",
+      "titleHighlight": " sustainable is standard.",
+      "description": "Our vision is to help create an interconnected, global economy where sustainable and regenerative commerce is the",
+      "descriptionHighlight": "standard, not the exception."
+    },
+    "values": {
+      "label": "Our Core Values",
+      "title": "Preserving The Earth For Future Generations",
+      "cards": {
+        "planetFirst": {
+          "title": "Planet-First",
+          "text": "Every action is measured by its environmental benefit and commitment to regeneration."
+        },
+        "integrity": {
+          "title": "Integrity & Trust",
+          "text": "We demand radical transparency from our partners and communicate openly with our users."
+        },
+        "accessibility": {
+          "title": "Accessibility",
+          "text": "We strive to make sustainable choices the easiest and most convenient option available."
+        },
+        "community": {
+          "title": "Community",
+          "text": "We prioritize connecting ethical enterprises with dedicated customers."
+        }
+      }
+    },
+    "verification": {
+      "label": "Verification",
+      "title": "The EcoSphere",
+      "titleHighlight": " Verification.",
+      "description": "Every partner must pass a structured verification system combining documentation, third-party certifications, and sustainability assessments across four pillars:",
+      "items": {
+        "documentation": "Documentation Review",
+        "certification": "Third-Party Certification Assessment",
+        "questionnaire": "Detailed Impact Questionnaire",
+        "monitoring": "Continuous Compliance Monitoring"
+      }
+    },
+    "keyPillars": {
+      "label": "Our Standards",
+      "title": "Key Pillars",
+      "description": "We don't just take a brand's word for it. We rigorously evaluate every partner against these four non-negotiable standards.",
+      "pillars": {
+        "environmental": {
+          "title": "Environmental Impact",
+          "text": "Sourcing organic, recycled materials with a focus on carbon neutrality and minimal waste."
+        },
+        "ethical": {
+          "title": "Ethical Labor",
+          "text": "Ensuring fair wages, safe working conditions, and absolutely no forced or child labor."
+        },
+        "transparency": {
+          "title": "Supply Chain Transparency",
+          "text": "Providing verifiable proof and complete openness about sourcing, processing, and logistics."
+        },
+        "quality": {
+          "title": "Durability & Quality",
+          "text": "Products designed for longevity, repairability, and circularity — actively fighting waste culture."
+        }
+      }
+    }
+  },
+  "Game": {
+    "hero": {
+      "title": "Tic Tac Toe",
+      "you": "You",
+      "vs": "vs",
+      "ai": "AI"
+    },
+    "status": {
+      "draw": "Draw",
+      "youWin": "You Win",
+      "aiWin": "AI Win",
+      "aiThinking": "AI think...",
+      "yourTurn": "Your turn",
+      "pointsAdded": "{points} points added to your EcoPoints!",
+      "updatePoints": "Error updating EcoPoints. Please try again.",
+      "loginForPoints": "Login to earn EcoPoints!"
+    },
+    "difficulty": {
+      "easy": "Easy",
+      "medium": "Medium",
+      "hard": "Hard"
+    },
+    "actions": {
+      "playAgain": "Play Again",
+      "resetScores": "Reset Scores"
+    },
+    "scoreBoard": {
+      "title": "SCORE BOARD",
+      "you": "You",
+      "draws": "Draws",
+      "ai": "AI"
+    }
+  },
+  "Shop": {
+    "hero": {
+      "title": "Shops",
+      "subtitle": "Shops for eco-friendly products and gifts made with love for our planet."
+    },
+    "quality": {
+      "title": "Quality You Can Trust",
+      "description": "We check every partner shop with real care keeping things healthy, planet-friendly, and a little fun along the way. Hover over a card to explore it!",
+      "cards": {
+        "planetFriendly": {
+          "title": "Planet-Friendly Products",
+          "text": "Each shop prioritizes items that are inherently sustainable and kind to the environment, minimizing ecological impact."
+        },
+        "ecoConscious": {
+          "title": "Eco-Conscious Sourcing",
+          "text": "They ensure full responsibility and ethical sourcing, favoring materials that are renewable, recycled, or low-waste."
+        },
+        "commitment": {
+          "title": "Commitment to You",
+          "text": "Products are carefully selected to be safe, kind to your health, and promote a holistic, sustainable lifestyle."
+        }
+      }
+    },
+    "filter": {
+      "searchPlaceholder": "Search shops",
+      "sortBy": "Sort by:",
+      "sortOptions": {
+        "default": "Default",
+        "highestRating": "Highest Rating",
+        "lowestRating": "Lowest Rating"
+      },
+      "noProducts": "No products match your current search criteria."
+    }
+  },
+  "Restaurant": {
+    "Products": {
+      "title": "Products",
+      "subtitle": "Manage your restaurant menu items",
+      "addProduct": "Add Product",
+      "searchPlaceholder": "Search products...",
+      "noProducts": "No products found. Add your first product!",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}",
+      "unavailable": "Unavailable",
+      "noImage": "No Image",
+      "currency": "$",
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving..."
+      },
+      "deleteDialog": {
+        "title": "Delete Product",
+        "description": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+        "descriptionNoTitle": "Are you sure you want to delete this product? This action cannot be undone.",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "deleting": "Deleting..."
+      },
+      "popup": {
+        "addTitle": "Add New Product",
+        "editTitle": "Edit Product",
+        "addDescription": "Add a new item to your menu",
+        "editDescription": "Update product details",
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. Margherita Pizza",
+        "subtitleLabel": "Subtitle",
+        "subtitlePlaceholder": "Short description...",
+        "priceLabel": "Price (EGP)",
+        "imageLabel": "Product Image",
+        "availableLabel": "Available Online",
+        "errors": {
+          "titleRequired": "Title is required",
+          "subtitleRequired": "Subtitle is required",
+          "priceRequired": "Price is required"
+        }
+      },
 
 			"toasts": {
 				"loadError": "Failed to load products",

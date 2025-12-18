@@ -56,14 +56,14 @@ export default async function Verification() {
             </div>
 
             {/* RIGHT COLUMN: Image & Decor */}
-            <div className="relative pl-4 md:pl-8 hidden sm:block">
+            <div className="relative ltr:pl-4 rtl:pr-4 md:ltr:pl-8 md:rtl:pr-8 hidden sm:block">
               {/* Primary color decorative sidebar line */}
               <div
-                className="absolute left-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block"
+                className="absolute ltr:left-0 rtl:right-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block"
                 style={{ background: "var(--primary)" }}
               />
 
-              <div className="absolute -bottom-10 -right-10 z-0 opacity-10"></div>
+              <div className="absolute -bottom-10 ltr:-right-10 rtl:-left-10 z-0 opacity-10"></div>
 
               {/* Main Image Container */}
               <BasicAnimatedWrapper className="relative z-10 overflow-hidden rounded-xl shadow-lg dark:shadow-primary/30 ring-2 ring-primary/40 dark:ring-primary/60 transform transition-transform hover:scale-[1.02] duration-500">

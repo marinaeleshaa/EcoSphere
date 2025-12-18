@@ -56,8 +56,10 @@ const LogIn = () => {
       password: loginForm.password,
       redirect: false,
     });
-    if (!response.error) router.replace("/");
-    toast.success(t("successLogin"));
+    if (!response.error) {
+      router.replace("/");
+      toast.success(t("successLogin"));
+    }
     setIsLogging(false);
     setLoginState(response);
   };

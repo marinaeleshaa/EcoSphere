@@ -1,67 +1,72 @@
 {
-	"Home": {
-		"hero": {
-			"subtitle": "#Rejoignez le mouvement",
-			"title": "Les collectes de fonds réussies commencent ici",
-			"cta": "Plus sur EcoSphere"
-		},
-		"marketplace": {
-			"title": "Notre Magasin",
-			"description": "Achetez des produits 100% écologiques et commencez votre voyage vers un mode de vie plus durable. Nous proposons une large gamme d'articles certifiés sans toxines, soigneusement sélectionnés auprès de magasins écologiques de confiance et de fermes partenaires à travers l'Égypte et au-delà.",
-			"list": {
-				"natural": "Produits fabriqués à partir de matériaux naturels, biodégradables et recyclés.",
-				"zeroWaste": "Une gamme complète d'essentiels zéro déchet sur lesquels vous pouvez compter au quotidien.",
-				"farm": "Produits agricoles frais et biologiques provenant de manière responsable de fermes écologiques locales."
-			},
-			"stats": {
-				"products": "300+ produits durables",
-				"brands": "50+ marques vertes"
-			},
-			"cta": "Visiter le Magasin"
-		},
-		"partners": {
-			"title": "Magasins et Fermes Partenaires Écologiques",
-			"description": "Nous sommes fiers de vous mettre en relation avec les meilleurs magasins et fermes écologiques qui partagent notre mission de promouvoir un avenir plus propre et plus durable. Notre réseau s'agrandit chaque jour, ce qui vous permet d'accéder plus facilement à des produits fiables, sûrs et respectueux de l'environnement provenant de magasins certifiés et de fermes écologiques passionnées.",
-			"cta": "Visiter Nos Partenaires",
-			"stats": {
-				"partners": "50+",
-				"partnersDesc": "partenaires engagés dans la durabilité",
-				"products": "1200+",
-				"productsDesc": "produits naturels et sans toxines",
-				"farms": "15+",
-				"farmsDesc": "fermes locales certifiées"
-			}
-		}
-	},
-	"Layout": {
-		"Sidebar": {
-			"groups": {
-				"application": "Application",
-				"dashboard": "Tableau de bord",
-				"admin": "Admin"
-			},
-			"menu": {
-				"home": "Accueil",
-				"shops": "Boutiques",
-				"events": "Événements",
-				"recycle": "Recycler",
-				"news": "Actualités",
-				"store": "Magasin",
-				"game": "Jeu",
-				"about": "À propos",
-				"recipes": "Recettes"
-			},
-			"dashboard": {
-				"overview": "Aperçu",
-				"addEvent": "Ajouter un événement",
-				"browseEvents": "Parcourir les événements",
-				"eventDetails": "Détails de l’événement",
-				"products": "Produits",
-				"orders": "Commandes",
-				"shops": "Boutiques",
-				"events": "Événements",
-				"recycling": "Recyclage"
-			},
+  "Home": {
+    "hero": {
+      "subtitle": "#Rejoignez le mouvement",
+      "title": "Les collectes de fonds réussies commencent ici",
+      "cta": "Plus sur EcoSphere"
+    },
+    "solidContent": {
+      "footprint": "réduisez votre empreinte carbone jusqu'à 30 % grâce à des gestes simples au quotidien.",
+      "tips": "Découvrez plus de 100 astuces écologiques",
+      "community": "Rejoignez une communauté grandissante de plus de 10 000 amoureux de la planète"
+    },
+    "marketplace": {
+      "title": "Notre Magasin",
+      "description": "Achetez des produits 100% écologiques et commencez votre voyage vers un mode de vie plus durable. Nous proposons une large gamme d'articles certifiés sans toxines, soigneusement sélectionnés auprès de magasins écologiques de confiance et de fermes partenaires à travers l'Égypte et au-delà.",
+      "list": {
+        "natural": "Produits fabriqués à partir de matériaux naturels, biodégradables et recyclés.",
+        "zeroWaste": "Une gamme complète d'essentiels zéro déchet sur lesquels vous pouvez compter au quotidien.",
+        "farm": "Produits agricoles frais et biologiques provenant de manière responsable de fermes écologiques locales."
+      },
+      "stats": {
+        "products": "300+ produits durables",
+        "brands": "50+ marques vertes"
+      },
+      "cta": "Visiter le Magasin"
+    },
+    "partners": {
+      "title": "Magasins et Fermes Partenaires Écologiques",
+      "description": "Nous sommes fiers de vous mettre en relation avec les meilleurs magasins et fermes écologiques qui partagent notre mission de promouvoir un avenir plus propre et plus durable. Notre réseau s'agrandit chaque jour, ce qui vous permet d'accéder plus facilement à des produits fiables, sûrs et respectueux de l'environnement provenant de magasins certifiés et de fermes écologiques passionnées.",
+      "cta": "Visiter Nos Partenaires",
+      "stats": {
+        "partners": "50+",
+        "partnersDesc": "partenaires engagés dans la durabilité",
+        "products": "1200+",
+        "productsDesc": "produits naturels et sans toxines",
+        "farms": "15+",
+        "farmsDesc": "fermes locales certifiées"
+      }
+    }
+  },
+  "Layout": {
+    "Sidebar": {
+      "groups": {
+        "application": "Application",
+        "dashboard": "Tableau de bord",
+        "admin": "Admin"
+      },
+      "menu": {
+        "home": "Accueil",
+        "shops": "Boutiques",
+        "events": "Événements",
+        "recycle": "Recycler",
+        "news": "Actualités",
+        "store": "Magasin",
+        "game": "Jeu",
+        "about": "À propos",
+        "recipes": "Recettes"
+      },
+      "dashboard": {
+        "overview": "Aperçu",
+        "addEvent": "Ajouter un événement",
+        "browseEvents": "Parcourir les événements",
+        "eventDetails": "Détails de l’événement",
+        "products": "Produits",
+        "orders": "Commandes",
+        "shops": "Boutiques",
+        "events": "Événements",
+        "recycling": "Recyclage"
+      },
 
 			"footer": {
 				"favorite": "Favoris",

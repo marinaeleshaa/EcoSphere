@@ -29,7 +29,7 @@ export default async function KeyPillars() {
   return (
     <section className="relative py-20 text-foreground overflow-hidden">
       {/* Decorative Corner Leaves (Rotated for variety compared to Values component) */}
-      <div className="absolute top-0 right-0 w-48 opacity-10 translate-x-12 -translate-y-8 rotate-90 pointer-events-none mix-blend-multiply">
+      <div className="absolute top-0 ltr:right-0 rtl:left-0 w-48 opacity-10 ltr:translate-x-12 rtl:-translate-x-12 -translate-y-8 rotate-90 pointer-events-none mix-blend-multiply">
         <Image
           src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent"
           alt=""
@@ -38,7 +38,7 @@ export default async function KeyPillars() {
           unoptimized
         />
       </div>
-      <div className="absolute bottom-0 left-0 w-64 opacity-10 -translate-x-20 translate-y-20 -rotate-45 pointer-events-none mix-blend-multiply">
+      <div className="absolute bottom-0 ltr:left-0 rtl:right-0 w-64 opacity-10 ltr:-translate-x-20 rtl:translate-x-20 translate-y-20 -rotate-45 pointer-events-none mix-blend-multiply">
         <Image
           src="https://img.freepik.com/free-vector/green-leaves-branch-vector-illustration_53876-113063.jpg?w=740&t=st=1709490000~exp=1709490600~hmac=transparent"
           alt=""

@@ -28,7 +28,7 @@ export default async function Mission() {
               {/* Summarized Text */}
               <div className="space-y-6 text-foreground text-lg leading-relaxed">
                 <p>{t("description")}</p>
-                <div className="pl-6 border-l-4 border-primary space-y-4">
+                <div className="ltr:pl-6 rtl:pr-6 ltr:border-l-4 rtl:border-r-4 border-primary space-y-4">
                   <div>
                     <strong className="block text-foreground">
                       {t("forConsumers.title")}
@@ -50,9 +50,9 @@ export default async function Mission() {
             </div>
 
             {/* RIGHT COLUMN: Image & Decor */}
-            <div className="relative order-1 lg:order-2 pl-4 md:pl-8">
+            <div className="relative order-1 lg:order-2 ltr:pl-4 rtl:pr-4 md:ltr:pl-8 md:rtl:pr-8">
               {/* Primary color decorative sidebar line similar to first component */}
-              <div className="absolute left-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
+              <div className="absolute ltr:left-0 rtl:right-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
 
               {/* Main Image Container */}
               <BasicAnimatedWrapper className="relative z-10 overflow-hidden rounded-xl p-4 shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30">

@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { rootContainer } from "@/backend/config/container";
 import RestaurantController from "@/backend/features/restaurant/restaurant.controller";
 import { ApiResponse, ok, serverError } from "@/types/api-helpers";
-import { IRestaurant } from "@/backend/features/restaurant/restaurant.model";
+import { IShop } from "@/types/ShopTypes";
 
 export const GET = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<IRestaurant>>> => {
+): Promise<NextResponse<ApiResponse<IShop>>> => {
   const { id } = await context.params;
   const controller = rootContainer.resolve(RestaurantController);
   try {
@@ -22,7 +22,7 @@ export const GET = async (
 export const PUT = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<IRestaurant>>> => {
+): Promise<NextResponse<ApiResponse<IShop>>> => {
   const { id } = await context.params;
   const body = await req.json();
   const controller = rootContainer.resolve(RestaurantController);
@@ -52,7 +52,7 @@ export const DELETE = async (
 export const PATCH = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<IRestaurant>>> => {
+): Promise<NextResponse<ApiResponse<IShop>>> => {
   const { id } = await context.params;
   const body = await req.json();
   const controller = rootContainer.resolve(RestaurantController);

@@ -2,13 +2,13 @@
 
 import { motion } from "framer-motion";
 import ShopProductsSliderSection from "./ShopProductsSliderSection";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
+import { IShop } from "@/types/ShopTypes";
 
-const ShopProducts = ({ shopName }: { shopName?: string }) => {
-  const t = useTranslations('ShopDetails.products');
+const ShopProducts = ({ shop }: { shop?: IShop }) => {
+  const t = useTranslations("ShopDetails.products");
   return (
     <section className="mt-20 overflow-hidden">
-
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -18,13 +18,13 @@ const ShopProducts = ({ shopName }: { shopName?: string }) => {
       >
         <div className="mb-10">
           <h2 className="text-2xl text-center font-semibold text-foreground">
-            {t('title')}
+            {t("title")}
           </h2>
           <p className="text-sm text-center text-secondary-foreground">
-            {t('subtitle')}
+            {t("subtitle")}
           </p>
         </div>
-        <ShopProductsSliderSection shopName={shopName} />
+        <ShopProductsSliderSection products={shop?.menus || []} />
       </motion.div>
     </section>
   );

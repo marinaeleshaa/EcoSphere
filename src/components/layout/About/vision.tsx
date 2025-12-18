@@ -39,10 +39,10 @@ export default async function Vision() {
             </div>
 
             {/* RIGHT COLUMN: Image & Decor */}
-            <div className="relative order-1 lg:order-2 pl-4 md:pl-8">
+            <div className="relative order-1 lg:order-2 ltr:pl-4 rtl:pr-4 md:ltr:pl-8 md:rtl:pr-8">
               {/* Primary color decorative sidebar line */}
-              <div className="absolute left-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
-              <div className="absolute -top-6 -right-6 z-0 opacity-10"></div>
+              <div className="absolute ltr:left-0 rtl:right-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
+              <div className="absolute -top-6 ltr:-right-6 rtl:-left-6 z-0 opacity-10"></div>
 
               {/* Main Image Container */}
               <BasicAnimatedWrapper className="relative z-10 overflow-hidden rounded-xl p-4  shadow-lg transform transition-transform hover:scale-[1.02] duration-500 ring-2 ring-primary/40 dark:ring-primary/60 dark:shadow-primary/30">

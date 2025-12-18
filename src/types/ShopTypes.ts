@@ -1,16 +1,9 @@
+import { IProduct } from "./ProductType";
+
 export interface IReview {
   userId: string;
   rate: number;
   review: string;
-}
-
-export interface IMenuItem {
-  title: string;
-  subtitle: string;
-  price: number;
-  avatar?: string;
-  availableOnline: boolean;
-  itemRating?: IReview[];
 }
 
 export interface IShopAvatar {
@@ -19,13 +12,13 @@ export interface IShopAvatar {
 }
 
 export interface IShop {
-  _id: number;
+  _id: string;
   name: string;
   location: string;
   workingHours: string;
   phoneNumber: string;
   avatar: IShopAvatar;
   description: string;
-  menus?: IMenuItem[];
+  menus?: IProduct[];
   restaurantRating?: IReview[];
 }
