@@ -12,6 +12,7 @@ export interface IEventService {
   acceptEvent: (eventId: string) => Promise<IEvent>;
   rejectEvent: (eventId: string) => Promise<IEvent>;
   attendEvent: (id: string, eventId: string) => Promise<IEvent>;
+  getEventById: (eventId: string) => Promise<IEvent>;
 }
 
 @injectable()
@@ -71,6 +72,10 @@ class EventService {
 
   async attendEvent(id: string, eventId: string): Promise<IEvent> {
     return await this.eventRepository.attendEvent(id, eventId);
+  }
+
+  async getEventById(eventId: string): Promise<IEvent> {
+    return await this.eventRepository.getEventById(eventId);
   }
 }
 

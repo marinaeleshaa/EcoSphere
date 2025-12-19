@@ -5,7 +5,7 @@ import { PaymentService } from "@/backend/services/payment.service";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency , metaData } = body;
+    const { amount, currency, metaData } = body;
 
     if (!amount) {
       return NextResponse.json(
@@ -24,14 +24,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error("Error in payment intent route:", error);
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Failed to create payment intent",
-      },
-      { status: 500 }
-    );
+
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Failed to create payment intent";
+    const status = errorMessage.includes("Amount is too small") ? 400 : 500;
+
+    return NextResponse.json({ error: errorMessage }, { status: status });
   }
 }

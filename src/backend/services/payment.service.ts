@@ -13,8 +13,15 @@ export class PaymentService {
   async createPaymentIntent(
     amount: number,
     currency: string = "usd",
-    metadata: Record<string, string> = {},
+    metadata: Record<string, string> = {}
   ): Promise<Stripe.PaymentIntent> {
+    // Stripe requires a minimum equivalent to $0.50 USD.
+    // EGP ~0.50 USD is roughly 25-30 EGP. We'll enforce 30 EGP to be safe.
+    if (currency.toLowerCase() === "egp" && amount < 3000) {
+      throw new Error(
+        "Amount is too small. The minimum payment for EGP is 30.00 EGP due to payment processor requirements."
+      );
+    }
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Ensure integer
@@ -50,7 +57,7 @@ export class PaymentService {
       // map the Stripe customer/subscription back to a user or restaurant in our DB.
       if (!opts.metadata || Object.keys(opts.metadata).length === 0) {
         console.warn(
-          "Creating Stripe Checkout session without metadata; webhooks will not be able to map customer to user/restaurant.",
+          "Creating Stripe Checkout session without metadata; webhooks will not be able to map customer to user/restaurant."
         );
       }
 

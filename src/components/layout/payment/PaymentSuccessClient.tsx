@@ -121,12 +121,14 @@ export function PaymentSuccessClient({
             Items ({order.items.length})
           </p>
           <div className="space-y-1 max-h-32 overflow-y-auto">
-            {order.items.map((item, index) => (
+            {order.items.map((item: any, index: number) => (
               <div
                 key={index}
                 className="flex justify-between text-xs text-accent-foreground/70"
               >
-                <span>Item {index + 1}</span>
+                <span>
+                  {item.eventId ? "Event Ticket" : `Item ${index + 1}`}
+                </span>
                 <span>
                   Qty: {item.quantity} × {item.unitPrice.toFixed(2)} EGP
                 </span>

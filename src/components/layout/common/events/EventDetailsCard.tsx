@@ -18,7 +18,7 @@ import { ISubEvent } from "@/types/EventTypes";
 import UpdateEventBtn from "../../Dashboard/Events/DisplayEvents/UpdateEventBtn";
 import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn";
 import AddAttendBtn from "./AddAttendBtn";
-import { FaUserTie } from "react-icons/fa6"
+import { FaUserTie } from "react-icons/fa6";
 import { useTranslations, useLocale } from "next-intl";
 export default function EventDetailsCard({
   event,
@@ -151,31 +151,30 @@ export default function EventDetailsCard({
                   </p>
                 </div>
                 {/* organizer */}
-                {!isOrganizerDetails&&(
-                <div className="md:col-span-3 flex items-center gap-3 rounded-xl border bg-muted/40 px-4 py-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-                    <FaUserTie className="text-primary" />
-                  </div>
+                {!isOrganizerDetails && (
+                  <div className="md:col-span-3 flex items-center gap-3 rounded-xl border bg-muted/40 px-4 py-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+                      <FaUserTie className="text-primary" />
+                    </div>
 
                     {isEventOrganizer ? (
-                    <span className="text-xs text-primary font-semibold">
-                      {t("organizer")}
-                    </span>
-                  ) : (
-                    <div className="flex flex-col text-sm">
-                      <span className="font-medium text-foreground">
-                            {event.user?.firstName}
+                      <span className="text-xs text-primary font-semibold">
+                        {t("organizer")}
                       </span>
-                      {canAttend && (
-                        <span className="text-muted-foreground text-xs">
-                          {event.user?.email}
+                    ) : (
+                      <div className="flex flex-col text-sm">
+                        <span className="font-medium text-foreground">
+                          {event.user?.firstName}
                         </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-                )
-                }
+                        {canAttend && (
+                          <span className="text-muted-foreground text-xs">
+                            {event.user?.email}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               {/* Sections / Schedule */}
               {event.sections && event.sections.length > 0 && (
@@ -191,7 +190,6 @@ export default function EventDetailsCard({
                         <span className="text-xs text-muted-foreground">
                           {formatTime(section.startTime, locale)} –{" "}
                           {formatTime(section.endTime, locale)}
-
                         </span>
                       </div>
                       {section.description && (
@@ -215,7 +213,7 @@ export default function EventDetailsCard({
                     <div className="flex gap-4">
                       <AddAttendBtn
                         eventId={event._id}
-                        isFree={event.ticketPrice === 0}
+                        ticketPrice={event.ticketPrice}
                         attenders={event.attenders ?? []}
                         userId={userId}
                       />

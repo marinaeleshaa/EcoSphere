@@ -3,22 +3,25 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 export default function AddAttendBtn({
   eventId,
-  isFree,
+  ticketPrice,
   userId,
   attenders,
 }: {
   eventId: string;
-  isFree: boolean;
+  ticketPrice: number;
   attenders?: string[];
   userId: string | "";
 }) {
   const t = useTranslations("Events.displayEvents.AddAttendBtn");
   const router = useRouter();
+  const isFree = ticketPrice === 0;
   const isAttending = attenders?.includes(userId);
   const handleAddEvent = async () => {
-    const url = isFree
-      ? `/api/events/${eventId}`
-      : `/api/events/${eventId}/checkout`;
+    if (!isFree) {
+      router.push(`/checkout?eventId=${eventId}&amount=${ticketPrice}`);
+      return;
+    }
+    const url = `/api/events/${eventId}`;
 
     try {
       const response = await fetch(url, {

@@ -14,6 +14,7 @@ export interface IEventRepository {
   rejectEvent(id: string, eventId: string): Promise<IEvent>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
   attendEvent(id: string, eventId: string): Promise<IEvent>;
+  getEventById(eventId: string): Promise<IEvent>;
 }
 
 @injectable()
@@ -258,6 +259,22 @@ class EventRepository {
     }
 
     return updatedEvent as IEvent;
+  }
+
+  async getEventById(eventId: string): Promise<IEvent> {
+    await DBInstance.getConnection();
+    const user = await UserModel.findOne(
+      { "events._id": eventId },
+      { events: { $elemMatch: { _id: eventId } } }
+    )
+      .lean<Pick<IUser, "events">>()
+      .exec();
+
+    if (!user?.events || user.events.length === 0) {
+      throw new Error(`Event with ID ${eventId} not found.`);
+    }
+
+    return user.events[0] as IEvent;
   }
 }
 

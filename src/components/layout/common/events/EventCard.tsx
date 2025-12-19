@@ -124,7 +124,7 @@ export default function EventCard({ event }: { event: any }) {
           {!isOrganizerDetails && canAttend && (
             <AddAttendBtn
               eventId={event._id}
-              isFree={event.ticketPrice === 0}
+              ticketPrice={event.ticketPrice}
               attenders={event.attenders ?? []}
               userId={session?.user?.id || ""}
             />

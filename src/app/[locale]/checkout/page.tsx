@@ -6,17 +6,23 @@ import { useAppSelector } from "@/frontend/redux/hooks";
 import { selectCartPrice } from "@/frontend/redux/selector/cartSelector";
 import { CardCheckoutSection } from "@/components/layout/payment/CardCheckoutSection";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 type PaymentMethod = "card" | "cash";
 
 export default function CheckoutPage() {
   const t = useTranslations("Checkout.page");
-  const total = useAppSelector(selectCartPrice);
+  const searchParams = useSearchParams();
+  const eventId = searchParams.get("eventId");
+  const eventAmount = searchParams.get("amount");
+
+  const cartTotal = useAppSelector(selectCartPrice);
+  const total = eventId ? Number(eventAmount) : cartTotal;
   const amount = total * 100;
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
 
-  if (!total) return <p>{t("somethingWentWrong")}</p>;
+  if (!total && !eventId) return <p>{t("somethingWentWrong")}</p>;
 
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -52,7 +58,7 @@ export default function CheckoutPage() {
 
         {/* ⬇️ LOGIC-ONLY SWITCH */}
         {paymentMethod === "card" ? (
-          <CardCheckoutSection amount={amount} />
+          <CardCheckoutSection amount={amount} eventId={eventId} />
         ) : (
           /* ⬇️ ORIGINAL CASH UI — UNCHANGED */
           <div className="text-center py-6 animate-in fade-in slide-in-from-bottom-4">

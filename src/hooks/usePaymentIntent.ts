@@ -16,6 +16,7 @@ interface UsePaymentIntentResult {
 export function usePaymentIntent(
   amount: number,
   enabled: boolean,
+  eventId?: string | null
 ): UsePaymentIntentResult {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,11 @@ export function usePaymentIntent(
       setError(null);
 
       try {
-        const response = await createOrder(cartItems);
+        const orderItems = eventId
+          ? [{ eventId, quantity: 1, restaurantId: "" }]
+          : cartItems;
+
+        const response = await createOrder(orderItems as any);
 
         // Error handling: Stop flow if order creation fails
         if (!response?.data?._id) {
@@ -66,7 +71,7 @@ export function usePaymentIntent(
             orderId: currentOrderId,
             userId: userIdString,
           },
-          "EGP",
+          "EGP"
         );
         if (isMounted) {
           setClientSecret(clientSecret);
