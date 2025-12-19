@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import type { IRestaurantRepository } from "./restaurant.repository";
-import { IRestaurant } from "./restaurant.model";
+import { IRestaurant, IMenuItem } from "./restaurant.model";
 import { ImageService } from "../../services/image.service";
 
 export interface IRestaurantService {
@@ -59,12 +59,12 @@ class RestaurantService {
     const restaurant = await this.restaurantRepository.getById(id);
     return await this.populateAvatar(restaurant);
   }
-  
+
   async getRestaurantsByIds(restIds: string[]): Promise<IRestaurant[]> {
     const rest = await this.restaurantRepository.getRestaurantsByIdes(restIds);
     return rest;
   }
-  
+
   async updateById(
     id: string,
     data: Partial<IRestaurant>
@@ -83,11 +83,33 @@ class RestaurantService {
         ? restaurant.toObject()
         : restaurant;
 
-    if (restaurantObj?.avatar?.key) {
-      restaurantObj.avatar.url = await this.imageService.getSignedUrl(
-        restaurantObj.avatar.key
+    if (!restaurantObj) return restaurantObj;
+
+    const promises = [];
+
+    // Populate restaurant avatar
+    if (restaurantObj.avatar?.key) {
+      promises.push(
+        this.imageService.getSignedUrl(restaurantObj.avatar.key).then((url) => {
+          if (restaurantObj.avatar) restaurantObj.avatar.url = url;
+        })
       );
     }
+
+    // Populate menus avatars
+    if (restaurantObj.menus && restaurantObj.menus.length > 0) {
+      restaurantObj.menus.forEach((menu: IMenuItem) => {
+        if (menu.avatar?.key) {
+          promises.push(
+            this.imageService.getSignedUrl(menu.avatar.key).then((url) => {
+              if (menu.avatar) menu.avatar.url = url;
+            })
+          );
+        }
+      });
+    }
+
+    await Promise.all(promises);
     return restaurantObj as IRestaurant;
   }
 }

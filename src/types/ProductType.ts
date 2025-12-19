@@ -1,3 +1,5 @@
+import { IReview } from "./ShopTypes";
+
 export interface IProduct {
   id: string;
   restaurantId: string;
@@ -11,6 +13,7 @@ export interface IProduct {
   availableOnline?: boolean;
   sustainabilityScore?: number;
   sustainabilityReason?: string;
+  itemRating?: IReview[];
 }
 
 export interface IProductCart extends IProduct {

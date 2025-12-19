@@ -13,26 +13,18 @@ function ShopDetailsClient({ shop }: { shop: IShop }) {
     shop.restaurantRating || []
   );
 
-  const handleReviewAdded = useCallback((newReview: IReview) => {
-    setReviews((prevReviews) => [newReview, ...prevReviews]);
-  }, []);
-
   const liveAverageRating = useMemo(() => {
     const shopWithLiveReviews = { ...shop, restaurantRating: reviews };
     return getAverageRating(shopWithLiveReviews);
   }, [reviews, shop]);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden w-full">
       <ShopHero shop={shop} />
       <div className="w-[80%] mx-auto">
-        <ShopDetailsCard
-          shop={shop}
-          liveAverageRating={liveAverageRating}
-          onReviewAdded={handleReviewAdded}
-        />
-        <ShopTextComponent reviews={reviews} />
-        <ShopProducts shopName={shop.name} />
+        <ShopDetailsCard shop={shop} liveAverageRating={liveAverageRating} />
+        <ShopTextComponent reviews={reviews} shopId={shop._id} />
+        <ShopProducts shop={shop} />
       </div>
     </div>
   );

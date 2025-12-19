@@ -3,7 +3,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
-import { IProduct } from "@/types/ProductType";
 import { useSelector } from "react-redux";
 import { RootState } from "@/frontend/redux/store";
 import {
@@ -26,30 +25,47 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { IProduct } from "@/types/ProductType";
 
-const ProductCard = (product: IProduct) => {
+interface ProductCardProps {
+  product: IProduct;
+}
+
+const ProductCard = ({ product }: ProductCardProps) => {
   const t = useTranslations("Store.product");
   const {
     id,
     productName,
+    productPrice,
     productSubtitle,
     productImg,
-    productPrice,
+    restaurantId,
     sustainabilityScore,
     sustainabilityReason,
   } = product;
-  console.log(product, "products")
+
+  // Fallbacks for data mismatch (handling raw IMenuItem structure)
+  const safeName = productName || (product as any).title || "Unknown Product";
+  const safePrice = productPrice ?? (product as any).price ?? 0;
+  const safeSubtitle = productSubtitle || (product as any).subtitle || "";
+  const safeImg =
+    productImg || (product as any).avatar?.url || "/store img/2.jpg";
+  const safeId = id || (product as any)._id;
+
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const isFav = useSelector((state: RootState) => isInFavSelector(state, id));
+  const isFav = useSelector((state: RootState) =>
+    isInFavSelector(state, safeId)
+  );
   const isInCart = useSelector((state: RootState) =>
-    isInCartSelector(state, id)
+    isInCartSelector(state, safeId)
   );
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    dispatch(toggleFavoriteAsync(product));
+    // Use partial object logic or ensure FavSlice handles it
+    dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
       toast.success(t("removedFromFavorites"));
     } else {
@@ -60,10 +76,26 @@ const ProductCard = (product: IProduct) => {
   const handleCart = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (isInCart) {
-      dispatch(removeItem(id));
+      dispatch(removeItem(safeId));
       toast.success(t("removedFromCart"));
     } else {
-      dispatch(addItem({ ...product, quantity: 1 }));
+      dispatch(
+        addItem({
+          id: safeId,
+          productName: safeName,
+          productPrice: safePrice,
+          productSubtitle: safeSubtitle,
+          productImg: safeImg,
+          restaurantId: restaurantId || "",
+          shopName: "",
+          shopSubtitle: "", // Not passed currently
+          productDescription: "",
+          quantity: 1,
+          availableOnline: product.availableOnline || false,
+          sustainabilityScore,
+          sustainabilityReason,
+        })
+      );
       toast.success(t("addedToCart"));
     }
   };
@@ -78,7 +110,7 @@ const ProductCard = (product: IProduct) => {
   return (
     <motion.div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group"
-      onClick={() => router.push(`/store/${id}`)}
+      onClick={() => router.push(`/store/${safeId}`)}
     >
       {/* Sustainability Badge with Shadcn Tooltip */}
       {sustainabilityScore && (
@@ -108,18 +140,18 @@ const ProductCard = (product: IProduct) => {
       <div className="flex justify-between items-center p-5 min-h-20">
         <div className="flex gap-3 items-center flex-1 min-w-0">
           <Image
-            width={1000}
-            height={1000}
-            src={productImg || "/store img/2.jpg"}
-            alt={productName}
+            width={100}
+            height={100}
+            src={safeImg}
+            alt={`${safeName} avatar`}
             className="w-10 h-10 rounded-full shrink-0"
           />
           <div className="min-w-0 flex-1">
             <p className="line-clamp-1 font-medium text-sm leading-tight">
-              {productName}
+              {safeName}
             </p>
             <p className="text-xs text-secondary-foreground line-clamp-1">
-              {productSubtitle}
+              {safeSubtitle}
             </p>
           </div>
         </div>
@@ -132,23 +164,23 @@ const ProductCard = (product: IProduct) => {
         <Image
           width={1000}
           height={1000}
-          src={productImg || "/store img/2.jpg"}
-          alt="product"
+          src={safeImg}
+          alt={safeName || "Product Image"}
           className="w-full h-full object-cover"
         />
       </div>
 
       {/* product details - flexible but controlled */}
       <div className="p-5 flex flex-col flex-1 min-h-0">
-        <p className="text-lg font-semibold line-clamp-1 mb-1">{productName}</p>
+        <p className="text-lg font-semibold line-clamp-1 mb-1">{safeName}</p>
         <div className="grow ">
           <p className="text-sm text-secondary-foreground/90 line-clamp-3 mb-3   ">
-            {productSubtitle}
+            {safeSubtitle}
           </p>
         </div>
         <div className="flex justify-between items-center">
           <p className="text-lg font-semibold mt-auto ml-10">
-            {productPrice}
+            {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"}
             <span className="text-primary ml-1">{t("currency")}</span>
           </p>
           <div className=" flex gap-3 text-2xl">

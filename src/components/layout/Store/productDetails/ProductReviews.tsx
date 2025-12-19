@@ -4,17 +4,20 @@ import { IReview } from "@/types/ShopTypes";
 import { Star, MessageSquarePlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
+import BasicAnimatedWrapper from "@/components/layout/common/BasicAnimatedWrapper";
 import { toast } from "sonner";
 
-interface ShopTextComponentProps {
+interface ProductReviewsProps {
   reviews: IReview[];
-  shopId: string;
+  productId: string;
 }
 
-const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
-  const t = useTranslations("ShopDetails.reviews");
-  const [localReviews, setLocalReviews] = useState<IReview[]>(reviews);
+const ProductReviews = ({ reviews, productId }: ProductReviewsProps) => {
+  const t = useTranslations("ShopDetails.reviews"); // Reusing similar translations or I should use generic ones
+  // For now reusing ShopDetails.reviews as it likely has "title", "noReviews", etc.
+  // Ideally should be "ProductDetails.reviews" but user didn't provide it.
+
+  const [localReviews, setLocalReviews] = useState<IReview[]>(reviews || []);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [rating, setRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -36,7 +39,7 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/shops/${shopId}/reviews`, {
+      const response = await fetch(`/api/products/${productId}/reviews`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,7 +54,8 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
         throw new Error(data.message || "Failed to submit review");
       }
 
-      const newReview: IReview = data.review;
+      // The API returns the new review object directly based on my implementation
+      const newReview: IReview = data.data || data;
 
       // ✅ update local state immediately
       setLocalReviews((prev) => [newReview, ...prev]);
@@ -69,7 +73,7 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
   };
 
   return (
-    <section className="my-2 overflow-hidden">
+    <section className="my-10 w-full">
       <BasicAnimatedWrapper>
         {/* Header */}
         <div className="flex items-center justify-between gap-5 capitalize text-foreground text-lg md:text-xl border-b-2 p-5 border-primary">
@@ -158,9 +162,8 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
             <div className="space-y-6">
               {validReviews.map((review, index) => (
                 <BasicAnimatedWrapper key={index} index={index}>
-                  <div className="border-b border-border pb-6">
-                    <div className="flex justify-between items-center">
-                      <p className="font-medium">{review.review}</p>
+                  <div className="border-b border-border pb-6 px-5">
+                    <div className="flex justify-between items-center mb-2">
                       <div className="flex gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -173,7 +176,9 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
                           />
                         ))}
                       </div>
+                      {/* Can add date or user name here if available */}
                     </div>
+                    <p className="text-foreground">{review.review}</p>
                   </div>
                 </BasicAnimatedWrapper>
               ))}
@@ -189,4 +194,4 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
   );
 };
 
-export default ShopTextComponent;
+export default ProductReviews;

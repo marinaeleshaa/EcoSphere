@@ -8,13 +8,14 @@ import {
   serverError,
   unauthorized,
 } from "@/types/api-helpers";
-import { IRating } from "@/backend/features/restaurant/restaurant.model";
+import { IReview } from "@/types/ShopTypes";
+import { IRestaurant } from "@/backend/features/restaurant/restaurant.model";
 import { getCurrentUser } from "@/backend/utils/authHelper";
 
 export const GET = async (
   req: NextRequest,
   context: { params: Promise<{ id: string }> }
-): Promise<NextResponse<ApiResponse<IRating[]>>> => {
+): Promise<NextResponse<ApiResponse<IReview[]>>> => {
   try {
     const { id } = await context.params;
 
@@ -49,15 +50,15 @@ export const POST = async (
   const controller = rootContainer.resolve(RestaurantController);
   const shop = await controller.getById(id);
 
-  const newRating: IRating = {
+  const newRating: IReview = {
     userId: user.id,
     rate: rating,
     review: review || "",
-  } as IRating;
+  };
 
   await controller.updateById(id, {
     restaurantRating: [...(shop.restaurantRating || []), newRating],
-  });
+  } as unknown as Partial<IRestaurant>);
 
   return ok(newRating);
 };

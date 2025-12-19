@@ -1,6 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import type { IRestaurantService } from "./restaurant.service";
 import { IRestaurant } from "./restaurant.model";
+import { mapResponseToIShop } from "./dto/restaurant.dto";
+import { IShop } from "@/types/ShopTypes";
 
 @injectable()
 class RestaurantController {
@@ -17,8 +19,8 @@ class RestaurantController {
     phoneNumber: string;
     avatar: string;
     description: string;
-  }): Promise<IRestaurant> {
-    return await this.restaurantService.create(
+  }): Promise<IShop> {
+    const restaurant = await this.restaurantService.create(
       body.email,
       body.password,
       body.location,
@@ -28,21 +30,23 @@ class RestaurantController {
       body.avatar,
       body.description
     );
+    return mapResponseToIShop(restaurant);
   }
-  async getAll(): Promise<IRestaurant[]> {
-    return await this.restaurantService.getAll();
+  async getAll(): Promise<IShop[]> {
+    const restaurants = await this.restaurantService.getAll();
+    return restaurants.map(mapResponseToIShop);
   }
-  async getById(id: string): Promise<IRestaurant> {
-    return await this.restaurantService.getById(id);
+  async getById(id: string): Promise<IShop> {
+    const restaurant = await this.restaurantService.getById(id);
+    return mapResponseToIShop(restaurant);
   }
-  async updateById(
-    id: string,
-    data: Partial<IRestaurant>
-  ): Promise<IRestaurant> {
-    return await this.restaurantService.updateById(id, data);
+  async updateById(id: string, data: Partial<IRestaurant>): Promise<IShop> {
+    const restaurant = await this.restaurantService.updateById(id, data);
+    return mapResponseToIShop(restaurant);
   }
-  async deleteById(id: string): Promise<IRestaurant> {
-    return await this.restaurantService.deleteById(id);
+  async deleteById(id: string): Promise<IShop> {
+    const restaurant = await this.restaurantService.deleteById(id);
+    return mapResponseToIShop(restaurant);
   }
 }
 export default RestaurantController;
