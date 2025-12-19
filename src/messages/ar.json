@@ -85,7 +85,7 @@
       "notifications": "الإشعارات",
       "logout": "تسجيل الخروج",
       "logoutSuccess": "تم تسجيل الخروج بنجاح.",
-      "logoutError": "حدث خطأ في تسجيل الخروج."
+      "logoutError": "فعالية خطأ في تسجيل الخروج."
     }
   },
   "About": {
@@ -588,7 +588,7 @@
       "title": "إتمام الدفع",
       "payWithCard": "الدفع بالبطاقة",
       "payWithCash": "الدفع عند الاستلام",
-      "somethingWentWrong": "حدث خطأ ما",
+      "somethingWentWrong": "فعالية خطأ ما",
       "youWillPay": "ستدفع",
       "directlyToCourier": "مباشرة إلى المندوب عند الاستلام.",
       "confirmOrder": "تأكيد الطلب"
@@ -598,7 +598,7 @@
       "securePayment": "دفع آمن",
       "securePaymentDesc": "أكمل عملية الشراء بأمان.",
       "errorTitle": "خطأ",
-      "unexpectedError": "حدث خطأ غير متوقع.",
+      "unexpectedError": "فعالية خطأ غير متوقع.",
       "processing": "جاري المعالجة...",
       "pay": "ادفع {amount}",
       "securedByStripe": "المدفوعات مؤمنة بواسطة Stripe"
@@ -617,7 +617,11 @@
       "tryAgain": "حاول مرة أخرى"
     }
   },
-  "Dashboard": {
+  "Events": {
+    "hero": {
+      "title": "لا تفوت أي فعالية في Ecosphere",
+      "subTitle": "استكشف الفعاليات القادمة عبر منصة Ecosphere، احصل على كل التفاصيل التي تحتاجها، وشارك في تجارب تجمع المجتمع"
+    },
     "overview": {
       "title": "نظرة عامة على لوحة التحكم",
       "quickActions": "إجراءات سريعة",
@@ -627,7 +631,6 @@
       "keyMetrics": "المؤشرات الرئيسية",
       "realTimeData": "البيانات اللحظية",
       "totalTicketSales": "إجمالي مبيعات التذاكر",
-      "fromLastWeek": "من الأسبوع الماضي",
       "totalRevenue": "إجمالي الإيرادات",
       "confirmedAttendees": "الحضور المؤكد",
       "activeEvents": "الفعاليات النشطة",
@@ -636,10 +639,115 @@
       "manage": "إدارة",
       "noUpcomingEvents": "لا توجد فعاليات قادمة."
     },
+    "MainDisplayEvents": {
+      "title": "تصفح الفعاليات",
+      "search": "بحث",
+      "searchPlaceholder": "ابحث عن الفعاليات...",
+      "emptyTitle": "لا توجد فعاليات قادمة",
+      "emptySubtitle": "يرجى التحقق لاحقًا من الفعاليات القادمة"
+    },
+    "WhyEcosphere": {
+      "title": "لماذا حضور الفعاليات على Ecosphere؟",
+      "subtitle": "يساعدك Ecosphere على اكتشاف واستكشاف وحضور الفعاليات بسهولة مع كل ما تحتاجه في مكان واحد.",
+      "card1": {
+        "title": "اكتشاف الفعاليات مركزيًا",
+        "description": "اعثر على جميع الفعاليات القادمة في منصة واحدة موحدة دون البحث في مصادر متعددة."
+      },
+      "card2": {
+        "title": "معلومات مفصلة عن الفعالية",
+        "description": "عرض الجداول والمواقع والمنظمين وكل تفاصيل الفعالية قبل الحضور."
+      },
+      "card3": {
+        "title": "سهولة الحضور والمتابعة",
+        "description": "انضم إلى الفعاليات بسهولة وتتبع الفعاليات التي تخطط لحضورها."
+      }
+    },
     "displayEvents": {
-      "title": "عرض فعاليات لوحة التحكم",
-      "ticketLeft": "التذاكر المتبقية",
-      "sold": "{percent}% تم بيعها"
+      "title": "فعالياتي",
+      "addEventBtn": "إضافة فعالية جديد",
+      "UpComingEvents": "الفعاليات القادمة",
+      "PastEvents": "الفعاليات السابقة",
+      "noEvents": "لا توجد فعاليات",
+      "EventCard": {
+        "organizer": "أنت منظم الفعالية",
+        "status": {
+          "approved": "تمت الموافقة",
+          "pending": "قيد المراجعة...",
+          "rejected": "مرفوض"
+        }
+      },
+      "EventCardDetails": {
+        "viewDetails": "عرض التفاصيل",
+        "title": "تفاصيل الفعالية",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "location": "الموقع",
+        "about": "عن هذا الفعالية",
+        "capacity": "السعة",
+        "attenders": "الحضور",
+        "ticketPrice": "سعر التذكرة",
+        "free": "مجاني",
+        "schedule": "الجدول",
+        "organizer": "أنت منظم الفعالية"
+      },
+      "AddAttendBtn": {
+        "join": "انضم إلى الفعالية",
+        "joined": "تم الانضمام",
+        "success": "تم الانضمام إلى الفعالية بنجاح",
+        "error": "فعالية خطأ ما"
+      },
+      "editBtn": "تعديل الفعالية",
+      "DeleteEventBtn": {
+        "delete": "حذف الفعالية",
+        "success": "تم حذف الفعالية بنجاح",
+        "error": "فعالية خطأ أثناء حذف الفعالية"
+      }
+    },
+    "Manage": {
+      "titleCreate": "إنشاء فعالية",
+      "titleEdit": "تعديل الفعالية",
+      "submitCreate": "إنشاء فعالية",
+      "submitUpdate": "تحديث الفعالية",
+      "submitting": "جاري حفظ الفعالية...",
+      "successCreate": "تم إنشاء الفعالية بنجاح",
+      "successUpdate": "تم تحديث الفعالية بنجاح",
+      "error": "خطأ في حفظ الفعالية",
+      "sections": {
+        "primary": "معلومات الفعالية الأساسية",
+        "venue": "المكان والجدول الزمني",
+        "capacity": "السعة والمبيعات",
+        "schedule": "جدول الفعالية المفصل (بنود جدول الأعمال)",
+        "section": "قسم"
+      },
+      "fields": {
+        "title": "عنوان الفعالية",
+        "titlePlaceholder": "اسم الفعالية",
+        "type": "نوع الفعالية",
+        "typePlaceholder": "اختر نوع الفعالية",
+        "image": "صورة الفعالية",
+        "description": "وصف قصير",
+        "descriptionPlaceholder": "صف فعاليتك...",
+        "location": "الموقع / المكان",
+        "locationPlaceholder": "المدينة، العنوان، أو المكان",
+        "date": "تاريخ الفعالية",
+        "startTime": "وقت البدء",
+        "endTime": "وقت الانتهاء",
+        "ticketsAmount": "عدد التذاكر",
+        "ticketStatus": "حالة التذكرة",
+        "ticketStatusPlaceholder": "اختر حالة التذكرة",
+        "ticketPrice": "سعر التذكرة",
+        "agendaTitle": "العنوان",
+        "agendaTitlePlaceholder": "عنوان بند جدول الأعمال",
+        "agendaDescription": "الوصف",
+        "agendaDescriptionPlaceholder": "التفاصيل..."
+      },
+      "actions": {
+        "addAgenda": "إضافة بند لجدول الأعمال"
+      },
+      "ticketTypes": {
+        "priced": "بمقابل",
+        "free": "مجاني"
+      }
     }
   },
   "Favorites": {
@@ -836,7 +944,7 @@
           "noItem": "يرجى إضافة عنصر واحد على الأقل.",
           "noImage": "يرجى رفع صورة واحدة على الأقل.",
           "submitFailed": "فشل إرسال الطلب. يرجى المحاولة مرة أخرى.",
-          "unexpected": "حدث خطأ غير متوقع."
+          "unexpected": "فعالية خطأ غير متوقع."
         }
       }
     }
@@ -862,7 +970,7 @@
       "addItem": "يرجى إضافة عنصر واحد على الأقل.",
       "uploadImage": "يرجى تحميل صورة واحدة على الأقل.",
       "submissionFailed": "فشل إرسال طلب إعادة التدوير. يرجى المحاولة مرة أخرى.",
-      "unexpected": "حدث خطأ غير متوقع."
+      "unexpected": "فعالية خطأ غير متوقع."
     },
     "success": {
       "title": "تم إرسال طلب إعادة التدوير!",
@@ -1030,58 +1138,6 @@
           "hidden": "مخفي",
           "visible": "ظاهر"
         }
-      }
-    }
-  },
-  "Events": {
-    "Browse": {
-      "title": "تصفح جميع الفعاليات",
-      "searchPlaceholder": "بحث...",
-      "noEvents": "لم يتم العثور على فعاليات قادمة."
-    },
-    "Manage": {
-      "titleCreate": "إنشاء فعالية",
-      "titleEdit": "تعديل الفعالية",
-      "submitCreate": "إنشاء فعالية",
-      "submitUpdate": "تحديث الفعالية",
-      "submitting": "جاري حفظ الفعالية...",
-      "successCreate": "تم إنشاء الفعالية بنجاح",
-      "successUpdate": "تم تحديث الفعالية بنجاح",
-      "error": "خطأ في حفظ الفعالية",
-      "sections": {
-        "primary": "معلومات الفعالية الأساسية",
-        "venue": "المكان والجدول الزمني",
-        "capacity": "السعة والمبيعات",
-        "schedule": "جدول الفعالية المفصل (بنود جدول الأعمال)"
-      },
-      "fields": {
-        "title": "عنوان الفعالية",
-        "titlePlaceholder": "اسم الفعالية",
-        "type": "نوع الفعالية",
-        "typePlaceholder": "اختر نوع الفعالية",
-        "image": "صورة الفعالية",
-        "description": "وصف قصير",
-        "descriptionPlaceholder": "صف فعاليتك...",
-        "location": "الموقع / المكان",
-        "locationPlaceholder": "المدينة، العنوان، أو المكان",
-        "date": "تاريخ الفعالية",
-        "startTime": "وقت البدء",
-        "endTime": "وقت الانتهاء",
-        "ticketsAmount": "عدد التذاكر",
-        "ticketStatus": "حالة التذكرة",
-        "ticketStatusPlaceholder": "اختر حالة التذكرة",
-        "ticketPrice": "سعر التذكرة",
-        "agendaTitle": "العنوان",
-        "agendaTitlePlaceholder": "عنوان بند جدول الأعمال",
-        "agendaDescription": "الوصف",
-        "agendaDescriptionPlaceholder": "التفاصيل..."
-      },
-      "actions": {
-        "addAgenda": "إضافة بند لجدول الأعمال"
-      },
-      "ticketTypes": {
-        "priced": "بمقابل",
-        "free": "مجاني"
       }
     }
   },

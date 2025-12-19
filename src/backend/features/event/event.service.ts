@@ -11,6 +11,7 @@ export interface IEventService {
   deleteEvent: (id: string, eventId: string) => Promise<IEvent>;
   acceptEvent: (eventId: string) => Promise<IEvent>;
   rejectEvent: (eventId: string) => Promise<IEvent>;
+  attendEvent: (id: string, eventId: string) => Promise<IEvent>;
 }
 
 @injectable()
@@ -66,6 +67,10 @@ class EventService {
   async rejectEvent(eventId: string): Promise<IEvent> {
     const id = await this.eventRepository.getUserIdByEventId(eventId);
     return await this.eventRepository.rejectEvent(id._id.toString(), eventId);
+  }
+
+  async attendEvent(id: string, eventId: string): Promise<IEvent> {
+    return await this.eventRepository.attendEvent(id, eventId);
   }
 }
 

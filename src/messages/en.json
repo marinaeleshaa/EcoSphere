@@ -619,7 +619,11 @@
       "tryAgain": "Try Again"
     }
   },
-  "Dashboard": {
+  "Events": {
+    "hero": {
+      "title": "Never Miss an Event in Ecosphere",
+      "subTitle": "Explore upcoming events across the Ecosphere platform, get all the details you need, and take part in experiences that bring the community together"
+    },
     "overview": {
       "title": "Dashboard Overview",
       "quickActions": "Quick Actions",
@@ -629,7 +633,6 @@
       "keyMetrics": "Key Metrics",
       "realTimeData": "Real-time data",
       "totalTicketSales": "Total Ticket Sales",
-      "fromLastWeek": "from last week",
       "totalRevenue": "Total Revenue",
       "confirmedAttendees": "Confirmed Attendees",
       "activeEvents": "Active Events",
@@ -638,10 +641,115 @@
       "manage": "Manage",
       "noUpcomingEvents": "No upcoming events found."
     },
+    "MainDisplayEvents": {
+      "title": "Browse Events",
+      "search": "Search",
+      "searchPlaceholder": "Search events...",
+      "emptyTitle": "No upcoming events found",
+      "emptySubtitle": "Please check back later for upcoming events"
+    },
+    "WhyEcosphere": {
+    "title": "Why Attend Events on Ecosphere?",
+    "subtitle": "Ecosphere helps you discover, explore, and attend events effortlessly with everything you need in one place.",
+    "card1": {
+      "title": "Centralized Event Discovery",
+      "description": "Find all upcoming events in one unified platform without searching multiple sources."
+    },
+    "card2": {
+      "title": "Detailed Event Information",
+      "description": "View schedules, locations, organizers, and all event details before attending."
+    },
+    "card3": {
+      "title": "Easy Attendance & Tracking",
+      "description": "Join events easily and keep track of the events you plan to attend."
+    }
+  },
     "displayEvents": {
-      "title": "Dashboard Display Events",
-      "ticketLeft": "Ticket Left",
-      "sold": "{percent}% Sold"
+      "title": "My Events",
+      "addEventBtn": "Add New Event",
+      "UpComingEvents": "Upcoming Events",
+      "PastEvents": "Past Events",
+      "noEvents": "No events found",
+      "EventCard": {
+        "organizer": "You are the organizer",
+        "status": {
+          "approved": "Approved",
+          "pending": "Pending...",
+          "rejected": "Rejected"
+        }
+      },
+      "EventCardDetails": {
+        "viewDetails": "View Details",
+        "title": "Event Details",
+        "date": "Date",
+        "time": "Time",
+        "location": "Location",
+        "about": "About this event",
+        "capacity": "Capacity",
+        "attenders": "Attenders",
+        "ticketPrice": "Ticket Price",
+        "free": "Free",
+        "schedule": "Schedule",
+        "organizer": "You are the organizer"
+      },
+      "AddAttendBtn": {
+        "join": "Join Event",
+        "joined": "Joined",
+        "success": "You have successfully joined the event",
+        "error": "Something went wrong"
+      },
+      "editBtn": "Edit Event",
+      "DeleteEventBtn": {
+        "delete": "Delete Event",
+        "success": "Event deleted successfully",
+        "error": "Error deleting event"
+      }
+    },
+    "Manage": {
+      "titleCreate": "Create Event",
+      "titleEdit": "Edit Event",
+      "submitCreate": "Create Event",
+      "submitUpdate": "Update Event",
+      "submitting": "Saving Event...",
+      "successCreate": "Event created successfully",
+      "successUpdate": "Event updated successfully",
+      "error": "Error saving event",
+      "sections": {
+        "primary": "Primary Event Information",
+        "venue": "Venue and Schedule",
+        "capacity": "Capacity and Sales",
+        "schedule": "Detailed Event Schedule (Agenda Items)",
+        "section": "section"
+      },
+      "fields": {
+        "title": "Event Title",
+        "titlePlaceholder": "Event Name",
+        "type": "Event Type",
+        "typePlaceholder": "Select event type",
+        "image": "Event Image",
+        "description": "Short Description",
+        "descriptionPlaceholder": "Describe your event...",
+        "location": "Location / Venue",
+        "locationPlaceholder": "City, Address, or Venue",
+        "date": "Event Date",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "ticketsAmount": "Tickets Amount",
+        "ticketStatus": "Ticket Status",
+        "ticketStatusPlaceholder": "Select ticket status",
+        "ticketPrice": "Ticket Price",
+        "agendaTitle": "Title",
+        "agendaTitlePlaceholder": "Agenda section title",
+        "agendaDescription": "Description",
+        "agendaDescriptionPlaceholder": "Details..."
+      },
+      "actions": {
+        "addAgenda": "Add Agenda Section"
+      },
+      "ticketTypes": {
+        "priced": "Priced",
+        "free": "Free"
+      }
     }
   },
   "Favorites": {
@@ -1034,58 +1142,7 @@
       }
     }
   },
-  "Events": {
-    "Browse": {
-      "title": "Browse All Events",
-      "searchPlaceholder": "Search...",
-      "noEvents": "No upcoming events found."
-    },
-    "Manage": {
-      "titleCreate": "Create Event",
-      "titleEdit": "Edit Event",
-      "submitCreate": "Create Event",
-      "submitUpdate": "Update Event",
-      "submitting": "Saving Event...",
-      "successCreate": "Event created successfully",
-      "successUpdate": "Event updated successfully",
-      "error": "Error saving event",
-      "sections": {
-        "primary": "Primary Event Information",
-        "venue": "Venue and Schedule",
-        "capacity": "Capacity and Sales",
-        "schedule": "Detailed Event Schedule (Agenda Items)"
-      },
-      "fields": {
-        "title": "Event Title",
-        "titlePlaceholder": "Event Name",
-        "type": "Event Type",
-        "typePlaceholder": "Select event type",
-        "image": "Event Image",
-        "description": "Short Description",
-        "descriptionPlaceholder": "Describe your event...",
-        "location": "Location / Venue",
-        "locationPlaceholder": "City, Address, or Venue",
-        "date": "Event Date",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "ticketsAmount": "Tickets Amount",
-        "ticketStatus": "Ticket Status",
-        "ticketStatusPlaceholder": "Select ticket status",
-        "ticketPrice": "Ticket Price",
-        "agendaTitle": "Title",
-        "agendaTitlePlaceholder": "Agenda section title",
-        "agendaDescription": "Description",
-        "agendaDescriptionPlaceholder": "Details..."
-      },
-      "actions": {
-        "addAgenda": "Add Agenda Section"
-      },
-      "ticketTypes": {
-        "priced": "Priced",
-        "free": "Free"
-      }
-    }
-  },
+
   "Metrics": {
     "title": "Our Impact",
     "subtitle": "Key Metrics",

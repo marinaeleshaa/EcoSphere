@@ -1,34 +1,40 @@
 import { IEventDetails } from "@/types/EventTypes";
 
-export const formatTime = (time: string): string => {
+export const formatTime = (
+  time: string,
+  locale: string
+): string => {
   try {
-    // Assuming time is in "HH:MM" format (24-hour)
-    const [hours, minutes] = time.split(":");
-    const date = new Date(0, 0, 0, +hours, +minutes);
-    return date.toLocaleTimeString("en-US", {
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+
+    return new Intl.DateTimeFormat(locale, {
       hour: "numeric",
       minute: "2-digit",
-      hour12: true,
-    });
+    }).format(date);
   } catch (e) {
     console.error(e);
-    return time; 
+    return time;
   }
 };
-// Function to format the date
-export const formatDate = (dateString: string): string => {
+
+export const formatDate = (
+  dateString: string,
+  locale: string
+): string => {
   try {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Intl.DateTimeFormat(locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
+    }).format(new Date(dateString));
   } catch (e) {
     console.error(e);
     return dateString;
   }
 };
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function serializeEvent(event: any): IEventDetails {

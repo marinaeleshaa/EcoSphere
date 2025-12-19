@@ -30,3 +30,25 @@ export const GET = async (
     return serverError("Something went wrong");
   }
 };
+
+export const PATCH = async (
+  req: NextRequest,
+  context: {
+    params: Promise<{ eventId: string }>;
+  }
+): Promise<NextResponse<ApiResponse<string>>> => {
+  try {
+    const { eventId } = await context.params;
+    const user = await getCurrentUser();
+    if (!user?.id) {
+      return unauthorized();
+    }
+    await rootContainer
+      .resolve(EventController)
+      .attendEvent(user.id, eventId);
+    return ok("Event updated successfully");
+  } catch (error) {
+    console.error(error);
+    return serverError("Something went wrong");
+  }
+};

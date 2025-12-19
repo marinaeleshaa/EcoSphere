@@ -53,6 +53,11 @@ class EventController {
     const response = await this.eventService.rejectEvent(eventId);
     return mapEventToEventData(response);
   }
+
+  async attendEvent(id: string, eventId: string): Promise<EventResponse> {
+    const response = await this.eventService.attendEvent(id,eventId);
+    return mapEventToEventData(response);
+  }
 }
 
 export default EventController;

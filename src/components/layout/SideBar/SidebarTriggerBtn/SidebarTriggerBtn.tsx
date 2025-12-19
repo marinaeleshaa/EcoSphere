@@ -8,9 +8,9 @@ export default function SidebarTriggerBtn() {
   const locale = useLocale();
   return isMobile ? (
     <SidebarTrigger
-      className={`absolute ${open ? "hidden" : "absolute"}  top-4 ${
+      className={`sticky ${open ? "hidden" : "sticky"}  top-4 ${
         locale === "ar" ? "right-4" : "left-4"
-      } size-5`}
+      } z-50 size-8`}
     />
   ) : (
     <SidebarTrigger className="hidden" />

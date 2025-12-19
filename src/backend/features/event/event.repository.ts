@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { IEvent, IUser, UserModel } from "../user/user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 export interface IEventRepository {
   getEvents(): Promise<IEvent[]>;
@@ -13,6 +13,7 @@ export interface IEventRepository {
   acceptEvent(id: string, eventId: string): Promise<IEvent>;
   rejectEvent(id: string, eventId: string): Promise<IEvent>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
+  attendEvent(id: string, eventId: string): Promise<IEvent>;
 }
 
 @injectable()
@@ -223,6 +224,40 @@ class EventRepository {
     ).exec();
 
     return updatedEvent;
+  }
+
+  async attendEvent(userId: string, eventId: string): Promise<IEvent> {
+    await DBInstance.getConnection();
+
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { "events._id": eventId },
+      {
+        $addToSet: {
+          "events.$.attenders": new Types.ObjectId(userId),
+        },
+        $set: {
+          "events.$.updatedAt": new Date(),
+        },
+      },
+      {
+        new: true,
+        projection: { events: 1 },
+      }
+    ).lean<IUser>();
+
+    if (!updatedUser?.events) {
+      throw new Error(`Event with ID ${eventId} not found.`);
+    }
+
+    const updatedEvent = updatedUser.events.find(
+      (e) => e._id.toString() === eventId
+    );
+
+    if (!updatedEvent) {
+      throw new Error(`Event with ID ${eventId} not found.`);
+    }
+
+    return updatedEvent as IEvent;
   }
 }
 

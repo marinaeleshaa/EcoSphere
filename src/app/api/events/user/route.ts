@@ -13,9 +13,42 @@ import {
   unauthorized,
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
-// import { ImageService } from "@/backend/services/image.service";
+import { UploadController } from "@/backend/features/upload/upload.controller";
 
-// const imageService = rootContainer.resolve(ImageService);
+async function parseEventFormData(formData: FormData) {
+  const body: any = {};
+  formData.forEach((value, key) => {
+    if (key === "sections") {
+      try {
+        body[key] = JSON.parse(value as string);
+      } catch (e) {
+        console.error("Error parsing sections:", e);
+      }
+    } else if (key === "avatar") {
+      // Handled separately
+    } else if (key === "capacity" || key === "ticketPrice") {
+      body[key] = Number(value);
+    } else {
+      body[key] = value;
+    }
+  });
+
+  const avatarFile = formData.get("avatar") as File | null;
+  if (avatarFile && avatarFile instanceof File) {
+    const uploadController = rootContainer.resolve(UploadController);
+    const uploadResult = await uploadController.uploadGeneric(avatarFile);
+    body.avatar = {
+      key: uploadResult.key,
+      url: uploadResult.url,
+    };
+  } else {
+    const avatarKey = formData.get("avatarKey") as string | null;
+    if (avatarKey) {
+      body.avatar = { key: avatarKey };
+    }
+  }
+  return body;
+}
 
 export const GET = async (): Promise<
   NextResponse<ApiResponse<EventResponse[]>>
@@ -39,11 +72,21 @@ export const POST = organizerOnly(
     req: NextRequest
   ): Promise<NextResponse<ApiResponse<EventResponse>>> => {
     try {
-      const body = await req.json();
       const user = await getCurrentUser();
       if (!user?.id) {
         return unauthorized();
       }
+
+      const contentType = req.headers.get("content-type") || "";
+      let body;
+
+      if (contentType.includes("multipart/form-data")) {
+        const formData = await req.formData();
+        body = await parseEventFormData(formData);
+      } else {
+        body = await req.json();
+      }
+
       return ok(
         await rootContainer.resolve(EventController).createEvent(user.id, body)
       );
@@ -59,11 +102,21 @@ export const PUT = organizerOnly(
     req: NextRequest
   ): Promise<NextResponse<ApiResponse<EventResponse>>> => {
     try {
-      const body = await req.json();
       const user = await getCurrentUser();
       if (!user?.id) {
         return unauthorized();
       }
+
+      const contentType = req.headers.get("content-type") || "";
+      let body;
+
+      if (contentType.includes("multipart/form-data")) {
+        const formData = await req.formData();
+        body = await parseEventFormData(formData);
+      } else {
+        body = await req.json();
+      }
+
       return ok(
         await rootContainer.resolve(EventController).updateEvent(user.id, body)
       );
@@ -103,14 +156,10 @@ export const PATCH = adminOnly(
       }
       let response;
       if (action === "accept") {
-        await rootContainer
-          .resolve(EventController)
-          .acceptEvent(eventId);
+        await rootContainer.resolve(EventController).acceptEvent(eventId);
         response = "Event accepted successfully";
       } else if (action === "reject") {
-        await rootContainer
-          .resolve(EventController)
-          .rejectEvent(eventId);
+        await rootContainer.resolve(EventController).rejectEvent(eventId);
         response = "Event rejected successfully";
       }
       return ok(response);

@@ -44,26 +44,30 @@ import z from "zod";
 import { useTranslations } from "next-intl";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ManageEvent({
-  initialData,
-}: Readonly<{ initialData?: any }>) {
+export default function ManageEvent({initialData,}: Readonly<{ initialData?: any }>) {
   const t = useTranslations("Events.Manage");
   const router = useRouter();
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
-    defaultValues: initialData ?? {
-      name: "",
-      type: "",
-      avatar: undefined,
-      description: "",
-      locate: "",
-      eventDate: "",
-      startTime: "",
-      endTime: "",
-      capacity: 0,
-      ticketPrice: 0,
-      sections: [],
-    },
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          ticketType: initialData.ticketPrice === 0 ? "Free" : "Priced",
+        }
+      : {
+          name: "",
+          type: "",
+          avatar: undefined,
+          description: "",
+          locate: "",
+          eventDate: "",
+          startTime: "",
+          endTime: "",
+          capacity: 0,
+          ticketPrice: 0,
+          ticketType: "Free",
+          sections: [],
+        },
   });
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -94,16 +98,6 @@ export default function ManageEvent({
       form.setValue("ticketType", "Priced");
     }
   }, [ticketPrice, form]);
-  useEffect(() => {
-    if (!initialData) return;
-
-    const derivedTicketType = initialData.ticketPrice === 0 ? "Free" : "Priced";
-
-    form.reset({
-      ...initialData,
-      ticketType: derivedTicketType,
-    });
-  }, [initialData, form]);
 
   // --- 5. Submission Handler ---
   async function onSubmit(data: z.infer<typeof eventSchema>) {
@@ -137,7 +131,7 @@ export default function ManageEvent({
   }
 
   return (
-    <div className="min-h-screen py-8 w-[85%] mx-auto flex flex-col  gap-6">
+    <div className="min-h-screen py-8 w-[80%] mx-auto flex flex-col  gap-6">
       <h1 className="capitalize text-center  font-bold text-4xl  text-foreground">
         {initialData ? t("titleEdit") : t("titleCreate")}
       </h1>
@@ -151,7 +145,7 @@ export default function ManageEvent({
             {/* --- SECTION 1: Event Details --- */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold  border-b pb-2 flex items-center">
-                <Ticket className="w-5 h-5 mr-2 text-primary" />
+                <Ticket className="w-5 h-5 m-2 text-primary" />
                 {t("sections.primary")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-6 gap-3">
@@ -164,10 +158,10 @@ export default function ManageEvent({
                       <FormLabel>{t("fields.title")}</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Ticket className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <Ticket className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             placeholder={t("fields.titlePlaceholder")}
-                            className="pl-9"
+                            className="pl-9 rtl:pr-9 cursor-pointer"
                             {...field}
                           />
                         </div>
@@ -189,8 +183,8 @@ export default function ManageEvent({
                       >
                         <FormControl>
                           <div className="relative">
-                            <SelectTrigger className="pl-9 w-full cursor-pointer">
-                              <Tag className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground z-10" />
+                            <SelectTrigger className="pl-9 rtl:pr-9 rtl:flex-row-reverse w-full cursor-pointer">
+                              <Tag className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground z-10" />
                               <SelectValue
                                 placeholder={t("fields.typePlaceholder")}
                               />
@@ -233,7 +227,7 @@ export default function ManageEvent({
                     <FormLabel>{t("fields.image")}</FormLabel>
                     <FormControl>
                       <Input
-                        className="cursor-pointer"
+                        className="cursor-pointer rtl:text-right"
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
@@ -270,7 +264,7 @@ export default function ManageEvent({
             {/* --- SECTION 2: Location & Time --- */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold  border-b pb-2 flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-primary" />
+                <MapPin className="w-5 h-5 m-2 text-primary" />
                 {t("sections.venue")}
               </h2>
               <FormField
@@ -281,10 +275,10 @@ export default function ManageEvent({
                     <FormLabel>{t("fields.location")}</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <MapPin className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                           placeholder={t("fields.locationPlaceholder")}
-                          className="pl-9 cursor-pointer"
+                          className="pl-9 rtl:pr-9 cursor-pointer"
                           {...field}
                         />
                       </div>
@@ -302,11 +296,11 @@ export default function ManageEvent({
                     <FormItem>
                       <FormLabel>{t("fields.date")}</FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Calendar className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <div className="relative ">
+                          <Calendar className="absolute left-3  top-2.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="date"
-                            className="pl-9 cursor-pointer"
+                            className="pl-9  cursor-pointer"
                             {...field}
                           />
                         </div>
@@ -363,7 +357,7 @@ export default function ManageEvent({
             {/* --- SECTION 3: Capacity & Sales --- */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold  border-b pb-2 flex items-center">
-                <Users className="w-5 h-5 mr-2 text-primary" />
+                <Users className="w-5 h-5 m-2 text-primary" />
                 {t("sections.capacity")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -375,12 +369,12 @@ export default function ManageEvent({
                     <FormItem>
                       <FormLabel>{t("fields.ticketsAmount")}</FormLabel>
                       <FormControl>
-                        <div className="relative">
-                          <Ticket className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <div className="relative rtl:flex-col-reverse">
+                          <Ticket className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="number"
                             min={0}
-                            className="pl-9 cursor-pointer"
+                            className="ltr:pl-9 rtl:pr-9 cursor-pointer"
                             {...field}
                           />
                         </div>
@@ -398,11 +392,11 @@ export default function ManageEvent({
                       <FormLabel>{t("fields.ticketStatus")}</FormLabel>
 
                       <Select
-                        value={field.value} // ✅ controlled
+                        value={field.value}
                         onValueChange={field.onChange}
                       >
                         <FormControl>
-                          <SelectTrigger className="cursor-pointer w-full">
+                          <SelectTrigger className="cursor-pointer rtl:flex-row-reverse w-full">
                             <SelectValue
                               placeholder={t("fields.ticketStatusPlaceholder")}
                             />
@@ -410,10 +404,16 @@ export default function ManageEvent({
                         </FormControl>
 
                         <SelectContent>
-                          <SelectItem value="Priced">
+                          <SelectItem
+                            value="Priced"
+                            className="rtl:flex-row-reverse"
+                          >
                             {t("ticketTypes.priced")}
                           </SelectItem>
-                          <SelectItem value="Free">
+                          <SelectItem
+                            value="Free"
+                            className="rtl:flex-row-reverse"
+                          >
                             {t("ticketTypes.free")}
                           </SelectItem>
                         </SelectContent>
@@ -432,11 +432,11 @@ export default function ManageEvent({
                       <FormLabel>{t("fields.ticketPrice")}</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <DollarSign className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="number"
                             min={0}
-                            className="pl-9 cursor-pointer"
+                            className="ltr:pl-9 rtl:pr-9 cursor-pointer"
                             disabled={ticketType === "Free"}
                             {...field}
                           />
@@ -451,7 +451,7 @@ export default function ManageEvent({
             {/* --- SECTION 4: Detailed Agenda/Schedule --- */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold  border-b pb-2 flex items-center">
-                <ListOrdered className="w-5 h-5 mr-2 text-primary" />
+                <ListOrdered className="w-5 h-5 m-2 text-primary" />
                 {t("sections.schedule")}
               </h2>
               {fields.map((field, index) => (
@@ -460,8 +460,8 @@ export default function ManageEvent({
                   className="p-4 border border-gray-200 rounded-lg shadow-sm space-y-4 relative"
                 >
                   <div className="flex justify-between items-start">
-                    <h3 className="text-lg font-medium text-accent-foreground">
-                      Section #{index + 1}
+                    <h3 className="text-lg font-medium text-accent-foreground capitalize">
+                      {t("sections.section")} #{index + 1}
                     </h3>
                     <Button
                       type="button"
@@ -521,7 +521,7 @@ export default function ManageEvent({
                             <Input
                               type="time"
                               {...field}
-                              className="cursor-pointer"
+                              className="cursor-pointer rtl:flex-row-reverse"
                             />
                           </FormControl>
                           <FormMessage />

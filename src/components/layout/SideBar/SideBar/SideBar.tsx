@@ -177,7 +177,7 @@ export default function SideBar() {
       side={locale === "ar" ? "right" : "left"}
       collapsible="icon"
       variant="floating"
-      className="bg-background "
+      className="bg-background min-h-screen"
     >
       <SidebarHeader>
         <SidebarTrigger />

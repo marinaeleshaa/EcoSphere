@@ -5,19 +5,41 @@ import { ApiResponse, unauthorized } from "@/types/api-helpers";
 import { NextResponse } from "next/server";
 
 // Protected: must be signed in
-export const PROTECTED_ROUTES = ["/dashboard", "/profile", "/settings"];
+export const PROTECTED_ROUTES = [
+  "/dashboard",
+  "/profile",
+  "/settings",
+  "/admin",
+  "/organizer",
+  "/restaurant",
+  "/recycleDash",
+];
 
 // Role-based rules (optional, but scalable)
 export const ROLE_ROUTES: Record<string, string[]> = {
   "/admin": ["admin"],
   "/organizer": ["organizer"],
-  "/vendor": ["vendor"],
+  "/restaurant": ["shop", "restaurant"],
+  "/recycleDash": ["recycleMan"],
+  "/shop": ["customer"],
+  "/store": ["customer"],
+  "/game": ["customer"],
+  "/cart": ["customer"],
+  "/fav": ["customer"],
+  "/checkout": ["customer"],
+  "/recipes": ["customer"],
 };
 
 type ApiHandler<T extends unknown[], R> = (...args: T) => Promise<R> | R;
 
 async function checkRole(
-  role: "admin" | "organizer" | "vendor" | "customer"
+  role:
+    | "admin"
+    | "organizer"
+    | "shop"
+    | "customer"
+    | "recycleMan"
+    | "restaurant"
 ): Promise<NextResponse<ApiResponse<string>> | null> {
   const user = await getCurrentUser();
 
@@ -29,7 +51,15 @@ async function checkRole(
   return null;
 }
 
-const createGuard = (role: "admin" | "organizer" | "vendor" | "customer") => {
+const createGuard = (
+  role:
+    | "admin"
+    | "organizer"
+    | "shop"
+    | "customer"
+    | "recycleMan"
+    | "restaurant"
+) => {
   return <T extends unknown[], R>(handler: ApiHandler<T, R>) => {
     return async (
       ...args: T
@@ -41,8 +71,8 @@ const createGuard = (role: "admin" | "organizer" | "vendor" | "customer") => {
   };
 };
 
-
 export const adminOnly = createGuard("admin");
 export const organizerOnly = createGuard("organizer");
-export const vendorOnly = createGuard("vendor");
+export const shopOnly = createGuard("shop");
+export const recycleManOnly = createGuard("recycleMan");
 export const userOnly = createGuard("customer");

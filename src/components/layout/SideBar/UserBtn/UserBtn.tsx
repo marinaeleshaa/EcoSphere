@@ -1,5 +1,5 @@
 "use client";
-import { BadgeCheck, ChevronsUpDown, LogOut } from "lucide-react";
+import { BadgeCheck, ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -83,15 +83,17 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
             </div>
           </DropdownMenuLabel>
 
-          {/*<DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <Link href="/subscription">
-              <DropdownMenuItem>
-                <Sparkles />
-                {t('subscribe')}
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuGroup>*/}
+          {/*<DropdownMenuSeparator />*/}
+          {session?.user?.role === "shop" && (
+            <DropdownMenuGroup>
+              <Link href="/subscription">
+                <DropdownMenuItem>
+                  <Sparkles />
+                  {t("subscribe")}
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href="/profile">

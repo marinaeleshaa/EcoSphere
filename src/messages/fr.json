@@ -618,7 +618,11 @@
       "tryAgain": "Réessayer"
     }
   },
-  "Dashboard": {
+  "Events": {
+    "hero": {
+      "title": "Ne manquez jamais un événement sur Ecosphere",
+      "subTitle": "Découvrez les événements à venir sur la plateforme Ecosphere, obtenez tous les détails dont vous avez besoin et participez à des expériences qui rassemblent la communauté"
+    },
     "overview": {
       "title": "Aperçu du tableau de bord",
       "quickActions": "Actions rapides",
@@ -628,7 +632,6 @@
       "keyMetrics": "Indicateurs clés",
       "realTimeData": "Données en temps réel",
       "totalTicketSales": "Total des ventes de billets",
-      "fromLastWeek": "depuis la semaine dernière",
       "totalRevenue": "Revenu total",
       "confirmedAttendees": "Participants confirmés",
       "activeEvents": "Événements actifs",
@@ -637,10 +640,115 @@
       "manage": "Gérer",
       "noUpcomingEvents": "Aucun événement à venir."
     },
+    "MainDisplayEvents": {
+      "title": "Parcourir les événements",
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher des événements...",
+      "emptyTitle": "Aucun événement à venir",
+      "emptySubtitle": "Veuillez revenir plus tard pour les prochains événements"
+    },
+    "WhyEcosphere": {
+      "title": "Pourquoi assister aux événements sur Ecosphere ?",
+      "subtitle": "Ecosphere vous aide à découvrir, explorer et assister aux événements facilement avec tout ce dont vous avez besoin au même endroit.",
+      "card1": {
+        "title": "Découverte centralisée des événements",
+        "description": "Trouvez tous les événements à venir sur une plateforme unifiée sans chercher dans plusieurs sources."
+      },
+      "card2": {
+        "title": "Informations détaillées sur l'événement",
+        "description": "Consultez les horaires, lieux, organisateurs et tous les détails de l'événement avant d'y assister."
+      },
+      "card3": {
+        "title": "Participation et suivi faciles",
+        "description": "Participez facilement aux événements et suivez ceux auxquels vous prévoyez d'assister."
+      }
+    },
     "displayEvents": {
-      "title": "Affichage des événements du tableau de bord",
-      "ticketLeft": "Billets restants",
-      "sold": "{percent}% vendu"
+      "title": "Mes événements",
+      "addEventBtn": "Ajouter un événement",
+      "UpComingEvents": "Événements à venir",
+      "PastEvents": "Événements passés",
+      "noEvents": "Aucun événement trouvé",
+      "EventCard": {
+        "organizer": "Vous êtes l'organisateur",
+        "status": {
+          "approved": "Approuvé",
+          "pending": "En attente...",
+          "rejected": "Refusé"
+        }
+      },
+      "EventCardDetails": {
+        "viewDetails": "Voir les détails",
+        "title": "Détails de l’événement",
+        "date": "Date",
+        "time": "Heure",
+        "location": "Lieu",
+        "about": "À propos de cet événement",
+        "capacity": "Capacité",
+        "attenders": "Participants",
+        "ticketPrice": "Prix du billet",
+        "free": "Gratuit",
+        "schedule": "Programme",
+        "organizer": "Vous êtes l’organisateur"
+      },
+      "AddAttendBtn": {
+        "join": "Participer à l’événement",
+        "joined": "Déjà inscrit",
+        "success": "Vous avez rejoint l’événement avec succès",
+        "error": "Une erreur s’est produite"
+      },
+      "editBtn": "Modifier l’événement",
+      "DeleteEventBtn": {
+        "delete": "Supprimer l’événement",
+        "success": "Événement supprimé avec succès",
+        "error": "Erreur lors de la suppression de l’événement"
+      }
+    },
+    "Manage": {
+      "titleCreate": "Créer un Événement",
+      "titleEdit": "Modifier l'Événement",
+      "submitCreate": "Créer l'Événement",
+      "submitUpdate": "Mettre à jour l'Événement",
+      "submitting": "Enregistrement de l'événement...",
+      "successCreate": "Événement créé avec succès",
+      "successUpdate": "Événement mis à jour avec succès",
+      "error": "Erreur lors de l'enregistrement de l'événement",
+      "sections": {
+        "primary": "Informations Principales de l'Événement",
+        "venue": "Lieu et Horaire",
+        "capacity": "Capacité et Ventes",
+        "schedule": "Programme Détaillé de l'Événement",
+        "section": "la section"
+      },
+      "fields": {
+        "title": "Titre de l'Événement",
+        "titlePlaceholder": "Nom de l'Événement",
+        "type": "Type d'Événement",
+        "typePlaceholder": "Sélectionner le type d'événement",
+        "image": "Image de l'Événement",
+        "description": "Brève Description",
+        "descriptionPlaceholder": "Décrivez votre événement...",
+        "location": "Lieu / Salle",
+        "locationPlaceholder": "Ville, Adresse ou Lieu",
+        "date": "Date de l'Événement",
+        "startTime": "Heure de Début",
+        "endTime": "Heure de Fin",
+        "ticketsAmount": "Nombre de Billets",
+        "ticketStatus": "Statut du Billet",
+        "ticketStatusPlaceholder": "Sélectionner le statut du billet",
+        "ticketPrice": "Prix du Billet",
+        "agendaTitle": "Titre",
+        "agendaTitlePlaceholder": "Titre de la section",
+        "agendaDescription": "Description",
+        "agendaDescriptionPlaceholder": "Détails..."
+      },
+      "actions": {
+        "addAgenda": "Ajouter une Section"
+      },
+      "ticketTypes": {
+        "priced": "Payant",
+        "free": "Gratuit"
+      }
     }
   },
   "Favorites": {
@@ -1026,58 +1134,6 @@
           "hidden": "Masqué",
           "visible": "Visible"
         }
-      }
-    }
-  },
-  "Events": {
-    "Browse": {
-      "title": "Parcourir tous les événements",
-      "searchPlaceholder": "Rechercher...",
-      "noEvents": "Aucun événement à venir trouvé."
-    },
-    "Manage": {
-      "titleCreate": "Créer un Événement",
-      "titleEdit": "Modifier l'Événement",
-      "submitCreate": "Créer l'Événement",
-      "submitUpdate": "Mettre à jour l'Événement",
-      "submitting": "Enregistrement de l'événement...",
-      "successCreate": "Événement créé avec succès",
-      "successUpdate": "Événement mis à jour avec succès",
-      "error": "Erreur lors de l'enregistrement de l'événement",
-      "sections": {
-        "primary": "Informations Principales de l'Événement",
-        "venue": "Lieu et Horaire",
-        "capacity": "Capacité et Ventes",
-        "schedule": "Programme Détaillé de l'Événement"
-      },
-      "fields": {
-        "title": "Titre de l'Événement",
-        "titlePlaceholder": "Nom de l'Événement",
-        "type": "Type d'Événement",
-        "typePlaceholder": "Sélectionner le type d'événement",
-        "image": "Image de l'Événement",
-        "description": "Brève Description",
-        "descriptionPlaceholder": "Décrivez votre événement...",
-        "location": "Lieu / Salle",
-        "locationPlaceholder": "Ville, Adresse ou Lieu",
-        "date": "Date de l'Événement",
-        "startTime": "Heure de Début",
-        "endTime": "Heure de Fin",
-        "ticketsAmount": "Nombre de Billets",
-        "ticketStatus": "Statut du Billet",
-        "ticketStatusPlaceholder": "Sélectionner le statut du billet",
-        "ticketPrice": "Prix du Billet",
-        "agendaTitle": "Titre",
-        "agendaTitlePlaceholder": "Titre de la section",
-        "agendaDescription": "Description",
-        "agendaDescriptionPlaceholder": "Détails..."
-      },
-      "actions": {
-        "addAgenda": "Ajouter une Section"
-      },
-      "ticketTypes": {
-        "priced": "Payant",
-        "free": "Gratuit"
       }
     }
   },
