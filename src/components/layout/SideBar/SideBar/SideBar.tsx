@@ -105,11 +105,6 @@ export default function SideBar() {
       url: "/about",
       icon: Info,
     },
-    {
-      title: t("menu.recipes"),
-      url: "/recipes",
-      icon: Salad,
-    },
   ];
   // Event dashboard items.
   const OrganizerItems = [
@@ -183,10 +178,10 @@ export default function SideBar() {
         <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent>
-        {(session?.user.role === "customer" || session === null) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>{t("groups.application")}</SidebarGroupLabel>
-            <SidebarGroupContent>
+        <SidebarGroup>
+          <SidebarGroupLabel>{t("groups.application")}</SidebarGroupLabel>
+          <SidebarGroupContent>
+            {(session?.user.role === "customer" || session === null) && (
               <SidebarMenu>
                 {useritems.map((item) => (
                   <SidebarMenuItem key={item.title}>
@@ -202,10 +197,26 @@ export default function SideBar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
+                {session?.user.role === "customer" && (
+
+                  <SidebarMenuItem >
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={t("menu.recipes")}
+                      isActive={matchPathWithOptionalLocale(pathname, "/recipes")}
+                    >
+                      <Link href="/recipes">
+                        <Salad />
+                        <span className="capitalize">{t("menu.recipes")}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+
+                )}
               </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
+            )}
+          </SidebarGroupContent>
+        </SidebarGroup>
         {session?.user.role == "organizer" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
