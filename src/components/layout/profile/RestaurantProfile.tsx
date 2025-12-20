@@ -55,7 +55,7 @@ export default function RestaurantProfile({
       }
     };
     fetchUser();
-  }, [id]);
+  }, [id, role]);
 
   if (loading)
     return <div className="p-6 text-center">{t("states.loading")}</div>;
@@ -151,7 +151,7 @@ export default function RestaurantProfile({
 
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
-          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-[350px]">
+          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-87.5">
             <div className="flex items-center gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
@@ -364,7 +364,7 @@ export default function RestaurantProfile({
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={formData.name || user.name}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
@@ -376,7 +376,7 @@ export default function RestaurantProfile({
                 <input
                   type="text"
                   name="phoneNumber"
-                  value={formData.phoneNumber}
+                  value={formData.phoneNumber || user.phoneNumber}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
@@ -388,7 +388,7 @@ export default function RestaurantProfile({
                 <input
                   type="text"
                   name="location"
-                  value={formData.location}
+                  value={formData.location || user.location}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
@@ -400,7 +400,7 @@ export default function RestaurantProfile({
                 <input
                   type="text"
                   name="workingHours"
-                  value={formData.workingHours}
+                  value={formData.workingHours || user.workingHours}
                   onChange={handleInputChange}
                   placeholder="e.g., 9 AM - 10 PM"
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -412,7 +412,7 @@ export default function RestaurantProfile({
                 </label>
                 <textarea
                   name="description"
-                  value={formData.description}
+                  value={formData.description || user.description}
                   onChange={handleInputChange}
                   rows={3}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"

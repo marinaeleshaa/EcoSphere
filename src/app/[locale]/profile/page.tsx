@@ -22,7 +22,6 @@ export default function ProfilePage() {
     return <div>{t("loading")}</div>;
   }
 
-  console.log(session);
   return (
     status === "authenticated" && (
       <div className=" bg-background py-8">

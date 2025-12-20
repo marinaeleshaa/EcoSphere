@@ -49,7 +49,11 @@ export default function OrganizerProfile({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const userData = await getUserData<User>(id, role);
+        const userData = await getUserData<User>(
+          id,
+          role,
+          "firstName lastName email phoneNumber address birthDate gender points avatar role subscriptionPeriod"
+        );
         setUser(userData);
       } catch (error) {
         console.error("Failed to fetch user", error);
@@ -58,7 +62,7 @@ export default function OrganizerProfile({
       }
     };
     fetchUser();
-  }, [id]);
+  }, [id, role]);
 
   if (loading)
     return <div className="p-6 text-center">{t("states.loading")}</div>;
@@ -167,7 +171,7 @@ export default function OrganizerProfile({
 
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
-          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-[350px]">
+          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-87.5">
             <div className="flex items-center gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
@@ -251,7 +255,8 @@ export default function OrganizerProfile({
                     {t("organizer.expiryDate")}
                   </p>
                   <p className="font-medium text-card-foreground">
-                    {user.subscriptionPeriod || t("common.na")}
+                    {new Date(user.subscriptionPeriod).toDateString() ||
+                      t("common.na")}
                   </p>
                 </div>
                 <button
