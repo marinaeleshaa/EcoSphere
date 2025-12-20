@@ -540,7 +540,30 @@
       "hotline": "Hotline",
       "editModalTitle": "Modifier le profil du magasin",
       "restaurantInformation": "Informations sur le restaurant",
-      "noDescription": "Aucune description disponible."
+      "noDescription": "Aucune description disponible.",
+      "orders": {
+        "title": "Gestion des Commandes",
+        "totalOrders": "Total des Commandes",
+        "orderId": "ID de Commande",
+        "customer": "Client",
+        "date": "Date",
+        "total": "Total",
+        "status": "Statut",
+        "actions": "Actions",
+        "noOrders": "Aucune commande trouvée.",
+        "fetchError": "Échec de la récupération des commandes.",
+        "statusUpdated": "Statut mis à jour avec succès.",
+        "updateError": "Échec de la mise à jour du statut.",
+        "changeStatus": "Changer le Statut",
+        "statuses": {
+          "pending": "En attente",
+          "paid": "Payé",
+          "preparing": "En préparation",
+          "delivering": "En cours de livraison",
+          "completed": "Terminé",
+          "canceled": "Annulé"
+        }
+      }
     }
   },
   "Cart": {

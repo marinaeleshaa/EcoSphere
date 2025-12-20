@@ -27,7 +27,7 @@ import { Loader2 } from "lucide-react";
 export default function RestaurantOrdersClient() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = useTranslations("Restaurant.orders");
+  const t = useTranslations("Profile.restaurant.orders");
 
   const fetchOrders = async () => {
     try {
