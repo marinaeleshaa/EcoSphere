@@ -27,12 +27,13 @@ export interface IRestaurantService {
 }
 
 @injectable()
-class RestaurantService {
+class RestaurantService implements IRestaurantService {
   constructor(
     @inject("IRestaurantRepository")
     private readonly restaurantRepository: IRestaurantRepository,
     @inject("ImageService") private readonly imageService: ImageService
   ) {}
+
   async create(
     email: string,
     password: string,
@@ -53,8 +54,8 @@ class RestaurantService {
       avatar,
       description
     );
-    const data = await this.populateAvatar([restaurant]);
-    return data[0];
+    // Directly use populateSingle for a single object
+    return this.populateSingle(restaurant);
   }
 
   async getAll(
@@ -62,6 +63,7 @@ class RestaurantService {
   ): Promise<PaginatedRestaurantResponse | IRestaurant[]> {
     const result = await this.restaurantRepository.getAll(options);
 
+    // Handle the Union Type logic: check if it's a raw array or paginated object
     if (Array.isArray(result)) {
       return this.populateAvatar(result);
     }
@@ -74,13 +76,16 @@ class RestaurantService {
 
   async getById(id: string): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.getById(id);
-    const data = await this.populateAvatar([restaurant]);
-    return data[0];
+    if (!restaurant) throw new Error("Restaurant not found");
+
+    return this.populateSingle(restaurant);
   }
 
   async getRestaurantsByIds(restIds: string[]): Promise<IRestaurant[]> {
-    const rest = await this.restaurantRepository.getRestaurantsByIdes(restIds);
-    return rest;
+    const restaurants = await this.restaurantRepository.getRestaurantsByIdes(
+      restIds
+    );
+    return this.populateAvatar(restaurants);
   }
 
   async updateById(
@@ -88,57 +93,53 @@ class RestaurantService {
     data: Partial<IRestaurant>
   ): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.updateById(id, data);
-    const populatedShop = await this.populateAvatar([restaurant]);
-    return populatedShop[0];
+    if (!restaurant) throw new Error("Restaurant not found");
+
+    return this.populateSingle(restaurant);
   }
 
   async deleteById(id: string): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.deleteById(id);
-    const data = await this.populateAvatar([restaurant]);
-    return data[0];
+    if (!restaurant) throw new Error("Restaurant not found");
+
+    return this.populateSingle(restaurant);
+  }
+
+  private async populateSingle(restaurant: IRestaurant): Promise<IRestaurant> {
+    const restaurantObj = (restaurant as any).toObject?.() ?? restaurant;
+    const allPromises: Promise<void>[] = [];
+
+    if (restaurantObj.avatar?.key) {
+      allPromises.push(
+        this.imageService.getSignedUrl(restaurantObj.avatar.key).then((url) => {
+          if (restaurantObj.avatar) restaurantObj.avatar.url = url;
+        })
+      );
+    }
+
+    if (restaurantObj.menus?.length) {
+      restaurantObj.menus.forEach((menu: IMenuItem) => {
+        if (menu.avatar?.key) {
+          allPromises.push(
+            this.imageService.getSignedUrl(menu.avatar.key).then((url) => {
+              if (menu.avatar) menu.avatar.url = url;
+            })
+          );
+        }
+      });
+    }
+
+    await Promise.all(allPromises);
+    return restaurantObj as IRestaurant;
   }
 
   private async populateAvatar(
     restaurants: IRestaurant[]
   ): Promise<IRestaurant[]> {
-    if (!restaurants || restaurants.length === 0) return restaurants;
+    if (!restaurants?.length) return restaurants;
 
-    const allPromises: Promise<void>[] = [];
-
-    const restaurantObjects = restaurants.map((restaurant) =>
-      restaurant && typeof (restaurant as any).toObject === "function"
-        ? (restaurant as any).toObject()
-        : restaurant
-    );
-
-    restaurantObjects.forEach((restaurant) => {
-      if (!restaurant) return;
-
-      // Restaurant avatar
-      if (restaurant.avatar?.key) {
-        allPromises.push(
-          this.imageService.getSignedUrl(restaurant.avatar.key).then((url) => {
-            if (restaurant.avatar) restaurant.avatar.url = url;
-          })
-        );
-      }
-
-      // Menu avatars
-      if (restaurant.menus?.length) {
-        restaurant.menus.forEach((menu: IMenuItem) => {
-          if (menu.avatar?.key) {
-            allPromises.push(
-              this.imageService.getSignedUrl(menu.avatar.key).then((url) => {
-                if (menu.avatar) menu.avatar.url = url;
-              })
-            );
-          }
-        });
-      }
-    });
-
-    await Promise.all(allPromises);
-    return restaurantObjects as IRestaurant[];
+    return Promise.all(restaurants.map((r) => this.populateSingle(r)));
   }
 }
+
 export default RestaurantService;
