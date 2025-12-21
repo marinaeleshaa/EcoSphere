@@ -3,7 +3,7 @@
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import Link from "next/link";
 import Image from "next/image";
-import { FaApple, FaFacebookF, FaGoogle, FaTwitter } from "react-icons/fa";
+import { FaApple, FaFacebookF, FaGoogle, FaGithub } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { ChangeEvent, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -164,12 +164,14 @@ const LogIn = () => {
         >
           <FaApple />
         </Link>
-        <Link
-          href={"#"}
+        <button
+          onClick={() => {
+            signIn("github", { redirectTo: "/" });
+          }}
           className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
         >
-          <FaTwitter />
-        </Link>
+          <FaGithub />
+        </button>
       </div>
       <p className="text-center text-stone-600 space-x-1 sm:hidden ">
         <span>{t("newToEcosphere")}</span>

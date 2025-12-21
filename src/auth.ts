@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github"
 import CredentialsProvider from "next-auth/providers/credentials";
 import { rootContainer } from "./backend/config/container";
 import AuthController from "./backend/features/auth/auth.controller";
@@ -44,6 +45,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 				},
 			},
 		}),
+		GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
 	],
 	session: {
 		strategy: "jwt",
@@ -51,7 +56,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 	callbacks: {
 		async signIn({ user, account, profile }) {
 			switch (account?.provider) {
-				case "google": {
+				case "google":
+				case  "github": {
+				console.log(user, account, profile, "info")
 					const [firstName, ...rest] = (profile?.name ?? "").split(" ");
 					const lastName = rest.join(" ");
 					return !!(await rootContainer
@@ -65,6 +72,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 							provider: account.provider,
 						}));
 				}
+				// case : 
 				case "credentials":
 					return true;
 				default:
