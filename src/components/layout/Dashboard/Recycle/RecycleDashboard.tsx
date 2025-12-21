@@ -145,54 +145,33 @@ const RecycleDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       {/* Hero Section */}
-      <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-12 px-6 rounded-3xl shadow-2xl mb-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/patterns/grid.svg')] opacity-10"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <div className="p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner border border-white/10">
-              <Recycle className="w-12 h-12 text-white animate-pulse" />
+      <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-8 px-6  mb-8 relative overflow-hidden">
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-center ">
+          <div className="flex flex-col  items-center gap-3">
+            <div className="p-2 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner border border-white/10">
+              <Recycle className="w-8 h-8 text-white animate-pulse" />
             </div>
-            <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 flex items-center gap-3">
+            <div className="text-center">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 ">
                 {t("title")}
-                <span className="text-sm font-normal bg-white/20 px-3 py-1 rounded-full border border-white/10">
-                  Dashboard
-                </span>
               </h1>
-              <p className="text-lg text-primary-foreground/90 font-medium max-w-xl leading-relaxed">
+              <p className="text-lg text-primary-foreground/90 font-medium  leading-relaxed">
                 {t("description")}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-4">
-            <div className="text-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/10">
-              <p className="text-3xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-white/80">
-                {requests.length}
-              </p>
-              <p className="text-xs font-medium text-primary-foreground/70 uppercase tracking-widest mt-1">
-                {t("stats.totalRequests")}
-              </p>
-            </div>
-            <div className="text-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-xl border border-white/10">
-              <p className="text-3xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-white/80">
-                {requests.filter((r) => r.status === "pending").length}
-              </p>
-              <p className="text-xs font-medium text-primary-foreground/70 uppercase tracking-widest mt-1">
-                {t("stats.pending")}
               </p>
             </div>
           </div>
         </div>
       </div>
+<div className="w-[80%] mx-auto">
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="group bg-card hover:bg-muted/50 p-6 rounded-2xl shadow-sm border border-border/50 hover:border-primary/20 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
+            className="group bg-card hover:bg-muted/50 p-4 rounded-2xl shadow-sm border border-border/50 hover:border-primary/20 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
           >
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
@@ -398,6 +377,7 @@ const RecycleDashboard = () => {
           </div>
         )}
       </div>
+</div>
     </div>
   );
 };
