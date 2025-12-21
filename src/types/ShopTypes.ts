@@ -11,6 +11,8 @@ export interface IShopAvatar {
   url?: string;
 }
 
+export type SortOption = "default" | "highestRating" | "lowestRating";
+
 export interface IShop {
   _id: string;
   name: string;

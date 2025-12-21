@@ -4,12 +4,19 @@ import RestaurantController from "@/backend/features/restaurant/restaurant.contr
 import { ApiResponse, created, ok } from "@/types/api-helpers";
 import { IShop } from "@/types/ShopTypes";
 
-export const GET = async (): Promise<NextResponse<ApiResponse<IShop[]>>> => {
+export const GET = async (req: NextRequest) => {
   const controller = rootContainer.resolve(RestaurantController);
-  const result = await controller.getAll();
+
+  const { searchParams } = new URL(req.url);
+  const page = Number(searchParams.get("page")) || 1;
+  const limit = Number(searchParams.get("limit")) || 10;
+  const sort = (searchParams.get("sort") as any) || "default";
+  const search = searchParams.get("search") || "";
+
+  const result = await controller.getAll({ page, limit, sort, search });
+
   return ok(result);
 };
-
 export const POST = async (
   req: NextRequest
 ): Promise<NextResponse<ApiResponse<IShop>>> => {

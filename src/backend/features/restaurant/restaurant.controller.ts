@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IRestaurantService } from "./restaurant.service";
 import { IRestaurant } from "./restaurant.model";
-import { mapResponseToIShop } from "./dto/restaurant.dto";
+import { mapResponseToIShop, RestaurantPageOptions } from "./dto/restaurant.dto";
 import { IShop } from "@/types/ShopTypes";
 
 @injectable()
@@ -32,18 +32,33 @@ class RestaurantController {
     );
     return mapResponseToIShop(restaurant);
   }
-  async getAll(): Promise<IShop[]> {
-    const restaurants = await this.restaurantService.getAll();
-    return restaurants.map(mapResponseToIShop);
+  async getAll(
+    query: RestaurantPageOptions
+  ): Promise<IShop[] | { data: IShop[]; metadata: any }> {
+    const result = await this.restaurantService.getAll(query);
+
+    // Legacy (no pagination)
+    if (Array.isArray(result)) {
+      return result.map(mapResponseToIShop);
+    }
+
+    // Paginated
+    return {
+      data: result.data.map(mapResponseToIShop),
+      metadata: result.metadata,
+    };
   }
+
   async getById(id: string): Promise<IShop> {
     const restaurant = await this.restaurantService.getById(id);
     return mapResponseToIShop(restaurant);
   }
+
   async updateById(id: string, data: Partial<IRestaurant>): Promise<IShop> {
     const restaurant = await this.restaurantService.updateById(id, data);
     return mapResponseToIShop(restaurant);
   }
+
   async deleteById(id: string): Promise<IShop> {
     const restaurant = await this.restaurantService.deleteById(id);
     return mapResponseToIShop(restaurant);

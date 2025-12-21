@@ -62,10 +62,11 @@ export interface RestaurantPageOptions {
   page?: number;
   limit?: number;
   search?: string;
+  sort?: "highestRating" | "lowestRating" | "default";
 }
 
 export interface PaginatedRestaurantResponse {
-  data: RestaurantResponse[];
+  data: IRestaurant[];
   metadata: {
     total: number;
     page: number;

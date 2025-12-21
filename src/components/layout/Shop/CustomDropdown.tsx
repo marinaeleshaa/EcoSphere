@@ -1,18 +1,23 @@
-// CustomDropdown.jsx (New file)
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface CustomDropdownProps {
-  options: string[];
-  selectedValue: string;
+  options: string[]; // These are translation keys, e.g. "sortOptions.default"
+  selectedValue: string; // also a translation key
   onChange: (value: string) => void;
+  namespace?: string; // optional namespace for translations
 }
 
 export default function CustomDropdown({
   options,
   selectedValue,
   onChange,
+  namespace,
 }: Readonly<CustomDropdownProps>) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations(namespace ?? "Shop.filter.sortOptions");
 
   const handleSelect = (value: string) => {
     onChange(value);
@@ -21,15 +26,14 @@ export default function CustomDropdown({
 
   return (
     <div className="relative inline-block text-left z-20">
-      {/* Button/Display Area - Looks like the 'All' button in your image */}
+      {/* Button/Display Area */}
       <button
         type="button"
         className="inline-flex justify-center w-full rounded-lg border border-primary bg-background text-foreground px-4 py-2 text-sm font-medium shadow-sm hover:bg-primary/25 transition duration-150"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        {selectedValue}
-        {/* Simple arrow icon */}
+        {t(selectedValue)}
         <svg
           className="-mr-1 ml-2 h-5 w-5"
           xmlns="http://www.w3.org/2000/svg"
@@ -44,26 +48,25 @@ export default function CustomDropdown({
         </svg>
       </button>
 
-      {/* Dropdown Menu - The light gray modal area */}
+      {/* Dropdown Menu */}
       {isOpen && (
         <div
           className="absolute right-0 mt-2 w-48 rounded-lg shadow-2xl bg-gray-100 ring-1 ring-black ring-opacity-5 focus:outline-none"
           role="menu"
         >
           <div className="py-1">
-            {options.map((option) => (
+            {options.map((optionKey) => (
               <button
-                key={option}
-                onClick={() => handleSelect(option)}
-                className={`block w-full text-left px-4 py-2 text-lg transition duration-100 
-                            ${
-                              selectedValue === option
-                                ? "bg-gray-300 text-gray-900 font-semibold" // Selected/Active style
-                                : "text-gray-700 hover:bg-gray-200" // Default style
-                            }`}
+                key={optionKey}
+                onClick={() => handleSelect(optionKey)}
+                className={`block w-full text-left px-4 py-2 text-lg transition duration-100 ${
+                  selectedValue === optionKey
+                    ? "bg-gray-300 text-gray-900 font-semibold"
+                    : "text-gray-700 hover:bg-gray-200"
+                }`}
                 role="menuitem"
               >
-                {option}
+                {t(optionKey)}
               </button>
             ))}
           </div>

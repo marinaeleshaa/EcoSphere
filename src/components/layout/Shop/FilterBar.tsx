@@ -1,40 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
-import CustomDropdown from "./CustomDropdown";
 import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
+import CustomDropdown from "./CustomDropdown";
+import { SortOption } from "@/types/ShopTypes";
 
-interface FilterBarProps {
-  onSortChange: (sortType: string) => void;
+export interface FilterBarProps {
+  onSortChange: (sort: SortOption) => void;
   onSearch: (query: string) => void;
-  isSorting: boolean;
+  isSorting?: boolean;
+  currentSort: SortOption; // required now
+  searchValue: string; // required now
 }
 
 export default function FilterBar({
   onSortChange,
   onSearch,
+  isSorting = true,
+  currentSort,
+  searchValue,
 }: Readonly<FilterBarProps>) {
   const t = useTranslations("Shop.filter");
-  const [selectedSort, setSelectedSort] = useState(t("sortOptions.default"));
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const sortOptions = [
-    t("sortOptions.default"),
-    t("sortOptions.highestRating"),
-    t("sortOptions.lowestRating"),
+  const sortOptions: SortOption[] = [
+    "default",
+    "highestRating",
+    "lowestRating",
   ];
-
-  const handleSortChange = (value: string) => {
-    setSelectedSort(value);
-    onSortChange(value);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    onSearch(query);
-  };
 
   return (
     <div className="w-[80%] mx-auto py-8 flex flex-col md:flex-row gap-4 items-center justify-between">
@@ -44,27 +36,28 @@ export default function FilterBar({
         <input
           type="text"
           placeholder={t("searchPlaceholder")}
-          value={searchQuery}
-          onChange={handleSearchChange}
+          value={searchValue}
+          onChange={(e) => onSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 border border-primary rounded-full bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground"
         />
       </div>
 
       {/* Sort Dropdown */}
-      <div className="w-full md:w-auto flex items-center gap-2 justify-end">
-        <label
-          htmlFor="sort-option"
-          className="text-foreground font-semibold whitespace-nowrap"
-        >
-          {t("sortBy")}
-        </label>
-
-        <CustomDropdown
-          options={sortOptions}
-          selectedValue={selectedSort}
-          onChange={handleSortChange}
-        />
-      </div>
+      {isSorting && (
+        <div className="w-full md:w-auto flex items-center gap-2 justify-end">
+          <label
+            htmlFor="sort-option"
+            className="text-foreground font-semibold whitespace-nowrap"
+          >
+            {t("sortBy")}
+          </label>
+          <CustomDropdown
+            options={sortOptions}
+            selectedValue={currentSort}
+            onChange={(value) => onSortChange(value as SortOption)}
+          />
+        </div>
+      )}
     </div>
   );
 }

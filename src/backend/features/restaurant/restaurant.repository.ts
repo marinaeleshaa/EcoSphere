@@ -1,5 +1,9 @@
 import { injectable } from "tsyringe";
 import { IRestaurant, RestaurantModel } from "./restaurant.model";
+import {
+  RestaurantPageOptions,
+  PaginatedRestaurantResponse,
+} from "./dto/restaurant.dto";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { Types } from "mongoose";
 
@@ -12,14 +16,16 @@ export interface IRestaurantRepository {
     workingHours: string,
     phoneNumber: string,
     avatar: string,
-    description: string,
+    description: string
   ): Promise<IRestaurant>;
-  getAll(): Promise<IRestaurant[]>;
+  getAll(
+    options?: RestaurantPageOptions
+  ): Promise<PaginatedRestaurantResponse | IRestaurant[]>;
   getById(id: string): Promise<IRestaurant>;
   getRestaurantsByIdes(restaurantIds: string[]): Promise<IRestaurant[]>;
   // Find a restaurant by its Stripe customer id (used by subscription flow)
   getRestaurantByStripeId(
-    stripeCustomerId: string,
+    stripeCustomerId: string
   ): Promise<IRestaurant | null>;
   updateById(id: string, data: Partial<IRestaurant>): Promise<IRestaurant>;
   updateFavoritedBy(userId: string, restaurantId: string): Promise<IRestaurant>;
@@ -36,7 +42,7 @@ class RestaurantRepository {
     workingHours: string,
     phoneNumber: string,
     avatar: string,
-    description: string,
+    description: string
   ): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.create({
@@ -51,9 +57,61 @@ class RestaurantRepository {
     });
   }
 
-  async getAll(): Promise<IRestaurant[]> {
-    await DBInstance.getConnection();
-    return await RestaurantModel.find({}, { password: 0 });
+  async getAll(
+    options: RestaurantPageOptions = {}
+  ): Promise<PaginatedRestaurantResponse> {
+    const { page = 1, limit = 10, search = "", sort = "default" } = options;
+    const skip = (page - 1) * limit;
+
+    const matchStage: any = {};
+    if (search) {
+      const regex = new RegExp(search, "i");
+      matchStage.$or = [{ name: regex }, { description: regex }];
+    }
+
+    const pipeline: any[] = [
+      { $match: matchStage },
+      {
+        $addFields: {
+          restaurantRatingAvg: {
+            $cond: [
+              { $gt: [{ $size: "$restaurantRating" }, 0] },
+              { $avg: "$restaurantRating.rate" },
+              0,
+            ],
+          },
+        },
+      },
+    ];
+
+    // Sorting
+    if (sort === "highestRating")
+      pipeline.push({ $sort: { restaurantRatingAvg: -1 } });
+    else if (sort === "lowestRating")
+      pipeline.push({ $sort: { restaurantRatingAvg: 1 } });
+    else pipeline.push({ $sort: { name: 1 } }); // default sort by name
+
+    // Facet for pagination
+    pipeline.push({
+      $facet: {
+        data: [{ $skip: skip }, { $limit: limit }],
+        metadata: [{ $count: "total" }],
+      },
+    });
+
+    const result = await RestaurantModel.aggregate(pipeline).exec();
+    const data = result[0]?.data || [];
+    const total = result[0]?.metadata[0]?.total || 0;
+
+    return {
+      data,
+      metadata: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async getById(id: string): Promise<IRestaurant> {
@@ -83,7 +141,7 @@ class RestaurantRepository {
   // New helper: find restaurant by Stripe customer id so subscription webhooks
   // and checkout session metadata can be mapped back to a restaurant account.
   async getRestaurantByStripeId(
-    stripeCustomerId: string,
+    stripeCustomerId: string
   ): Promise<IRestaurant | null> {
     await DBInstance.getConnection();
     const restaurant = await RestaurantModel.findOne({
@@ -94,7 +152,7 @@ class RestaurantRepository {
 
   async updateById(
     id: string,
-    data: Partial<IRestaurant>,
+    data: Partial<IRestaurant>
   ): Promise<IRestaurant> {
     await DBInstance.getConnection();
     const restaurant = await this.getById(id);
