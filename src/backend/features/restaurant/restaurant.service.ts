@@ -53,7 +53,8 @@ class RestaurantService {
       avatar,
       description
     );
-    return await this.populateAvatar(restaurant);
+    const data = await this.populateAvatar([restaurant]);
+    return data[0];
   }
 
   async getAll(
