@@ -8,7 +8,6 @@ import {
   MapPin,
   Users,
   Ticket,
-  DollarSign,
   Send,
   Loader2,
   Tag,
@@ -16,6 +15,7 @@ import {
   X,
   ListOrdered,
 } from "lucide-react";
+import { LuEuro } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -434,7 +434,7 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                       <FormLabel>{t("fields.ticketPrice")}</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <DollarSign className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <LuEuro className="absolute left-3 rtl:right-3 top-2.5 h-4 w-4 text-muted-foreground" />
                           <Input
                             type="number"
                             min={0}

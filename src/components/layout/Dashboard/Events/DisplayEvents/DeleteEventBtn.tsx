@@ -21,7 +21,7 @@ export default function DeleteEventBtn({
     if (res) {
       toast.success(t("success"));
       if (detailscard) {
-        router.push("/organizer/events");
+        router.push("/organizer/details");
       }
       router.refresh();
     }
