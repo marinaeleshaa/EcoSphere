@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 const HomeHero = () => {
   const t = useTranslations("Home");
   return (
-    <section dir="ltr" className="isolate hero-ltr ">
+    <section  className=" hero-ltr ">
       <div className="flex justify-center items-center min-h-screen relative ">
         <div className="relative flex items-center justify-center p-[3%] overflow-hidden w-full h-full min-h-screen py-20 md:py-0">
           <motion.div
