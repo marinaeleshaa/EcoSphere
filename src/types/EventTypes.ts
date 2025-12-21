@@ -8,13 +8,10 @@ export interface MetricData {
 }
 
 export const EVENT_TYPES = [
-  "Music Festival",
-  "Conference",
-  "Workshop",
-  "Sporting Event",
-  "Exhibition",
-  "Private Party",
-  "Other",
+  "environmental_seminar",
+  "community_cleanup",
+  "sustainable_brands_showcase",
+  "other",
 ];
 
 export interface ISubEvent {

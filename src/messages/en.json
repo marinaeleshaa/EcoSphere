@@ -728,6 +728,12 @@
         "title": "Event Title",
         "titlePlaceholder": "Event Name",
         "type": "Event Type",
+        "EventTypes": {
+          "environmental_seminar": "Environmental Seminar / Talk",
+          "community_cleanup": "Community Clean-Up Event",
+          "sustainable_brands_showcase": "Sustainable Brands Showcase",
+          "other": "Other"
+        },
         "typePlaceholder": "Select event type",
         "image": "Event Image",
         "description": "Short Description",

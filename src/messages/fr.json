@@ -727,6 +727,12 @@
         "title": "Titre de l'Événement",
         "titlePlaceholder": "Nom de l'Événement",
         "type": "Type d'Événement",
+         "EventTypes": {
+          "environmental_seminar": "Séminaire / Conférence environnementale",
+          "community_cleanup": "Événement de nettoyage communautaire",
+          "sustainable_brands_showcase": "Présentation de marques durables",
+          "other": "Autre"
+        },
         "typePlaceholder": "Sélectionner le type d'événement",
         "image": "Image de l'Événement",
         "description": "Brève Description",

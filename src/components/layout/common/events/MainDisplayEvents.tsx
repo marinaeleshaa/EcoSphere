@@ -10,7 +10,7 @@ import { useTranslations } from "next-intl";
 
 export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
   const t = useTranslations("Events.MainDisplayEvents");
-console.log(events);
+  console.log(events);
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -34,18 +34,23 @@ console.log(events);
 
   return (
     <>
-      <div className="w-full flex justify-end">
-        <ButtonGroup className="rtl:flex-row-reverse">
+      <div className="w-full flex justify-center md:justify-end">
+        <ButtonGroup className="rtl:flex-row-reverse w-[80%] md:w-fit">
           <Input
             placeholder={t("searchPlaceholder")}
             value={searchQuery}
             onChange={handleSearchChange}
+            className="rounded-r-none border-r-0 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
-          <Button variant="outline" aria-label={t("search")}>
-            <SearchIcon />
+          <Button
+            aria-label={t("search")}
+            className="rounded-l-none border-l-0 px-3"
+          >
+            <SearchIcon className="h-4 w-4" />
           </Button>
         </ButtonGroup>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEvents.map((event) => (
           <EventCard key={event._id} event={event} />

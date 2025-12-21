@@ -46,6 +46,7 @@ import { useTranslations } from "next-intl";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function ManageEvent({initialData,}: Readonly<{ initialData?: any }>) {
   const t = useTranslations("Events.Manage");
+  const tEventTypes = useTranslations("Events.Manage.fields.EventTypes");
   const router = useRouter();
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
@@ -135,7 +136,7 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
       <h1 className="capitalize text-center  font-bold text-4xl  text-foreground">
         {initialData ? t("titleEdit") : t("titleCreate")}
       </h1>
-      <div className=" p-6 sm:p-10 ltr:rounded-tr-[10%] ltr:rounded-bl-[10%] rtl:rounded-tl-[10%] rtl:rounded-br-[10%] shadow-2xl border-2 border-primary">
+      <div className=" p-6 sm:p-10 ltr:rounded-tr-3xl ltr:rounded-bl-3xl rtl:rounded-tl-3xl rtl:rounded-br-3xl  md:ltr:rounded-tr-[10%] md:ltr:rounded-bl-[10%] md:rtl:rounded-tl-[10%] md:rtl:rounded-br-[10%] shadow-2xl border-2 border-primary">
         <Form {...form}>
           <form
             id="event-form"
@@ -191,10 +192,10 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                             </SelectTrigger>
                           </div>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent >
                           {EVENT_TYPES.map((type) => (
-                            <SelectItem key={type} value={type}>
-                              {type}
+                            <SelectItem key={type} value={type} className="rtl:text-right rtl:flex-row-reverse">
+                              {tEventTypes(type)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -571,7 +572,7 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
             <Button
               type="submit"
               form="event-form"
-              className="w-full h-12 text-lg bg-primary hover:bg-primary/90 cursor-pointer"
+              className="w-full rounded-2xl h-12 text-lg bg-primary hover:bg-primary/90 cursor-pointer"
               disabled={form.formState.isSubmitting}
             >
               {form.formState.isSubmitting ? (

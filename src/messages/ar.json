@@ -726,6 +726,12 @@
         "title": "عنوان الفعالية",
         "titlePlaceholder": "اسم الفعالية",
         "type": "نوع الفعالية",
+        "EventTypes": {
+    "environmental_seminar": "ندوة أو محاضرة بيئية",
+    "community_cleanup": "فعالية تنظيف مجتمعية",
+    "sustainable_brands_showcase": "عرض العلامات التجارية المستدامة",
+    "other": "أخرى"
+  },
         "typePlaceholder": "اختر نوع الفعالية",
         "image": "صورة الفعالية",
         "description": "وصف قصير",
