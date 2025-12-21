@@ -63,7 +63,7 @@ export default function ShopSection({
       </div>
 
       {!loading && shops.length === 0 && (
-        <p className="col-span-full text-center text-primary-foreground py-10">
+        <p className="col-span-full text-center text-foreground py-10">
           {t("noProducts")}
         </p>
       )}

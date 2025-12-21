@@ -24,24 +24,24 @@ const FavCard = ({ product }: FavCardProps) => {
     <div
       className={`${
         view === "grid"
-          ? "flex-col w-62.5 p-2"
+          ? "flex-col"
           : "flex-row items-center gap-4 h-75 p-2"
       } flex shadow-md rounded-lg dark:bg-primary/10 bg-background/50 relative`}
     >
       {/* img */}
-      <div
-        className={`${view === "grid" ? "w-full h-62.5" : "w-1/3 h-full"}`}
-      >
+      <div className={`${view === "grid" ? "w-full h-62.5" : "w-1/3 h-full"}`}>
         <Image
           src={product.productImg || "/store img/2.png"}
           alt="product img"
           width={300}
           height={300}
-          className="w-full h-full rounded-lg"
+          className="w-full h-full rounded-lg object-cover"
         />
       </div>
       <div className="p-3 capitalize flex-1 flex flex-col justify-between gap-2">
-        <h3 className="text-foreground text-md md:text-lg">{product.productName}</h3>
+        <h3 className="text-foreground text-md md:text-lg">
+          {product.productName}
+        </h3>
         {view === "horizontal" && (
           <>
             <div className="flex items-center gap-2">
