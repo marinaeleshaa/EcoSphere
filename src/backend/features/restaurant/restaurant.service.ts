@@ -74,7 +74,8 @@ class RestaurantService {
 
   async getById(id: string): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.getById(id);
-    return await this.populateAvatar(restaurant);
+    const data = await this.populateAvatar([restaurant]);
+    return data[0];
   }
 
   async getRestaurantsByIds(restIds: string[]): Promise<IRestaurant[]> {
@@ -87,12 +88,14 @@ class RestaurantService {
     data: Partial<IRestaurant>
   ): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.updateById(id, data);
-    return await this.populateAvatar(restaurant);
+    const populatedShop = await this.populateAvatar([restaurant]);
+    return populatedShop[0];
   }
 
   async deleteById(id: string): Promise<IRestaurant> {
     const restaurant = await this.restaurantRepository.deleteById(id);
-    return await this.populateAvatar(restaurant);
+    const data = await this.populateAvatar([restaurant]);
+    return data[0];
   }
 
   private async populateAvatar(
