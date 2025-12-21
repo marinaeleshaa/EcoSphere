@@ -486,6 +486,8 @@
       "birthDate": "Birth Date",
       "gender": "Gender",
       "ecoPoints": "EcoPoints",
+      "redeem": "Redeem",
+      "redeeming": "Redeeming...",
       "na": "N/A",
       "cancel": "Cancel",
       "saveChanges": "Save Changes",
@@ -512,7 +514,8 @@
     },
     "toasts": {
       "passwordChanged": "Password changed successfully",
-      "passwordChangeFailed": "Failed to change password"
+      "passwordChangeFailed": "Failed to change password",
+      "redeemFailed": "Failed to redeem points. Please try again."
     },
     "states": {
       "loading": "Loading profile...",
@@ -569,7 +572,9 @@
           "delivering": "Delivering",
           "completed": "Completed",
           "canceled": "Canceled"
-        }
+        },
+        "page": "Page",
+        "of": "of"
       }
     }
   },
@@ -986,7 +991,7 @@
     "title": "Recycle Request",
     "description": "Schedule your pickup. Eco-friendly and easy.",
     "submit": {
-      "default": "Submit Recycling Request",
+      "default": "Submit",
       "processing": "Processing Request..."
     },
     "entryMethod": {

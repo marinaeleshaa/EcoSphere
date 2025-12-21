@@ -484,6 +484,8 @@
       "birthDate": "تاريخ الميلاد",
       "gender": "الجنس",
       "ecoPoints": "نقاط إيكو",
+      "redeem": "استبدال",
+      "redeeming": "جاري الاستبدال...",
       "na": "غير متاح",
       "cancel": "إلغاء",
       "saveChanges": "حفظ التغييرات",
@@ -510,7 +512,8 @@
     },
     "toasts": {
       "passwordChanged": "تم تغيير كلمة المرور بنجاح",
-      "passwordChangeFailed": "فشل تغيير كلمة المرور"
+      "passwordChangeFailed": "فشل تغيير كلمة المرور",
+      "redeemFailed": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى."
     },
     "states": {
       "loading": "جاري تحميل الملف الشخصي...",
@@ -567,7 +570,9 @@
           "delivering": "جاري التوصيل",
           "completed": "مكتمل",
           "canceled": "ملغي"
-        }
+        },
+        "page": "صفحة",
+        "of": "من"
       }
     }
   },
@@ -988,7 +993,7 @@
     "title": "طلب إعادة تدوير",
     "description": "حدد موعد استلامك. صديق للبيئة وسهل.",
     "submit": {
-      "default": "إرسال طلب إعادة التدوير",
+      "default": "إرسال",
       "processing": "جاري معالجة الطلب..."
     },
     "entryMethod": {

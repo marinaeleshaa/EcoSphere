@@ -9,9 +9,21 @@ import {
 } from "@/frontend/redux/Slice/UserSlice";
 import ImageUpload from "@/components/layout/common/ImageUpload";
 import OrderHistoryEmptyState from "./OrderHistoryEmptyState";
-import { Edit, Eye, EyeOff } from "lucide-react";
+import {
+  Edit,
+  Eye,
+  EyeOff,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
-import { changeUserPassword, getUserData } from "@/frontend/api/Users";
+import {
+  changeUserPassword,
+  getUserData,
+  redeemUserPoints,
+} from "@/frontend/api/Users";
 import { getUserOrders } from "@/frontend/api/Orders";
 import { User } from "@/types/UserTypes";
 import { IOrder } from "@/backend/features/orders/order.model";
@@ -22,6 +34,9 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
   const t = useTranslations("Profile.customer.orderHistory");
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,70 +52,171 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
     fetchOrders();
   }, []);
 
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const currentOrders = orders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   if (loading) {
     return <div className="p-4 text-center">{t("loading")}</div>;
   }
 
-  // If no orders found from API (or empty array)
-  if (!orders || orders.length === 0) {
-    return <OrderHistoryEmptyState />;
-  }
-
   return (
-    <div className="bg-card shadow rounded-lg p-6 border border-border">
-      <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-        {t("title")}
-      </h2>
-      <p className="text-muted-foreground mb-4">
-        {t("orderCount", { count: orders.length })}
-      </p>
+    <div className="bg-card shadow rounded-lg px-6 border border-border">
+      <button
+        onClick={() => setIsOrderHistoryOpen(!isOrderHistoryOpen)}
+        className="w-full py-6 flex items-center justify-between group"
+      >
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold text-card-foreground group-hover:text-primary transition-colors">
+            {t("title")}
+          </h2>
+          {orders.length > 0 && (
+            <span className="text-sm text-muted-foreground font-normal">
+              ({orders.length})
+            </span>
+          )}
+        </div>
+        {isOrderHistoryOpen ? (
+          <ChevronUp className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+        ) : (
+          <ChevronDown className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+        )}
+      </button>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
-            <tr>
-              <th className="px-4 py-3 rounded-tl-lg">{t("orderId")}</th>
-              <th className="px-4 py-3">{t("date")}</th>
-              <th className="px-4 py-3">{t("total")}</th>
-              <th className="px-4 py-3 rounded-tr-lg">{t("status")}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {orders.map((order) => (
-              <tr
-                key={order._id?.toString()}
-                className="hover:bg-muted/20 transition-colors"
-              >
-                <td className="px-4 py-3 font-mono font-medium">
-                  {order._id?.toString().slice(-8).toUpperCase()}
-                </td>
-                <td className="px-4 py-3">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </td>
-                <td className="px-4 py-3 font-semibold">
-                  ${order.orderPrice.toFixed(2)}
-                </td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                    ${
-                      order.status === "completed"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                        : order.status === "pending"
-                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                        : order.status === "canceled"
-                        ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                        : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
-                    }`}
+      {isOrderHistoryOpen && (
+        <div className="animate-in slide-in-from-top-2 duration-200 pb-6">
+          {!orders || orders.length === 0 ? (
+            <OrderHistoryEmptyState />
+          ) : (
+            <>
+              {/* Desktop View (Table) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
+                    <tr>
+                      <th className="px-4 py-3 rounded-tl-lg">
+                        {t("orderId")}
+                      </th>
+                      <th className="px-4 py-3">{t("date")}</th>
+                      <th className="px-4 py-3">{t("total")}</th>
+                      <th className="px-4 py-3 rounded-tr-lg">{t("status")}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {currentOrders.map((order) => (
+                      <tr
+                        key={order._id?.toString()}
+                        className="hover:bg-muted/20 transition-colors"
+                      >
+                        <td className="px-4 py-3 font-mono font-medium">
+                          {order._id?.toString().slice(-8).toUpperCase()}
+                        </td>
+                        <td className="px-4 py-3">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-4 py-3 font-semibold">
+                          ${order.orderPrice.toFixed(2)}
+                        </td>
+                        <td className="px-4 py-3">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                            ${
+                              order.status === "completed"
+                                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                                : order.status === "pending"
+                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                : order.status === "canceled"
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                            }`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile View (Cards) */}
+              <div className="md:hidden space-y-4">
+                {currentOrders.map((order) => (
+                  <div
+                    key={order._id?.toString()}
+                    className="p-4 border border-border rounded-lg bg-card hover:bg-muted/20 transition-colors"
                   >
-                    {order.status}
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-mono font-medium text-sm">
+                        #{order._id?.toString().slice(-8).toUpperCase()}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
+                        ${
+                          order.status === "completed"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                            : order.status === "pending"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                            : order.status === "canceled"
+                            ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                            : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                        }`}
+                      >
+                        {order.status}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-muted-foreground">
+                        {t("date")}:
+                      </span>
+                      <span>
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold">
+                      <span className="text-muted-foreground">
+                        {t("total")}:
+                      </span>
+                      <span>${order.orderPrice.toFixed(2)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="p-2 rounded-md hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <span className="text-sm font-medium">
+                    {currentPage} / {totalPages}
                   </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="p-2 rounded-md hover:bg-accent disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
@@ -134,6 +250,9 @@ export default function CustomerProfile({
     confirmPassword: false,
   });
 
+  /* State */
+  const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+  const [isRedeeming, setIsRedeeming] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   /* Translations */
@@ -261,11 +380,11 @@ export default function CustomerProfile({
   return (
     <div className="space-y-6">
       {/* Main Profile Section */}
-      <div className="bg-card shadow rounded-lg p-6 border border-border relative">
-        {/* Edit Button - Top Right */}
+      <div className="bg-card shadow rounded-lg p-4 sm:p-6 border border-border relative">
+        {/* Edit Button - Top Right (Desktop) */}
         <button
           onClick={handleEditClick}
-          className="absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
+          className="hidden lg:block absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
           title={tCommon("editProfile")}
         >
           <Edit className="w-5 h-5" />
@@ -274,17 +393,26 @@ export default function CustomerProfile({
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
           <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-[350px]">
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col items-center gap-4 sm:gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
                 onImageUpdate={handleImageUpdate}
               />
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 text-center">
                 <div>
                   <h1 className="text-2xl font-bold text-card-foreground">
                     {user.firstName} {user.lastName}
                   </h1>
                   <p className="text-muted-foreground">Customer</p>
+                </div>
+                <div className="lg:hidden mt-2 w-fit mx-auto">
+                  <button
+                    onClick={handleEditClick}
+                    className="myBtnPrimary flex items-center gap-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>{tCommon("editProfile")}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -298,7 +426,7 @@ export default function CustomerProfile({
             <h2 className="text-xl font-semibold mb-4 text-card-foreground">
               {tCommon("personalInformation")}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">
                   {tCommon("email")}
@@ -337,13 +465,57 @@ export default function CustomerProfile({
                   {user.gender || tCommon("na")}
                 </p>
               </div>
-              <div>
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-border my-6"></div>
+
+            {/* EcoPoints Section */}
+            <div className="flex gap-4">
+              {/* Points Display - 1/3 width */}
+              <div className="w-1/3 bg-accent/10 border border-border rounded-lg p-4 flex items-center justify-center gap-3">
                 <p className="text-sm text-muted-foreground">
-                  {tCommon("ecoPoints")}
+                  {tCommon("ecoPoints")}:
                 </p>
-                <p className="font-medium text-card-foreground">
+                <p className="text-2xl font-bold text-primary">
                   {user.points || 0}
                 </p>
+              </div>
+
+              {/* Redeem Button - 2/3 width */}
+              <div className="w-2/3 flex items-center">
+                <button
+                  onClick={async () => {
+                    if (!user._id || !user.points || user.points <= 0) return;
+                    setIsRedeeming(true);
+                    try {
+                      const response = await redeemUserPoints(user._id);
+                      if (response.success) {
+                        toast.success(response.data.message);
+                        // Refresh user data to show updated points
+                        const userData = await getUserData<User>(
+                          id,
+                          role,
+                          "firstName lastName email phoneNumber address birthDate gender points avatar role"
+                        );
+                        setUser(userData);
+                      }
+                    } catch (error: any) {
+                      console.error("Failed to redeem points", error);
+                      toast.error(error.message || tToasts("redeemFailed"));
+                    } finally {
+                      setIsRedeeming(false);
+                    }
+                  }}
+                  disabled={!user.points || user.points <= 0 || isRedeeming}
+                  className={`myBtnPrimary w-full ${
+                    !user.points || user.points <= 0 || isRedeeming
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {isRedeeming ? tCommon("redeeming") : tCommon("redeem")}
+                </button>
               </div>
             </div>
           </div>
@@ -351,136 +523,151 @@ export default function CustomerProfile({
       </div>
 
       {/* Security Section */}
-      <div className="bg-card shadow rounded-lg p-6 border border-border">
-        <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-          {tSecurity("title")}
-        </h2>
-        <div className="max-w-md space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {tSecurity("currentPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.current ? "text" : "password"}
-                name="currentPassword"
-                value={passwordData.currentPassword}
-                onChange={handlePasswordInputChange}
-                className="myInput pr-12"
-                placeholder={tSecurity("currentPasswordPlaceholder")}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({
-                    ...prev,
-                    current: !prev.current,
-                  }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.current ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
-              </button>
+      <div className="bg-card shadow rounded-lg px-6 border border-border">
+        <button
+          onClick={() => setIsSecurityOpen(!isSecurityOpen)}
+          className="w-full py-6 flex items-center justify-between group"
+        >
+          <h2 className="text-xl font-semibold text-card-foreground group-hover:text-primary transition-colors">
+            {tSecurity("title")}
+          </h2>
+          {isSecurityOpen ? (
+            <ChevronUp className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          )}
+        </button>
+
+        {isSecurityOpen && (
+          <div className="max-w-md space-y-4 pb-6 animate-in slide-in-from-top-2 duration-200">
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {tSecurity("currentPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.current ? "text" : "password"}
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordInputChange}
+                  className="myInput pr-12"
+                  placeholder={tSecurity("currentPasswordPlaceholder")}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({
+                      ...prev,
+                      current: !prev.current,
+                    }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.current ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {touched.currentPassword && errors.currentPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.currentPassword}
+                </p>
+              )}
             </div>
-            {touched.currentPassword && errors.currentPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.currentPassword}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {tSecurity("newPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.new ? "text" : "password"}
-                name="newPassword"
-                value={passwordData.newPassword}
-                onChange={handlePasswordInputChange}
-                className={`myInput pr-12 ${
-                  !passwordData.currentPassword
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                placeholder={tSecurity("newPasswordPlaceholder")}
-                disabled={!passwordData.currentPassword}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({ ...prev, new: !prev.new }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {tSecurity("newPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.new ? "text" : "password"}
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`myInput pr-12 ${
+                    !passwordData.currentPassword
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  placeholder={tSecurity("newPasswordPlaceholder")}
+                  disabled={!passwordData.currentPassword}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({ ...prev, new: !prev.new }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {touched.newPassword && errors.newPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.newPassword}
+                </p>
+              )}
             </div>
-            {touched.newPassword && errors.newPassword && (
-              <p className="text-red-500 text-sm mt-1">{errors.newPassword}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {tSecurity("confirmPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.confirm ? "text" : "password"}
-                name="confirmPassword"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordInputChange}
-                className={`myInput pr-12 ${
-                  !passwordData.newPassword
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                placeholder={tSecurity("confirmPasswordPlaceholder")}
-                disabled={!passwordData.newPassword}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({
-                    ...prev,
-                    confirm: !prev.confirm,
-                  }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.confirm ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {tSecurity("confirmPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.confirm ? "text" : "password"}
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`myInput pr-12 ${
+                    !passwordData.newPassword
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  placeholder={tSecurity("confirmPasswordPlaceholder")}
+                  disabled={!passwordData.newPassword}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({
+                      ...prev,
+                      confirm: !prev.confirm,
+                    }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.confirm ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
-            {touched.confirmPassword && errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.confirmPassword}
-              </p>
-            )}
+            <button
+              onClick={handleChangePassword}
+              className={`mt-8 myBtnPrimary w-full ${
+                !passwordData.confirmPassword ||
+                passwordData.newPassword !== passwordData.confirmPassword
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={
+                !passwordData.confirmPassword ||
+                passwordData.newPassword !== passwordData.confirmPassword
+              }
+            >
+              {tSecurity("changePassword")}
+            </button>
           </div>
-          <button
-            onClick={handleChangePassword}
-            className={`mt-8 myBtnPrimary w-full ${
-              !passwordData.confirmPassword ||
-              passwordData.newPassword !== passwordData.confirmPassword
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            disabled={
-              !passwordData.confirmPassword ||
-              passwordData.newPassword !== passwordData.confirmPassword
-            }
-          >
-            {tSecurity("changePassword")}
-          </button>
-        </div>
+        )}
       </div>
 
       {/* Order History */}

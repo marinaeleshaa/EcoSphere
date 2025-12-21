@@ -17,9 +17,32 @@ export class ProductController {
     @inject("ProductService") private readonly productService: IProductService
   ) {}
 
-  async getAll(): Promise<IProduct[]> {
-    const products = await this.productService.getAllProducts();
-    return products.map((product) => mapResponseToIProduct(product));
+  async getAll(options?: ProductPageOptions): Promise<
+    | IProduct[]
+    | {
+        data: IProduct[];
+        metadata: {
+          total: number;
+          page: number;
+          limit: number;
+          totalPages: number;
+        };
+      }
+  > {
+    const result = await this.productService.getAllProducts(options);
+
+    if (Array.isArray(result)) {
+      return result.map((product) => mapResponseToIProduct(product));
+    } else {
+      // It's PaginatedProductResponse
+      const paginatedResult = result as PaginatedProductResponse;
+      return {
+        data: paginatedResult.data.map((product) =>
+          mapResponseToIProduct(product)
+        ),
+        metadata: paginatedResult.metadata,
+      };
+    }
   }
 
   async getById(id: string): Promise<IProduct | null> {

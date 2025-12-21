@@ -26,7 +26,7 @@ export interface IUserService {
     limit?: number,
     sortBy?: string,
     sortOrder?: 1 | -1,
-    selectFields?: string | Record<string, 0 | 1>,
+    selectFields?: string | Record<string, 0 | 1>
   ): Promise<DashboardUsers>;
   redeemUserPoints(userId: string): Promise<{ message: string }>;
   getUserIdByEmail(email: string): Promise<IUser>;
@@ -39,12 +39,12 @@ export interface IUserService {
   verifyCode(email: string, code: string): Promise<{ message: string }>;
   resetPassword(
     email: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<{ message: string }>;
   changePassword(
     userId: string,
     currentPassword: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<{ message: string }>;
 
   /**
@@ -56,7 +56,7 @@ export interface IUserService {
       subscribed: boolean;
       subscriptionPeriod?: Date;
       stripeCustomerId?: string;
-    }>,
+    }>
   ): Promise<IUser>;
 }
 
@@ -67,7 +67,7 @@ class UserService implements IUserService {
     @inject("IRestaurantRepository")
     private readonly restRepo: IRestaurantRepository,
     @inject("CouponService") private readonly couponService: ICouponService,
-    @inject("ImageService") private readonly imageService: ImageService,
+    @inject("ImageService") private readonly imageService: ImageService
   ) {}
 
   async getAll(): Promise<IUser[]> {
@@ -84,7 +84,7 @@ class UserService implements IUserService {
     limit?: number,
     sortBy?: string,
     sortOrder?: 1 | -1,
-    selectFields?: string | Record<string, 0 | 1>,
+    selectFields?: string | Record<string, 0 | 1>
   ): Promise<DashboardUsers> {
     const result = await this.userRepository.getUsersByRoleAdvanced({
       limit,
@@ -108,7 +108,7 @@ class UserService implements IUserService {
     await this.userRepository.savePasswordResetCode(
       userId._id.toString(),
       code,
-      validTo,
+      validTo
     );
 
     // Send Email
@@ -141,7 +141,7 @@ class UserService implements IUserService {
 
   async resetPassword(
     email: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<{ message: string }> {
     const userId = await this.userRepository.getUserIdByEmail(email);
     if (!userId) throw new Error("User not found");
@@ -158,7 +158,7 @@ class UserService implements IUserService {
   async changePassword(
     userId: string,
     currentPassword: string,
-    newPassword: string,
+    newPassword: string
   ): Promise<{ message: string }> {
     const user = await this.userRepository.getById(userId, "password");
     if (!user) {
@@ -168,7 +168,7 @@ class UserService implements IUserService {
     const isMatch = await this.userRepository.changePassword(
       userId,
       currentPassword,
-      newPassword,
+      newPassword
     );
 
     if (!isMatch) {
@@ -181,7 +181,7 @@ class UserService implements IUserService {
   }
 
   async redeemUserPoints(userId: string): Promise<{ message: string }> {
-    const user = await this.getById(userId); // "points email firstName as a second param"
+    const user = await this.getById(userId, "points email firstName");
     if (!user.points || user.points <= 0) {
       throw new Error("User has no enough points to redeem.");
     }
@@ -217,7 +217,7 @@ class UserService implements IUserService {
   }
 
   async getCart(
-    userId: string,
+    userId: string
   ): Promise<{ success: boolean; items: IProductCart[] }> {
     const user = await this.userRepository.getById(userId, "cart");
     if (!user?.cart || user.cart.length === 0) {
@@ -231,7 +231,7 @@ class UserService implements IUserService {
       ...new Set(
         user.cart
           .map((item) => item.restaurantId)
-          .filter((id): id is string => !!id && Types.ObjectId.isValid(id)),
+          .filter((id): id is string => !!id && Types.ObjectId.isValid(id))
       ),
     ];
 
@@ -294,8 +294,8 @@ class UserService implements IUserService {
               avatarType: typeof menuItem.avatar,
             },
             null,
-            2,
-          ),
+            2
+          )
         );
 
         const avatarKey = menuItem.avatar?.key;
@@ -309,7 +309,7 @@ class UserService implements IUserService {
           }
         } else {
           console.log(
-            "[getCart] No valid avatar key, productImg will be empty",
+            "[getCart] No valid avatar key, productImg will be empty"
           );
         }
 
@@ -336,7 +336,7 @@ class UserService implements IUserService {
           // // Warnings
           // warnings: !menuItem.availableOnline ? ["Currently unavailable"] : [],
         } as IProductCart;
-      }),
+      })
     );
     const filteredItems = cartItems.filter((item) => item !== null); // Remove deleted items
     return {
@@ -362,17 +362,18 @@ class UserService implements IUserService {
   }
 
   async getFavoriteMenuItems(itemIds: string[]): Promise<IProduct[]> {
-    const productResponses =
-      await this.userRepository.getFavoriteMenuItems(itemIds);
+    const productResponses = await this.userRepository.getFavoriteMenuItems(
+      itemIds
+    );
     // Populate avatar URLs before mapping
     const productsWithUrls = await Promise.all(
-      productResponses.map((p) => this.attachSignedUrl(p)),
+      productResponses.map((p) => this.attachSignedUrl(p))
     );
     return productsWithUrls.map(mapResponseToIProduct);
   }
 
   private async attachSignedUrl(
-    product: ProductResponse,
+    product: ProductResponse
   ): Promise<ProductResponse> {
     console.log("[userService.attachSignedUrl] Product:", {
       productId: product._id,
@@ -389,12 +390,12 @@ class UserService implements IUserService {
       } catch (error) {
         console.error(
           `Failed to generate signed URL for product ${product._id}:`,
-          error,
+          error
         );
       }
     } else {
       console.log(
-        "[userService.attachSignedUrl] No avatar.key found, skipping URL generation",
+        "[userService.attachSignedUrl] No avatar.key found, skipping URL generation"
       );
     }
     return product;
@@ -411,14 +412,14 @@ class UserService implements IUserService {
       subscribed: boolean;
       subscriptionPeriod?: Date;
       stripeCustomerId?: string;
-    }>,
+    }>
   ): Promise<IUser> {
     // Use an `unknown` intermediate cast instead of `any` to be explicit and safer.
     // The repository expects `Partial<IUser>`, and the incoming `data` shape is a
     // subset; cast through `unknown` to satisfy the type system without using `any`.
     const user = await this.userRepository.updateById(
       userId,
-      data as unknown as Partial<IUser>,
+      data as unknown as Partial<IUser>
     );
     return await this.populateAvatar(user);
   }
@@ -436,7 +437,7 @@ class UserService implements IUserService {
 
     if (userObj?.avatar?.key) {
       userObj.avatar.url = await this.imageService.getSignedUrl(
-        userObj.avatar.key,
+        userObj.avatar.key
       );
     }
     return userObj as IUser;

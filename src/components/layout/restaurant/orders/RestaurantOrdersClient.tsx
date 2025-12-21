@@ -22,12 +22,36 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Loader2 } from "lucide-react";
+import {
+  Loader2,
+  ArrowUpDown,
+  ChevronLeft,
+  ChevronRight,
+  User,
+} from "lucide-react";
+import Pagination from "@/components/ui/Pagination";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 export default function RestaurantOrdersClient() {
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const t = useTranslations("Profile.restaurant.orders");
+
+  // Pagination & Sorting State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState<{
+    key: "orderPrice" | "status" | "createdAt" | null;
+    direction: "asc" | "desc";
+  }>({ key: "createdAt", direction: "desc" });
 
   const fetchOrders = async () => {
     try {
@@ -59,6 +83,47 @@ export default function RestaurantOrdersClient() {
     }
   };
 
+  const handleSort = (key: "orderPrice" | "status" | "createdAt") => {
+    let direction: "asc" | "desc" = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedOrders = [...orders].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+
+    const key = sortConfig.key;
+    const direction = sortConfig.direction === "asc" ? 1 : -1;
+
+    if (key === "orderPrice") {
+      return (a.orderPrice - b.orderPrice) * direction;
+    }
+    if (key === "createdAt") {
+      return (
+        (new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()) *
+        direction
+      );
+    }
+    if (key === "status") {
+      return a.status.localeCompare(b.status) * direction;
+    }
+    return 0;
+  });
+
+  const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
+  const currentOrders = sortedOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -68,24 +133,57 @@ export default function RestaurantOrdersClient() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">{t("title")}</h1>
-        <Badge variant="outline" className="text-lg px-4 py-1">
+    <div className="w-[80%] mx-auto py-10 space-y-8 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-primary/20 pb-4">
+        <h1 className="text-3xl font-bold text-primary">{t("title")}</h1>
+        <Badge
+          variant="outline"
+          className="text-lg px-4 py-1 border-primary/50 text-primary"
+        >
           {orders.length} {t("totalOrders")}
         </Badge>
       </div>
 
-      <div className="bg-card border rounded-lg overflow-hidden">
+      <div className="hidden md:block bg-card border border-primary/10 rounded-xl overflow-hidden shadow-sm">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{t("orderId")}</TableHead>
-              <TableHead>{t("customer")}</TableHead>
-              <TableHead>{t("date")}</TableHead>
-              <TableHead>{t("total")}</TableHead>
-              <TableHead>{t("status")}</TableHead>
-              <TableHead className="text-right">{t("actions")}</TableHead>
+          <TableHeader className="bg-primary/5">
+            <TableRow className="hover:bg-primary/5 border-b-primary/10">
+              <TableHead className="font-semibold text-primary/80">
+                {t("orderId")}
+              </TableHead>
+              <TableHead className="font-semibold text-primary/80">
+                Products
+              </TableHead>
+              <TableHead
+                className="font-semibold text-primary/80 cursor-pointer hover:text-primary transition-colors"
+                onClick={() => handleSort("createdAt")}
+              >
+                <div className="flex items-center gap-1">
+                  {t("date")}
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableHead>
+              <TableHead
+                className="font-semibold text-primary/80 cursor-pointer hover:text-primary transition-colors"
+                onClick={() => handleSort("orderPrice")}
+              >
+                <div className="flex items-center gap-1">
+                  {t("total")}
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableHead>
+              <TableHead
+                className="font-semibold text-primary/80 cursor-pointer hover:text-primary transition-colors"
+                onClick={() => handleSort("status")}
+              >
+                <div className="flex items-center gap-1">
+                  {t("status")}
+                  <ArrowUpDown className="w-3 h-3" />
+                </div>
+              </TableHead>
+              <TableHead className="text-right font-semibold text-primary/80">
+                {t("actions")}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -93,31 +191,51 @@ export default function RestaurantOrdersClient() {
               <TableRow>
                 <TableCell
                   colSpan={6}
-                  className="text-center py-10 text-muted-foreground"
+                  className="text-center py-12 text-muted-foreground"
                 >
                   {t("noOrders")}
                 </TableCell>
               </TableRow>
             ) : (
-              orders.map((order) => (
-                <TableRow key={order._id?.toString()}>
-                  <TableCell className="font-mono text-xs">
+              currentOrders.map((order) => (
+                <TableRow
+                  key={order._id?.toString()}
+                  className="border-b-primary/5 hover:bg-primary/5 transition-colors cursor-pointer"
+                  onClick={(e) => {
+                    // Prevent modal opening when clicking action elements
+                    if (
+                      (e.target as HTMLElement).closest("button") ||
+                      (e.target as HTMLElement).closest('[role="combobox"]') ||
+                      (e.target as HTMLElement).closest(".badge-action")
+                    ) {
+                      return;
+                    }
+                    setSelectedOrder(order);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <TableCell className="font-mono text-xs text-muted-foreground">
                     {order._id?.toString().slice(-8).toUpperCase()}
                   </TableCell>
                   <TableCell>
-                    {/* Note: Order model might need population for user name, but we have userId */}
-                    {typeof order.userId === "string"
-                      ? order.userId.slice(-6)
-                      : "User"}
+                    <div className="font-medium text-sm">
+                      {order.items.length > 0
+                        ? `${order.items.length} items`
+                        : "No items"}
+                    </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-muted-foreground">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="font-semibold">
+                  <TableCell className="font-semibold text-foreground">
                     ${order.orderPrice.toFixed(2)}
                   </TableCell>
                   <TableCell>
-                    <Badge className={getStatusColor(order.status)}>
+                    <Badge
+                      className={`${getStatusColor(
+                        order.status
+                      )} border-0 badge-action`}
+                    >
                       {t(`statuses.${order.status}`)}
                     </Badge>
                   </TableCell>
@@ -131,10 +249,16 @@ export default function RestaurantOrdersClient() {
                         )
                       }
                     >
-                      <SelectTrigger className="w-[140px] ml-auto">
+                      <SelectTrigger
+                        className="w-[140px] ml-auto border-primary/20 focus:ring-primary/20"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <SelectValue placeholder={t("changeStatus")} />
                       </SelectTrigger>
                       <SelectContent>
+                        <SelectItem value="pending">
+                          {t("statuses.pending")}
+                        </SelectItem>
                         <SelectItem value="preparing">
                           {t("statuses.preparing")}
                         </SelectItem>
@@ -156,6 +280,294 @@ export default function RestaurantOrdersClient() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {orders.length === 0 ? (
+          <div className="text-center py-12 text-muted-foreground bg-card border border-primary/10 rounded-xl">
+            {t("noOrders")}
+          </div>
+        ) : (
+          currentOrders.map((order) => (
+            <div
+              key={order._id?.toString()}
+              className="bg-card border border-primary/10 rounded-xl p-4 shadow-sm space-y-4 cursor-pointer hover:bg-primary/5 transition-colors"
+              onClick={(e) => {
+                // Prevent modal opening when clicking action elements
+                if (
+                  (e.target as HTMLElement).closest("button") ||
+                  (e.target as HTMLElement).closest('[role="combobox"]') ||
+                  (e.target as HTMLElement).closest(".badge-action")
+                ) {
+                  return;
+                }
+                setSelectedOrder(order);
+                setIsModalOpen(true);
+              }}
+            >
+              <div className="flex justify-between items-start">
+                <div className="space-y-1">
+                  <div className="font-mono text-xs text-muted-foreground">
+                    #{order._id?.toString().slice(-8).toUpperCase()}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+                      <User className="w-3 h-3" />
+                    </div>
+                    <span className="text-sm font-medium">
+                      {typeof order.userId === "string"
+                        ? order.userId.slice(-6)
+                        : "User"}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-muted-foreground">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </div>
+                  <div className="font-bold text-lg text-primary">
+                    ${order.orderPrice.toFixed(2)}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center gap-3 pt-2 border-t border-primary/5">
+                <Badge className={`${getStatusColor(order.status)} border-0`}>
+                  {t(`statuses.${order.status}`)}
+                </Badge>
+
+                <Select
+                  defaultValue={order.status}
+                  onValueChange={(value) =>
+                    handleStatusChange(
+                      order._id!.toString(),
+                      value as OrderStatus
+                    )
+                  }
+                >
+                  <SelectTrigger className="w-[130px] h-8 text-xs border-primary/20 focus:ring-primary/20">
+                    <SelectValue placeholder={t("changeStatus")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pending">
+                      {t("statuses.pending")}
+                    </SelectItem>
+                    <SelectItem value="preparing">
+                      {t("statuses.preparing")}
+                    </SelectItem>
+                    <SelectItem value="delivering">
+                      {t("statuses.delivering")}
+                    </SelectItem>
+                    <SelectItem value="completed">
+                      {t("statuses.completed")}
+                    </SelectItem>
+                    <SelectItem value="canceled">
+                      {t("statuses.canceled")}
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
+      {/* Order Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-1xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+              {t("title")}
+              <Badge variant="outline" className="ml-2">
+                #{selectedOrder?._id?.toString().slice(-8).toUpperCase()}
+              </Badge>
+            </DialogTitle>
+            <DialogDescription>
+              {selectedOrder &&
+                new Date(selectedOrder.createdAt).toLocaleDateString(
+                  undefined,
+                  {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedOrder && (
+            <div className="space-y-6 pt-4">
+              {/* Customer Info */}
+              <div className="bg-primary/5 p-4 rounded-xl border border-primary/10">
+                <h3 className="font-semibold text-lg text-primary mb-3 flex items-center gap-2">
+                  <User className="w-5 h-5" />
+                  Customer Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <span className="text-xs text-muted-foreground block mb-1">
+                      Customer Name
+                    </span>
+                    <span className="font-medium text-base break-words">
+                      {(selectedOrder.userId as any)?.firstName
+                        ? `${(selectedOrder.userId as any).firstName} ${
+                            (selectedOrder.userId as any).lastName
+                          }`
+                        : "Name Not Available"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-muted-foreground block mb-1">
+                      Customer Phone
+                    </span>
+                    <span className="font-medium text-base">
+                      {(selectedOrder.userId as any)?.phoneNumber || "N/A"}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-muted-foreground block mb-1">
+                      Customer ID
+                    </span>
+                    <span className="font-mono text-sm">
+                      {typeof selectedOrder.userId === "string"
+                        ? selectedOrder.userId.slice(-8).toUpperCase()
+                        : (selectedOrder.userId as any)?._id
+                            ?.toString()
+                            .slice(-8)
+                            .toUpperCase() || "N/A"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order Status */}
+              <div className="p-4 bg-card border rounded-xl flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+                {/* Mobile: Label + Badge Row. Tablet: Label only */}
+                <div className="flex items-center justify-between w-full md:w-auto md:justify-start gap-3">
+                  <span className="font-medium text-base">Order Status</span>
+                  {/* Badge visible here on Mobile only */}
+                  <Badge
+                    className={`${getStatusColor(
+                      selectedOrder.status
+                    )} md:hidden border-0 text-base py-1 px-3 w-fit`}
+                  >
+                    {t(`statuses.${selectedOrder.status}`)}
+                  </Badge>
+                </div>
+
+                {/* Mobile: Select Row. Tablet: Badge + Select Row */}
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-3 w-full md:w-auto">
+                  {/* Badge visible here on Tablet only */}
+                  <Badge
+                    className={`${getStatusColor(
+                      selectedOrder.status
+                    )} hidden md:inline-flex border-0 text-base py-1 px-3 w-fit`}
+                  >
+                    {t(`statuses.${selectedOrder.status}`)}
+                  </Badge>
+                  <Select
+                    defaultValue={selectedOrder.status}
+                    onValueChange={(value) =>
+                      handleStatusChange(
+                        selectedOrder._id!.toString(),
+                        value as OrderStatus
+                      )
+                    }
+                  >
+                    <SelectTrigger className="w-full md:w-[140px] border-primary/20 focus:ring-primary/20">
+                      <SelectValue placeholder={t("changeStatus")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">
+                        {t("statuses.pending")}
+                      </SelectItem>
+                      <SelectItem value="preparing">
+                        {t("statuses.preparing")}
+                      </SelectItem>
+                      <SelectItem value="delivering">
+                        {t("statuses.delivering")}
+                      </SelectItem>
+                      <SelectItem value="completed">
+                        {t("statuses.completed")}
+                      </SelectItem>
+                      <SelectItem value="canceled">
+                        {t("statuses.canceled")}
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Products List */}
+              <div className="border rounded-xl overflow-hidden">
+                <div className="bg-primary/5 px-4 py-3 border-b border-primary/10 font-semibold text-primary text-base">
+                  Order Items
+                </div>
+                <div className="divide-y">
+                  {selectedOrder.items.map((item, index) => (
+                    <div
+                      key={index}
+                      className="p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-4 w-full md:w-auto">
+                        <div className="w-8 h-8 shrink-0 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-sm">
+                          {item.quantity}x
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-base break-words">
+                            {(item.productId as any)?.name || "Product Item"}
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-0.5">
+                            ${item.unitPrice.toFixed(2)} / unit
+                          </div>
+                        </div>
+                      </div>
+                      <div className="font-semibold text-base pl-12 md:pl-0">
+                        Total: ${item.totalPrice.toFixed(2)}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Payment Info */}
+              <div className="pt-2">
+                <div className="w-full space-y-3">
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Subtotal</span>
+                    <span>${selectedOrder.orderPrice.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Payment Method</span>
+                    <span className="capitalize">
+                      {selectedOrder.paymentMethod
+                        .replace(/([A-Z])/g, " $1")
+                        .trim()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-xl font-bold pt-3 border-t">
+                    <span>Total</span>
+                    <span className="text-primary">
+                      ${selectedOrder.orderPrice.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

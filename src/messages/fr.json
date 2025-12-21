@@ -485,6 +485,8 @@
       "birthDate": "Date de naissance",
       "gender": "Genre",
       "ecoPoints": "EcoPoints",
+      "redeem": "Échanger",
+      "redeeming": "Échange en cours...",
       "na": "N/A",
       "cancel": "Annuler",
       "saveChanges": "Enregistrer les modifications",
@@ -505,7 +507,8 @@
     },
     "toasts": {
       "passwordChanged": "Mot de passe modifié avec succès",
-      "passwordChangeFailed": "Échec de la modification du mot de passe"
+      "passwordChangeFailed": "Échec de la modification du mot de passe",
+      "redeemFailed": "Échec de l'échange de points. Veuillez réessayer."
     },
     "states": {
       "loading": "Chargement du profil...",
@@ -562,7 +565,9 @@
           "delivering": "En cours de livraison",
           "completed": "Terminé",
           "canceled": "Annulé"
-        }
+        },
+        "page": "Page",
+        "of": "sur"
       }
     }
   },
@@ -977,7 +982,7 @@
     "title": "Demande de Recyclage",
     "description": "Planifiez votre collecte. Écologique et simple.",
     "submit": {
-      "default": "Soumettre la Demande de Recyclage",
+      "default": "Soumettre",
       "processing": "Traitement de la demande en cours..."
     },
     "entryMethod": {

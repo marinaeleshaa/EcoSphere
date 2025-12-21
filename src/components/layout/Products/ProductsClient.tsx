@@ -140,7 +140,6 @@ export default function ProductsClient({
     }
   };
 
-
   const renderProductsGrid = () => {
     if (loading) {
       return (
