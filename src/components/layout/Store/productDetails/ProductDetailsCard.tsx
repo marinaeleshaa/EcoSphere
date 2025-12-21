@@ -152,7 +152,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Price */}
           <div className="text-3xl font-bold text-primary">
-            ${typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"}
+            {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"} EGP
           </div>
 
           {/* Description */}

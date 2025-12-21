@@ -63,14 +63,16 @@ class RestaurantRepository {
     const { page = 1, limit = 10, search = "", sort = "default" } = options;
     const skip = (page - 1) * limit;
 
-    const matchStage: any = {};
+    // 1. Updated matchStage to exclude hidden restaurants
+    const matchStage: any = { isHidden: false };
+
     if (search) {
       const regex = new RegExp(search, "i");
       matchStage.$or = [{ name: regex }, { description: regex }];
     }
 
     const pipeline: any[] = [
-      { $match: matchStage },
+      { $match: matchStage }, // This now filters both search AND visibility
       {
         $addFields: {
           restaurantRatingAvg: {
@@ -84,14 +86,12 @@ class RestaurantRepository {
       },
     ];
 
-    // Sorting
     if (sort === "highestRating")
       pipeline.push({ $sort: { restaurantRatingAvg: -1 } });
     else if (sort === "lowestRating")
       pipeline.push({ $sort: { restaurantRatingAvg: 1 } });
-    else pipeline.push({ $sort: { name: 1 } }); // default sort by name
+    else pipeline.push({ $sort: { name: 1 } });
 
-    // Facet for pagination
     pipeline.push({
       $facet: {
         data: [{ $skip: skip }, { $limit: limit }],
