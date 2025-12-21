@@ -77,12 +77,12 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
                 placeholder={t("newPassword.placeholder")}
                 value={newPass}
                 onChange={(e) => setNewPass(e.target.value)}
-                className="bg-input text-input-foreground p-3 rounded-full w-full border-2 border-border pr-12 focus:border-primary outline-none transition"
+                className="myInput"
               />
               <button
                 type="button"
                 onClick={() => setShowPass(!showPass)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition cursor-pointer"
                 aria-label={showPass ? t("hidePassword") : t("showPassword")}
               >
                 {showPass ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -94,36 +94,36 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
               <div className="text-xs space-y-1 mt-2">
                 <div
                   className={`flex items-center gap-2 ${
-                    hasMinLength ? "text-green-600" : "text-muted-foreground"
+                    hasMinLength ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   <div
                     className={`w-1.5 h-1.5 rounded-full ${
-                      hasMinLength ? "bg-green-600" : "bg-muted-foreground"
+                      hasMinLength ? "bg-primary" : "bg-muted-foreground"
                     }`}
                   />
                   {t("requirements.minLength")}
                 </div>
                 <div
                   className={`flex items-center gap-2 ${
-                    hasNumber ? "text-green-600" : "text-muted-foreground"
+                    hasNumber ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   <div
                     className={`w-1.5 h-1.5 rounded-full ${
-                      hasNumber ? "bg-green-600" : "bg-muted-foreground"
+                      hasNumber ? "bg-primary" : "bg-muted-foreground"
                     }`}
                   />
                   {t("requirements.hasNumber")}
                 </div>
                 <div
                   className={`flex items-center gap-2 ${
-                    hasSpecial ? "text-green-600" : "text-muted-foreground"
+                    hasSpecial ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   <div
                     className={`w-1.5 h-1.5 rounded-full ${
-                      hasSpecial ? "bg-green-600" : "bg-muted-foreground"
+                      hasSpecial ? "bg-primary" : "bg-muted-foreground"
                     }`}
                   />
                   {t("requirements.hasSpecial")}
@@ -143,7 +143,7 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
                 placeholder={t("confirmPassword.placeholder")}
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
-                className={`bg-input text-input-foreground p-3 rounded-full w-full border-2 pr-12 outline-none transition ${
+                className={`myInput ${
                   confirm && !match
                     ? "border-red-500"
                     : "border-border focus:border-primary"
@@ -152,7 +152,7 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
               <button
                 type="button"
                 onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition cursor-pointer"
                 aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
               >
                 {showConfirm ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -169,7 +169,7 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
           <button
             disabled={!passValid || !match}
             onClick={handleSubmit}
-            className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all mt-4"
+            className="myBtnPrimary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {t("submitButton")} <IoIosArrowRoundForward className="text-2xl" />
           </button>
@@ -190,9 +190,9 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
-              className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center"
+              className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center"
             >
-              <CheckCircle2 className="w-10 h-10 text-green-500" />
+              <CheckCircle2 className="w-10 h-10 text-primary" />
             </motion.div>
             <h2 className="font-extrabold text-3xl text-foreground">
               {t("success.title")}
@@ -203,7 +203,7 @@ export default function ResetPassword({ onPasswordReset }: ResetPasswordProps) {
           </div>
 
           <Link href="/auth" className="w-full">
-            <button className="w-full bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 hover:scale-105 transition-all">
+            <button className="myBtnPrimary w-full">
               {t("success.button")}{" "}
               <IoIosArrowRoundForward className="text-2xl" />
             </button>
