@@ -311,7 +311,7 @@ const RecyclingHistoryComponent = ({ user }: { user: User }) => {
                         className="hover:bg-muted/20 transition-colors"
                       >
                         <td className="px-4 py-3">
-                          {new Date(entry.createdAt!).toLocaleDateString()}
+                          {new Date(entry.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3">
                           {entry.recycleItems?.length || 0} {t("itemsCount")}

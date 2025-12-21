@@ -25,7 +25,7 @@ export interface IRecycle extends Document {
   totalCarbonSaved?: number;
   imageKeys?: string[];
   isVerified?: boolean;
-  createdAt?: Date;
+  createdAt: Date;
   updatedAt?: Date;
 }
 
