@@ -1,12 +1,11 @@
 import Link from "next/link";
-import React from "react";
-import { useTranslations } from 'next-intl';
+import { getTranslations } from "next-intl/server";
 
-const CartHero = () => {
-  const t = useTranslations('Cart.hero');
+const CartHero = async () => {
+  const t = await getTranslations('Cart.hero');
 
   return (
-    <section className="relative w-full h-[200px] bg-primary overflow-hidden">
+    <section className="relative w-full h-50 bg-primary overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-foreground rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>

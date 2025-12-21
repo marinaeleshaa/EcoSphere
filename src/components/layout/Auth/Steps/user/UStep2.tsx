@@ -5,10 +5,10 @@ import * as Z from "zod";
 import { useDispatch } from "react-redux";
 import { saveStep2Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
 import { useEffect } from "react";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 const UStep2 = () => {
-  const t = useTranslations('Auth.steps.userStep2');
+  const t = useTranslations("Auth.steps.userStep2");
   const dispatch = useDispatch();
 
   const form = useForm<Z.infer<typeof Step2UserSchema>>({
@@ -52,14 +52,14 @@ const UStep2 = () => {
         className="flex flex-col gap-5"
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          {t('title')}
+          {t("title")}
         </p>
 
         {/* First Name */}
         <div>
           <input
             type="text"
-            placeholder={t('firstName')}
+            placeholder={t("firstName")}
             {...register("firstName")}
             className="myInput"
           />
@@ -74,7 +74,7 @@ const UStep2 = () => {
         <div>
           <input
             type="text"
-            placeholder={t('lastName')}
+            placeholder={t("lastName")}
             {...register("lastName")}
             className="myInput"
           />
@@ -87,11 +87,7 @@ const UStep2 = () => {
 
         {/* Birthdate */}
         <div>
-          <input
-            type="date"
-            {...register("birthDate")}
-            className="myInput"
-          />
+          <input type="date" {...register("birthDate")} className="myInput" />
           {errors.birthDate && (
             <p className="text-red-500 mt-1 text-sm">
               {errors.birthDate.message}
@@ -103,7 +99,7 @@ const UStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder={t('phoneNumber')}
+            placeholder={t("phoneNumber")}
             {...register("phoneNumber")}
             className="myInput"
           />
@@ -118,7 +114,7 @@ const UStep2 = () => {
         <div>
           <input
             type="text"
-            placeholder="Enter Your Address"
+            placeholder={t("addressPlaceholder")}
             {...register("address")}
             className="myInput"
           />
@@ -138,7 +134,7 @@ const UStep2 = () => {
               {...register("gender")}
               className="w-4 h-4 accent-primary"
             />
-            <span className="text-secondary-foreground">{t('female')}</span>
+            <span className="text-secondary-foreground">{t("female")}</span>
           </label>
 
           <label className="flex items-center gap-2 cursor-pointer">
@@ -148,7 +144,7 @@ const UStep2 = () => {
               {...register("gender")}
               className="w-4 h-4 accent-primary"
             />
-            <span className="text-secondary-foreground">{t('male')}</span>
+            <span className="text-secondary-foreground">{t("male")}</span>
           </label>
         </div>
 

@@ -9,7 +9,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 export const stripe = new Stripe(
   process.env.STRIPE_SECRET_KEY || "sk_test_placeholder",
   {
-    apiVersion: "2025-11-17.clover", // Update this to match your Stripe dashboard version
+    apiVersion: "2025-12-15.clover", // Update this to match your Stripe dashboard version
     typescript: true,
   }
 );

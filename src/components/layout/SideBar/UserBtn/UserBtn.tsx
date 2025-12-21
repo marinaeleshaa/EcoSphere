@@ -1,11 +1,5 @@
 "use client";
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { BadgeCheck, ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -26,6 +20,7 @@ import { signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const { isMobile } = useSidebar();
@@ -35,6 +30,7 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const handleLogout = () => {
     signOut({ redirect: false });
     router.replace("/");
+    toast.success(t("logoutSuccess"));
   };
 
   return (
@@ -87,15 +83,17 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
             </div>
           </DropdownMenuLabel>
 
-          {/*<DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <Link href="/subscription">
-              <DropdownMenuItem>
-                <Sparkles />
-                {t('subscribe')}
-              </DropdownMenuItem>
-            </Link>
-          </DropdownMenuGroup>*/}
+          {/*<DropdownMenuSeparator />*/}
+          {session?.user?.role === "shop" && (
+            <DropdownMenuGroup>
+              <Link href="/subscription">
+                <DropdownMenuItem>
+                  <Sparkles />
+                  {t("subscribe")}
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuGroup>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <Link href="/profile">

@@ -1,4 +1,4 @@
-import mongoose, { Document, model, Schema } from "mongoose";
+import { Document, model, models, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 export interface IRating extends Document {
@@ -15,13 +15,14 @@ export interface IMenuItem extends Document {
     key: string;
     url?: string;
   };
+  sustainabilityScore?: number;
+  sustainabilityReason?: string;
   availableOnline: boolean;
-  itemRating?: IRating[];
+  itemRating?: Types.DocumentArray<IRating>;
 }
 
 export interface IRestaurant extends Document {
-  _id: mongoose.Types.ObjectId;
-  name: string;
+  name: string; // needed
   email: string;
   password: string;
   location: string;
@@ -30,7 +31,8 @@ export interface IRestaurant extends Document {
   description: string;
   subscribed: boolean;
   subscriptionPeriod?: Date;
-  menus?: IMenuItem[];
+  stripeCustomerId?: string;
+  menus?: Types.DocumentArray<IMenuItem>;
   restaurantRating?: IRating[];
   avatar?: {
     key: string;
@@ -38,6 +40,7 @@ export interface IRestaurant extends Document {
   };
   createdAt?: Date;
   updatedAt?: Date;
+  isHidden: boolean; // needed
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -47,7 +50,7 @@ export const ratingSchema = new Schema<IRating>(
     rate: { type: Number, required: true },
     review: { type: String, required: false },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export const menuItemSchema = new Schema<IMenuItem>({
@@ -58,6 +61,8 @@ export const menuItemSchema = new Schema<IMenuItem>({
     key: { type: String, required: false },
     url: { type: String, required: false },
   },
+  sustainabilityScore: { type: Number, required: false },
+  sustainabilityReason: { type: String, required: false },
   availableOnline: { type: Boolean, default: true },
   itemRating: { type: [ratingSchema], default: [] },
 });
@@ -74,20 +79,22 @@ const restaurantSchema = new Schema<IRestaurant>(
       key: { type: String, required: false },
     },
     description: { type: String, required: true },
+    isHidden: { type: Boolean, default: false },
     subscribed: { type: Boolean, default: false },
     subscriptionPeriod: { type: Date, required: false, default: Date.now() },
+    stripeCustomerId: { type: String, required: false },
     menus: { type: [menuItemSchema], default: [] },
     restaurantRating: { type: [ratingSchema], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-restaurantSchema.pre<IRestaurant>("save", function (): 
-  | Promise<void> 
+restaurantSchema.pre<IRestaurant>("save", function ():
+  | Promise<void>
   | undefined {
-	this.createdAt ??= new Date();
-	if (!this.isModified("password")) { 
-    return; 
+  this.createdAt ??= new Date();
+  if (!this.isModified("password")) {
+    return;
   }
   return bcrypt.hash(this.password, 10).then((hashedPassword) => {
     this.password = hashedPassword;
@@ -95,11 +102,10 @@ restaurantSchema.pre<IRestaurant>("save", function ():
 });
 
 restaurantSchema.methods.comparePassword = async function (
-  candidatePassword: string
+  candidatePassword: string,
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 
 export const RestaurantModel =
-  mongoose.models.Restaurant ||
-  model<IRestaurant>("Restaurant", restaurantSchema);
+  models.Restaurant || model<IRestaurant>("Restaurant", restaurantSchema);

@@ -3,19 +3,21 @@ import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
 import { BsPatchCheckFill } from "react-icons/bs";
 import { HiLightBulb } from "react-icons/hi2";
 import { FaPeopleGroup } from "react-icons/fa6";
+import { useTranslations } from "next-intl";
 
 const SolidContentSection = () => {
+  const t = useTranslations("Home.solidContent");
   const data = [
     {
-      text: "reducing your carbon footprint by up to 30% with simple daily actions.",
+      text: t("footprint"),
       icon: <BsPatchCheckFill size={48} />,
     },
     {
-      text: "Discover over 100+ eco-friendly tips",
+      text: t("tips"),
       icon: <HiLightBulb size={48} />,
     },
     {
-      text: "Become part of a growing community of more than 10,000 planet-lovers",
+      text: t("community"),
       icon: <FaPeopleGroup size={48} />,
     },
   ];

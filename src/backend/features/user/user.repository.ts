@@ -1,14 +1,15 @@
 import { injectable } from "tsyringe";
-import { IUser, UserModel, UserRole } from "./user.model";
+import { ICart, IUser, UserModel, UserRole } from "./user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { DashboardUsers } from "./user.types";
 import { ProjectionFields, Types } from "mongoose";
 import { IMenuItem, RestaurantModel } from "../restaurant/restaurant.model";
+import { ProductResponse } from "../product/dto/product.dto";
 
 export interface IUserRepository {
   getAll(): Promise<IUser[]>;
   getById(id: string, query?: string): Promise<IUser>;
-  getFavoriteMenuItems(itemIds: string[]): Promise<IMenuItem[]>;
+  getFavoriteMenuItems(itemIds: string[]): Promise<ProductResponse[]>;
   getUsersByRoleAdvanced(options?: {
     limit?: number;
     sortBy?: string;
@@ -17,18 +18,20 @@ export interface IUserRepository {
   }): Promise<DashboardUsers>;
   redeemPoints(userId: string): Promise<IUser>;
   getUserIdByEmail(email: string): Promise<IUser>;
+  getUserByStripeId(stripeCustomerId: string): Promise<IUser | null>;
+  saveCart(userId: string, cart: ICart[]): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
   savePasswordResetCode(
     userId: string,
     code: string,
-    validTo: Date
+    validTo: Date,
   ): Promise<void>;
   changePassword(
     userId: string,
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<boolean>;
 }
 
@@ -41,7 +44,7 @@ class UserRepository implements IUserRepository {
 
   async getById(
     id: string,
-    query: string = "email firstName lastName avatar phoneNumber"
+    query: string = "email firstName lastName avatar phoneNumber",
   ): Promise<IUser> {
     await DBInstance.getConnection();
     let projection: ProjectionFields<IUser> = {};
@@ -86,15 +89,18 @@ class UserRepository implements IUserRepository {
     // Convert selectFields to $project format
     const projectStage = this.parseSelectFields(selectFields);
 
-    const facets = roles.reduce((acc, role) => {
-      acc[role] = [
-        { $match: { role } },
-        { $sort: { [sortBy]: sortOrder } },
-        { $limit: limit },
-        { $project: projectStage },
-      ];
-      return acc;
-    }, {} as Record<string, any[]>);
+    const facets = roles.reduce(
+      (acc, role) => {
+        acc[role] = [
+          { $match: { role } },
+          { $sort: { [sortBy]: sortOrder } },
+          { $limit: limit },
+          { $project: projectStage },
+        ];
+        return acc;
+      },
+      {} as Record<string, any[]>,
+    );
 
     const result = await UserModel.aggregate()
       .match({ role: { $ne: "customer" } })
@@ -109,7 +115,7 @@ class UserRepository implements IUserRepository {
     const user = await UserModel.findByIdAndUpdate(
       userId,
       { $set: { points: 0 } },
-      { new: true }
+      { new: true },
     )
       .select("email points")
       .lean<IUser>()
@@ -124,6 +130,14 @@ class UserRepository implements IUserRepository {
       .lean<IUser>()
       .exec();
     return response!;
+  }
+
+  async getUserByStripeId(stripeCustomerId: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const user = await UserModel.findOne({ stripeCustomerId })
+      .select("subscriptionPeriod")
+      .exec();
+    return user!;
   }
 
   async updateById(id: string, data: Partial<IUser>): Promise<IUser> {
@@ -149,8 +163,10 @@ class UserRepository implements IUserRepository {
     let updatedUser = await UserModel.findOneAndUpdate(
       { _id: id, favoritesIds: { $ne: item } },
       { $addToSet: { favoritesIds: item } },
-      { new: true, projection: { favoritesIds: 1, _id: 0 } }
-    );
+      { new: true, projection: { favoritesIds: 1, _id: 0 } },
+    )
+      .lean<IUser>()
+      .exec();
 
     if (updatedUser) {
       return updatedUser;
@@ -160,13 +176,15 @@ class UserRepository implements IUserRepository {
     updatedUser = await UserModel.findByIdAndUpdate(
       id,
       { $pull: { favoritesIds: item } },
-      { new: true, projection: { favoritesIds: 1, _id: 0 } }
-    );
+      { new: true, projection: { favoritesIds: 1, _id: 0 } },
+    )
+      .lean<IUser>()
+      .exec();
 
-    return updatedUser;
+    return updatedUser!;
   }
 
-  async getFavoriteMenuItems(itemIds: string[]): Promise<IMenuItem[]> {
+  async getFavoriteMenuItems(itemIds: string[]): Promise<ProductResponse[]> {
     if (itemIds.length === 0) return [];
     await DBInstance.getConnection();
 
@@ -175,50 +193,79 @@ class UserRepository implements IUserRepository {
     const restaurants = await RestaurantModel.find({
       "menus._id": { $in: objectIds },
     })
-      .select("menus")
+      .select("_id name menus")
       .lean()
       .exec();
 
-    const favoriteItems: IMenuItem[] = [];
+    const favoriteItems: ProductResponse[] = [];
 
     restaurants.forEach((restaurant) => {
       restaurant.menus.forEach((menu: IMenuItem) => {
         if (objectIds.some((id) => id.equals(menu._id))) {
-          favoriteItems.push(menu);
+          console.log(
+            "[getFavoriteMenuItems] Menu item from DB:",
+            JSON.stringify(
+              {
+                menuId: menu._id?.toString(),
+                menuTitle: menu.title,
+                hasAvatar: !!menu.avatar,
+                avatar: menu.avatar,
+                avatarKey: menu.avatar?.key,
+                avatarUrl: menu.avatar?.url,
+              },
+              null,
+              2,
+            ),
+          );
+
+          favoriteItems.push({
+            ...menu,
+            restaurantId: restaurant._id,
+            restaurantName: restaurant.name,
+          } as ProductResponse);
         }
       });
     });
 
+    console.log(
+      "[getFavoriteMenuItems] Returning",
+      favoriteItems.length,
+      "items",
+    );
     return favoriteItems;
   }
 
-  async deleteById(id: string): Promise<IUser> {
+  async saveCart(userId: string, cart: ICart[]): Promise<IUser> {
     await DBInstance.getConnection();
-    const user = await this.getById(id);
-    if (!user) {
-      throw new Error(`User with id ${id} not found`);
-    }
-    return await user.deleteOne();
+    const user = await UserModel.findByIdAndUpdate(
+      userId,
+      { cart },
+      { new: true },
+    )
+      .lean<IUser>()
+      .exec();
+
+    return user!;
   }
 
   async savePasswordResetCode(
     userId: string,
     code: string,
-    validTo: Date
+    validTo: Date,
   ): Promise<void> {
     await DBInstance.getConnection();
     await UserModel.findByIdAndUpdate(
       userId,
       { resetCode: { code, validTo } },
-      { new: true }
+      { new: true },
     );
   }
 
   async changePassword(
     userId: string,
     currentPassword: string,
-    newPassword: string)
-  : Promise<boolean> {
+    newPassword: string,
+  ): Promise<boolean> {
     await DBInstance.getConnection();
     const user = await UserModel.findById(userId).select("password");
 
@@ -231,12 +278,21 @@ class UserRepository implements IUserRepository {
     user.password = newPassword;
     await user.save();
 
-    return true
+    return true;
+  }
+
+  async deleteById(id: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const user = await this.getById(id);
+    if (!user) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    return await user.deleteOne();
   }
 
   // Helper function to convert Mongoose select syntax to $project
   private parseSelectFields(
-    selectFields: string | Record<string, 0 | 1>
+    selectFields: string | Record<string, 0 | 1>,
   ): Record<string, 0 | 1> {
     // If already an object, return as is
     if (typeof selectFields === "object") {
@@ -256,7 +312,6 @@ class UserRepository implements IUserRepository {
         projection[field] = 1;
       }
     });
-
     return projection;
   }
 }

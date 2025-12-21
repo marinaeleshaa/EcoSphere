@@ -1,57 +1,68 @@
 "use client";
-import { useState } from "react";
-import { Mail, Phone, MapPin, Ticket, Check, X,User  } from "lucide-react";
+
+import { act, useEffect, useState } from "react";
+import { Mail, Phone, MapPin, Ticket, Check, X, User } from "lucide-react";
 import Pagination from "@/components/ui/Pagination";
+import { useTranslations } from "next-intl";
+import { IEventDetails } from "@/types/EventTypes";
+import { toast } from "sonner";
 
 const EventCard = () => {
-  const [events, setEvents] = useState([
-    {
-      id: 1,
-      name: "Summer Music Festival",
-      organizer: "Music Fest",
-      email: "contact@summerfest.com",
-      phone: "+1 (555) 123-4567",
-      location: "Central Park, New York",
-      ticketPrice: "$50",
-      status: "pending",
-    },
-    {
-      id: 2,
-      name: "Tech Conference 2024",
-      organizer: "Music Fest",
-      email: "info@techconf.com",
-      phone: "+1 (555) 234-5678",
-      location: "Convention Center, San Francisco",
-      ticketPrice: "$150",
-      status: "pending",
-    },
-    {
-      id: 3,
-      name: "Food & Wine Expo",
-      organizer: "Music Fest",
-      email: "hello@foodexpo.com",
-      phone: "+1 (555) 345-6789",
-      location: "Grand Hotel, Chicago",
-      ticketPrice: "$75",
-      status: "pending",
-    },
-  ]);
+  const t = useTranslations("Admin.Events.card");
+  const [events, setEvents] = useState<IEventDetails[]>([]);
 
-  const handleAccept = (id: number) => {
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const response = await fetch("/api/events");
+      const { data } = await response.json();
+      setEvents(data);
+    };
+    fetchEvents();
+  }, []);
+
+  const handleAccept = async (id: string) => {
+    const response = await fetch("/api/events/user", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventId: id, action: "accept" }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to accept event");
+      toast.error(t("toasts.acceptError"));
+    }
     setEvents(
-      events.map((event) =>
-        event.id === id ? { ...event, status: "accepted" } : event
+      events.map((e) =>
+        e._id === id ? { ...e, isAccepted: true, isEventNew: false } : e
       )
     );
   };
 
-  const handleDeny = (id: number) => {
+  const handleDeny = async (id: string) => {
+    const response = await fetch("/api/events/user", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eventId: id, action: "deny" }),
+    });
+
+    if (!response.ok) {
+      console.error("Failed to deny event");
+      toast.error(t("toasts.denyError"));
+    }
     setEvents(
-      events.map((event) =>
-        event.id === id ? { ...event, status: "denied" } : event
+      events.map((e) =>
+        e._id === id ? { ...e, isAccepted: false, isEventNew: false } : e
       )
     );
   };
+
+  if (events.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <p className="text-muted-foreground">{t("Loading")}</p>
+      </div>
+    );
+  }
 
   return (
     <div className=" bg-secondary rounded-xl p-4 sm:p-6 lg:p-8">
@@ -59,7 +70,7 @@ const EventCard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
             <div
-              key={event.id}
+              key={event._id}
               className="bg-white dark:bg-white/10 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
             >
               {/* Header */}
@@ -74,18 +85,22 @@ const EventCard = () => {
                 <div className="flex items-start gap-3">
                   <User className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground mb-1">Organizer</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      {t("organizer")}
+                    </p>
                     <p className="text-sm text-foreground/60 truncate">
-                      {event.organizer}
+                      {event.user?.firstName || "N/A"}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground mb-1">Email</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      {t("email")}
+                    </p>
                     <p className="text-sm text-foreground/60 truncate">
-                      {event.email}
+                      {event.user?.email}
                     </p>
                   </div>
                 </div>
@@ -93,8 +108,12 @@ const EventCard = () => {
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground mb-1">Phone</p>
-                    <p className="text-sm text-foreground/60">{event.phone}</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      {t("phone")}
+                    </p>
+                    <p className="text-sm text-foreground/60">
+                      {event.user?.phoneNumber}
+                    </p>
                   </div>
                 </div>
 
@@ -102,11 +121,9 @@ const EventCard = () => {
                   <MapPin className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs text-muted-foreground mb-1">
-                      Location
+                      {t("location")}
                     </p>
-                    <p className="text-sm text-foreground/60">
-                      {event.location}
-                    </p>
+                    <p className="text-sm text-foreground/60">{event.locate}</p>
                   </div>
                 </div>
 
@@ -114,7 +131,7 @@ const EventCard = () => {
                   <Ticket className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs text-muted-foreground mb-1">
-                      Ticket Price
+                      {t("ticketPrice")}
                     </p>
                     <p className="text-lg font-bold text-primary">
                       {event.ticketPrice}
@@ -125,32 +142,34 @@ const EventCard = () => {
 
               {/* Actions */}
               <div className="px-5 pb-5">
-                {event.status === "pending" ? (
+                {event.isAccepted === false && event.isEventNew === true ? (
                   <div className="flex gap-3">
                     <button
-                      onClick={() => handleDeny(event.id)}
+                      onClick={() => handleDeny(event._id)}
                       className="flex-1 flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2.5 px-4 rounded-lg transition-colors cursor-pointer"
                     >
                       <X className="w-4 h-4" />
-                      Deny
+                      {t("actions.deny")}
                     </button>
                     <button
-                      onClick={() => handleAccept(event.id)}
+                      onClick={() => handleAccept(event._id)}
                       className="flex-1 flex items-center justify-center gap-2 bg-green-50 hover:bg-green-100 text-green-600 font-medium py-2.5 px-4 rounded-lg transition-colors cursor-pointer"
                     >
                       <Check className="w-4 h-4" />
-                      Accept
+                      {t("actions.accept")}
                     </button>
                   </div>
                 ) : (
                   <div
                     className={`text-center py-2.5 px-4 rounded-lg font-medium ${
-                      event.status === "accepted"
+                      event.isAccepted === true && event.isEventNew === false
                         ? "bg-green-100 text-green-700"
                         : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {event.status === "accepted" ? "✓ Accepted" : "✗ Denied"}
+                    {event.isAccepted === true && event.isEventNew === false
+                      ? "✓ " + t("status.accepted")
+                      : "✗ " + t("status.denied")}
                   </div>
                 )}
               </div>

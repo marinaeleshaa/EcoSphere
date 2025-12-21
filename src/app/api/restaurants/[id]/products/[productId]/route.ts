@@ -1,7 +1,7 @@
 import { rootContainer } from "@/backend/config/container";
 import { ProductController } from "@/backend/features/product/product.controller";
 import { IRestaurant } from "@/backend/features/restaurant/restaurant.model";
-import { ApiResponse, ok, serverError, badRequest } from "@/types/api-helpers";
+import { ApiResponse, ok, badRequest } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const PUT = async (

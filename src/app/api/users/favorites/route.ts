@@ -1,7 +1,5 @@
 import { rootContainer } from "@/backend/config/container";
-import { IMenuItem } from "@/backend/features/restaurant/restaurant.model";
 import UserController from "@/backend/features/user/user.controller";
-import { IUser } from "@/backend/features/user/user.model";
 import { getCurrentUser } from "@/backend/utils/authHelper";
 import {
   ApiResponse,
@@ -11,10 +9,9 @@ import {
   unauthorized,
 } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
+import { IProduct } from "@/types/ProductType";
 
-export const GET = async (
-  _req: NextRequest
-): Promise<NextResponse<ApiResponse<IMenuItem[]>>> => {
+export const GET = async (): Promise<NextResponse<ApiResponse<IProduct[]>>> => {
   const session = await getCurrentUser();
   if (!session?.id) {
     return unauthorized();
@@ -31,6 +28,15 @@ export const GET = async (
       favoritesIds as string[]
     );
 
+    console.log("[API /users/favorites] Returning", result.length, "favorites");
+    if (result.length > 0) {
+      console.log("[API /users/favorites] Sample favorite:", {
+        id: result[0].id,
+        productName: result[0].productName,
+        productImg: result[0].productImg || "EMPTY",
+        hasImg: !!result[0].productImg,
+      });
+    }
     return ok(result);
   } catch (error) {
     console.error(error);
@@ -40,7 +46,7 @@ export const GET = async (
 
 export const PATCH = async (
   _req: NextRequest
-): Promise<NextResponse<ApiResponse<IMenuItem[]>>> => {
+): Promise<NextResponse<ApiResponse<IProduct[]>>> => {
   const session = await getCurrentUser();
   if (!session?.id) {
     return unauthorized();
@@ -59,6 +65,7 @@ export const PATCH = async (
     const result = await controller.getFavoriteMenuItems(
       favoritesIds as string[]
     );
+    console.log(result, "form route")
     return ok(result);
   } catch (error) {
     console.error(error);

@@ -15,6 +15,13 @@ export class PaymentService {
     currency: string = "usd",
     metadata: Record<string, string> = {}
   ): Promise<Stripe.PaymentIntent> {
+    // Stripe requires a minimum equivalent to $0.50 USD.
+    // EGP ~0.50 USD is roughly 25-30 EGP. We'll enforce 30 EGP to be safe.
+    if (currency.toLowerCase() === "egp" && amount < 3000) {
+      throw new Error(
+        "Amount is too small. The minimum payment for EGP is 30.00 EGP due to payment processor requirements."
+      );
+    }
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(amount), // Ensure integer
@@ -28,6 +35,71 @@ export class PaymentService {
       return paymentIntent;
     } catch (error) {
       console.error("Error creating payment intent:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a Stripe Checkout Session for subscriptions.
+   * The frontend will POST a planKey (e.g. "pro_monthly") and the backend
+   * maps that to a Stripe Price ID (so the frontend never sends raw prices).
+   * Uses mode: 'subscription' (not PaymentIntent).
+   */
+  async createSubscriptionCheckoutSession(opts: {
+    priceId: string;
+    successUrl: string;
+    cancelUrl: string;
+    customerEmail?: string; // optional, Stripe can create a customer record
+    metadata?: Record<string, string>;
+  }) {
+    try {
+      // If metadata is not provided, warn — without metadata the webhook flow cannot
+      // map the Stripe customer/subscription back to a user or restaurant in our DB.
+      if (!opts.metadata || Object.keys(opts.metadata).length === 0) {
+        console.warn(
+          "Creating Stripe Checkout session without metadata; webhooks will not be able to map customer to user/restaurant."
+        );
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [{ price: opts.priceId, quantity: 1 }],
+        success_url: opts.successUrl,
+        cancel_url: opts.cancelUrl,
+        customer_email: opts.customerEmail,
+        // Attach metadata to the Checkout Session object
+        metadata: opts.metadata,
+        // Also attach the same metadata to the subscription resource that Checkout
+        // will create. This ensures that events like customer.subscription.created
+        // and invoice.payment_succeeded contain the metadata and we can map them
+        // back to our local user or restaurant.
+        subscription_data: {
+          metadata: opts.metadata,
+        },
+        // Allow promotion codes and automatic tax behavior if desired
+        allow_promotion_codes: true,
+      });
+
+      return session;
+    } catch (error) {
+      console.error("Error creating subscription checkout session:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a Stripe Customer Portal session so users can manage subscriptions.
+   * Backend must provide the customer id and a return url.
+   */
+  async createCustomerPortalSession(customerId: string, returnUrl: string) {
+    try {
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: returnUrl,
+      });
+      return session;
+    } catch (error) {
+      console.error("Error creating customer portal session:", error);
       throw error;
     }
   }

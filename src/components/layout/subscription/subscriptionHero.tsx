@@ -1,8 +1,7 @@
-import { useTranslations } from "next-intl";
-import React from "react";
+import { getTranslations } from "next-intl/server";
 
-const SubscriptionHero = () => {
-  const t = useTranslations("subscribe");
+const SubscriptionHero = async () => {
+  const t = await getTranslations("subscribe");
   return (
     <div className="w-[80%] mx-auto my-10">
       <div className="flex flex-col justify-center items-center p-4 md:p-8">

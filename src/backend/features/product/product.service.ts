@@ -2,6 +2,7 @@ import { injectable, inject } from "tsyringe";
 import { type IProductRepository } from "./product.repository";
 import { IRestaurant } from "../restaurant/restaurant.model";
 import { ImageService } from "@/backend/services/image.service";
+import { type IAIService } from "../ai/ai.service";
 import {
   ProductResponse,
   CreateProductDTO,
@@ -27,6 +28,7 @@ export interface IProductService {
     productData: UpdateProductDTO
   ): Promise<IRestaurant>;
   deleteProduct(restaurantId: string, productId: string): Promise<IRestaurant>;
+  addProductReview(productId: string, review: any): Promise<IRestaurant | null>;
 }
 
 @injectable()
@@ -34,15 +36,32 @@ export class ProductService implements IProductService {
   constructor(
     @inject("ProductRepository")
     private readonly productRepository: IProductRepository,
-    @inject("ImageService") private readonly imageService: ImageService
+    @inject("ImageService") private readonly imageService: ImageService,
+    @inject("AIService") private readonly aiService: IAIService
   ) {}
 
   private async attachSignedUrl(
     product: ProductResponse
   ): Promise<ProductResponse> {
+    console.log(
+      "[attachSignedUrl] Product:",
+      JSON.stringify(
+        {
+          productId: product._id?.toString(),
+          hasAvatar: !!product.avatar,
+          avatar: product.avatar,
+          avatarKey: product.avatar?.key,
+          avatarUrlBefore: product.avatar?.url,
+        },
+        null,
+        2
+      )
+    );
+
     if (product?.avatar?.key) {
       try {
         const url = await this.imageService.getSignedUrl(product.avatar.key);
+        console.log("[attachSignedUrl] Generated URL:", url);
         // We ensure we don't mutate the original read-only object if it's frozen,
         // essentially returning a new object or modifying it if allowed.
         // For standard JS objects from Mongoose lean/aggregate, this is fine.
@@ -53,13 +72,17 @@ export class ProductService implements IProductService {
           error
         );
       }
+    } else {
+      console.log(
+        "[attachSignedUrl] No avatar.key found, skipping URL generation"
+      );
     }
     return product;
   }
 
   async getAllProducts(): Promise<ProductResponse[]> {
     const products = await this.productRepository.findAllProducts();
-    return await Promise.all(products.map((p) => this.attachSignedUrl(p)));
+    return await Promise.all(products.data.map((p) => this.attachSignedUrl(p)));
   }
 
   async getProductById(productId: string): Promise<ProductResponse | null> {
@@ -103,6 +126,29 @@ export class ProductService implements IProductService {
     ) {
       throw new Error("Title, subtitle, and price are required");
     }
+
+    // Generate Sustainability Score (Automatic)
+    try {
+      const { score, reason } =
+        await this.aiService.generateSustainabilityScore(
+          productData.title,
+          productData.subtitle
+        );
+      productData.sustainabilityScore = score;
+      productData.sustainabilityReason = reason;
+    } catch (error) {
+      console.error("Failed to generate sustainability score:", error);
+      // Fallback for debugging
+      productData.sustainabilityScore = -1;
+      productData.sustainabilityReason =
+        "AI Analysis Failed. Check server logs.";
+    }
+
+    console.log(
+      "Adding Product with Data:",
+      JSON.stringify(productData, null, 2)
+    );
+
     const result = await this.productRepository.addProduct(
       restaurantId,
       productData
@@ -136,4 +182,16 @@ export class ProductService implements IProductService {
     if (!result) throw new Error("Product not found or delete failed");
     return result;
   }
+
+	async addProductReview(
+		productId: string,
+		review: any
+	): Promise<IRestaurant | null> {
+		const result = await this.productRepository.addProductReview(
+			productId,
+			review
+		);
+		if (!result) throw new Error("Product not found for review");
+		return result;
+	}
 }

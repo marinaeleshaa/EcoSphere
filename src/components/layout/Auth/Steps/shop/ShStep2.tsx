@@ -3,7 +3,7 @@
 import { saveStep2Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
 import { Step2ShopSchema } from "@/frontend/schema/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";

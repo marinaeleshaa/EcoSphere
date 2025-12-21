@@ -6,7 +6,6 @@ import { Eye, EyeOff, Lock, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
 
 interface ResetPasswordProps {
   onPasswordReset: (newPass: string) => void;

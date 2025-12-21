@@ -1,4 +1,5 @@
 "use client";
+
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,7 +10,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { signIn, SignInResponse } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/frontend/redux/hooks";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { toast } from "sonner";
 
 const initiateData: SignInResponse = {
   status: 200,
@@ -29,8 +31,10 @@ const LogIn = () => {
   const dispatch = useAppDispatch();
   const [loginForm, setLoginForm] = useState(initLoginData);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLogging, setIsLogging] = useState(false);
   const [loginState, setLoginState] = useState(initiateData);
   const t = useTranslations("Auth.login");
+  const locale = useLocale();
 
   const handleToggle = () => {
     dispatch(toggleAuthView());
@@ -45,13 +49,18 @@ const LogIn = () => {
   };
 
   const handleLogin = async () => {
+    setIsLogging(true);
     if (!loginForm.email || !loginForm.password) return;
     const response = await signIn("credentials", {
       email: loginForm.email,
       password: loginForm.password,
       redirect: false,
     });
-    if (!response.error) router.replace("/");
+    if (!response.error) {
+      router.replace("/");
+      toast.success(t("successLogin"));
+    }
+    setIsLogging(false);
     setLoginState(response);
   };
 
@@ -83,7 +92,9 @@ const LogIn = () => {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-4 top-1/2 cursor-pointer -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          className={`absolute ${
+            locale === "ar" ? "left-4" : "right-4"
+          } top-1/2 cursor-pointer -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors`}
         >
           {showPassword ? (
             <EyeOff size={20} className="text-black" />
@@ -116,7 +127,7 @@ const LogIn = () => {
         disabled={!!(!loginForm.email || !loginForm.password)}
         className="myBtnPrimary disabled:opacity-50"
       >
-        {t("title")}
+        {isLogging ? t("titleLogging") : t("title")}
         <Image
           src={"/leaf.png"}
           width={25}
@@ -136,7 +147,7 @@ const LogIn = () => {
       {/* social login */}
       <div className="flex justify-evenly items-center my-4 text-4xl text-secondary-foreground ">
         <button
-          onClick={async () => await signIn("google")}
+          onClick={async () => await signIn("google", { redirectTo: "/" })}
           className="hover:scale-115 hover:shadow-2xl shadow-primary transition duration-300"
         >
           <FaGoogle />

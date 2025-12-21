@@ -2,7 +2,8 @@ import { IProduct } from "@/types/ProductType";
 
 export const products: IProduct[] = [
   {
-    id: "1",
+    id: "693ac5adeff192ae1349f5e8",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Green Store",
     shopSubtitle: "Organic Goods",
     productImg: "/store img/1.jpg",
@@ -12,7 +13,8 @@ export const products: IProduct[] = [
     productDescription: "Grown organically without pesticides.",
   },
   {
-    id: "2",
+    id: "693ac5aeeff192ae1349f5eb",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Tech Hub",
     shopSubtitle: "Electronics",
     productImg: "/store img/2.jpg",
@@ -22,7 +24,8 @@ export const products: IProduct[] = [
     productDescription: "High-quality sound with long battery life.",
   },
   {
-    id: "3",
+    id: "693ac5aeeff192ae1349f5ef",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Fashion Point",
     shopSubtitle: "Clothing",
     productImg: "/store img/3.jpg",
@@ -32,7 +35,8 @@ export const products: IProduct[] = [
     productDescription: "Classic fit, perfect for all seasons.",
   },
   {
-    id: "4",
+    id: "693ac5afeff192ae1349f5f4",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Book World",
     shopSubtitle: "Books & Stationery",
     productImg: "/store img/4.jpg",
@@ -42,7 +46,8 @@ export const products: IProduct[] = [
     productDescription: "A thrilling story that captivates readers.",
   },
   {
-    id: "5",
+    id: "693ac5afeff192ae1349f5fa",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Toy Land",
     shopSubtitle: "Kids",
     productImg: "/store img/5.jpg",
@@ -52,7 +57,8 @@ export const products: IProduct[] = [
     productDescription: "Encourages creativity and problem-solving.",
   },
   {
-    id: "6",
+    id: "693ac5b1eff192ae1349f601",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Green Store",
     shopSubtitle: "Organic Goods",
     productImg: "/store img/6.jpg",
@@ -62,7 +68,8 @@ export const products: IProduct[] = [
     productDescription: "Grown naturally without chemicals.",
   },
   {
-    id: "7",
+    id: "693ac5b1eff192ae1349f609",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Tech Hub",
     shopSubtitle: "Electronics",
     productImg: "/store img/7.jpg",
@@ -72,7 +79,8 @@ export const products: IProduct[] = [
     productDescription: "Track your health and notifications easily.",
   },
   {
-    id: "8",
+    id: "693ac5b2eff192ae1349f61c",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Fashion Point",
     shopSubtitle: "Clothing",
     productImg: "/store img/8.jpg",
@@ -82,7 +90,8 @@ export const products: IProduct[] = [
     productDescription: "Perfect for sports and daily wear.",
   },
   {
-    id: "9",
+    id: "693ac5b3eff192ae1349f627",
+    restaurantId: "692b8349e9f39a8a157fb982",
     shopName: "Book World",
     shopSubtitle: "Books & Stationery",
     productImg: "/store img/9.jpg",
@@ -92,7 +101,8 @@ export const products: IProduct[] = [
     productDescription: "High-quality paper, ideal for notes.",
   },
   {
-    id: "10",
+    id: "693ac5b3eff192ae1349f633",
+    restaurantId: "692b8349e9f39f8a157fb982",
     shopName: "Toy Land",
     shopSubtitle: "Kids",
     productImg: "/store img/10.jpg",

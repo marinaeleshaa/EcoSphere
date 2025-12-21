@@ -1,37 +1,54 @@
 "use client";
 import { IProduct } from "@/types/ProductType";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/frontend/redux/store";
-import { isInFavSelector, toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
+import {
+  isInFavSelector,
+  toggleFavoriteAsync,
+} from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
-  const t = useTranslations('ProductDetails.card');
+  const t = useTranslations("ProductDetails.card");
   const {
-    _id,
-    title,
-    subtitle,
-    avatar,
-    price,
-    availableOnline
+    id,
+    shopName,
+    shopSubtitle,
+    productName, // Added
+    productImg,
+    productPrice,
+    availableOnline,
   } = product;
 
+  // Defensive fallbacks
+  const safeName = productName || (product as any).title || "Unknown Product";
+  const safePrice = productPrice ?? (product as any).price ?? 0;
+  const safeImg =
+    productImg ||
+    (product as any).avatar?.url ||
+    "/store img/product-placeholder.png";
+  const safeDescription =
+    product.productDescription || (product as any).description || shopSubtitle;
+  const safeId = id || (product as any)._id;
+
   const [count, setCount] = useState(1);
-  const isFav = useSelector((state: RootState) => isInFavSelector(state, _id));
-  const dispatch = useDispatch<AppDispatch>()
+  const isFav = useSelector((state: RootState) =>
+    isInFavSelector(state, safeId)
+  );
+  const dispatch = useDispatch<AppDispatch>();
   const handleFav = () => {
-    dispatch(toggleFavoriteAsync(product));
+    dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
-      toast.success(t('removedFromFavorites'));
+      toast.success(t("removedFromFavorites"));
     } else {
-      toast.success(t('addedToFavorites'));
+      toast.success(t("addedToFavorites"));
     }
-  }
+  };
 
   const handleIncrement = () => setCount((prev) => prev + 1);
   const handleDecrement = () => {
@@ -44,15 +61,16 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 ">
+        className="flex flex-col justify-center items-center md:flex-row gap-10 my-30 "
+      >
         {/* product image */}
         <div className="relative shadow-lg rounded-lg  ">
           <Image
             width={600}
             height={400}
-            src={avatar?.url || "/store img/product-placeholder.png"}
-            alt={title}
-            className="w-[500px] rounded-lg "
+            src={safeImg}
+            alt={safeName}
+            className="w-125 rounded-lg "
           />
           {/* top right decorative SVG */}
           <div className="w-[30%] h-[30%] absolute -top-[6%] -right-[6%]  ">
@@ -97,10 +115,12 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
               />
               <div className="hidden sm:block">
                 <h2 className="text-base font-bold text-primary-foreground ">
-                  {"Tech Store"}
+                  {shopName}
                 </h2>
                 <p className="text-primary-foreground/80 text-sm">
-                  {availableOnline ? t('availableOnline') : t('notAvailableOnline')}
+                  {availableOnline
+                    ? t("availableOnline")
+                    : t("notAvailableOnline")}
                 </p>
               </div>
             </div>
@@ -112,9 +132,9 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           {/* Product name and subtitle */}
           <div>
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-              {title}
+              {safeName}
             </h1>
-            <p className="text-lg text-muted-foreground">{subtitle}</p>
+            <p className="text-lg text-muted-foreground">{shopSubtitle}</p>
           </div>
 
           {/* Rating */}
@@ -132,20 +152,20 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Price */}
           <div className="text-3xl font-bold text-primary">
-            ${price.toFixed(2)}
+            ${typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"}
           </div>
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold mb-2">{t('description')}</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("description")}</h3>
             <p className="text-muted-foreground leading-relaxed">
-              {subtitle}
+              {safeDescription}
             </p>
           </div>
 
           {/* Quantity selector */}
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium">{t('quantity')}</span>
+            <span className="text-sm font-medium">{t("quantity")}</span>
             <div className="flex items-center gap-3 border rounded-lg p-2">
               <button
                 onClick={handleDecrement}
@@ -169,19 +189,18 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           <div className="flex gap-4 mt-4">
             <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
               <ShoppingCart className="w-5 h-5" />
-              {t('addToCart')}
+              {t("addToCart")}
             </button>
             <button
               onClick={handleFav}
-              className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${isFav
+              className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${
+                isFav
                   ? "bg-primary border-primary text-primary-foreground"
                   : "border-primary text-primary hover:bg-primary/10 "
-                }`}
+              }`}
               aria-label="Add to favorites"
             >
-              <Heart
-                className={`w-6 h-6 ${isFav ? "fill-current" : ""}`}
-              />
+              <Heart className={`w-6 h-6 ${isFav ? "fill-current" : ""}`} />
             </button>
           </div>
         </div>

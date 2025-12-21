@@ -233,7 +233,7 @@ export class RecycleService implements IRecycleService {
           year: 2025,
           source_lca_activity: "cradle_to_gate",
           data_version: "^29",
-          // @ts-ignore
+          // @ts-expect-error
           allowed_data_quality_flags: ["notable_methodological_variance"],
         };
       } else if (type.includes("glass")) {
@@ -317,6 +317,7 @@ export class RecycleService implements IRecycleService {
         else if (type.includes("metal")) factor = 9.0;
         else if (type.includes("glass")) factor = 0.6;
         totalCO2 += item.estimatedWeight * factor;
+        console.error(error);
       }
     }
 

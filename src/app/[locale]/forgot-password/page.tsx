@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import EmailVerification from "@/components/layout/ForgotPassword/EmailVerification";
 import ResetPassword from "@/components/layout/ForgotPassword/ResetPassword";
 import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { resetPassword } from "@/frontend/api/Users";
 import { toast } from "sonner";
 
 const ForgotPasswordPage = () => {
   const t = useTranslations("ForgotPassword");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  const rtlMultiplier = isRTL ? -1 : 1;
   const controls = useAnimation();
 
   const [coords, setCoords] = useState<ICoords>({
@@ -41,8 +44,18 @@ const ForgotPasswordPage = () => {
   }, []);
 
   const divVariants = {
-    email: { opacity: 1, x: coords.loginX, y: -1500, rotate: 360 },
-    reset: { opacity: 1, x: coords.registerX, y: -1500, rotate: 360 },
+    email: {
+      opacity: 1,
+      x: coords.loginX * rtlMultiplier,
+      y: -1500,
+      rotate: 360,
+    },
+    reset: {
+      opacity: 1,
+      x: coords.registerX * rtlMultiplier,
+      y: -1500,
+      rotate: 360,
+    },
   };
 
   const formVariants = {
@@ -51,23 +64,27 @@ const ForgotPasswordPage = () => {
   };
 
   const imgLoginVariants = {
-    email: { opacity: 1, x: coords.loginImgX, y: coords.loginImgY },
-    reset: { opacity: 0, x: -1850 },
+    email: {
+      opacity: 1,
+      x: coords.loginImgX * rtlMultiplier,
+      y: coords.loginImgY,
+    },
+    reset: { opacity: 0, x: -1850 * rtlMultiplier },
   };
 
   const imgSignupVariants = {
-    email: { opacity: 0, x: 1850 },
-    reset: { opacity: 1, x: coords.signupImgX },
+    email: { opacity: 0, x: 1850 * rtlMultiplier },
+    reset: { opacity: 1, x: coords.signupImgX * rtlMultiplier },
   };
 
   const toEmailVariants = {
-    email: { opacity: 1, x: coords.toSignUpX },
-    reset: { opacity: 0, x: -1850 },
+    email: { opacity: 1, x: coords.toSignUpX * rtlMultiplier },
+    reset: { opacity: 0, x: -1850 * rtlMultiplier },
   };
 
   const toResetVariants = {
-    email: { opacity: 0, x: 1850 },
-    reset: { opacity: 1, x: coords.toSignInX },
+    email: { opacity: 0, x: 1850 * rtlMultiplier },
+    reset: { opacity: 1, x: coords.toSignInX * rtlMultiplier },
   };
 
   useEffect(() => {
@@ -75,8 +92,8 @@ const ForgotPasswordPage = () => {
       if (step === "email") {
         await controls.start({
           width: "0px",
-          left: 0,
-          right: "auto",
+          left: isRTL ? "auto" : 0,
+          right: isRTL ? 0 : "auto",
           transition: { duration: 0 },
         });
         await controls.start({
@@ -85,15 +102,15 @@ const ForgotPasswordPage = () => {
         });
         await controls.start({
           width: "0px",
-          left: 0,
-          right: "auto",
+          left: isRTL ? "auto" : 0,
+          right: isRTL ? 0 : "auto",
           transition: { duration: 1, ease: "easeInOut" },
         });
       } else {
         await controls.start({
           width: "0px",
-          left: "auto",
-          right: 0,
+          left: isRTL ? 0 : "auto",
+          right: isRTL ? "auto" : 0,
           transition: { duration: 0 },
         });
         await controls.start({
@@ -102,8 +119,8 @@ const ForgotPasswordPage = () => {
         });
         await controls.start({
           width: "0px",
-          left: "auto",
-          right: 0,
+          left: isRTL ? 0 : "auto",
+          right: isRTL ? "auto" : 0,
           transition: { duration: 1, ease: "easeInOut" },
         });
       }
@@ -134,7 +151,11 @@ const ForgotPasswordPage = () => {
               step === "email" ? "hidden" : ""
             }`}
             variants={formVariants}
-            animate={step === "reset" ? "reset" : { opacity: 0, x: -200 }}
+            animate={
+              step === "reset"
+                ? "reset"
+                : { opacity: 0, x: -200 * rtlMultiplier }
+            }
             initial={false}
             transition={{ duration: 2, delay: 0.5 }}
           >
@@ -148,7 +169,11 @@ const ForgotPasswordPage = () => {
             }`}
             variants={formVariants}
             initial={false}
-            animate={step === "email" ? "email" : { opacity: 0, x: 100 }}
+            animate={
+              step === "email"
+                ? "email"
+                : { opacity: 0, x: 100 * rtlMultiplier }
+            }
             transition={{ duration: 2, delay: 0.5 }}
           >
             <EmailVerification
@@ -171,7 +196,9 @@ const ForgotPasswordPage = () => {
 
       {/* Animated background for mobile */}
       <motion.div
-        className="absolute h-screen bg-primary sm:hidden top-0 left-0"
+        className={`absolute h-screen bg-primary sm:hidden top-0 ${
+          isRTL ? "right-0" : "left-0"
+        }`}
         initial={false}
         animate={controls}
         transition={{ duration: 2, delay: 0.5 }}
@@ -191,7 +218,11 @@ const ForgotPasswordPage = () => {
         width={300}
         height={350}
         alt={t("forgotPasswordImageAlt")}
-        className="sm:absolute sm:block hidden absolute bottom-50 right-0 sm:-right-2 md:-right-10 lg:right-10 xl:-right-10 xl:w-[350px]"
+        className={`sm:absolute sm:block hidden absolute bottom-50 ${
+          isRTL
+            ? "left-0 sm:-left-2 md:-left-10 lg:left-10 xl:-left-10"
+            : "right-0 sm:-right-2 md:-right-10 lg:right-10 xl:-right-10"
+        } xl:w-[350px]`}
         variants={imgLoginVariants}
         initial={false}
         animate={step}
@@ -204,7 +235,9 @@ const ForgotPasswordPage = () => {
         width={350}
         height={400}
         alt={t("verifyEmailImageAlt")}
-        className="sm:absolute sm:block hidden absolute bottom-0 right-0 md:w-[320px] md:h-[300px] lg:w-[450px] lg:h-[350px]"
+        className={`sm:absolute sm:block hidden absolute bottom-0 ${
+          isRTL ? "left-0" : "right-0"
+        } md:w-[320px] md:h-[300px] lg:w-[450px] lg:h-[350px]`}
         variants={imgSignupVariants}
         initial={false}
         animate={step}
@@ -213,7 +246,11 @@ const ForgotPasswordPage = () => {
 
       {/* Text overlay - Email step */}
       <motion.div
-        className="hidden sm:absolute top-30 left-0 md:left-30 lg:left-20 min-w-60 sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground"
+        className={`hidden sm:absolute top-30 ${
+          isRTL
+            ? "right-0 md:right-30 lg:right-20"
+            : "left-0 md:left-30 lg:left-20"
+        } min-w-60 sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground`}
         variants={toEmailVariants}
         animate={step}
         initial={false}
@@ -229,7 +266,11 @@ const ForgotPasswordPage = () => {
 
       {/* Text overlay - Reset step */}
       <motion.div
-        className="hidden sm:absolute top-50 right-10 md:right-30 lg:top-40 lg:right-10 xl:right-30 xl:top-30 min-w-60 sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground"
+        className={`hidden sm:absolute top-50 ${
+          isRTL
+            ? "left-10 md:left-30 lg:left-10 xl:left-30"
+            : "right-10 md:right-30 lg:right-10 xl:right-30"
+        } lg:top-40 xl:top-30 min-w-60 sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground`}
         variants={toResetVariants}
         animate={step}
         initial={false}

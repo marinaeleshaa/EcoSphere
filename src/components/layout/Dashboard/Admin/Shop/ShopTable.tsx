@@ -1,50 +1,73 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Eye, EyeOff, Store } from "lucide-react";
 import Pagination from "@/components/ui/Pagination";
+import { useTranslations } from "next-intl";
 
 const ShopTable = () => {
-  const [shops, setShops] = useState([
-    {
-      id: 1,
-      name: "Tech Haven",
-      email: "contact@techhaven.com",
-      phone: "+1 (555) 123-4567",
-      status: "active",
-      hidden: false,
-    },
-    {
-      id: 2,
-      name: "Fashion Forward",
-      email: "info@fashionforward.com",
-      phone: "+1 (555) 234-5678",
-      status: "pending",
-      hidden: false,
-    },
-    {
-      id: 3,
-      name: "Home Essentials",
-      email: "support@homeessentials.com",
-      phone: "+1 (555) 345-6789",
-      status: "active",
-      hidden: true,
-    },
-    {
-      id: 4,
-      name: "Sports Zone",
-      email: "hello@sportszone.com",
-      phone: "+1 (555) 456-7890",
-      status: "inactive",
-      hidden: false,
-    },
-  ]);
+  const t = useTranslations("Admin.Shops.table");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [shops, setShops] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const toggleVisibility = (id: number) => {
-    setShops(
-      shops.map((shop) =>
-        shop.id === id ? { ...shop, hidden: !shop.hidden } : shop
-      )
-    );
+  // Fetch shops
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const response = await fetch("/api/shops");
+        if (response.ok) {
+          const data = await response.json();
+          // Map backend data to frontend structure if needed
+          // Backend: IRestaurant { isHidden, ... }
+          // Frontend state expects: { id (display purposes?), ... }
+          // We can just use the backend data directly, but need to map _id to key
+          setShops(data.data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch shops:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchShops();
+  }, []);
+
+  const toggleVisibility = async (id: string, currentHidden: boolean) => {
+    try {
+      // Optimistic update
+      setShops((prev) =>
+        prev.map((shop) =>
+          shop._id === id ? { ...shop, isHidden: !shop.isHidden } : shop
+        )
+      );
+
+      const response = await fetch(`/api/shops/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isHidden: !currentHidden }),
+      });
+
+      if (!response.ok) {
+        // Revert on failure
+        setShops((prev) =>
+          prev.map((shop) =>
+            shop._id === id ? { ...shop, isHidden: currentHidden } : shop
+          )
+        );
+        console.error("Failed to update visibility");
+      }
+    } catch (error) {
+      // Revert on error
+      setShops((prev) =>
+        prev.map((shop) =>
+          shop._id === id ? { ...shop, isHidden: currentHidden } : shop
+        )
+      );
+      console.error("Error updating visibility:", error);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -60,6 +83,10 @@ const ShopTable = () => {
     }
   };
 
+  if (isLoading) {
+    return <div className="p-8 text-center">Loading...</div>;
+  }
+
   return (
     <div>
       {/* Table Section */}
@@ -70,26 +97,26 @@ const ShopTable = () => {
               <thead>
                 <tr className="bg-primary  border-b border-background text-primary-foreground">
                   <th className="px-6 py-4 text-center text-xs font-semibold  uppercase tracking-wider">
-                    Shop Name
+                    {t("headers.name")}
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold  uppercase tracking-wider">
-                    Email
+                    {t("headers.email")}
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold  uppercase tracking-wider">
-                    Phone
+                    {t("headers.phone")}
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold  uppercase tracking-wider">
-                    Status
+                    {t("headers.status")}
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold  uppercase tracking-wider">
-                    Visibility
+                    {t("headers.visibility")}
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-primary">
                 {shops.map((shop) => (
                   <tr
-                    key={shop.id}
+                    key={shop._id}
                     className="hover:bg-primary/10 transition-colors text-center"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -106,36 +133,37 @@ const ShopTable = () => {
                       {shop.email}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-foreground/60">
-                      {shop.phone}
+                      {shop.phoneNumber}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                          shop.status
+                          shop.subscribed ? "active" : "pending"
                         )}`}
                       >
-                        {shop.status.charAt(0).toUpperCase() +
-                          shop.status.slice(1)}
+                        {t(`status.${shop.subscribed ? "active" : "pending"}`)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <button
-                        onClick={() => toggleVisibility(shop.id)}
+                        onClick={() =>
+                          toggleVisibility(shop._id, shop.isHidden)
+                        }
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium cursor-pointer hover:scale-105 transition-all mx-auto ${
-                          shop.hidden
+                          shop.isHidden
                             ? "bg-primary/20 text-foreground hover:bg-primary/30"
                             : "bg-primary text-primary-foreground hover:bg-primary/80"
                         }`}
                       >
-                        {shop.hidden ? (
+                        {shop.isHidden ? (
                           <>
                             <EyeOff className="w-4 h-4" />
-                            Hidden
+                            {t("actions.hidden")}
                           </>
                         ) : (
                           <>
                             <Eye className="w-4 h-4" />
-                            Visible
+                            {t("actions.visible")}
                           </>
                         )}
                       </button>

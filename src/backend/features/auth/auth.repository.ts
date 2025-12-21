@@ -21,7 +21,7 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.exists({ email }).lean().exec();
   }
-  
+
   async existsShopByEmail(email: string) {
     await DBInstance.getConnection();
     return await RestaurantModel.exists({ email }).lean().exec();
@@ -41,9 +41,9 @@ class AuthRepository {
     await DBInstance.getConnection();
     return await UserModel.findOne({ email })
       .select(
-        `password _id email role lastName accountProvider avatar ${
+        `password _id email role firstName accountProvider avatar subscribed subscriptionPeriod ${
           keys || ""
-        }`
+        }`,
       )
       .exec();
   }
@@ -51,7 +51,9 @@ class AuthRepository {
   async findShopByEmail(email: string, keys?: string): Promise<IRestaurant> {
     await DBInstance.getConnection();
     return await RestaurantModel.findOne({ email })
-      .select(`password _id email name avatar ${keys || ""}`)
+      .select(
+        `password _id email name avatar subscribed subscriptionPeriod ${keys || ""}`,
+      )
       .exec();
   }
 

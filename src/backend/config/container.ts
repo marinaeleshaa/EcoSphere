@@ -23,10 +23,16 @@ import { RecycleRepository } from "../features/recycle/recycle.repository";
 import { OrderRepository } from "../features/orders/order.repository";
 import { OrderService } from "../features/orders/order.service";
 import { PaymentService } from "../services/payment.service";
+import { SubscriptionService } from "../features/subscription/subscription.service";
 import { CouponRepository } from "../features/discountCoupon/coupon.repository";
 import { CouponService } from "../features/discountCoupon/coupon.service";
 import { AIRepository } from "../features/ai/ai.repository";
 import { AIService } from "../features/ai/ai.service";
+
+import { RecipeRepository } from "../features/recipe/recipe.repository";
+import { RecipeService } from "../features/recipe/recipe.service";
+import { SubscriptionRepository } from "../features/subscription/subscription.repository";
+import { WebhookEventRepository } from "../features/webhookEvent/webhook.event.repository";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
@@ -50,11 +56,16 @@ container.registerSingleton("UploadRepository", UploadRepository);
 container.registerSingleton("ProductRepository", ProductRepository);
 container.registerSingleton("ProductService", ProductService);
 container.registerSingleton("PaymentService", PaymentService);
+container.registerSingleton("SubscriptionService", SubscriptionService);
+container.registerSingleton("SubscriptionRepository", SubscriptionRepository);
+container.registerSingleton("WebhookRepository", WebhookEventRepository);
 container.registerSingleton("RecycleService", RecycleService);
 container.registerSingleton("RecycleRepository", RecycleRepository);
 container.registerSingleton("CouponRepository", CouponRepository);
 container.registerSingleton("CouponService", CouponService);
 container.registerSingleton("AIRepository", AIRepository);
 container.registerSingleton("AIService", AIService);
+container.registerSingleton("RecipeRepository", RecipeRepository);
+container.registerSingleton("RecipeService", RecipeService);
 
 export { container as rootContainer } from "tsyringe";

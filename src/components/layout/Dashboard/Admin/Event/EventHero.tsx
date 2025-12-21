@@ -1,61 +1,43 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MdCheckCircleOutline,
   MdEvent,
   MdPendingActions,
 } from "react-icons/md";
 import { RiNumbersLine } from "react-icons/ri";
+import { useTranslations } from "next-intl";
+import { IEventDetails } from "@/types/EventTypes";
+
 const EventHero = () => {
-  const [shops] = useState([
-    {
-      id: 1,
-      name: "Tech Haven",
-      email: "contact@techhaven.com",
-      phone: "+1 (555) 123-4567",
-      status: "active",
-      hidden: false,
-    },
-    {
-      id: 2,
-      name: "Fashion Forward",
-      email: "info@fashionforward.com",
-      phone: "+1 (555) 234-5678",
-      status: "pending",
-      hidden: false,
-    },
-    {
-      id: 3,
-      name: "Home Essentials",
-      email: "support@homeessentials.com",
-      phone: "+1 (555) 345-6789",
-      status: "active",
-      hidden: true,
-    },
-    {
-      id: 4,
-      name: "Sports Zone",
-      email: "hello@sportszone.com",
-      phone: "+1 (555) 456-7890",
-      status: "inactive",
-      hidden: false,
-    },
-  ]);
+  const t = useTranslations("Admin.Events");
+  const [events, setEvents] = useState<IEventDetails[]>([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const response = await fetch("/api/events");
+      const { data } = await response.json();
+      setEvents(data);
+    };
+    fetchEvents();
+  }, []);
 
   const stats = [
     {
-      label: "Total Events",
-      value: shops.length,
+      label: t("stats.total"),
+      value: events.length,
       icon: <RiNumbersLine className="w-5 h-5" />,
     },
     {
-      label: "Active",
-      value: shops.filter((s) => s.status === "active").length,
+      label: t("stats.active"),
+      value: events.filter((e) => e.isAccepted === true).length,
       icon: <MdCheckCircleOutline className="w-5 h-5" />,
     },
     {
-      label: "Pending",
-      value: shops.filter((s) => s.status === "pending").length,
+      label: t("stats.pending"),
+      value: events.filter(
+        (e) => e.isAccepted === false && e.isEventNew === true
+      ).length,
       icon: <MdPendingActions className="w-5 h-5" />,
     },
   ];
@@ -64,15 +46,12 @@ const EventHero = () => {
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {/* Header */}
         <div className="flex items-center justify-center gap-3 mb-3">
-          <MdEvent  className="w-8 h-8" />
-          <h1 className="text-2xl sm:text-3xl font-bold">
-            Event Requests Dashboard
-          </h1>
+          <MdEvent className="w-8 h-8" />
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("title")}</h1>
         </div>
 
         <p className="text-primary-foreground/80 text-sm sm:text-base max-w-2xl mb-6 text-center">
-          Manage and monitor all event registration requests. Review, approve,
-          and control event.
+          {t("description")}
         </p>
 
         {/* Stats */}

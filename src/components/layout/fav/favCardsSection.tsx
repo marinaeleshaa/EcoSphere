@@ -42,7 +42,7 @@ const FavCardsSection = () => {
             } my-10 p-10 bg-primary/10 rounded-xl `}
         >
           {favProducts.map((product) => (
-            <FavCard key={product._id} product={product} />
+            <FavCard key={product.id} product={product} />
           ))}
         </div>
       )}

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { CartItems } from "@/types/cart";
 import { RootState } from "../store";
+import { IProductCart } from "@/types/ProductType";
 
 type CartState = {
-  items: Record<string, CartItems>;
+  items: Record<string, IProductCart>;
   totalAfterDiscount: number;
 };
 
@@ -16,14 +16,17 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    hydrateCart(state, action: PayloadAction<CartItems[]>) {
+    hydrateCart(state, action: PayloadAction<IProductCart[]>) {
       for (const item of action.payload) {
         if (!state.items[item.id]) {
           state.items[item.id] = item;
         }
       }
     },
-    addItem(state, action: PayloadAction<CartItems & { replace?: boolean }>) {
+    addItem(
+      state,
+      action: PayloadAction<IProductCart & { replace?: boolean }>,
+    ) {
       const { replace, ...it } = action.payload;
       if (!it.id || it.quantity < 1) {
         console.warn("Invalid cart item:", it);
@@ -50,14 +53,20 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.items = {};
     },
-    updateCartTotal(state, action: PayloadAction<{ cartTotal: number}>) {
+    updateCartTotal(state, action: PayloadAction<{ cartTotal: number }>) {
       state.totalAfterDiscount = action.payload.cartTotal;
     },
   },
 });
 
-export const { hydrateCart, addItem, updateQuantity, removeItem, clearCart, updateCartTotal } =
-  cartSlice.actions;
+export const {
+  hydrateCart,
+  addItem,
+  updateQuantity,
+  removeItem,
+  clearCart,
+  updateCartTotal,
+} = cartSlice.actions;
 export default cartSlice.reducer;
 
 export const isInCartSelector = (state: RootState, productId: string) =>

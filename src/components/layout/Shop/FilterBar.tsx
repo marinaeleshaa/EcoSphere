@@ -46,7 +46,7 @@ export default function FilterBar({
           placeholder={t("searchPlaceholder")}
           value={searchQuery}
           onChange={handleSearchChange}
-          className="w-full pl-10 pr-4 py-2 border border-border rounded-full bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground"
+          className="w-full pl-10 pr-4 py-2 border border-primary rounded-full bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-muted-foreground"
         />
       </div>
 

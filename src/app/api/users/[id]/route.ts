@@ -2,13 +2,7 @@ import { rootContainer } from "@/backend/config/container";
 import UserController from "@/backend/features/user/user.controller";
 import { IUser } from "@/backend/features/user/user.model";
 import { getCurrentUser } from "@/backend/utils/authHelper";
-import {
-  ApiResponse,
-  badRequest,
-  ok,
-  serverError,
-  unauthorized,
-} from "@/types/api-helpers";
+import {ApiResponse, ok, serverError, unauthorized } from "@/types/api-helpers";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (

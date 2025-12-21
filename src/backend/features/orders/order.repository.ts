@@ -2,22 +2,21 @@ import { IOrder, OrderModel } from "./order.model";
 import { injectable } from "tsyringe";
 import { DBInstance } from "@/backend/config/dbConnect";
 import {
-	CreateOrderCommand,
 	revenuePerRest,
 	BestSailingProduct,
 	TopCustomers,
 	DailySales,
 	RevenuePerDate,
-	OrderStatus,
+	updatePayment,
 } from "./order.types";
 
 export interface IOrderRepository {
-	makeOrder(createOrderDTO: CreateOrderCommand): Promise<IOrder>;
+	makeOrder(createOrderDTO: Partial<IOrder>): Promise<IOrder>;
 	getOrdersByUser(userId: string): Promise<IOrder[]>;
 	getOrderById(orderId: string): Promise<IOrder>;
 	updateOrderStatus(
 		orderId: string,
-		orderNewStatus: OrderStatus
+		orderNewStatus: updatePayment
 	): Promise<IOrder>;
 	deleteOrderById(orderId: string): Promise<IOrder>;
 
@@ -36,7 +35,7 @@ export interface IOrderRepository {
 @injectable()
 export class OrderRepository implements IOrderRepository {
 	//
-	async makeOrder(order: CreateOrderCommand): Promise<IOrder> {
+	async makeOrder(order: Partial<IOrder>): Promise<IOrder> {
 		await DBInstance.getConnection();
 		const savedOrder = await OrderModel.create(order);
 		return savedOrder;
@@ -59,12 +58,12 @@ export class OrderRepository implements IOrderRepository {
 
 	async updateOrderStatus(
 		orderId: string,
-		orderNewStatus: OrderStatus
+		orderNewStatus: updatePayment
 	): Promise<IOrder> {
 		await DBInstance.getConnection();
 		const updatedOrder = await OrderModel.findByIdAndUpdate(
 			{ _id: orderId },
-			{ orderNewStatus },
+			{ ...orderNewStatus },
 			{ new: true }
 		)
 			.lean<IOrder>()

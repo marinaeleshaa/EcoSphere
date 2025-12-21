@@ -5,6 +5,7 @@ import FavSlice from "./Slice/FavSlice";
 import AuthSlice from "./Slice/AuthSlice";
 import UserSlice from "./Slice/UserSlice";
 import CartSlice from "./Slice/CartSlice";
+import { cartSyncMiddleware } from "./middleware/cartSyncMiddleware";
 
 // Persist config
 const persistConfig = {
@@ -33,12 +34,17 @@ export const store = configureStore({
 			serializableCheck: {
 				ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
 			},
-		}),
+		}).concat(cartSyncMiddleware),
 	devTools: process.env.NODE_ENV !== "production",
 });
 
 // Persister for <PersistGate>
 export const persister = persistStore(store);
+
+// Register store for page unload sync (optional but recommended)
+if (globalThis.window !== undefined && (globalThis as any).__setCartSyncStore) {
+	(globalThis as any).__setCartSyncStore(store);
+}
 
 // TS Types
 export type RootState = ReturnType<typeof rootReducer> & PersistedState

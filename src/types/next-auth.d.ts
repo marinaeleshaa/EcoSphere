@@ -11,6 +11,8 @@ declare module "next-auth" {
 	interface User {
 		role: string;
     picture?: string;
+		subscribed?: boolean;
+		subscriptionPeriod?: string | Date;
 	}
 }
 

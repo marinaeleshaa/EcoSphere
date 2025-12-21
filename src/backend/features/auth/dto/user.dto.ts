@@ -12,6 +12,9 @@ export type LoginResponse = {
   name: string;
   role: string;
   image?: string;
+  // Optional subscription fields (populated for organizers, recycleMen and shops/restaurants)
+  subscribed?: boolean;
+  subscriptionPeriod?: string | Date;
 };
 
 export type RegisterResponseDTO = {
@@ -63,19 +66,43 @@ export type RegisterWithPhoneNumber = {
 };
 
 export const mapToUserPublicProfile = (
-  user: Partial<IUser> | Partial<IRestaurant>
+  user: Partial<IUser> | Partial<IRestaurant>,
 ) => {
+  const isUsr = isUser(user);
+  const role = isUsr ? user.role! : "shop";
+
+  // Include subscription info only for organizers, recycleMen, and shops/restaurants.
+  const includeSubscription =
+    (isUsr && (user.role === "organizer" || user.role === "recycleMan")) ||
+    !isUsr;
+
+  const subscribed = includeSubscription
+    ? ((user as Partial<IUser | IRestaurant>).subscribed ?? false)
+    : undefined;
+
+  const rawPeriod = includeSubscription
+    ? (user as Partial<IUser | IRestaurant>).subscriptionPeriod
+    : undefined;
+
+  const subscriptionPeriod =
+    rawPeriod instanceof Date
+      ? rawPeriod.toISOString()
+      : rawPeriod
+        ? String(rawPeriod)
+        : undefined;
+
   return {
     id: `${user._id}`,
     email: user.email!,
     image: user.avatar?.url,
-    name: isUser(user) ? user.lastName! : user.name!,
-    role: isUser(user) ? user.role! : "shop",
+    name: isUsr ? user.firstName! : user.name!,
+    role,
+    ...(includeSubscription ? { subscribed, subscriptionPeriod } : {}),
   };
 };
 
 const isUser = (
-  u: Partial<IUser> | Partial<IRestaurant>
+  u: Partial<IUser> | Partial<IRestaurant>,
 ): u is Partial<IUser> => {
-  return "lastName" in u;
+  return "firstName" in u;
 };

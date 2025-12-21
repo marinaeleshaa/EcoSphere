@@ -4,20 +4,15 @@ import { saveStep3Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
 import { Step3ShopSchema } from "@/frontend/schema/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";
 import { useTranslations } from 'next-intl';
-import { useState } from "react";
-import Image from "next/image";
-import { Loader2, UploadCloud } from "lucide-react";
-import { toast } from "sonner";
+
 
 const ShStep3 = () => {
   const t = useTranslations('Auth.steps.shopStep3');
   const dispatch = useDispatch();
-  const [isUploading, setIsUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const form = useForm<Z.infer<typeof Step3ShopSchema>>({
     resolver: zodResolver(Step3ShopSchema),
@@ -45,7 +40,6 @@ const ShStep3 = () => {
 
   const {
     register,
-    control,
     formState: { errors },
   } = form;
   return (

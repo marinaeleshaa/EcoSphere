@@ -1,84 +1,68 @@
 "use client";
 import { Store } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   MdCheckCircleOutline,
   MdPendingActions,
   MdVisibilityOff,
 } from "react-icons/md";
 import { RiNumbersLine } from "react-icons/ri";
+import { useTranslations } from "next-intl";
 
 const ShopHero = () => {
-  const [shops] = useState([
-    {
-      id: 1,
-      name: "Tech Haven",
-      email: "contact@techhaven.com",
-      phone: "+1 (555) 123-4567",
-      status: "active",
-      hidden: false,
-    },
-    {
-      id: 2,
-      name: "Fashion Forward",
-      email: "info@fashionforward.com",
-      phone: "+1 (555) 234-5678",
-      status: "pending",
-      hidden: false,
-    },
-    {
-      id: 3,
-      name: "Home Essentials",
-      email: "support@homeessentials.com",
-      phone: "+1 (555) 345-6789",
-      status: "active",
-      hidden: true,
-    },
-    {
-      id: 4,
-      name: "Sports Zone",
-      email: "hello@sportszone.com",
-      phone: "+1 (555) 456-7890",
-      status: "inactive",
-      hidden: false,
-    },
-  ]);
+  const t = useTranslations("Admin.Shops");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [shops, setShops] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const response = await fetch("/api/shops");
+        if (response.ok) {
+          const data = await response.json();
+          setShops(data.data || []);
+        }
+      } catch (error) {
+        console.error("Failed to fetch shops for hero:", error);
+      }
+    };
+    fetchShops();
+  }, []);
 
   const stats = [
     {
-      label: "Total Shops",
+      label: t("stats.total"),
       value: shops.length,
       icon: <RiNumbersLine className="w-5 h-5" />,
     },
     {
-      label: "Active",
-      value: shops.filter((s) => s.status === "active").length,
+      label: t("stats.active"),
+      value: shops.filter((s) => s.subscribed).length,
       icon: <MdCheckCircleOutline className="w-5 h-5" />,
     },
     {
-      label: "Pending",
-      value: shops.filter((s) => s.status === "pending").length,
+      label: t("stats.pending"),
+      value: shops.filter((s) => !s.subscribed).length,
       icon: <MdPendingActions className="w-5 h-5" />,
     },
     {
-      label: "Hidden",
-      value: shops.filter((s) => s.hidden).length,
+      label: t("stats.hidden"),
+      value: shops.filter((s) => s.isHidden).length,
       icon: <MdVisibilityOff className="w-5 h-5" />,
     },
   ];
 
   return (
-    <div className="bg-gradient-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-20 px-4 sm:px-6">
+    <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
         {/* Header */}
         <div className="flex items-center justify-center gap-3 mb-3">
           <Store className="w-8 h-8" />
-          <h1 className="text-2xl sm:text-3xl font-bold">Shop Requests Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("title")}</h1>
         </div>
-        
+
         <p className="text-primary-foreground/80 text-sm sm:text-base max-w-2xl mb-6 text-center">
-          Manage and monitor all shop registration requests. Review, approve,
-          and control shop visibility with ease.
+          {t("description")}
         </p>
 
         {/* Stats */}

@@ -14,6 +14,23 @@ import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
 import { changeUserPassword, getUserData } from "@/frontend/api/Users";
 import { User } from "@/types/UserTypes";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+
+const OrderHistoryComponent = ({ user }: { user: User }) => {
+  const t = useTranslations("Profile.orderHistory");
+  return user.paymentHistory && user.paymentHistory.length > 0 ? (
+    <div className="bg-card shadow rounded-lg p-6 border border-border">
+      <h2 className="text-xl font-semibold mb-4 text-card-foreground">
+        Order History
+      </h2>
+      <p className="text-muted-foreground">
+        You have {user.paymentHistory.length} past order(s).
+      </p>
+    </div>
+  ) : (
+    <OrderHistoryEmptyState />
+  );
+};
 
 export default function CustomerProfile({
   id,
@@ -46,6 +63,12 @@ export default function CustomerProfile({
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  /* Translations */
+  const tCommon = useTranslations("Profile.common");
+  const tStates = useTranslations("Profile.states");
+  const tToasts = useTranslations("Profile.toasts");
+  const tSecurity = useTranslations("Profile.security");
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -64,8 +87,10 @@ export default function CustomerProfile({
     fetchUser();
   }, [id, role]);
 
-  if (loading) return <div className="p-6 text-center">Loading profile...</div>;
-  if (!user) return <div className="p-6 text-center">User not found.</div>;
+  if (loading)
+    return <div className="p-6 text-center">{tStates("loading")}</div>;
+  if (!user)
+    return <div className="p-6 text-center">{tStates("notFound")}</div>;
 
   const validatePassword = (data: typeof passwordData) => {
     const result = ChangePasswordSchema.safeParse(data);
@@ -99,7 +124,7 @@ export default function CustomerProfile({
         passwordData.newPassword
       );
       if (response.success) {
-        toast.success("Password changed successfully");
+        toast.success(tToasts("passwordChanged"));
         setPasswordData({
           currentPassword: "",
           newPassword: "",
@@ -114,7 +139,7 @@ export default function CustomerProfile({
       }
     } catch (error) {
       console.error("Failed to change password", error);
-      toast.error("Failed to change password");
+      toast.error(tToasts("passwordChangeFailed"));
     }
   };
 
@@ -168,7 +193,7 @@ export default function CustomerProfile({
         <button
           onClick={handleEditClick}
           className="absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
-          title="Edit Profile"
+          title={tCommon("editProfile")}
         >
           <Edit className="w-5 h-5" />
         </button>
@@ -198,39 +223,51 @@ export default function CustomerProfile({
           {/* Right Side: Personal Information */}
           <div className="flex-1 w-full">
             <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-              Personal Information
+              {tCommon("personalInformation")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">Email</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("email")}
+                </p>
                 <p className="font-medium text-card-foreground">{user.email}</p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Phone Number</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("phoneNumber")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.phoneNumber || "N/A"}
+                  {user.phoneNumber || tCommon("na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Address</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("address")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.address || "N/A"}
+                  {user.address || tCommon("na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Birth Date</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("birthDate")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.birthDate || "N/A"}
+                  {user.birthDate || tCommon("na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Gender</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("gender")}
+                </p>
                 <p className="font-medium capitalize text-card-foreground">
-                  {user.gender || "N/A"}
+                  {user.gender || tCommon("na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">EcoPoints</p>
+                <p className="text-sm text-muted-foreground">
+                  {tCommon("ecoPoints")}
+                </p>
                 <p className="font-medium text-card-foreground">
                   {user.points || 0}
                 </p>
@@ -243,12 +280,12 @@ export default function CustomerProfile({
       {/* Security Section */}
       <div className="bg-card shadow rounded-lg p-6 border border-border">
         <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-          Security
+          {tSecurity("title")}
         </h2>
         <div className="max-w-md space-y-4">
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              Current Password
+              {tSecurity("currentPassword")}
             </label>
             <div className="relative">
               <input
@@ -257,7 +294,7 @@ export default function CustomerProfile({
                 value={passwordData.currentPassword}
                 onChange={handlePasswordInputChange}
                 className="myInput pr-12"
-                placeholder="Enter current password"
+                placeholder={tSecurity("currentPasswordPlaceholder")}
               />
               <button
                 type="button"
@@ -284,7 +321,7 @@ export default function CustomerProfile({
           </div>
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              New Password
+              {tSecurity("newPassword")}
             </label>
             <div className="relative">
               <input
@@ -297,7 +334,7 @@ export default function CustomerProfile({
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
-                placeholder="Enter new password"
+                placeholder={tSecurity("newPasswordPlaceholder")}
                 disabled={!passwordData.currentPassword}
               />
               <button
@@ -316,7 +353,7 @@ export default function CustomerProfile({
           </div>
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              Confirm Password
+              {tSecurity("confirmPassword")}
             </label>
             <div className="relative">
               <input
@@ -329,7 +366,7 @@ export default function CustomerProfile({
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
-                placeholder="Confirm new password"
+                placeholder={tSecurity("confirmPasswordPlaceholder")}
                 disabled={!passwordData.newPassword}
               />
               <button
@@ -368,37 +405,26 @@ export default function CustomerProfile({
               passwordData.newPassword !== passwordData.confirmPassword
             }
           >
-            Change Password
+            {tSecurity("changePassword")}
           </button>
         </div>
       </div>
 
       {/* Order History */}
-      {user.paymentHistory && user.paymentHistory.length > 0 ? (
-        <div className="bg-card shadow rounded-lg p-6 border border-border">
-          <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-            Order History
-          </h2>
-          <p className="text-muted-foreground">
-            You have {user.paymentHistory.length} past order(s).
-          </p>
-        </div>
-      ) : (
-        <OrderHistoryEmptyState />
-      )}
+      {role === "customer" && <OrderHistoryComponent user={user} />}
 
       {/* Edit Modal */}
       {isEditing && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg p-6 w-full max-w-md border border-border shadow-lg">
             <h2 className="text-xl font-bold mb-4 text-card-foreground">
-              Edit Profile
+              {tCommon("editProfile")}
             </h2>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-card-foreground mb-1">
-                    First Name
+                    {tCommon("firstName")}
                   </label>
                   <input
                     type="text"
@@ -410,7 +436,7 @@ export default function CustomerProfile({
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-card-foreground mb-1">
-                    Last Name
+                    {tCommon("lastName")}
                   </label>
                   <input
                     type="text"
@@ -423,7 +449,7 @@ export default function CustomerProfile({
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Phone Number
+                  {tCommon("phoneNumber")}
                 </label>
                 <input
                   type="text"
@@ -435,7 +461,7 @@ export default function CustomerProfile({
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Address
+                  {tCommon("address")}
                 </label>
                 <input
                   type="text"
@@ -447,7 +473,7 @@ export default function CustomerProfile({
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Birth Date
+                  {tCommon("birthDate")}
                 </label>
                 <input
                   type="date"
@@ -459,7 +485,7 @@ export default function CustomerProfile({
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Gender
+                  {tCommon("gender")}
                 </label>
                 <select
                   name="gender"
@@ -467,9 +493,9 @@ export default function CustomerProfile({
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="">{tCommon("selectGender")}</option>
+                  <option value="male">{tCommon("male")}</option>
+                  <option value="female">{tCommon("female")}</option>
                 </select>
               </div>
             </div>
@@ -478,13 +504,13 @@ export default function CustomerProfile({
                 onClick={() => setIsEditing(false)}
                 className="px-4 py-2 border border-input rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition"
               >
-                Cancel
+                {tCommon("cancel")}
               </button>
               <button
                 onClick={handleSave}
                 className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition"
               >
-                Save Changes
+                {tCommon("saveChanges")}
               </button>
             </div>
           </div>

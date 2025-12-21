@@ -2,8 +2,10 @@ import Image from "next/image";
 import { RiShoppingBasket2Fill } from "react-icons/ri";
 import { TbCertificate } from "react-icons/tb";
 import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
+import { useTranslations } from "next-intl";
 
 const MarketLeft = () => {
+  const t = useTranslations("Home.marketplace.stats");
   return (
     <BasicAnimatedWrapper className="w-full md:w-1/2">
       <div className=" flex flex-col justify-center items-center gap-4 ">
@@ -19,13 +21,13 @@ const MarketLeft = () => {
             <p className="text-5xl text-primary">
               <RiShoppingBasket2Fill />
             </p>
-            <p>300+ sustainable products</p>
+            <p>{t("products")}</p>
           </div>
           <div className="flex flex-col gap-2 justify-center items-center text-lg text-center">
             <p className="text-5xl text-primary">
               <TbCertificate />
             </p>
-            <p>50+ green brands</p>
+            <p>{t("brands")}</p>
           </div>
         </div>
       </div>

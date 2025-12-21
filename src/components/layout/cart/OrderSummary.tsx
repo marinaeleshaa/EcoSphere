@@ -17,8 +17,11 @@ export default function OrderSummary() {
   const subtotalCents = useAppSelector(selectCartTotal);
   const dispatch = useAppDispatch();
 
-  const discountCents = Math.round(subtotalCents * discountRate);
-  const deliveryCents = 50;
+  const discountCents = Math.round(subtotalCents! * discountRate);
+  let deliveryCents = 0;
+
+  if (subtotalCents) deliveryCents = 50;
+
   const total = subtotalCents - discountCents + deliveryCents;
 
   const handleApplyCoupon = () => {
@@ -26,10 +29,10 @@ export default function OrderSummary() {
       .then((res) => {
         if (res.ok)
           res.json().then((data) => {
-            toast.success("Coupon Applied");
+            toast.success(t("toasts.couponApplied"));
             setDiscountRate(data.rate ?? 0);
           });
-        else toast.message("not valid coupon");
+        else toast.error(t("toasts.invalidCoupon"));
       })
       .catch((err) => console.error(err));
     setCouponCode("");
@@ -70,28 +73,38 @@ export default function OrderSummary() {
         )}
       </div>
       <div className="space-y-3 mb-6">
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">{t("subTotal")}</span>
-          <span className="font-medium ">{subtotalCents.toFixed(2)} EGP</span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-primary">
-            {t("discount", { percent: discountRate * 100 })}
-          </span>
-          <span className="font-medium text-primary">
-            -{discountCents.toFixed(2)} EGP
-          </span>
-        </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">{t("deliveryFee")}</span>
-          <span className="font-medium text-foreground">
-            {deliveryCents.toFixed(2)} EGP
-          </span>
-        </div>
+        {!!subtotalCents && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{t("subTotal")}</span>
+            <span className="font-medium">
+              {subtotalCents.toFixed(2)} {t("currency")}
+            </span>
+          </div>
+        )}
+        {!!discountRate && (
+          <div className="flex justify-between text-sm">
+            <span className="text-primary">
+              {t("discount", { percent: discountRate * 100 })}
+            </span>
+            <span className="font-medium text-primary">
+              -{discountCents.toFixed(2)} {t("currency")}
+            </span>
+          </div>
+        )}
+        {!!deliveryCents && (
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">{t("deliveryFee")}</span>
+            <span className="font-medium text-foreground">
+              {deliveryCents.toFixed(2)} {t("currency")}
+            </span>
+          </div>
+        )}
       </div>
       <div className="flex justify-between font-bold text-lg mb-6 pt-4 border-t border-primary">
         <span>{t("total")}</span>
-        <span>{total.toFixed(2)} EGP</span>
+        <span>
+          {total.toFixed(2)} {t("currency")}
+        </span>
       </div>
 
       <div className="flex items-start gap-2 mb-6 p-3 bg-muted/50 rounded-full">

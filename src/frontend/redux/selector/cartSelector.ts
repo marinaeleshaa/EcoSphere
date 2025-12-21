@@ -13,7 +13,7 @@ export const selectCartItemsArray = createSelector([selectCartItems], (items) =>
 
 // Calculate total price - only recalculates when items array changes
 export const selectCartTotal = createSelector([selectCartItemsArray], (items) =>
-	items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+	items.reduce((sum, item) => sum + item.productPrice * item.quantity, 0)
 );
 
 // Calculate total item count

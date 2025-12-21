@@ -17,6 +17,14 @@ const initialState: FavState = {
 export const getFavorites = createAsyncThunk(
   "fav/getFavorites",
   async (_, { getState }) => {
+    const state = getState() as RootState;
+    const { isLoggedIn } = state.user;
+
+    // If not logged in, return current favorites from local state (persist)
+    if (!isLoggedIn) {
+      return state.fav.favProducts || [];
+    }
+
     const res = await fetch("/api/users/favorites", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -27,12 +35,12 @@ export const getFavorites = createAsyncThunk(
 
     const { data } = await res.json();
 
-    const state = getState() as RootState;
     const existingFavs = state.fav.favProducts || [];
 
+    // Merge backend favorites with local favorites (optional but good for sync)
     const merged = Array.from(
       new Map(
-        [...existingFavs, ...data].map((item) => [item._id, item])
+        [...existingFavs, ...data].map((item: any) => [item.id, item])
       ).values()
     );
 
@@ -42,18 +50,35 @@ export const getFavorites = createAsyncThunk(
 
 export const toggleFavoriteAsync = createAsyncThunk(
   "fav/toggleFavoriteAsync",
-  async (product: Partial<IProduct>) => {
-    const res = await fetch("/api/users/favorites", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ ids: product._id }),
-    });
+  async (product: Partial<IProduct>, { getState }) => {
+    const state = getState() as RootState;
+    const { isLoggedIn } = state.user;
 
-    if (!res.ok) throw new Error("Failed to toggle favorite");
+    if (isLoggedIn) {
+      const res = await fetch("/api/users/favorites", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ids: product.id }),
+      });
 
-    const { data } = await res.json();
-    return data;
+      if (!res.ok) throw new Error("Failed to toggle favorite");
+
+      const { data } = await res.json();
+      return data;
+    } else {
+      // Logic for non-logged in users (local state)
+      const currentFavs = state.fav.favProducts || [];
+      const isFav = currentFavs.some((p) => p.id === product.id);
+
+      if (isFav) {
+        // Remove from favorites
+        return currentFavs.filter((p) => p.id !== product.id);
+      } else {
+        // Add to favorites
+        return [...currentFavs, product as IProduct];
+      }
+    }
   }
 );
 
@@ -92,4 +117,4 @@ export const { toggleFavView, clearFav } = FavSlice.actions;
 export default FavSlice.reducer;
 
 export const isInFavSelector = (state: RootState, productId: string) =>
-  state.fav.favProducts.some((p) => p._id === productId);
+  state.fav.favProducts.some((p) => p.id === productId);

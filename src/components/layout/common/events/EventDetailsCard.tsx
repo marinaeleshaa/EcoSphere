@@ -1,4 +1,4 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Dialog,
   DialogClose,
@@ -13,20 +13,36 @@ import { FcClock } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { formatDate, formatTime } from "@/frontend/utils/Event";
 import { FaLocationDot } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5";
 import { ISubEvent } from "@/types/EventTypes";
-import UpdateEventBtn from "./UpdateEventBtn";
-import DeleteEventBtn from "./DeleteEventBtn";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function EventDetailsCard({event,state,}: {event: any;state: boolean;}) {
+import UpdateEventBtn from "../../Dashboard/Events/DisplayEvents/UpdateEventBtn";
+import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn";
+import AddAttendBtn from "./AddAttendBtn";
+import { FaUserTie } from "react-icons/fa6";
+import { useTranslations, useLocale } from "next-intl";
+export default function EventDetailsCard({
+  event,
+  isOrganizerDetails,
+  isEventOrganizer,
+  canAttend,
+  userId,
+}: {
+  event: any;
+  canAttend: boolean;
+  isOrganizerDetails: boolean;
+  isEventOrganizer: boolean;
+  userId: string | "";
+}) {
+  const t = useTranslations("Events.displayEvents.EventCardDetails");
+  const locale = useLocale();
   return (
     <Dialog>
-      <DialogTrigger className="flex-1 py-3 rounded-xl border border-primary font-semibold text-sm hover:bg-primary/10 transition">
-        View Details
+      <DialogTrigger className="flex-1 py-3 rounded-xl border border-primary font-semibold text-sm hover:bg-primary/10 transition cursor-pointer">
+        {t("viewDetails")}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Event Details</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
         </DialogHeader>
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
           <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-background shadow-2xl">
@@ -45,9 +61,9 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                 <Button
                   type="button"
                   variant="secondary"
-                  className="absolute top-4 right-4 bg-background/80 hover:bg-background rounded-full p-2 shadow"
+                  className="absolute top-4 ltr:right-4 rtl:left-4 bg-background/80 hover:bg-background rounded-full p-2 shadow"
                 >
-                  Close
+                  <IoClose className="size-5" />
                 </Button>
               </DialogClose>
               {/* Title */}
@@ -65,10 +81,10 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                   <FcCalendar className="size-8" />
                   <div>
                     <p className="text-xs uppercase text-muted-foreground">
-                      Date
+                      {t("date")}
                     </p>
                     <p className="font-semibold">
-                      {formatDate(event.eventDate)}
+                      {formatDate(event.eventDate, locale)}
                     </p>
                   </div>
                 </div>
@@ -77,10 +93,11 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                   <FcClock className="size-8" />
                   <div>
                     <p className="text-xs uppercase text-muted-foreground">
-                      Time
+                      {t("time")}
                     </p>
                     <p className="font-semibold">
-                      {event.startTime} – {event.endTime}
+                      {formatTime(event.startTime, locale)} –{" "}
+                      {formatTime(event.endTime, locale)}
                     </p>
                   </div>
                 </div>
@@ -89,7 +106,7 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                   <FaLocationDot className="size-6 text-primary" />
                   <div>
                     <p className="text-xs uppercase text-muted-foreground">
-                      Location
+                      {t("location")}
                     </p>
                     <p className="font-semibold">{event.locate}</p>
                   </div>
@@ -97,7 +114,7 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
               </div>
               {/* Description */}
               <div className="space-y-2">
-                <h3 className="text-lg font-semibold">About this event</h3>
+                <h3 className="text-lg font-semibold">{t("about")}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {event.description}
                 </p>
@@ -107,7 +124,7 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                 {/* Capacity */}
                 <div className="rounded-xl border p-4 text-center">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Capacity
+                    {t("capacity")}
                   </p>
                   <p className="text-xl font-bold">{event.capacity}</p>
                 </div>
@@ -115,7 +132,7 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                 {/* Attenders */}
                 <div className="rounded-xl border p-4 text-center">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Attenders
+                    {t("attenders")}
                   </p>
                   <p className="text-xl font-bold">
                     {event.attenders?.length || 0}
@@ -125,19 +142,44 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                 {/* Price */}
                 <div className="rounded-xl border p-4 text-center">
                   <p className="text-xs uppercase text-muted-foreground">
-                    Ticket Price
+                    {t("ticketPrice")}
                   </p>
                   <p className="text-xl font-bold text-primary">
                     {event.ticketPrice === 0
-                      ? "Free"
+                      ? t("free")
                       : `${event.ticketPrice} EGP`}
                   </p>
                 </div>
+                {/* organizer */}
+                {!isOrganizerDetails && (
+                  <div className="md:col-span-3 flex items-center gap-3 rounded-xl border bg-muted/40 px-4 py-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
+                      <FaUserTie className="text-primary" />
+                    </div>
+
+                    {isEventOrganizer ? (
+                      <span className="text-xs text-primary font-semibold">
+                        {t("organizer")}
+                      </span>
+                    ) : (
+                      <div className="flex flex-col text-sm">
+                        <span className="font-medium text-foreground">
+                          {event.user?.firstName}
+                        </span>
+                        {canAttend && (
+                          <span className="text-muted-foreground text-xs">
+                            {event.user?.email}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
               {/* Sections / Schedule */}
               {event.sections && event.sections.length > 0 && (
                 <div className="space-y-3">
-                  <h3 className="text-lg font-bold">Schedule</h3>
+                  <h3 className="text-lg font-bold">{t("schedule")}</h3>
                   {event.sections.map((section: ISubEvent, index: number) => (
                     <div
                       key={index}
@@ -146,8 +188,8 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                       <div className="flex items-center justify-between">
                         <h4 className="font-semibold">{section.title}</h4>
                         <span className="text-xs text-muted-foreground">
-                          {formatTime(section.startTime)} –
-                          {formatTime(section.endTime)}
+                          {formatTime(section.startTime, locale)} –{" "}
+                          {formatTime(section.endTime, locale)}
                         </span>
                       </div>
                       {section.description && (
@@ -160,18 +202,23 @@ export default function EventDetailsCard({event,state,}: {event: any;state: bool
                 </div>
               )}
               {/* Footer Actions */}
-              <div className="sticky bottom-1 bg-background pt-4">
-                {state ? (
+              <div className="sticky bottom-0 bg-background py-4">
+                {isOrganizerDetails ? (
                   <div className="grid grid-cols-2 w-full  gap-4">
                     <UpdateEventBtn id={event._id} detailscard={true} />
                     <DeleteEventBtn id={event._id} detailscard={true} />
                   </div>
                 ) : (
-                  <div className="flex gap-4">
-                    <button className="flex-1 py-3 capitalize rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition">
-                      Attend Event
-                    </button>
-                  </div>
+                  canAttend && (
+                    <div className="flex gap-4">
+                      <AddAttendBtn
+                        eventId={event._id}
+                        ticketPrice={event.ticketPrice}
+                        attenders={event.attenders ?? []}
+                        userId={userId}
+                      />
+                    </div>
+                  )
                 )}
               </div>
             </div>

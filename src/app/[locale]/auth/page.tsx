@@ -8,10 +8,14 @@ import { AppDispatch, RootState } from "@/frontend/redux/store";
 import { toggleAuthView } from "@/frontend/redux/Slice/AuthSlice";
 import LogIn from "@/components/layout/Auth/LogIn";
 import { getCoords, ICoords } from "@/components/layout/Auth/GetCoords";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from "next-intl";
 
 const AuthPage = () => {
-  const t = useTranslations('Auth.page');
+  const t = useTranslations("Auth.page");
+  const locale = useLocale();
+  const isRTL = locale === "ar";
+  const rtlMultiplier = isRTL ? -1 : 1;
+
   const { active } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -42,10 +46,15 @@ const AuthPage = () => {
   }, []);
 
   const divVariants = {
-    login: { opacity: 1, x: coords.loginX, y: -1500, rotate: 360 },
+    login: {
+      opacity: 1,
+      x: coords.loginX * rtlMultiplier,
+      y: -1500,
+      rotate: 360,
+    },
     register: {
       opacity: 1,
-      x: coords.registerX,
+      x: coords.registerX * rtlMultiplier,
       y: -1500,
       rotate: 360,
     },
@@ -57,21 +66,25 @@ const AuthPage = () => {
   };
 
   const imgLoginVariants = {
-    login: { opacity: 1, x: coords.loginImgX, y: coords.loginImgY },
-    register: { opacity: 0, x: -1850 },
+    login: {
+      opacity: 1,
+      x: coords.loginImgX * rtlMultiplier,
+      y: coords.loginImgY,
+    },
+    register: { opacity: 0, x: -1850 * rtlMultiplier },
   };
 
   const imgSignupVariants = {
-    login: { opacity: 0, x: 1850 },
-    register: { opacity: 1, x: coords.signupImgX },
+    login: { opacity: 0, x: 1850 * rtlMultiplier },
+    register: { opacity: 1, x: coords.signupImgX * rtlMultiplier },
   };
   const toSignUpVariants = {
-    login: { opacity: 1, x: coords.toSignUpX },
-    register: { opacity: 0, x: -1850 },
+    login: { opacity: 1, x: coords.toSignUpX * rtlMultiplier },
+    register: { opacity: 0, x: -1850 * rtlMultiplier },
   };
   const toSignInVariants = {
-    login: { opacity: 0, x: 1850 },
-    register: { opacity: 1, x: coords.toSignInX },
+    login: { opacity: 0, x: 1850 * rtlMultiplier },
+    register: { opacity: 1, x: coords.toSignInX * rtlMultiplier },
   };
 
   // Animation for mobile div
@@ -80,8 +93,8 @@ const AuthPage = () => {
       if (active === "login") {
         await controls.start({
           width: "0px",
-          left: 0,
-          right: "auto",
+          left: isRTL ? "auto" : 0,
+          right: isRTL ? 0 : "auto",
           transition: { duration: 0 },
         });
         await controls.start({
@@ -90,15 +103,15 @@ const AuthPage = () => {
         });
         await controls.start({
           width: "0px",
-          left: 0,
-          right: "auto",
+          left: isRTL ? "auto" : 0,
+          right: isRTL ? 0 : "auto",
           transition: { duration: 1, ease: "easeInOut" },
         });
       } else {
         await controls.start({
           width: "0px",
-          left: "auto",
-          right: 0,
+          left: isRTL ? 0 : "auto",
+          right: isRTL ? "auto" : 0,
           transition: { duration: 0 },
         });
         await controls.start({
@@ -107,14 +120,14 @@ const AuthPage = () => {
         });
         await controls.start({
           width: "0px",
-          left: "auto",
-          right: 0,
+          left: isRTL ? 0 : "auto",
+          right: isRTL ? "auto" : 0,
           transition: { duration: 1, ease: "easeInOut" },
         });
       }
     };
     sequence();
-  }, [active, controls]);
+  }, [active, controls, isRTL]);
   const handleToggle = () => {
     dispatch(toggleAuthView());
   };
@@ -124,12 +137,15 @@ const AuthPage = () => {
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center min-h-screen  ">
           {/* register form */}
           <motion.div
-            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${active === "login" ? "hidden" : ""
-              }`}
+            className={`flex sm:flex  flex-col lg:w-[40%] md:w-[50%] h-full  w-full ${
+              active === "login" ? "hidden" : ""
+            }`}
             variants={formVariants}
             initial={false}
             animate={
-              active === "register" ? "register" : { opacity: 0, x: 100 }
+              active === "register"
+                ? "register"
+                : { opacity: 0, x: 100 * rtlMultiplier }
             }
             transition={{ duration: 2, delay: 0.5 }}
           >
@@ -138,10 +154,15 @@ const AuthPage = () => {
 
           {/* login form */}
           <motion.div
-            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[45%] md:w-[50%] w-full rounded-2xl ${active === "register" ? "hidden" : ""
-              } `}
+            className={`flex sm:flex gap-5 flex-col p-5 lg:w-[45%] md:w-[50%] w-full rounded-2xl ${
+              active === "register" ? "hidden" : ""
+            } `}
             variants={formVariants}
-            animate={active === "login" ? "login" : { opacity: 0, x: -200 }}
+            animate={
+              active === "login"
+                ? "login"
+                : { opacity: 0, x: -200 * rtlMultiplier }
+            }
             initial={false}
             transition={{ duration: 2, delay: 0.5 }}
           >
@@ -160,7 +181,9 @@ const AuthPage = () => {
       ></motion.div>
       {/* animated background for mobile */}
       <motion.div
-        className="absolute  h-screen bg-primary sm:hidden top-0 left-0"
+        className={`absolute  h-screen bg-primary sm:hidden top-0 ${
+          isRTL ? "right-0" : "left-0"
+        }`}
         initial={false}
         animate={controls}
         transition={{ duration: 2, delay: 0.5 }}
@@ -178,7 +201,11 @@ const AuthPage = () => {
         width={300}
         height={350}
         alt="login"
-        className="sm:absolute sm:block hidden absolute bottom-50 right-0 sm:-right-2 md:-right-10 lg:right-10 xl:-right-10 xl:w-[350px] "
+        className={`sm:absolute sm:block hidden absolute bottom-50 ${
+          isRTL
+            ? "left-0 sm:-left-2 md:-left-10 lg:left-10 xl:-left-10"
+            : "right-0 sm:-right-2 md:-right-10 lg:right-10 xl:-right-10"
+        } xl:w-[350px] `}
         variants={imgLoginVariants}
         initial={false}
         animate={active}
@@ -189,7 +216,9 @@ const AuthPage = () => {
         width={350}
         height={400}
         alt="signup"
-        className="sm:absolute sm:block hidden absolute bottom-0 right-0 md:w-[320px] md:h-[300px] lg:w-[450px] lg:h-[350px] "
+        className={`sm:absolute sm:block hidden absolute bottom-0 ${
+          isRTL ? "left-0" : "right-0"
+        } md:w-[320px] md:h-[300px] lg:w-[450px] lg:h-[350px] `}
         variants={imgSignupVariants}
         initial={false}
         animate={active}
@@ -197,44 +226,48 @@ const AuthPage = () => {
       />
       {/* to sign up */}
       <motion.div
-        className="hidden sm:absolute top-30 left-0 md:left-30 lg:left-20  min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  "
+        className={`hidden sm:absolute top-30 ${
+          isRTL
+            ? "right-0 md:right-30 lg:right-20"
+            : "left-0 md:left-30 lg:left-20"
+        }  min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  `}
         variants={toSignUpVariants}
         animate={active}
         initial={false}
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-2xl xl:text-3xl font-extrabold">
-          {t('newToEcosphere')}
+          {t("newToEcosphere")}
         </h2>
-        <p className="text-base lg:text-lg xl:text-xl">
-          {t('signUpText')}
-        </p>
+        <p className="text-base lg:text-lg xl:text-xl">{t("signUpText")}</p>
         <motion.button
           onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
-          {t('signUp')}
+          {t("signUp")}
         </motion.button>
       </motion.div>
       {/* to sign in */}
       <motion.div
-        className=" hidden sm:absolute top-50 right-10 md:right-30 lg:top-40 lg:right-10 xl:right-30 xl:top-30 min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  "
+        className={` hidden sm:absolute top-50 ${
+          isRTL
+            ? "left-10 md:left-30 lg:left-10 xl:left-30"
+            : "right-10 md:right-30 lg:right-10 xl:right-30"
+        } lg:top-40 xl:top-30 min-w-60  sm:flex flex-col gap-5 p-5 justify-center text-center text-primary-foreground  `}
         variants={toSignInVariants}
         animate={active}
         initial={false}
         transition={{ duration: 2, delay: 0.5 }}
       >
         <h2 className="text-2xl lg:text-xl xl:text-5xl font-extrabold">
-          {t('oneOfUs')}
+          {t("oneOfUs")}
         </h2>
-        <p className="text-sm lg:text-xl xl:text-2xl">
-          {t('signInText')}
-        </p>
+        <p className="text-sm lg:text-xl xl:text-2xl">{t("signInText")}</p>
         <motion.button
           onClick={handleToggle}
           className="cursor-pointer  text-primary-foreground border-2 border-background  p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary-foreground  hover:bg-background hover:text-primary hover:outline-offset-4 "
         >
-          {t('signIn')}
+          {t("signIn")}
         </motion.button>
       </motion.div>
     </section>

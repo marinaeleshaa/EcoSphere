@@ -71,7 +71,7 @@ export const UserSlice = createSlice({
     updateProfile: (state, action: PayloadAction<Partial<UserState>>) => {
       return { ...state, ...action.payload };
     },
-    logout: (state) => {
+    logout: () => {
       return initialState;
     },
   },

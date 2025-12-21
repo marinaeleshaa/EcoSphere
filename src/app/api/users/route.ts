@@ -2,19 +2,15 @@ import { rootContainer } from "@/backend/config/container";
 import UserController from "@/backend/features/user/user.controller";
 import { IUser } from "@/backend/features/user/user.model";
 import { ApiResponse, ok, serverError, unauthorized } from "@/types/api-helpers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
-export const GET = async (
-  _req: NextRequest
-): Promise<NextResponse<ApiResponse<IUser[]>>> => {
+export const GET = async (): Promise<NextResponse<ApiResponse<IUser[]>>> => {
   return ok(await rootContainer.resolve(UserController).getAll());
 };
 
 // Get current user endpoint - returns PublicUserProfile with proper avatar URL
-export const POST = async (
-  _req: NextRequest
-): Promise<NextResponse<ApiResponse<IUser>>> => {
+export const POST = async (): Promise<NextResponse<ApiResponse<IUser>>> => {
   try {
     const session = await auth();
     

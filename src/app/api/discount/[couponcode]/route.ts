@@ -17,6 +17,6 @@ export const POST = async (req: NextRequest) => {
 		return ok(response);
 	} catch (error) {
 		console.error(error);
-		return serverError(error!.message);
+		return serverError("Something went wrong");
 	}
 };

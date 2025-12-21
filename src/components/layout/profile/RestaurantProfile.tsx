@@ -3,17 +3,23 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/frontend/redux/store";
-import {
-  updateUserProfile,
-  updateProfile,
-} from "@/frontend/redux/Slice/UserSlice";
+import { updateProfile } from "@/frontend/redux/Slice/UserSlice";
 import ImageUpload from "@/components/layout/common/ImageUpload";
 import { Edit, Eye, EyeOff } from "lucide-react";
 import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
 import { getUserData } from "@/frontend/api/Users";
 import { Shop } from "@/types/UserTypes";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
-export default function RestaurantProfile({ id, role }: { id: string; role: string }) {
+export default function RestaurantProfile({
+  id,
+  role,
+}: {
+  id: string;
+  role: string;
+}) {
+  const t = useTranslations("Profile");
   const [user, setUser] = useState<Shop>();
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -49,10 +55,12 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
       }
     };
     fetchUser();
-  }, [id]);
+  }, [id, role]);
 
-  if (loading) return <div className="p-6 text-center">Loading profile...</div>;
-  if (!user) return <div className="p-6 text-center">User not found.</div>;
+  if (loading)
+    return <div className="p-6 text-center">{t("states.loading")}</div>;
+  if (!user)
+    return <div className="p-6 text-center">{t("states.notFound")}</div>;
 
   const validatePassword = (data: typeof passwordData) => {
     const result = ChangePasswordSchema.safeParse(data);
@@ -81,9 +89,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
     }
 
     // Dispatch password change logic here
-    // For now, we'll just simulate success or dispatch if needed
-    // Note: The actual API call needs to be implemented in the slice/thunk
-    alert("Password change validation passed! (API integration pending)");
+    toast.success(t("toasts.passwordChanged"));
     setPasswordData({
       currentPassword: "",
       newPassword: "",
@@ -138,14 +144,14 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
         <button
           onClick={handleEditClick}
           className="absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
-          title="Edit Profile"
+          title={t("common.editProfile")}
         >
           <Edit className="w-5 h-5" />
         </button>
 
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
-          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-[350px]">
+          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-87.5">
             <div className="flex items-center gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
@@ -154,9 +160,11 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
               <div className="flex flex-col gap-3">
                 <div>
                   <h1 className="text-2xl font-bold text-card-foreground">
-                    {user.name || "Restaurant Name"}
+                    {user.name || t("restaurant.shopName")}
                   </h1>
-                  <p className="text-muted-foreground">Restaurant</p>
+                  <p className="text-muted-foreground">
+                    {t("restaurant.role")}
+                  </p>
                 </div>
               </div>
             </div>
@@ -168,31 +176,39 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
           {/* Right Side: Restaurant Information */}
           <div className="flex-1 w-full">
             <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-              Restaurant Information
+              {t("restaurant.restaurantInformation")}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">Location</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("restaurant.location")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.location || "N/A"}
+                  {user.location || t("common.na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Phone Number</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("common.phoneNumber")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.phoneNumber || "N/A"}
+                  {user.phoneNumber || t("common.na")}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Working Hours</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("restaurant.workingHours")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.workingHours || "N/A"}
+                  {user.workingHours || t("common.na")}
                 </p>
               </div>
               <div className="col-span-2">
-                <p className="text-sm text-muted-foreground">Description</p>
+                <p className="text-sm text-muted-foreground">
+                  {t("restaurant.description")}
+                </p>
                 <p className="font-medium text-card-foreground">
-                  {user.description || "No description available."}
+                  {user.description || t("restaurant.noDescription")}
                 </p>
               </div>
             </div>
@@ -203,12 +219,12 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
       {/* Security Section */}
       <div className="bg-card shadow rounded-lg p-6 border border-border">
         <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-          Security
+          {t("security.title")}
         </h2>
         <div className="max-w-md space-y-4">
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              Current Password
+              {t("security.currentPassword")}
             </label>
             <div className="relative">
               <input
@@ -217,7 +233,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
                 value={passwordData.currentPassword}
                 onChange={handlePasswordInputChange}
                 className="myInput pr-12"
-                placeholder="Enter current password"
+                placeholder={t("security.currentPasswordPlaceholder")}
               />
               <button
                 type="button"
@@ -244,7 +260,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
           </div>
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              New Password
+              {t("security.newPassword")}
             </label>
             <div className="relative">
               <input
@@ -257,7 +273,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
-                placeholder="Enter new password"
+                placeholder={t("security.newPasswordPlaceholder")}
                 disabled={!passwordData.currentPassword}
               />
               <button
@@ -276,7 +292,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
           </div>
           <div>
             <label className="block text-sm font-medium text-card-foreground mb-1">
-              Confirm Password
+              {t("security.confirmPassword")}
             </label>
             <div className="relative">
               <input
@@ -289,7 +305,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
                     ? "opacity-50 cursor-not-allowed"
                     : ""
                 }`}
-                placeholder="Confirm new password"
+                placeholder={t("security.confirmPasswordPlaceholder")}
                 disabled={!passwordData.newPassword}
               />
               <button
@@ -328,7 +344,7 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
               passwordData.newPassword !== passwordData.confirmPassword
             }
           >
-            Change Password
+            {t("security.changePassword")}
           </button>
         </div>
       </div>
@@ -338,53 +354,53 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg p-6 w-full max-w-md border border-border shadow-lg">
             <h2 className="text-xl font-bold mb-4 text-card-foreground">
-              Edit Profile
+              {t("restaurant.editModalTitle")}
             </h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Restaurant Name
+                  {t("restaurant.shopName")}
                 </label>
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={formData.name || user.name}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Phone Number
+                  {t("common.phoneNumber")}
                 </label>
                 <input
                   type="text"
                   name="phoneNumber"
-                  value={formData.phoneNumber}
+                  value={formData.phoneNumber || user.phoneNumber}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Location
+                  {t("restaurant.location")}
                 </label>
                 <input
                   type="text"
                   name="location"
-                  value={formData.location}
+                  value={formData.location || user.location}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Working Hours
+                  {t("restaurant.workingHours")}
                 </label>
                 <input
                   type="text"
                   name="workingHours"
-                  value={formData.workingHours}
+                  value={formData.workingHours || user.workingHours}
                   onChange={handleInputChange}
                   placeholder="e.g., 9 AM - 10 PM"
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -392,11 +408,11 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
               </div>
               <div>
                 <label className="block text-sm font-medium text-card-foreground mb-1">
-                  Description
+                  {t("restaurant.description")}
                 </label>
                 <textarea
                   name="description"
-                  value={formData.description}
+                  value={formData.description || user.description}
                   onChange={handleInputChange}
                   rows={3}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
@@ -408,13 +424,13 @@ export default function RestaurantProfile({ id, role }: { id: string; role: stri
                 onClick={() => setIsEditing(false)}
                 className="px-4 py-2 border border-input rounded-md text-foreground hover:bg-accent hover:text-accent-foreground transition"
               >
-                Cancel
+                {t("common.cancel")}
               </button>
               <button
                 onClick={handleSave}
                 className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition"
               >
-                Save Changes
+                {t("common.saveChanges")}
               </button>
             </div>
           </div>

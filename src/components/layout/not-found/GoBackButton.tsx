@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-export default function GoBackButton() {
+export default function GoBackButton({ text }: { text: string }) {
   const router = useRouter();
 
   return (
@@ -10,7 +10,7 @@ export default function GoBackButton() {
       onClick={() => router.back()}
       className="myBtnPrimary min-w-[200px]"
     >
-      Go Back
+      {text}
     </button>
   );
 }

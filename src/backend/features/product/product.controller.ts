@@ -7,7 +7,9 @@ import {
   UpdateProductDTO,
   ProductPageOptions,
   PaginatedProductResponse,
+  mapResponseToIProduct,
 } from "./dto/product.dto";
+import { IProduct } from "@/types/ProductType";
 
 @injectable()
 export class ProductController {
@@ -15,12 +17,14 @@ export class ProductController {
     @inject("ProductService") private readonly productService: IProductService
   ) {}
 
-  async getAll(): Promise<ProductResponse[]> {
-    return await this.productService.getAllProducts();
+  async getAll(): Promise<IProduct[]> {
+    const products = await this.productService.getAllProducts();
+    return products.map((product) => mapResponseToIProduct(product));
   }
 
-  async getById(id: string): Promise<ProductResponse | null> {
-    return await this.productService.getProductById(id);
+  async getById(id: string): Promise<IProduct | null> {
+    const product = await this.productService.getProductById(id);
+    return product ? mapResponseToIProduct(product) : null;
   }
 
   async getByRestaurantId(
@@ -57,5 +61,12 @@ export class ProductController {
     productId: string
   ): Promise<IRestaurant> {
     return await this.productService.deleteProduct(restaurantId, productId);
+  }
+
+  async addProductReview(
+    productId: string,
+    review: any
+  ): Promise<IRestaurant | null> {
+    return await this.productService.addProductReview(productId, review);
   }
 }

@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { type IOrderService } from "./order.service";
 import { CreateOrderDTO, OrderStatus } from "./order.types";
+import Stripe from "stripe";
 
 @injectable()
 export class OrderController {
@@ -10,9 +11,14 @@ export class OrderController {
 
 	async createOrder(order: CreateOrderDTO) {
 		if (!order) return;
-		const savedOrder = await this.orderService.createOrder(order);
+		const savedOrder = await this.orderService.createOrder(order.userId, order);
 		if (!savedOrder) return;
 		return savedOrder;
+	}
+
+	async handleStripeEvent(event: Stripe.Event) {
+		const response = await this.orderService.handleStripeEvent(event);
+		return response;
 	}
 
 	async getUserOrders(userId: string) {

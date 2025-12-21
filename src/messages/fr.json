@@ -3,14 +3,47 @@
     "hero": {
       "subtitle": "#Rejoignez le mouvement",
       "title": "Les collectes de fonds réussies commencent ici",
-      "cta": "En savoir plus sur EcoSphere"
+      "cta": "Plus sur EcoSphere"
+    },
+    "solidContent": {
+      "footprint": "réduisez votre empreinte carbone jusqu'à 30 % grâce à des gestes simples au quotidien.",
+      "tips": "Découvrez plus de 100 astuces écologiques",
+      "community": "Rejoignez une communauté grandissante de plus de 10 000 amoureux de la planète"
+    },
+    "marketplace": {
+      "title": "Notre Magasin",
+      "description": "Achetez des produits 100% écologiques et commencez votre voyage vers un mode de vie plus durable. Nous proposons une large gamme d'articles certifiés sans toxines, soigneusement sélectionnés auprès de magasins écologiques de confiance et de fermes partenaires à travers l'Égypte et au-delà.",
+      "list": {
+        "natural": "Produits fabriqués à partir de matériaux naturels, biodégradables et recyclés.",
+        "zeroWaste": "Une gamme complète d'essentiels zéro déchet sur lesquels vous pouvez compter au quotidien.",
+        "farm": "Produits agricoles frais et biologiques provenant de manière responsable de fermes écologiques locales."
+      },
+      "stats": {
+        "products": "300+ produits durables",
+        "brands": "50+ marques vertes"
+      },
+      "cta": "Visiter le Magasin"
+    },
+    "partners": {
+      "title": "Magasins et Fermes Partenaires Écologiques",
+      "description": "Nous sommes fiers de vous mettre en relation avec les meilleurs magasins et fermes écologiques qui partagent notre mission de promouvoir un avenir plus propre et plus durable. Notre réseau s'agrandit chaque jour, ce qui vous permet d'accéder plus facilement à des produits fiables, sûrs et respectueux de l'environnement provenant de magasins certifiés et de fermes écologiques passionnées.",
+      "cta": "Visiter Nos Partenaires",
+      "stats": {
+        "partners": "50+",
+        "partnersDesc": "partenaires engagés dans la durabilité",
+        "products": "1200+",
+        "productsDesc": "produits naturels et sans toxines",
+        "farms": "15+",
+        "farmsDesc": "fermes locales certifiées"
+      }
     }
   },
   "Layout": {
     "Sidebar": {
       "groups": {
         "application": "Application",
-        "dashboard": "Tableau de bord"
+        "dashboard": "Tableau de bord",
+        "admin": "Admin"
       },
       "menu": {
         "home": "Accueil",
@@ -20,7 +53,8 @@
         "news": "Actualités",
         "store": "Magasin",
         "game": "Jeu",
-        "about": "À propos"
+        "about": "À propos",
+        "recipes": "Recettes"
       },
       "dashboard": {
         "overview": "Aperçu",
@@ -38,13 +72,21 @@
         "favorite": "Favoris",
         "cart": "Panier",
         "login": "Connexion"
+      },
+      "theme": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système",
+        "label": "Thème {theme}"
       }
     },
     "UserBtn": {
       "subscribe": "S’abonner",
       "profile": "Profil",
       "notifications": "Notifications",
-      "logout": "Déconnexion"
+      "logout": "Déconnexion",
+      "logoutSuccess": "Vous avez été déconnecté avec succès.",
+      "logoutError": "Impossible de se déconnecter. Veuillez réessayer plus tard."
     }
   },
   "About": {
@@ -151,7 +193,10 @@
       "yourTurn": "À votre tour",
       "pointsAdded": "{points} points ajoutés à vos EcoPoints !",
       "updatePoints": "Erreur lors de la mise à jour des EcoPoints. Veuillez réessayer.",
-      "loginForPoints": "Connectez-vous pour gagner des EcoPoints !"
+      "loginForPoints": "Connectez-vous pour gagner des EcoPoints !",
+      "limitReached": "Vous avez atteint votre limite quotidienne de 2 jeux. Revenez demain !",
+      "limitReachedDesc": "Rejoignez-nous demain pour gagner plus d'EcoPoints et tester à nouveau vos compétences !",
+      "remainingPlays": "Il vous reste {count} parties aujourd'hui."
     },
     "difficulty": {
       "easy": "Facile",
@@ -214,25 +259,10 @@
     },
     "product": {
       "addedToFavorites": "Ajouté aux favoris",
-      "removedFromFavorites": "Retiré des favoris"
-    }
-  },
-  "Favorites": {
-    "hero": {
-      "title": "Favoris",
-      "breadcrumb": {
-        "home": "Accueil",
-        "favorite": "Favoris"
-      }
-    },
-    "emptyState": {
-      "title": "Aucun favori pour le moment",
-      "description": "Ajoutez des produits à vos favoris pour les voir ici",
-      "browseButton": "Parcourir les produits"
-    },
-    "card": {
-      "addToCart": "Ajouter au panier",
-      "removedFromFavorites": "Retiré des favoris"
+      "removedFromFavorites": "Retiré des favoris",
+      "addedToCart": "Ajouté au panier",
+      "removedFromCart": "Retiré du panier",
+      "currency": "EGP"
     }
   },
   "ProductDetails": {
@@ -249,7 +279,9 @@
       "quantity": "Quantité :",
       "addToCart": "Ajouter au panier",
       "addedToFavorites": "Ajouté aux favoris",
-      "removedFromFavorites": "Retiré des favoris"
+      "removedFromFavorites": "Retiré des favoris",
+      "availableOnline": "Disponible en ligne",
+      "notAvailableOnline": "Indisponible en ligne"
     },
     "tabs": {
       "description": "description",
@@ -357,17 +389,22 @@
     },
     "login": {
       "title": "Connexion",
+      "titleLogging": "Connexion en cours...",
       "email": "Email",
       "password": "Mot de passe",
       "forgetPassword": "Mot de passe oublié",
       "forgotPassword": "Mot de passe oublié",
       "or": "ou",
       "newToEcosphere": "Nouveau sur EcoSphere ?",
-      "signUp": "Créer un compte"
+      "signUp": "Créer un compte",
+      "successLogin": "Vous avez bien connecté"
     },
     "signup": {
-      "oneOfUs": "Déjà l'un des nôtres ?",
-      "login": "Se connecter"
+      "oneOfUs": "Un de nous ?",
+      "login": "Connexion",
+      "registering": "Enregistrement...",
+      "continue": "Continuer",
+      "successRegister": "Vous avez bien créé votre compte"
     },
     "forgotPassword": {
       "title": "Mot de passe oublié",
@@ -410,7 +447,8 @@
         "lastName": "Entrez votre nom",
         "phoneNumber": "Entrez votre numéro de téléphone",
         "female": "Femme",
-        "male": "Homme"
+        "male": "Homme",
+        "addressPlaceholder": "Entrez votre adresse"
       },
       "shopStep2": {
         "title": "Détails de la boutique",
@@ -434,7 +472,8 @@
   },
   "Profile": {
     "page": {
-      "pleaseLogin": "Veuillez vous connecter pour voir votre profil."
+      "pleaseLogin": "Veuillez vous connecter pour voir votre profil.",
+      "loading": "Chargement..."
     },
     "common": {
       "editProfile": "Modifier le profil",
@@ -464,6 +503,24 @@
       "browseOrders": "Voir les commandes",
       "editModalTitle": "Modifier le profil"
     },
+    "toasts": {
+      "passwordChanged": "Mot de passe modifié avec succès",
+      "passwordChangeFailed": "Échec de la modification du mot de passe"
+    },
+    "states": {
+      "loading": "Chargement du profil...",
+      "notFound": "Utilisateur non trouvé."
+    },
+    "security": {
+      "title": "Sécurité",
+      "currentPassword": "Mot de passe actuel",
+      "currentPasswordPlaceholder": "Entrez le mot de passe actuel",
+      "newPassword": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Entrez le nouveau mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+      "changePassword": "Changer le mot de passe"
+    },
     "organizer": {
       "role": "Organisateur d'événements",
       "organizationName": "Nom de l'organisation",
@@ -471,7 +528,8 @@
       "editModalTitle": "Modifier le profil",
       "subscriptionManagement": "Gestion d'abonnement",
       "expiryDate": "Date d'expiration",
-      "renewSubscription": "Renouveler l'abonnement"
+      "renewSubscription": "Renouveler l'abonnement",
+      "renewFeatureComingSoon": "La fonctionnalité de renouvellement arrive bientôt !"
     },
     "restaurant": {
       "role": "Restaurant",
@@ -480,7 +538,9 @@
       "location": "Emplacement",
       "workingHours": "Heures d'ouverture",
       "hotline": "Hotline",
-      "editModalTitle": "Modifier le profil du magasin"
+      "editModalTitle": "Modifier le profil du magasin",
+      "restaurantInformation": "Informations sur le restaurant",
+      "noDescription": "Aucune description disponible."
     }
   },
   "Cart": {
@@ -511,18 +571,61 @@
       "title": "Récapitulatif de la commande",
       "promoCode": "Code promo",
       "apply": "Appliquer",
-      "couponApplied": "Code promo appliqué !",
+      "couponApplied": "Coupon appliqué",
+      "no-coupon": "Aucun coupon",
       "subTotal": "Sous-total",
-      "discount": "Réduction ({percent}%)",
+      "discount": "Remise ({percent}%)",
       "deliveryFee": "Frais de livraison",
       "total": "Total",
-      "warranty": "Garantie limitée de 90 jours couvrant les éléments du fabricant",
+      "warranty": "Garantie",
       "details": "Détails",
-      "checkoutNow": "Passer à la commande",
-      "no-coupon": "Aucun coupon appliqué"
+      "checkoutNow": "Commander maintenant",
+      "currency": "EGP",
+      "toasts": {
+        "couponApplied": "Coupon appliqué",
+        "invalidCoupon": "Coupon non valide"
+      }
     }
   },
-  "Dashboard": {
+  "Checkout": {
+    "page": {
+      "title": "Paiement",
+      "payWithCard": "Payer par carte",
+      "payWithCash": "Paiement à la livraison",
+      "somethingWentWrong": "Une erreur s'est produite",
+      "youWillPay": "Vous paierez",
+      "directlyToCourier": "directement au coursier à la livraison.",
+      "confirmOrder": "Confirmer la commande"
+    },
+    "form": {
+      "initializing": "Initialisation du paiement sécurisé...",
+      "securePayment": "Paiement sécurisé",
+      "securePaymentDesc": "Complétez votre achat en toute sécurité.",
+      "errorTitle": "Erreur",
+      "unexpectedError": "Une erreur inattendue s'est produite.",
+      "processing": "Traitement...",
+      "pay": "Payer {amount}",
+      "securedByStripe": "Paiements sécurisés par Stripe"
+    },
+    "verification": {
+      "successTitle": "Paiement confirmé",
+      "successDesc": "Merci de contribuer à un avenir plus vert.",
+      "transactionId": "ID de transaction",
+      "totalAmount": "Montant total",
+      "returnHome": "Retour à l'accueil",
+      "downloadReceipt": "Télécharger le reçu",
+      "failedTitle": "Échec du paiement",
+      "failedDesc": "Nous avons rencontré un problème lors du traitement de votre éco-contribution. Aucun fonds n'a été déduit.",
+      "errorCode": "Code d'erreur : {code}",
+      "cardDeclined": "Carte refusée. Veuillez vérifier les détails de votre carte ou essayer un autre mode de paiement.",
+      "tryAgain": "Réessayer"
+    }
+  },
+  "Events": {
+    "hero": {
+      "title": "Ne manquez jamais un événement sur Ecosphere",
+      "subTitle": "Découvrez les événements à venir sur la plateforme Ecosphere, obtenez tous les détails dont vous avez besoin et participez à des expériences qui rassemblent la communauté"
+    },
     "overview": {
       "title": "Aperçu du tableau de bord",
       "quickActions": "Actions rapides",
@@ -532,7 +635,6 @@
       "keyMetrics": "Indicateurs clés",
       "realTimeData": "Données en temps réel",
       "totalTicketSales": "Total des ventes de billets",
-      "fromLastWeek": "depuis la semaine dernière",
       "totalRevenue": "Revenu total",
       "confirmedAttendees": "Participants confirmés",
       "activeEvents": "Événements actifs",
@@ -541,10 +643,138 @@
       "manage": "Gérer",
       "noUpcomingEvents": "Aucun événement à venir."
     },
+    "MainDisplayEvents": {
+      "title": "Parcourir les événements",
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher des événements...",
+      "emptyTitle": "Aucun événement à venir",
+      "emptySubtitle": "Veuillez revenir plus tard pour les prochains événements"
+    },
+    "WhyEcosphere": {
+      "title": "Pourquoi assister aux événements sur Ecosphere ?",
+      "subtitle": "Ecosphere vous aide à découvrir, explorer et assister aux événements facilement avec tout ce dont vous avez besoin au même endroit.",
+      "card1": {
+        "title": "Découverte centralisée des événements",
+        "description": "Trouvez tous les événements à venir sur une plateforme unifiée sans chercher dans plusieurs sources."
+      },
+      "card2": {
+        "title": "Informations détaillées sur l'événement",
+        "description": "Consultez les horaires, lieux, organisateurs et tous les détails de l'événement avant d'y assister."
+      },
+      "card3": {
+        "title": "Participation et suivi faciles",
+        "description": "Participez facilement aux événements et suivez ceux auxquels vous prévoyez d'assister."
+      }
+    },
     "displayEvents": {
-      "title": "Affichage des événements du tableau de bord",
-      "ticketLeft": "Billets restants",
-      "sold": "{percent}% vendu"
+      "title": "Mes événements",
+      "addEventBtn": "Ajouter un événement",
+      "UpComingEvents": "Événements à venir",
+      "PastEvents": "Événements passés",
+      "noEvents": "Aucun événement trouvé",
+      "EventCard": {
+        "organizer": "Vous êtes l'organisateur",
+        "status": {
+          "approved": "Approuvé",
+          "pending": "En attente...",
+          "rejected": "Refusé"
+        }
+      },
+      "EventCardDetails": {
+        "viewDetails": "Voir les détails",
+        "title": "Détails de l’événement",
+        "date": "Date",
+        "time": "Heure",
+        "location": "Lieu",
+        "about": "À propos de cet événement",
+        "capacity": "Capacité",
+        "attenders": "Participants",
+        "ticketPrice": "Prix du billet",
+        "free": "Gratuit",
+        "schedule": "Programme",
+        "organizer": "Vous êtes l’organisateur"
+      },
+      "AddAttendBtn": {
+        "join": "Participer à l’événement",
+        "joined": "Déjà inscrit",
+        "success": "Vous avez rejoint l’événement avec succès",
+        "error": "Une erreur s’est produite"
+      },
+      "editBtn": "Modifier l’événement",
+      "DeleteEventBtn": {
+        "delete": "Supprimer l’événement",
+        "success": "Événement supprimé avec succès",
+        "error": "Erreur lors de la suppression de l’événement"
+      }
+    },
+    "Manage": {
+      "titleCreate": "Créer un Événement",
+      "titleEdit": "Modifier l'Événement",
+      "submitCreate": "Créer l'Événement",
+      "submitUpdate": "Mettre à jour l'Événement",
+      "submitting": "Enregistrement de l'événement...",
+      "successCreate": "Événement créé avec succès",
+      "successUpdate": "Événement mis à jour avec succès",
+      "error": "Erreur lors de l'enregistrement de l'événement",
+      "sections": {
+        "primary": "Informations Principales de l'Événement",
+        "venue": "Lieu et Horaire",
+        "capacity": "Capacité et Ventes",
+        "schedule": "Programme Détaillé de l'Événement",
+        "section": "la section"
+      },
+      "fields": {
+        "title": "Titre de l'Événement",
+        "titlePlaceholder": "Nom de l'Événement",
+        "type": "Type d'Événement",
+        "typePlaceholder": "Sélectionner le type d'événement",
+        "image": "Image de l'Événement",
+        "description": "Brève Description",
+        "descriptionPlaceholder": "Décrivez votre événement...",
+        "location": "Lieu / Salle",
+        "locationPlaceholder": "Ville, Adresse ou Lieu",
+        "date": "Date de l'Événement",
+        "startTime": "Heure de Début",
+        "endTime": "Heure de Fin",
+        "ticketsAmount": "Nombre de Billets",
+        "ticketStatus": "Statut du Billet",
+        "ticketStatusPlaceholder": "Sélectionner le statut du billet",
+        "ticketPrice": "Prix du Billet",
+        "agendaTitle": "Titre",
+        "agendaTitlePlaceholder": "Titre de la section",
+        "agendaDescription": "Description",
+        "agendaDescriptionPlaceholder": "Détails..."
+      },
+      "actions": {
+        "addAgenda": "Ajouter une Section"
+      },
+      "ticketTypes": {
+        "priced": "Payant",
+        "free": "Gratuit"
+      }
+    }
+  },
+  "Favorites": {
+    "hero": {
+      "title": "Vos favoris",
+      "breadcrumb": {
+        "home": "Accueil",
+        "favorite": "Favoris"
+      }
+    },
+    "emptyState": {
+      "title": "Pas encore de favoris",
+      "description": "Commencez à explorer et ajoutez des articles à votre liste de souhaits !",
+      "browseButton": "Parcourir les articles"
+    },
+    "card": {
+      "removedFromFavorites": "Retiré des favoris",
+      "addToCart": "Ajouter au panier"
+    },
+    "view": {
+      "grid": "Vue en grille",
+      "list": "Vue en liste",
+      "clearAll": "Tout effacer"
     }
   },
   "AI": {
@@ -600,7 +830,8 @@
           "Support dédié 24/7",
           "Accès à tous les outils premium Écosphère"
         ],
-        "icon": "eco-pro"
+        "icon": "eco-pro",
+        "planKey": "pro_monthly"
       },
       {
         "title": "Formule Croissance",
@@ -614,7 +845,8 @@
           "Support prioritaire",
           "Accès aux outils d'éco-événements"
         ],
-        "icon": "growth"
+        "icon": "growth",
+        "planKey": "growth_monthly"
       }
     ]
   },
@@ -730,6 +962,11 @@
       "manual": "Manuel",
       "aiScan": "Scan IA"
     },
+    "vision": {
+      "addImages": "Ajouter des images",
+      "dragDrop": "Glissez-déposez ou cliquez pour télécharger",
+      "imagesReady": "{count} Image{s} prête(s)"
+    },
     "errors": {
       "addItem": "Veuillez ajouter au moins un article.",
       "uploadImage": "Veuillez télécharger au moins une image.",
@@ -814,6 +1051,97 @@
       "mixed": "Mixte"
     }
   },
+  "RecycleDashboard": {
+    "title": "Tableau de Bord Recyclage",
+    "description": "Gérez et suivez toutes les demandes de recyclage. Examinez, traitez et complétez les collectes efficacement.",
+    "stats": {
+      "totalRequests": "Total des Demandes",
+      "reviewing": "En Revue",
+      "pending": "En Attente",
+      "outForDelivery": "En Livraison",
+      "completed": "Terminé"
+    },
+    "tabs": {
+      "activeRequests": "Demandes Actives",
+      "completed": "Terminées"
+    },
+    "table": {
+      "customerName": "Nom du Client",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "location": "Lieu",
+      "status": "Statut",
+      "actions": "Actions",
+      "empty": "Aucune demande trouvée"
+    },
+    "status": {
+      "reviewing": "En Revue",
+      "pending": "En Attente",
+      "outForDelivery": "En Livraison",
+      "completed": "Terminé"
+    }
+  },
+  "Admin": {
+    "Events": {
+      "title": "Tableau de Bord des Demandes d'Événements",
+      "description": "Gérez et surveillez toutes les demandes d'inscription d'événements. Examinez, approuvez et contrôlez les événements.",
+      "stats": {
+        "total": "Total des Événements",
+        "active": "Actif",
+        "pending": "En Attente"
+      },
+      "card": {
+        "organizer": "Organisateur",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "location": "Lieu",
+        "ticketPrice": "Prix du Billet",
+        "status": {
+          "accepted": "Accepté",
+          "denied": "Refusé"
+        },
+        "actions": {
+          "accept": "Accepter",
+          "deny": "Refuser"
+        },
+        "toasts": {
+          "accepted": "Événement accepté.",
+          "denied": "Événement refusé.",
+          "acceptError": "Échec de l'acceptation de l'événement.",
+          "denyError": "Échec du refus de l'événement."
+        },
+        "Loading": "Chargement des demandes d'événements..."
+      }
+    },
+    "Shops": {
+      "title": "Tableau de Bord des Demandes de Boutiques",
+      "description": "Gérez et surveillez toutes les demandes d'inscription de boutiques. Examinez, approuvez et contrôlez la visibilité des boutiques facilement.",
+      "stats": {
+        "total": "Total des Boutiques",
+        "active": "Actif",
+        "pending": "En Attente",
+        "hidden": "Masqué"
+      },
+      "table": {
+        "headers": {
+          "name": "Nom de la Boutique",
+          "email": "E-mail",
+          "phone": "Téléphone",
+          "status": "Statut",
+          "visibility": "Visibilité"
+        },
+        "status": {
+          "active": "Actif",
+          "pending": "En Attente",
+          "inactive": "Inactif"
+        },
+        "actions": {
+          "hidden": "Masqué",
+          "visible": "Visible"
+        }
+      }
+    }
+  },
   "Metrics": {
     "title": "Notre Impact",
     "subtitle": "Indicateurs Clés",
@@ -842,5 +1170,44 @@
     "goBack": "Retour",
     "goHome": "Accueil",
     "helpText": "Si vous pensez qu’il s’agit d’une erreur, contactez le support."
+  },
+  "Recipes": {
+    "hero": {
+      "title": "Chef Zéro Déchet 🍳",
+      "subtitle": "Transformez vos restes en repas gastronomiques. Économisez de l'argent, sauvez la planète."
+    },
+    "generator": {
+      "title": "Chef Zéro Déchet",
+      "description": "Entrez vos ingrédients restants ci-dessous, et notre IA créera pour vous une délicieuse recette zéro déchet.",
+      "placeholder": "ex: Pain rassis, 2 tomates, un demi-oignon, fromage cheddar...",
+      "generateBtn": "Générer la recette",
+      "generatingBtn": "Magie en cuisine...",
+      "justForYou": "Juste pour vous :",
+      "toasts": {
+        "emptyInput": "Veuillez entrer au moins un ingrédient",
+        "success": "Recette générée avec succès ! 🍳",
+        "error": "Échec de la génération de la recette. Veuillez réessayer."
+      }
+    },
+    "cookbook": {
+      "title": "Votre Livre de Cuisine",
+      "savedCount": "{count} recettes enregistrées",
+      "empty": "Pas encore de recettes. Commencez à cuisiner ci-dessus ! 👆"
+    },
+    "card": {
+      "prep": "Prép",
+      "cook": "Cuisson",
+      "instructions": "Instructions",
+      "tip": "Astuce :",
+      "difficulty": {
+        "Easy": "Facile",
+        "Medium": "Moyen",
+        "Hard": "Difficile"
+      },
+      "toasts": {
+        "deleted": "Recette supprimée",
+        "deleteError": "Impossible de supprimer la recette"
+      }
+    }
   }
 }
