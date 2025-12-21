@@ -108,7 +108,7 @@ class UserService implements IUserService {
     await this.userRepository.savePasswordResetCode(
       userId._id.toString(),
       code,
-      new Date(validTo.toLocaleString())
+      validTo.toLocaleString()
     );
 
     // Send Email
