@@ -6,9 +6,13 @@ import { useState } from "react";
 export default function SubscribeButton({
   planKey,
   label = "Subscribe",
+  className = "",
+  disabled = false,
 }: Readonly<{
   planKey: string;
   label?: string;
+  className?: string;
+  disabled?: boolean;
 }>) {
   const [loading, setLoading] = useState(false);
   const { data: user } = useSession();
@@ -45,8 +49,8 @@ export default function SubscribeButton({
   return (
     <button
       onClick={handleClick}
-      className="w-full myBtnPrimary"
-      disabled={loading}
+      className={`w-full myBtnPrimary ${className}`}
+      disabled={loading || disabled}
     >
       {loading ? "Redirecting..." : label}
     </button>

@@ -29,6 +29,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
   SidebarMenuBadge,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   MdOutlineAddToPhotos,
@@ -63,6 +64,8 @@ export default function SideBar() {
     const fr = `\\/fr\\${targetSegment}`;
     return new RegExp(`^(${base}|${en}?|${ar}?|${fr}?)$`).test(pathname);
   };
+
+  const { setOpenMobile } = useSidebar();
   // User items.
   const useritems = [
     {
@@ -194,7 +197,10 @@ export default function SideBar() {
                       asChild
                       isActive={matchPathWithOptionalLocale(pathname, item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => setOpenMobile(false)}
+                      >
                         <item.icon />
                         <span className="capitalize">{item.title}</span>
                       </Link>
@@ -216,7 +222,10 @@ export default function SideBar() {
                       asChild
                       isActive={matchPathWithOptionalLocale(pathname, item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => setOpenMobile(false)}
+                      >
                         <item.icon />
                         <span className="capitalize">{item.title}</span>
                       </Link>
@@ -238,7 +247,10 @@ export default function SideBar() {
                       asChild
                       isActive={matchPathWithOptionalLocale(pathname, item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => setOpenMobile(false)}
+                      >
                         <item.icon />
                         <span className="capitalize">{item.title}</span>
                       </Link>
@@ -260,7 +272,10 @@ export default function SideBar() {
                       asChild
                       isActive={matchPathWithOptionalLocale(pathname, item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => setOpenMobile(false)}
+                      >
                         <item.icon />
                         <span className="capitalize">{item.title}</span>
                       </Link>
@@ -284,7 +299,10 @@ export default function SideBar() {
                       asChild
                       isActive={matchPathWithOptionalLocale(pathname, item.url)}
                     >
-                      <Link href={item.url}>
+                      <Link
+                        href={item.url}
+                        onClick={() => setOpenMobile(false)}
+                      >
                         <item.icon />
                         <span className="capitalize">{item.title}</span>
                       </Link>
@@ -305,7 +323,7 @@ export default function SideBar() {
                   asChild
                   isActive={matchPathWithOptionalLocale(pathname, "/fav")}
                 >
-                  <Link href="/fav">
+                  <Link href="/fav" onClick={() => setOpenMobile(false)}>
                     <Heart />
                     <span>{t("footer.favorite")}</span>
                   </Link>
@@ -319,7 +337,7 @@ export default function SideBar() {
                   asChild
                   isActive={matchPathWithOptionalLocale(pathname, "/cart")}
                 >
-                  <Link href="/cart">
+                  <Link href="/cart" onClick={() => setOpenMobile(false)}>
                     <ShoppingCart />
                     <span>{t("footer.cart")}</span>
                   </Link>
@@ -339,7 +357,7 @@ export default function SideBar() {
                   asChild
                   isActive={matchPathWithOptionalLocale(pathname, "/auth")}
                 >
-                  <Link href="/auth">
+                  <Link href="/auth" onClick={() => setOpenMobile(false)}>
                     <LogIn />
                     <span>{t("footer.login")}</span>
                   </Link>

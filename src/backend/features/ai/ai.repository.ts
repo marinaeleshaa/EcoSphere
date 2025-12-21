@@ -76,7 +76,7 @@ export class AIRepository implements IAIRepository {
         .map((r) => `${r.name} (ID: ${r._id})`)
         .join(", ");
 
-      const topProducts = [...products]
+      const topProducts = [...products.data]
         .sort((a, b) => Number(b.itemRating ?? 0) - Number(a.itemRating ?? 0))
         .slice(0, 5)
         .map(

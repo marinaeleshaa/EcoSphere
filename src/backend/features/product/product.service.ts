@@ -82,7 +82,7 @@ export class ProductService implements IProductService {
 
   async getAllProducts(): Promise<ProductResponse[]> {
     const products = await this.productRepository.findAllProducts();
-    return await Promise.all(products.map((p) => this.attachSignedUrl(p)));
+    return await Promise.all(products.data.map((p) => this.attachSignedUrl(p)));
   }
 
   async getProductById(productId: string): Promise<ProductResponse | null> {

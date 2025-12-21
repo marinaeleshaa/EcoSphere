@@ -69,6 +69,8 @@ export interface ProductPageOptions {
   page?: number;
   limit?: number;
   search?: string;
+  sortBy?: "price" | "title" | "itemRating" | "createdAt";
+  sortOrder?: "asc" | "desc";
 }
 
 export interface PaginatedProductResponse {

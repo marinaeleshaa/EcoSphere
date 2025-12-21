@@ -14,7 +14,9 @@ const SubscriptionSection = async ({ locale }: { locale: string }) => {
             key={index}
             className={`${index === 1 ? "md:-translate-y-[10%]" : ""}`}
           >
-            <PlanCard plan={plan} locale={locale} />
+            <div className={`${index !== 0 ? "opacity-35" : ""}`}>
+              <PlanCard plan={plan} locale={locale} index={index} />
+            </div>
           </div>
         ))}
       </div>

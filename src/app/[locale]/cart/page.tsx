@@ -2,6 +2,7 @@ import CartClient from "./CartClient";
 import { rootContainer } from "@/backend/config/container";
 import UserController from "@/backend/features/user/user.controller";
 import { getCurrentUser } from "@/backend/utils/authHelper";
+import CartHero from "@/components/layout/cart/CartHero";
 import { IProductCart } from "@/types/ProductType";
 
 const getCartFromServer = async (): Promise<{
@@ -20,7 +21,12 @@ const getCartFromServer = async (): Promise<{
 
 const Cart = async () => {
   const serverCart = await getCartFromServer();
-  return <CartClient initialCart={serverCart.items} />;
+  return (
+    <>
+      <CartHero />
+      <CartClient initialCart={serverCart.items} />
+    </>
+  );
 };
 
 export default Cart;

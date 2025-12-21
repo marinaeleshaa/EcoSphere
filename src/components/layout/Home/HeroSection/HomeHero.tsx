@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 const HomeHero = () => {
   const t = useTranslations("Home");
   return (
-    <section className="">
+    <section dir="ltr" className="isolate hero-ltr ">
       <div className="flex justify-center items-center min-h-screen relative ">
         <div className="relative flex items-center justify-center p-[3%] overflow-hidden w-full h-full min-h-screen py-20 md:py-0">
           <motion.div
@@ -44,7 +44,7 @@ const HomeHero = () => {
             whileInView={{ opacity: 0.3, scale: 1 }}
             transition={{ duration: 1.2 }}
             viewport={{ once: true }}
-            className="absolute inset-0 m-auto aspect-square w-full h-fit rounded-full border border-primary opacity-50"
+            className="absolute inset-0 hidden sm:block m-auto aspect-square w-8/12 h-fit rounded-full border border-primary opacity-50"
           />
         </div>
         {/* small circle - centered within container, not viewport */}
@@ -53,7 +53,7 @@ const HomeHero = () => {
           whileInView={{ opacity: 0.3, scale: 1 }}
           transition={{ duration: 1.2 }}
           viewport={{ once: true }}
-          className="absolute inset-0 m-auto aspect-square w-full md:w-2/3 h-fit rounded-full border-primary border opacity-30"
+          className="absolute inset-0  m-auto aspect-square w-full md:w-5/12 lg:w-4/12 h-fit rounded-full border-primary border opacity-30"
         ></motion.div>
       </div>
     </section>

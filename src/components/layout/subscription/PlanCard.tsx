@@ -6,9 +6,10 @@ import SubscribeButton from "./SubscribeButton";
 export default async function PlanCard({
   plan,
   locale,
-}: Readonly<{ plan: ISubscribePlan; locale: string }>) {
+  index,
+}: Readonly<{ plan: ISubscribePlan; locale: string; index: number }>) {
   return (
-    <div className="">
+    <div className={``}>
       <div className="bg-background rounded-2xl   shadow-xl max-w-sm w-full overflow-hidden transform transition-all hover:scale-105 duration-300 flex flex-col justify-between">
         {/* Header with gradient background */}
         <div className="bg-linear-to-r  from-primary to-primary/50 p-8 text-primary-foreground flex justify-between items-center ">
@@ -37,7 +38,7 @@ export default async function PlanCard({
         <div className="px-8 py-6 flex-1">
           <ul className="space-y-4">
             {plan.features.map((feature, index) => (
-              <li key={index} className="flex items-start">
+              <li key={index} className={`flex items-start `}>
                 <div className="shrink-0 mt-1">
                   <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                     <Check className="w-3 h-3 text-primary-foreground" />
@@ -52,7 +53,12 @@ export default async function PlanCard({
         {/* CTA Button */}
         <div className="px-8 pb-8">
           {/* Use SubscribeButton which calls our backend to create a Checkout Session and redirects to Stripe Checkout */}
-          <SubscribeButton planKey={plan.planKey ?? ""} label={plan.btnText} />
+          <SubscribeButton
+            planKey={plan.planKey ?? ""}
+            label={plan.btnText}
+            className={`${index !== 0 ? "opacity-35 cursor-not-allowed" : ""}`}
+            disabled={index !== 0}
+          />
         </div>
       </div>
     </div>

@@ -4,13 +4,13 @@ import Image from "next/image";
 import { clearCart as clearAllItems } from "@/frontend/redux/Slice/CartSlice";
 import { useAppDispatch } from "@/frontend/redux/hooks";
 import { Trash2 } from "lucide-react";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 import { IProductCart } from "@/types/ProductType";
 
 export default function ProductsSection({
   items,
 }: Readonly<{ items: IProductCart[] }>) {
-  const t = useTranslations('Cart.productsSection');
+  const t = useTranslations("Cart.productsSection");
   const dispatch = useAppDispatch();
 
   const clearCart = () => {
@@ -25,11 +25,11 @@ export default function ProductsSection({
           <>
             {/* Table Header - Hidden on mobile, shown on desktop */}
             <div className="hidden md:grid grid-cols-12 gap-4 pb-3 border-b mb-2 text-sm text-muted-foreground font-medium">
-              <div className="col-span-4 text-center">{t('product')}</div>
-              <div className="col-span-2 text-center">{t('productCode')}</div>
-              <div className="col-span-2 text-center">{t('quantity')}</div>
-              <div className="col-span-2 text-center">{t('total')}</div>
-              <div className="col-span-1 text-center">{t('action')}</div>
+              <div className="col-span-4 text-center">{t("product")}</div>
+              <div className="col-span-2 text-center">{t("productCode")}</div>
+              <div className="col-span-2 text-center">{t("quantity")}</div>
+              <div className="col-span-2 text-center">{t("total")}</div>
+              <div className="col-span-1 text-center">{t("action")}</div>
             </div>
 
             <div className="space-y-0">
@@ -39,14 +39,17 @@ export default function ProductsSection({
             </div>
 
             <div className="mt-3 pt-3 flex justify-center">
-              <button onClick={clearCart} className="myBtnPrimary w-full lg:w-auto">
-                {t('clearAll')}
+              <button
+                onClick={clearCart}
+                className="myBtnPrimary w-full lg:w-auto"
+              >
+                {t("clearAll")}
                 <Trash2 className="w-5 h-5  " />
               </button>
             </div>
           </>
         ) : (
-          <div className="flex justify-center items-center py-12">
+          <div className="flex justify-center items-center py-12 h-20 md:h-35 lg:h-99">
             <Image
               width={430}
               height={270}
