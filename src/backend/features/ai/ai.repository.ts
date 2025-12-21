@@ -26,7 +26,9 @@ export class AIRepository implements IAIRepository {
     private readonly restaurantRepository: IRestaurantRepository
   ) {}
 
-  async getProductContext(productId: string): Promise<ProductContextDTO | null> {
+  async getProductContext(
+    productId: string
+  ): Promise<ProductContextDTO | null> {
     const product = await this.productRepository.findProductById(productId);
     if (!product) return null;
 
@@ -67,21 +69,24 @@ export class AIRepository implements IAIRepository {
 
   async getGlobalStructure(): Promise<string> {
     try {
-      const [restaurants, products] = await Promise.all([
+      const [restaurantRes, products] = await Promise.all([
         this.restaurantRepository.getAll(),
         this.productRepository.findAllProducts(),
       ]);
 
-      const restaurantNames = restaurants
+      const restaurantList =
+        restaurantRes && "data" in restaurantRes
+          ? restaurantRes.data
+          : restaurantRes;
+
+      const restaurantNames = restaurantList
         .map((r) => `${r.name} (ID: ${r._id})`)
         .join(", ");
 
       const topProducts = [...products.data]
         .sort((a, b) => Number(b.itemRating ?? 0) - Number(a.itemRating ?? 0))
         .slice(0, 5)
-        .map(
-          (p) => `${p.title} (ID: ${p._id}, Price: $${p.price})`
-        )
+        .map((p) => `${p.title} (ID: ${p._id}, Price: $${p.price})`)
         .join(", ");
 
       return `
