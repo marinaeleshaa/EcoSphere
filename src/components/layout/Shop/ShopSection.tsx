@@ -69,7 +69,7 @@ export default function ShopSection({
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 mb-8">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

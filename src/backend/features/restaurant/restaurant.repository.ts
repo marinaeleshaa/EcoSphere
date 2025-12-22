@@ -60,6 +60,7 @@ class RestaurantRepository {
   async getAll(
     options: RestaurantPageOptions = {}
   ): Promise<PaginatedRestaurantResponse> {
+    await DBInstance.getConnection();
     const { page = 1, limit = 10, search = "", sort = "default" } = options;
     const skip = (page - 1) * limit;
 
