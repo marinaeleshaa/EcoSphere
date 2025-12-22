@@ -12,7 +12,9 @@ import {
 } from "./dto/product.dto";
 
 export interface IProductService {
-  getAllProducts(): Promise<ProductResponse[]>;
+  getAllProducts(
+    options?: ProductPageOptions
+  ): Promise<PaginatedProductResponse | ProductResponse[]>;
   getProductById(productId: string): Promise<ProductResponse | null>;
   getProductsByRestaurantId(
     restaurantId: string,
@@ -80,9 +82,25 @@ export class ProductService implements IProductService {
     return product;
   }
 
-  async getAllProducts(): Promise<ProductResponse[]> {
-    const products = await this.productRepository.findAllProducts();
-    return await Promise.all(products.data.map((p) => this.attachSignedUrl(p)));
+  async getAllProducts(
+    options?: ProductPageOptions
+  ): Promise<PaginatedProductResponse | ProductResponse[]> {
+    const result = await this.productRepository.findAllProducts(options);
+
+    const productsWithUrls = await Promise.all(
+      result.data.map((p) => this.attachSignedUrl(p))
+    );
+
+    // If options are provided, return paginated response
+    if (options && (options.page || options.limit)) {
+      return {
+        data: productsWithUrls,
+        metadata: result.metadata,
+      };
+    }
+
+    // Otherwise return just the array for backward compatibility
+    return productsWithUrls;
   }
 
   async getProductById(productId: string): Promise<ProductResponse | null> {
@@ -183,15 +201,15 @@ export class ProductService implements IProductService {
     return result;
   }
 
-	async addProductReview(
-		productId: string,
-		review: any
-	): Promise<IRestaurant | null> {
-		const result = await this.productRepository.addProductReview(
-			productId,
-			review
-		);
-		if (!result) throw new Error("Product not found for review");
-		return result;
-	}
+  async addProductReview(
+    productId: string,
+    review: any
+  ): Promise<IRestaurant | null> {
+    const result = await this.productRepository.addProductReview(
+      productId,
+      review
+    );
+    if (!result) throw new Error("Product not found for review");
+    return result;
+  }
 }

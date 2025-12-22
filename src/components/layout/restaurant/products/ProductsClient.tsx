@@ -18,6 +18,7 @@ import {
 import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/use-debounce";
+import Pagination from "@/components/ui/Pagination";
 
 export default function ProductsClient({
   restaurantId,
@@ -69,8 +70,7 @@ export default function ProductsClient({
       }
     } catch (error) {
       toast.error(t("toasts.loadError"));
-			console.error(error);
-			
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -141,7 +141,6 @@ export default function ProductsClient({
     }
   };
 
-
   const renderProductsGrid = () => {
     if (loading) {
       return (
@@ -209,27 +208,11 @@ export default function ProductsClient({
 
       {/* Pagination */}
       {metadata && metadata.totalPages > 1 && (
-        <div className="flex justify-center space-x-2 shrink-0">
-          <Button
-            className="myBtnPrimary"
-            disabled={page === 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-          >
-            {t("previous")}
-          </Button>
-
-          <div className="flex items-center px-4 text-sm">
-            {t("page", { current: page, total: metadata.totalPages })}
-          </div>
-
-          <Button
-            className="myBtnPrimary"
-            disabled={page === metadata.totalPages}
-            onClick={() => setPage((p) => Math.min(metadata.totalPages, p + 1))}
-          >
-            {t("next")}
-          </Button>
-        </div>
+        <Pagination
+          currentPage={page}
+          totalPages={metadata.totalPages}
+          onPageChange={setPage}
+        />
       )}
 
       {/* Popup */}

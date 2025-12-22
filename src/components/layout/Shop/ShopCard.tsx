@@ -7,17 +7,26 @@ import { useRouter } from "next/navigation";
 import { IShop } from "@/types/ShopTypes";
 import { getAverageRating } from "./ShopSection";
 
-interface AnimatedShopCardProps {
-  shop: IShop;
+interface ShopCardProps {
+  shop?: IShop;
   index: number;
+  loading?: boolean;
 }
 
 export default function ShopCard({
   shop,
   index,
-}: Readonly<AnimatedShopCardProps>) {
+  loading,
+}: Readonly<ShopCardProps>) {
   const [isExiting, setIsExiting] = useState(false);
   const router = useRouter();
+
+  if (loading || !shop) {
+    return (
+      <div className="w-full h-60 rounded-3xl bg-gray-200 animate-pulse" />
+    );
+  }
+
   const exitVariant = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 },
@@ -31,10 +40,7 @@ export default function ShopCard({
       variants={exitVariant}
       animate={isExiting ? "exiting" : "visible"}
       initial="hidden"
-      transition={{
-        duration: 0.7,
-        delay: isExiting ? 0 : index * 0.1,
-      }}
+      transition={{ duration: 0.7, delay: index * 0.1 }}
       viewport={{ once: false }}
       onViewportLeave={() => setIsExiting(true)}
       onViewportEnter={() => setIsExiting(false)}

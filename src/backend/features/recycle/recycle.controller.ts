@@ -38,6 +38,11 @@ export class RecycleController {
     return await this.recycleService.listRecycleEntries();
   }
 
+  async getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]> {
+    if (!email) throw new Error("No email provided");
+    return await this.recycleService.getRecycleEntriesByEmail(email);
+  }
+
   async analyzeImages(formData: FormData): Promise<any> {
     try {
       const files = formData.getAll("files") as File[]; // Cast to File[] for better typing

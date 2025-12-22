@@ -13,6 +13,7 @@ export const PROTECTED_ROUTES = [
   "/organizer",
   "/restaurant",
   "/recycleDash",
+  "/recycle"
 ];
 
 // Role-based rules (optional, but scalable)

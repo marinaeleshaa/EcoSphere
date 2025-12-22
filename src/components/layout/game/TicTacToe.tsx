@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { updateUserPoints } from "@/frontend/api/Users";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { ArrowRight } from "lucide-react";
 
 export default function TicTacToe() {
   const t = useTranslations("Game");
@@ -428,66 +429,69 @@ export default function TicTacToe() {
         </div>
 
         {/* right Section - Score Board */}
-        <div className="w-full  sm:w-[60%] md:w-[50%] lg:w-80 space-y-6">
-          {/* Title Card - Only on large screens */}
-          <div className="hidden bg-primary/10 lg:flex justify-between items-center backdrop-blur-md rounded-3xl p-6 shadow-2xl text-center transform hover:scale-105 transition-transform gap-2">
-            <div className="flex flex-col items-center gap-1 shrink-0">
-              <BiSolidLeaf
-                className="text-xl md:text-4xl text-primary animate-spin"
-                style={{ animationDuration: "4s" }}
-              />
-              <span className="text-sm md:text-xl font-semibold text-secondary-foreground whitespace-nowrap">
-                {t("hero.you")}
-              </span>
-            </div>
-            <span className="text-gray-400 md:text-xl px-2">
-              {t("hero.vs")}
-            </span>
-            <div className="flex flex-col items-center gap-1 shrink-0">
-              <MdDoNotDisturbAlt className="text-xl md:text-4xl text-primary animate-pulse" />
-              <span className="text-sm md:text-xl font-semibold text-secondary-foreground whitespace-nowrap">
-                {t("hero.ai")}
-              </span>
-            </div>
-          </div>
+        <div className="w-full sm:w-[60%] md:w-[50%] lg:w-80 space-y-6">
           <div className="text-primary/10 space-y-4">
-            <div className="flex justify-evenly gap-4 bg-primary/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
-              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
-                <input
-                  type="radio"
-                  name="difficulty"
-                  value="easy"
-                  disabled={!canPlay && !gameStarted}
-                  onChange={handleDifficultyChange}
-                  className="accent-primary scale-125"
-                />
-                <span className="text-primary">{t("difficulty.easy")}</span>
-              </label>
+            <div className="flex flex-col justify-evenly gap-4 bg-primary/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl">
+              <section className="flex flex-row justify-evenly gap-4">
+                <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform font-bold">
+                  <input
+                    type="radio"
+                    name="difficulty"
+                    value="easy"
+                    disabled={!canPlay && !gameStarted}
+                    onChange={handleDifficultyChange}
+                    className="accent-primary scale-125"
+                  />
+                  <span className="text-primary">{t("difficulty.easy")}</span>
+                </label>
 
-              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
-                <input
-                  type="radio"
-                  name="difficulty"
-                  value="medium"
-                  disabled={!canPlay && !gameStarted}
-                  onChange={handleDifficultyChange}
-                  defaultChecked
-                  className="accent-primary scale-125"
-                />
-                <span className="text-primary">{t("difficulty.medium")}</span>
-              </label>
+                <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform font-bold">
+                  <input
+                    type="radio"
+                    name="difficulty"
+                    value="medium"
+                    disabled={!canPlay && !gameStarted}
+                    onChange={handleDifficultyChange}
+                    defaultChecked
+                    className="accent-primary scale-125"
+                  />
+                  <span className="text-primary">
+                    {t("difficulty.medium")}{" "}
+                  </span>
+                </label>
 
-              <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform">
-                <input
-                  type="radio"
-                  name="difficulty"
-                  value="hard"
-                  disabled={!canPlay && !gameStarted}
-                  onChange={handleDifficultyChange}
-                  className="accent-primary scale-125"
-                />
-                <span className="text-primary">{t("difficulty.hard")}</span>
-              </label>
+                <label className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform font-bold">
+                  <input
+                    type="radio"
+                    name="difficulty"
+                    value="hard"
+                    disabled={!canPlay && !gameStarted}
+                    onChange={handleDifficultyChange}
+                    className="accent-primary scale-125"
+                  />
+                  <span className="text-primary">{t("difficulty.hard")}</span>
+                </label>
+              </section>
+              <section>
+                <ul className="list-disc">
+                  <li className="text-primary">
+                    <span className="flex">
+                      {t("difficulty.easy")}: 100 {t("difficulty.points")}
+                    </span>
+                  </li>
+                  <li className="text-primary">
+                    {" "}
+                    <span className="flex">
+                      {t("difficulty.medium")}: 250 {t("difficulty.points")}
+                    </span>
+                  </li>
+                  <li className="text-primary">
+                    <span className="flex">
+                      {t("difficulty.hard")}: 500 {t("difficulty.points")}
+                    </span>
+                  </li>
+                </ul>
+              </section>
             </div>
           </div>
 

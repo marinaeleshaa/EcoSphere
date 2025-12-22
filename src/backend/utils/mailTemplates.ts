@@ -258,7 +258,7 @@ export const redeemCouponTemplate = (
 
 export const forgetPasswordTemplate = (
   code: string,
-  validTo: Date,
+  validTo: string,
   name: string = "EcoSphere friend"
 ): string => {
   return `
@@ -285,10 +285,7 @@ export const forgetPasswordTemplate = (
           ${code}
         </h1>
         <p style="${baseStyles.paragraph}">
-          This code is valid until <strong>${validTo.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}</strong>.
+          This code is valid until <strong>for the next 15 minutes</strong>.
           Please do not share this code with anyone.
         </p>
         <p style="${baseStyles.paragraph}">

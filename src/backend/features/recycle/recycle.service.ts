@@ -12,6 +12,7 @@ export interface IRecycleService {
   ): Promise<RecycleResponse>;
   deleteRecycleEntry(id: string): Promise<RecycleResponse>;
   listRecycleEntries(): Promise<RecycleResponse[]>;
+  getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]>;
   analyzeImages(files: Blob[]): Promise<any>;
   calculateCarbonFootprint(items: any[]): Promise<number>;
   calculateManualCarbon(
@@ -51,6 +52,14 @@ export class RecycleService implements IRecycleService {
 
   async listRecycleEntries(): Promise<RecycleResponse[]> {
     const response = await this.recycleRepository.listRecycleEntries();
+    const mappedData = response.map((item) => mapRecycleToResponse(item));
+    return mappedData;
+  }
+
+  async getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]> {
+    const response = await this.recycleRepository.getRecycleEntriesByEmail(
+      email
+    );
     const mappedData = response.map((item) => mapRecycleToResponse(item));
     return mappedData;
   }

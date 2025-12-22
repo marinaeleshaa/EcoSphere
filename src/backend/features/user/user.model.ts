@@ -78,7 +78,7 @@ export interface IUser extends Document {
   events?: IEvent[];
   resetCode?: {
     code: string;
-    validTo: Date;
+    validTo: string;
   };
   createdAt?: Date;
   updatedAt?: Date;
@@ -182,7 +182,7 @@ const userSchema = new Schema<IUser>(
     events: { type: [eventSchema], default: [] },
     resetCode: {
       code: { type: String, required: false },
-      validTo: { type: Date, required: false },
+      validTo: { type: String, required: false },
     },
   },
   { timestamps: true },

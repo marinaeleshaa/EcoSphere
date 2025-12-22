@@ -98,7 +98,7 @@ export async function sendForgetPasswordMail(
 	email: string,
 	name: string,
 	code: string,
-	validTo: Date
+	validTo: string
 ) {
 	if (!ensureSmtpConfigured()) return;
 

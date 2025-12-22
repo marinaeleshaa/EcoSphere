@@ -1,8 +1,8 @@
 {
   "Home": {
     "hero": {
-      "subtitle": "#انضم إلى الحركة",
-      "title": "تبدأ التبرعات الناجحة هنا",
+      "subtitle": "#تحرك_من_أجل_البيئة",
+      "title": "خيارات مستدامة، حياة مستقرة",
       "cta": "المزيد عن إيكوسفير"
     },
     "solidContent": {
@@ -200,7 +200,8 @@
     "difficulty": {
       "easy": "سهل",
       "medium": "متوسط",
-      "hard": "صعب"
+      "hard": "صعب",
+      "points": "نقطة"
     },
     "actions": {
       "playAgain": "العب مجددًا",
@@ -484,6 +485,8 @@
       "birthDate": "تاريخ الميلاد",
       "gender": "الجنس",
       "ecoPoints": "نقاط إيكو",
+      "redeem": "استبدال",
+      "redeeming": "جاري الاستبدال...",
       "na": "غير متاح",
       "cancel": "إلغاء",
       "saveChanges": "حفظ التغييرات",
@@ -495,16 +498,37 @@
     },
     "customer": {
       "role": "عميل",
-      "orderHistory": "سجل الطلبات",
-      "orderCount": "لديك {count} طلب سابق.",
-      "noOrders": "لا توجد طلبات بعد",
-      "noOrdersDescription": "ابدأ بإضافة المنتجات إلى طلباتك لعرضها هنا",
-      "browseOrders": "تصفح الطلبات",
+      "orderHistory": {
+        "title": "سجل الطلبات",
+        "orderCount": "لديك {count} طلب سابق.",
+        "noOrders": "لا توجد طلبات بعد",
+        "noOrdersDescription": "ابدأ بإضافة المنتجات إلى طلباتك لعرضها هنا",
+        "browseOrders": "تصفح الطلبات",
+        "orderId": "رقم الطلب",
+        "date": "التاريخ",
+        "total": "الإجمالي",
+        "status": "الحالة"
+      },
+      "recyclingHistory": {
+        "title": "سجل إعادة التدوير",
+        "date": "التاريخ",
+        "items": "العناصر",
+        "itemsCount": "عناصر",
+        "weight": "الوزن (كجم)",
+        "carbonSaved": "الكربون المحفوظ",
+        "status": "الحالة",
+        "verified": "محقق",
+        "pending": "قيد الانتظار",
+        "noRecyclingOrders": "لا توجد طلبات إعادة تدوير بعد",
+        "noRecyclingOrdersDescription": "ابدأ بإعادة التدوير لرؤية تأثيرك البيئي هنا",
+        "browseRecycling": "ابدأ إعادة التدوير"
+      },
       "editModalTitle": "تعديل الملف الشخصي"
     },
     "toasts": {
       "passwordChanged": "تم تغيير كلمة المرور بنجاح",
-      "passwordChangeFailed": "فشل تغيير كلمة المرور"
+      "passwordChangeFailed": "فشل تغيير كلمة المرور",
+      "redeemFailed": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى."
     },
     "states": {
       "loading": "جاري تحميل الملف الشخصي...",
@@ -539,7 +563,32 @@
       "hotline": "الخط الساخن",
       "editModalTitle": "تعديل ملف المتجر",
       "restaurantInformation": "معلومات المطعم",
-      "noDescription": "لا يوجد وصف متاح."
+      "noDescription": "لا يوجد وصف متاح.",
+      "orders": {
+        "title": "إدارة الطلبات",
+        "totalOrders": "إجمالي الطلبات",
+        "orderId": "رقم الطلب",
+        "customer": "العميل",
+        "date": "التاريخ",
+        "total": "الإجمالي",
+        "status": "الحالة",
+        "actions": "الإجراءات",
+        "noOrders": "لا توجد طلبات.",
+        "fetchError": "فشل تحميل الطلبات.",
+        "statusUpdated": "تم تحديث الحالة بنجاح.",
+        "updateError": "فشل تحديث الحالة.",
+        "changeStatus": "تغيير الحالة",
+        "statuses": {
+          "pending": "قيد الانتظار",
+          "paid": "تم الدفع",
+          "preparing": "جاري التجهيز",
+          "delivering": "جاري التوصيل",
+          "completed": "مكتمل",
+          "canceled": "ملغي"
+        },
+        "page": "صفحة",
+        "of": "من"
+      }
     }
   },
   "Cart": {
@@ -727,11 +776,11 @@
         "titlePlaceholder": "اسم الفعالية",
         "type": "نوع الفعالية",
         "EventTypes": {
-    "environmental_seminar": "ندوة أو محاضرة بيئية",
-    "community_cleanup": "فعالية تنظيف مجتمعية",
-    "sustainable_brands_showcase": "عرض العلامات التجارية المستدامة",
-    "other": "أخرى"
-  },
+          "environmental_seminar": "ندوة أو محاضرة بيئية",
+          "community_cleanup": "فعالية تنظيف مجتمعية",
+          "sustainable_brands_showcase": "عرض العلامات التجارية المستدامة",
+          "other": "أخرى"
+        },
         "typePlaceholder": "اختر نوع الفعالية",
         "image": "صورة الفعالية",
         "description": "وصف قصير",
@@ -965,7 +1014,7 @@
     "title": "طلب إعادة تدوير",
     "description": "حدد موعد استلامك. صديق للبيئة وسهل.",
     "submit": {
-      "default": "إرسال طلب إعادة التدوير",
+      "default": "إرسال",
       "processing": "جاري معالجة الطلب..."
     },
     "entryMethod": {

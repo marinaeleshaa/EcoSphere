@@ -25,6 +25,8 @@ export interface IRecycle extends Document {
   totalCarbonSaved?: number;
   imageKeys?: string[];
   isVerified?: boolean;
+  createdAt: Date;
+  updatedAt?: Date;
 }
 
 export const recycleSchema = new Schema<IRecycle>(
@@ -51,6 +53,8 @@ export const recycleSchema = new Schema<IRecycle>(
     totalCarbonSaved: { type: Number, default: 0 },
     imageKeys: [{ type: String }],
     isVerified: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );

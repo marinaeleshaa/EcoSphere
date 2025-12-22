@@ -1,72 +1,73 @@
 "use client";
-import {
-  Recycle,
-  CheckCircle,
-  Clock,
-  Truck,
-  Search,
-  Filter,
-  Eye,
-} from "lucide-react";
+import { Recycle, CheckCircle, Clock, Truck, Eye } from "lucide-react";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 
-export type requestState = "completed" | "reviewing" | "pending" | "out for delivery";
+type orderStatus = "reviewing" | "pending" | "completed" | "out for delivery";
+
+interface recycleOrder {
+  id: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  location: string;
+  status: orderStatus;
+}
 
 const RecycleDashboard = () => {
-  const t = useTranslations("RecycleDashboard");
   const [activeTab, setActiveTab] = useState("pending");
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-  const [requests, setRequests] = useState([
+  const [openDropdown, setOpenDropdown] = useState<null | string>(null);
+  const [requests, setRequests] = useState<recycleOrder[]>([
     {
-      id: 1,
+      id: "1",
       customerName: "John Smith",
       email: "john.smith@email.com",
       phone: "+1 (555) 123-4567",
       location: "123 Main St, New York, NY",
-      status: "reviewing" as requestState,
+      status: "reviewing",
     },
     {
-      id: 2,
+      id: "2",
       customerName: "Sarah Johnson",
       email: "sarah.j@email.com",
       phone: "+1 (555) 234-5678",
       location: "456 Oak Ave, Los Angeles, CA",
-      status: "pending" as requestState
+      status: "pending",
     },
     {
-      id: 3,
+      id: "3",
       customerName: "Mike Brown",
       email: "mike.brown@email.com",
       phone: "+1 (555) 345-6789",
       location: "789 Pine Rd, Chicago, IL",
-      status: "completed" as requestState
+      status: "completed",
     },
     {
-      id: 4,
+      id: "4",
       customerName: "Emily Davis",
       email: "emily.d@email.com",
       phone: "+1 (555) 456-7890",
       location: "321 Elm St, Houston, TX",
-      status: "out for delivery" as requestState
+      status: "out for delivery",
     },
     {
-      id: 5,
+      id: "5",
       customerName: "David Wilson",
       email: "david.w@email.com",
       phone: "+1 (555) 567-8901",
       location: "654 Maple Dr, Phoenix, AZ",
-      status: "completed" as requestState
-    }
+      status: "completed",
+    },
   ]);
 
   const pendingRequests = requests.filter((r) => r.status !== "completed");
   const completedRequests = requests.filter((r) => r.status === "completed");
 
-  const handleStatusChange = (id: number, newStatus: requestState) => {
-    setRequests(requests.map(req => 
-      req.id === id ? { ...req, status: newStatus } : req
-    ));
+  const handleStatusChange = (id: string, newStatus: orderStatus) => {
+    setRequests(
+      requests.map((req) =>
+        req.id === id ? { ...req, status: newStatus } : req,
+      ),
+    );
     setOpenDropdown(null);
 
     if (newStatus === "completed") {
@@ -74,43 +75,39 @@ const RecycleDashboard = () => {
     }
   };
 
-  const toggleDropdown = (id: number) => {
+  const toggleDropdown = (id: string) => {
     setOpenDropdown(openDropdown === id ? null : id);
   };
-  /* eslint-disable react-hooks/exhaustive-deps */
+
   const statusOptions = [
     {
-      value: "reviewing" as requestState,
-      label: t("status.reviewing"),
+      value: "reviewing",
+      label: "Reviewing",
       icon: <Eye className="w-4 h-4" />,
     },
+    { value: "pending", label: "Pending", icon: <Clock className="w-4 h-4" /> },
     {
-      value: "pending" as requestState,
-      label: t("status.pending"),
-      icon: <Clock className="w-4 h-4" />,
-    },
-    {
-      value: "out for delivery" as requestState,
-      label: t("status.outForDelivery"),
+      value: "out for delivery",
+      label: "Out for Delivery",
       icon: <Truck className="w-4 h-4" />,
     },
     {
-      value: "completed" as requestState,
-      label: t("status.completed"),
+      value: "completed",
+      label: "Completed",
       icon: <CheckCircle className="w-4 h-4" />,
     },
   ];
 
-  const getStatusColor = (status: requestState) => {
-    switch(status) {
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'reviewing':
-        return 'bg-blue-100 text-blue-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'out for delivery':
-        return 'bg-purple-100 text-purple-800';
+  const getStatusColor = (status: orderStatus) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-100 text-green-800";
+      case "reviewing":
+        return "bg-blue-100 text-blue-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "out for delivery":
+        return "bg-purple-100 text-purple-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -118,27 +115,27 @@ const RecycleDashboard = () => {
 
   const stats = [
     {
-      label: t("stats.totalRequests"),
+      label: "Total Requests",
       value: requests.length,
       icon: <Recycle className="w-5 h-5" />,
     },
     {
-      label: t("stats.reviewing"),
+      label: "Reviewing",
       value: requests.filter((r) => r.status === "reviewing").length,
       icon: <Eye className="w-5 h-5" />,
     },
     {
-      label: t("stats.pending"),
+      label: "Pending",
       value: requests.filter((r) => r.status === "pending").length,
       icon: <Clock className="w-5 h-5" />,
     },
     {
-      label: t("stats.outForDelivery"),
+      label: "Out for Delivery",
       value: requests.filter((r) => r.status === "out for delivery").length,
       icon: <Truck className="w-5 h-5" />,
     },
     {
-      label: t("stats.completed"),
+      label: "Completed",
       value: requests.filter((r) => r.status === "completed").length,
       icon: <CheckCircle className="w-5 h-5" />,
     },
@@ -147,237 +144,215 @@ const RecycleDashboard = () => {
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
-      <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-8 px-6  mb-8 relative overflow-hidden">
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-center ">
-          <div className="flex flex-col  items-center gap-3">
-            <div className="p-2 bg-white/20 backdrop-blur-md rounded-2xl shadow-inner border border-white/10">
-              <Recycle className="w-8 h-8 text-white animate-pulse" />
-            </div>
-            <div className="text-center">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-2 ">
-                {t("title")}
-              </h1>
-              <p className="text-lg text-primary-foreground/90 font-medium  leading-relaxed">
-                {t("description")}
-              </p>
-            </div>
+      <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-12 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <Recycle className="w-8 h-8" />
+            <h1 className="text-2xl sm:text-3xl font-bold">
+              Recycle Dashboard
+            </h1>
           </div>
-        </div>
-      </div>
-<div className="w-[80%] mx-auto">
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <div
-            key={index}
-            className="group bg-card hover:bg-muted/50 p-4 rounded-2xl shadow-sm border border-border/50 hover:border-primary/20 transition-all duration-300 hover:shadow-md hover:-translate-y-1"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                <div className="text-primary group-hover:scale-110 transition-transform duration-300">
-                  {stat.icon}
-                </div>
-              </div>
-              <span className="text-3xl font-bold text-foreground tracking-tight">
-                {stat.value}
-              </span>
-            </div>
-            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              {stat.label}
-            </p>
-          </div>
-        ))}
-      </div>
+          <p className="text-primary-foreground/80 text-sm sm:text-base max-w-2xl mb-6">
+            Manage and track all recycling requests. Review, process, and
+            complete pickups efficiently.
+          </p>
 
-      {/* Main Content Area */}
-      <div className="bg-card rounded-3xl shadow-xl border border-border/50 overflow-hidden">
-        {/* Tabs Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between p-6 border-b border-border/50 gap-4 bg-muted/30">
-          <div className="flex items-center gap-2 bg-muted p-1 rounded-xl w-full sm:w-auto">
-            {["pending", "completed"].map((tab) => (
-              <button
-                type="button"
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 capitalize flex items-center justify-center gap-2 ${
-                  activeTab === tab
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                }`}
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
+            {stats.map((stat) => (
+              <div
+                key={stat.label}
+                className="bg-white/10 backdrop-blur-sm rounded-lg p-4 hover:bg-white/15 transition-colors"
               >
-                {t(`tabs.${tab}`)}
-              </button>
+                <div className="flex items-center gap-2 text-primary-foreground/70 text-xs sm:text-sm mb-2">
+                  {stat.icon}
+                  <span>{stat.label}</span>
+                </div>
+                <p className="text-2xl sm:text-3xl font-bold">{stat.value}</p>
+              </div>
             ))}
           </div>
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="relative flex-1 sm:flex-none">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder={t("searchPlaceholder") || "Search requests..."}
-                className="w-full sm:w-64 pl-10 pr-4 py-2.5 bg-background border border-border/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 transition-all"
-              />
-            </div>
-            <button
-              type="button"
-              className="p-2.5 bg-background border border-border/50 rounded-xl text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
-            >
-              <Filter className="w-5 h-5" />
-            </button>
-          </div>
         </div>
-        <div className="overflow-x-auto overflow-visible">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200 overflow-visible">
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
-                  {t("table.customerName")}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
-                  {t("table.email")}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
-                  {t("table.phone")}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
-                  {t("table.location")}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
-                  {t("table.status")}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 overflow-visible">
-              {(activeTab === "pending"
-                ? pendingRequests
-                : completedRequests
-              ).map((request) => (
-                <tr
-                  key={request.id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="font-medium text-gray-900">
-                      {request.customerName}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
-                    {request.email}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
-                    {request.phone}
-                  </td>
-                  <td className="px-6 py-4 text-gray-600 text-sm">
-                    {request.location}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap relative overflow-visible">
-                    {activeTab === "completed" ? (
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                          request.status
-                        )}`}
-                      >
-                        {t("status.completed")}
-                      </span>
-                    ) : (
-                      <div className="relative">
-                        <button
-                          onClick={() => toggleDropdown(request.id)}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80 ${getStatusColor(
-                            request.status
-                          )}`}
-                        >
-                          {
-                            statusOptions.find(
-                              (opt) => opt.value === request.status
-                            )?.icon
-                          }
-                          <span className="capitalize">
-                            {statusOptions.find(
-                              (opt) => opt.value === request.status
-                            )?.label || request.status}
-                          </span>
-                          <svg
-                            className={`w-4 h-4 transition-transform ${
-                              openDropdown === request.id ? "rotate-180" : ""
-                            }`}
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 9l-7 7-7-7"
-                            />
-                          </svg>
-                        </button>
-
-                        {openDropdown === request.id && (
-                          <>
-                            <div
-                              className="fixed inset-0 z-10"
-                              onClick={() => setOpenDropdown(null)}
-                              role="button"
-                              tabIndex={0}
-                              aria-label="Close dropdown"
-                              onKeyDown={(e) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                  setOpenDropdown(null);
-                                }
-                              }}
-                            ></div>
-                            <div className="absolute z-20 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
-                              {statusOptions.map((option) => (
-                                <button
-                                  key={option.value}
-                                  onClick={() =>
-                                    handleStatusChange(request.id, option.value)
-                                  }
-                                  className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
-                                    request.status === option.value
-                                      ? "bg-gray-50 font-medium"
-                                      : ""
-                                  }`}
-                                >
-                                  <span
-                                    className={getStatusColor(option.value)
-                                      .replace("bg-", "text-")
-                                      .replace("/100", "-600")}
-                                  >
-                                    {option.icon}
-                                  </span>
-                                  <span className="text-gray-700">
-                                    {option.label}
-                                  </span>
-                                  {request.status === option.value && (
-                                    <CheckCircle className="w-4 h-4 ml-auto text-primary" />
-                                  )}
-                                </button>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Empty State */}
-        {(activeTab === "pending" ? pendingRequests : completedRequests)
-          .length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500">{t("table.empty")}</p>
-          </div>
-        )}
       </div>
-</div>
+
+      {/* Tabs and Tables */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        {/* Tabs */}
+        <div className="flex gap-2 mb-6 border-b border-gray-200">
+          <button
+            onClick={() => setActiveTab("pending")}
+            className={`px-6 py-3 font-medium transition-colors relative ${
+              activeTab === "pending"
+                ? "text-primary"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Active Requests
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-200">
+              {pendingRequests.length}
+            </span>
+            {activeTab === "pending" && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></div>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab("completed")}
+            className={`px-6 py-3 font-medium transition-colors relative ${
+              activeTab === "completed"
+                ? "text-primary"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Completed
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-200">
+              {completedRequests.length}
+            </span>
+            {activeTab === "completed" && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></div>
+            )}
+          </button>
+        </div>
+
+        {/* Table */}
+        <div className="bg-white rounded-xl shadow-lg overflow-visible">
+          <div className="overflow-x-auto overflow-visible">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gray-50 border-b border-gray-200 overflow-visible">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Customer Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Email
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Phone
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Location
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 overflow-visible">
+                {(activeTab === "pending"
+                  ? pendingRequests
+                  : completedRequests
+                ).map((request) => (
+                  <tr
+                    key={request.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="font-medium text-gray-900">
+                        {request.customerName}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
+                      {request.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
+                      {request.phone}
+                    </td>
+                    <td className="px-6 py-4 text-gray-600 text-sm">
+                      {request.location}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap relative overflow-visible">
+                      {activeTab === "completed" ? (
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}
+                        >
+                          Completed
+                        </span>
+                      ) : (
+                        <div className="relative ">
+                          <button
+                            onClick={() => toggleDropdown(request.id)}
+                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80 ${getStatusColor(request.status)}`}
+                          >
+                            {
+                              statusOptions.find(
+                                (opt) => opt.value === request.status,
+                              )?.icon
+                            }
+                            <span className="capitalize">{request.status}</span>
+                            <svg
+                              className={`w-4 h-4 transition-transform ${openDropdown === request.id ? "rotate-180" : ""}`}
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          </button>
+
+                          {openDropdown === request.id && (
+                            <>
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenDropdown(null)}
+                              ></div>
+                              <div className="absolute z-20 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
+                                {statusOptions.map((option) => (
+                                  <button
+                                    key={option.value}
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        request.id,
+                                        option.value as orderStatus,
+                                      )
+                                    }
+                                    className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                                      request.status === option.value
+                                        ? "bg-gray-50 font-medium"
+                                        : ""
+                                    }`}
+                                  >
+                                    <span
+                                      className={getStatusColor(
+                                        option.value as orderStatus,
+                                      )
+                                        .replace("bg-", "text-")
+                                        .replace("/100", "-600")}
+                                    >
+                                      {option.icon}
+                                    </span>
+                                    <span className="text-gray-700">
+                                      {option.label}
+                                    </span>
+                                    {request.status === option.value && (
+                                      <CheckCircle className="w-4 h-4 ml-auto text-primary" />
+                                    )}
+                                  </button>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Empty State */}
+          {(activeTab === "pending" ? pendingRequests : completedRequests)
+            .length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No requests found</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

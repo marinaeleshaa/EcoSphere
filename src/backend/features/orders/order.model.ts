@@ -3,6 +3,7 @@ import { OrderStatus, PaymentMethod, IOrderItem } from "./order.types";
 
 export interface IOrder extends Document {
   userId: ObjectId | string;
+  restaurantId: ObjectId | string;
   items: IOrderItem[];
   paymentMethod: PaymentMethod;
   orderPrice: number; // total for the entire order
@@ -10,6 +11,8 @@ export interface IOrder extends Document {
   stripePaymentIntentId?: string;
   paidAt?: Date;
   paymentProvider?: "stripe" | "paymob" | "fawry";
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const orderItemSchema = new Schema<IOrderItem>(
@@ -27,6 +30,7 @@ const orderItemSchema = new Schema<IOrderItem>(
 const orderSchema = new Schema<IOrder>(
   {
     userId: { type: Types.ObjectId, ref: "User", required: true },
+    restaurantId: { type: Types.ObjectId, ref: "Restaurant", required: false },
     items: { type: [orderItemSchema], required: true },
     paymentMethod: {
       type: String,

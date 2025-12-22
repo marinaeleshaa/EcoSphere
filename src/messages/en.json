@@ -1,8 +1,8 @@
 {
   "Home": {
     "hero": {
-      "subtitle": "#Join the movement",
-      "title": "Successful fundraisers start here",
+      "subtitle": "#ActForEarth",
+      "title": "Sustainable Choices, Stable Life ",
       "cta": "More About EcoSphere"
     },
     "solidContent": {
@@ -200,7 +200,8 @@
     "difficulty": {
       "easy": "Easy",
       "medium": "Medium",
-      "hard": "Hard"
+      "hard": "Hard",
+      "points": "Points"
     },
     "actions": {
       "playAgain": "Play Again",
@@ -486,6 +487,8 @@
       "birthDate": "Birth Date",
       "gender": "Gender",
       "ecoPoints": "EcoPoints",
+      "redeem": "Redeem",
+      "redeeming": "Redeeming...",
       "na": "N/A",
       "cancel": "Cancel",
       "saveChanges": "Save Changes",
@@ -497,16 +500,37 @@
     },
     "customer": {
       "role": "Customer",
-      "orderHistory": "Order History",
-      "orderCount": "You have {count} past order(s).",
-      "noOrders": "No orders yet",
-      "noOrdersDescription": "Start adding products to your Orders to see them here",
-      "browseOrders": "Browse Orders",
+      "orderHistory": {
+        "title": "Order History",
+        "orderCount": "You have {count} past order(s).",
+        "noOrders": "No orders yet",
+        "noOrdersDescription": "Start adding products to your Orders to see them here",
+        "browseOrders": "Browse Orders",
+        "orderId": "Order ID",
+        "date": "Date",
+        "total": "Total",
+        "status": "Status"
+      },
+      "recyclingHistory": {
+        "title": "Recycling History",
+        "date": "Date",
+        "items": "Items",
+        "itemsCount": "items",
+        "weight": "Weight (kg)",
+        "carbonSaved": "Carbon Saved",
+        "status": "Status",
+        "verified": "Verified",
+        "pending": "Pending",
+        "noRecyclingOrders": "No recycling orders yet",
+        "noRecyclingOrdersDescription": "Start recycling to see your eco-impact here",
+        "browseRecycling": "Start Recycling"
+      },
       "editModalTitle": "Edit Profile"
     },
     "toasts": {
       "passwordChanged": "Password changed successfully",
-      "passwordChangeFailed": "Failed to change password"
+      "passwordChangeFailed": "Failed to change password",
+      "redeemFailed": "Failed to redeem points. Please try again."
     },
     "states": {
       "loading": "Loading profile...",
@@ -541,7 +565,32 @@
       "hotline": "Hotline",
       "editModalTitle": "Edit Shop Profile",
       "restaurantInformation": "Restaurant Information",
-      "noDescription": "No description available."
+      "noDescription": "No description available.",
+      "orders": {
+        "title": "Order Management",
+        "totalOrders": "Total Orders",
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "date": "Date",
+        "total": "Total",
+        "status": "Status",
+        "actions": "Actions",
+        "noOrders": "No orders found.",
+        "fetchError": "Failed to fetch orders.",
+        "statusUpdated": "Status updated successfully.",
+        "updateError": "Failed to update status.",
+        "changeStatus": "Change Status",
+        "statuses": {
+          "pending": "Pending",
+          "paid": "Paid",
+          "preparing": "Preparing",
+          "delivering": "Delivering",
+          "completed": "Completed",
+          "canceled": "Canceled"
+        },
+        "page": "Page",
+        "of": "of"
+      }
     }
   },
   "Cart": {
@@ -963,7 +1012,7 @@
     "title": "Recycle Request",
     "description": "Schedule your pickup. Eco-friendly and easy.",
     "submit": {
-      "default": "Submit Recycling Request",
+      "default": "Submit",
       "processing": "Processing Request..."
     },
     "entryMethod": {

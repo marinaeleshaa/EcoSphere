@@ -26,7 +26,7 @@ export interface IUserRepository {
   savePasswordResetCode(
     userId: string,
     code: string,
-    validTo: Date,
+    validTo: string,
   ): Promise<void>;
   changePassword(
     userId: string,
@@ -251,7 +251,7 @@ class UserRepository implements IUserRepository {
   async savePasswordResetCode(
     userId: string,
     code: string,
-    validTo: Date,
+    validTo: string,
   ): Promise<void> {
     await DBInstance.getConnection();
     await UserModel.findByIdAndUpdate(

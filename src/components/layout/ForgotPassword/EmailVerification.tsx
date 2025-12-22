@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { Mail } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -26,8 +26,10 @@ export default function EmailVerification({
   const [codeSent, setCodeSent] = useState(false);
   const [userCode, setUserCode] = useState(["", "", "", "", "", ""]);
   const [codeError, setCodeError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSendCode = async () => {
+    setLoading(true);
     if (!emailValid) return;
 
     try {
@@ -38,6 +40,8 @@ export default function EmailVerification({
       console.error(error);
       toast.error(t("emailStep.sendError"));
     }
+
+    setLoading(false);
   };
 
   const handleCodeChange = (value: string, index: number) => {
@@ -64,6 +68,7 @@ export default function EmailVerification({
   };
 
   const verifyCode = async () => {
+    setLoading(true);
     const code = userCode.join("");
 
     if (code.length !== 6) {
@@ -78,6 +83,8 @@ export default function EmailVerification({
       console.error(error);
       setCodeError(t("codeStep.responseError"));
     }
+
+    setLoading(false);
   };
 
   const pageVariants = {
@@ -121,18 +128,24 @@ export default function EmailVerification({
                 setEmail(val);
                 setEmailValid(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val));
               }}
-              className={`bg-input text-input-foreground p-3 rounded-full w-full border-2 transition focus:outline-none focus:border-primary ${
+              className={`myInput ${
                 email && !emailValid ? "border-red-500" : "border-border"
               }`}
             />
 
             <button
-              disabled={!emailValid}
+              disabled={!emailValid || loading}
               onClick={handleSendCode}
-              className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all"
+              className="myBtnPrimary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {t("emailStep.sendButton")}{" "}
-              <IoIosArrowRoundForward className="text-2xl" />
+              {loading ? (
+                <Loader2 className="mr-2 animate-spin" />
+              ) : (
+                <>
+                  {t("emailStep.sendButton")}
+                  <IoIosArrowRoundForward className="text-2xl" />
+                </>
+              )}
             </button>
 
             <Link href="/auth">
@@ -189,7 +202,7 @@ export default function EmailVerification({
           <button
             disabled={userCode.join("").length !== 6}
             onClick={verifyCode}
-            className="bg-primary text-primary-foreground font-bold p-3 rounded-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transition-all"
+            className="myBtnPrimary disabled:opacity-50 disabled:cursor-not-allowed "
           >
             {t("codeStep.verifyButton")}{" "}
             <IoIosArrowRoundForward className="text-2xl" />
@@ -203,7 +216,11 @@ export default function EmailVerification({
             }}
             className="text-sm text-muted-foreground hover:text-foreground transition underline"
           >
-            {t("codeStep.changeEmailButton")}
+            {loading ? (
+              <Loader2 className="mr-2 animate-spin" />
+            ) : (
+              t("codeStep.changeEmailButton")
+            )}
           </button>
         </motion.div>
       )}

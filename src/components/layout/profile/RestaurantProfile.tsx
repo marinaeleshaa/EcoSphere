@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/frontend/redux/store";
 import { updateProfile } from "@/frontend/redux/Slice/UserSlice";
 import ImageUpload from "@/components/layout/common/ImageUpload";
-import { Edit, Eye, EyeOff } from "lucide-react";
+import { Edit, Eye, EyeOff, ChevronDown, ChevronUp } from "lucide-react";
 import { ChangePasswordSchema } from "@/frontend/schema/profile.schema";
 import { getUserData } from "@/frontend/api/Users";
 import { Shop } from "@/types/UserTypes";
@@ -35,6 +35,9 @@ export default function RestaurantProfile({
     new: false,
     confirm: false,
   });
+
+  const [isSecurityOpen, setIsSecurityOpen] = useState(false);
+
   const [touched, setTouched] = useState({
     currentPassword: false,
     newPassword: false,
@@ -139,11 +142,11 @@ export default function RestaurantProfile({
   return (
     <div className="space-y-6">
       {/* Main Profile Section */}
-      <div className="bg-card shadow rounded-lg p-6 border border-border relative">
-        {/* Edit Button - Top Right */}
+      <div className="bg-card shadow rounded-lg p-4 sm:p-6 border border-border relative">
+        {/* Edit Button - Top Right (Desktop) */}
         <button
           onClick={handleEditClick}
-          className="absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
+          className="hidden lg:block absolute top-6 right-6 p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
           title={t("common.editProfile")}
         >
           <Edit className="w-5 h-5" />
@@ -152,12 +155,12 @@ export default function RestaurantProfile({
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
           <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-87.5">
-            <div className="flex items-center gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
                 onImageUpdate={handleImageUpdate}
               />
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 text-center sm:text-left">
                 <div>
                   <h1 className="text-2xl font-bold text-card-foreground">
                     {user.name || t("restaurant.shopName")}
@@ -165,6 +168,15 @@ export default function RestaurantProfile({
                   <p className="text-muted-foreground">
                     {t("restaurant.role")}
                   </p>
+                </div>
+                <div className="lg:hidden mt-2 w-fit mx-auto sm:mx-0">
+                  <button
+                    onClick={handleEditClick}
+                    className="myBtnPrimary flex items-center gap-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>{t("common.editProfile")}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -178,7 +190,7 @@ export default function RestaurantProfile({
             <h2 className="text-xl font-semibold mb-4 text-card-foreground">
               {t("restaurant.restaurantInformation")}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">
                   {t("restaurant.location")}
@@ -217,136 +229,150 @@ export default function RestaurantProfile({
       </div>
 
       {/* Security Section */}
-      <div className="bg-card shadow rounded-lg p-6 border border-border">
-        <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-          {t("security.title")}
-        </h2>
-        <div className="max-w-md space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {t("security.currentPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.current ? "text" : "password"}
-                name="currentPassword"
-                value={passwordData.currentPassword}
-                onChange={handlePasswordInputChange}
-                className="myInput pr-12"
-                placeholder={t("security.currentPasswordPlaceholder")}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({
-                    ...prev,
-                    current: !prev.current,
-                  }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.current ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
-              </button>
+      <div className="bg-card shadow rounded-lg px-6 border border-border">
+        <button
+          onClick={() => setIsSecurityOpen(!isSecurityOpen)}
+          className="w-full py-6 flex items-center justify-between group"
+        >
+          <h2 className="text-xl font-semibold text-card-foreground group-hover:text-primary transition-colors">
+            {t("security.title")}
+          </h2>
+          {isSecurityOpen ? (
+            <ChevronUp className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          )}
+        </button>
+        {isSecurityOpen && (
+          <div className="max-w-md space-y-4 pb-6 animate-in slide-in-from-top-2 duration-200">
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {t("security.currentPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.current ? "text" : "password"}
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordInputChange}
+                  className="myInput pr-12"
+                  placeholder={t("security.currentPasswordPlaceholder")}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({
+                      ...prev,
+                      current: !prev.current,
+                    }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.current ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {touched.currentPassword && errors.currentPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.currentPassword}
+                </p>
+              )}
             </div>
-            {touched.currentPassword && errors.currentPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.currentPassword}
-              </p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {t("security.newPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.new ? "text" : "password"}
-                name="newPassword"
-                value={passwordData.newPassword}
-                onChange={handlePasswordInputChange}
-                className={`myInput pr-12 ${
-                  !passwordData.currentPassword
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                placeholder={t("security.newPasswordPlaceholder")}
-                disabled={!passwordData.currentPassword}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({ ...prev, new: !prev.new }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {t("security.newPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.new ? "text" : "password"}
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`myInput pr-12 ${
+                    !passwordData.currentPassword
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  placeholder={t("security.newPasswordPlaceholder")}
+                  disabled={!passwordData.currentPassword}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({ ...prev, new: !prev.new }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.new ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {touched.newPassword && errors.newPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.newPassword}
+                </p>
+              )}
             </div>
-            {touched.newPassword && errors.newPassword && (
-              <p className="text-red-500 text-sm mt-1">{errors.newPassword}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-card-foreground mb-1">
-              {t("security.confirmPassword")}
-            </label>
-            <div className="relative">
-              <input
-                type={showPasswords.confirm ? "text" : "password"}
-                name="confirmPassword"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordInputChange}
-                className={`myInput pr-12 ${
-                  !passwordData.newPassword
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                placeholder={t("security.confirmPasswordPlaceholder")}
-                disabled={!passwordData.newPassword}
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  setShowPasswords((prev) => ({
-                    ...prev,
-                    confirm: !prev.confirm,
-                  }))
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {showPasswords.confirm ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
-              </button>
+            <div>
+              <label className="block text-sm font-medium text-card-foreground mb-1">
+                {t("security.confirmPassword")}
+              </label>
+              <div className="relative">
+                <input
+                  type={showPasswords.confirm ? "text" : "password"}
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordInputChange}
+                  className={`myInput pr-12 ${
+                    !passwordData.newPassword
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  placeholder={t("security.confirmPasswordPlaceholder")}
+                  disabled={!passwordData.newPassword}
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPasswords((prev) => ({
+                      ...prev,
+                      confirm: !prev.confirm,
+                    }))
+                  }
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPasswords.confirm ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {touched.confirmPassword && errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
-            {touched.confirmPassword && errors.confirmPassword && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.confirmPassword}
-              </p>
-            )}
+            <button
+              onClick={handleChangePassword}
+              className={`mt-8 myBtnPrimary w-full ${
+                !passwordData.confirmPassword ||
+                passwordData.newPassword !== passwordData.confirmPassword
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={
+                !passwordData.confirmPassword ||
+                passwordData.newPassword !== passwordData.confirmPassword
+              }
+            >
+              {t("security.changePassword")}
+            </button>
           </div>
-          <button
-            onClick={handleChangePassword}
-            className={`mt-8 myBtnPrimary w-full ${
-              !passwordData.confirmPassword ||
-              passwordData.newPassword !== passwordData.confirmPassword
-                ? "opacity-50 cursor-not-allowed"
-                : ""
-            }`}
-            disabled={
-              !passwordData.confirmPassword ||
-              passwordData.newPassword !== passwordData.confirmPassword
-            }
-          >
-            {t("security.changePassword")}
-          </button>
-        </div>
+        )}
       </div>
 
       {/* Edit Modal */}

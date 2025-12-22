@@ -90,3 +90,17 @@ export const changeUserPassword = async (
   }
   return response.json();
 };
+
+export const redeemUserPoints = async (userId: string) => {
+  const response = await fetch(`/api/users/redeem-points/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || "Failed to redeem points");
+  }
+  return response.json();
+};
