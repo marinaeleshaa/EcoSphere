@@ -28,7 +28,7 @@ export default function ShopHero() {
 
   return (
     <motion.div
-      className="container mx-auto w-[80%] text-center"
+      className="container mx-auto w-[80%] text-center py-15"
       initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
