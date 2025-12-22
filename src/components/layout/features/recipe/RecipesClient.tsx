@@ -9,6 +9,7 @@ import { Loader2, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import Pagination from "@/components/ui/Pagination";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import HeroSection from "../../common/HeroSection";
 
 interface RecipesClientProps {
   initialRecipes: IRecipe[];
@@ -70,124 +71,122 @@ export default function RecipesClient({
   };
 
   return (
-    <div className="container py-10 max-w-5xl mx-auto space-y-12">
-      {/* Hero / Generator Section */}
-      <div className="max-w-2xl mx-auto text-center space-y-4">
-        <h1 className="text-4xl font-bold tracking-tight text-primary">
-          {tRecipes("hero.title")}
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          {tRecipes("hero.subtitle")}
-        </p>
-      </div>
+    <>
+      <HeroSection
+        imgUrl="/11.png"
+        title={tRecipes("hero.title")}
+        subTitle={tRecipes("hero.subtitle")}
+      />
+      <div className="container py-10 max-w-5xl mx-auto space-y-12">
 
-      <div className="max-w-2xl mx-auto">
-        <RecipeGenerator onRecipeGenerated={handleRecipeGenerated} />
-      </div>
-
-      {/* Saved Recipes List - Collapsible Cookbook */}
-      <div className="border rounded-2xl bg-card text-card-foreground shadow-sm overflow-hidden">
-        <div
-          className="p-6 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
-          onClick={() => setIsCookbookOpen(!isCookbookOpen)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setIsCookbookOpen(!isCookbookOpen);
-            }
-          }}
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-primary/10 p-2 rounded-lg text-primary">
-              <BookOpen className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold">
-                {tRecipes("cookbook.title")}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {tRecipes("cookbook.savedCount", { count: recipes.length })}
-              </p>
-            </div>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0"
-            tabIndex={-1}
-          >
-            {isCookbookOpen ? (
-              <ChevronUp className="w-5 h-5" />
-            ) : (
-              <ChevronDown className="w-5 h-5" />
-            )}
-          </Button>
+        <div className="max-w-2xl mx-auto">
+          <RecipeGenerator onRecipeGenerated={handleRecipeGenerated} />
         </div>
 
-        <AnimatePresence initial={false}>
-          {isCookbookOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
-              <div className="p-6 pt-0 border-t">
-                {recipes.length === 0 ? (
-                  <div className="text-center py-20 bg-muted/30 rounded-xl border border-dashed mt-6">
-                    <p className="text-muted-foreground">
-                      {tRecipes("cookbook.empty")}
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-6 mt-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <AnimatePresence mode="wait">
-                        {currentRecipes.map((recipe) => (
-                          <motion.div
-                            key={String(recipe._id)}
-                            layout
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                            className="relative"
-                          >
-                            <RecipeCard
-                              recipe={recipe}
-                              onDelete={
-                                deletingId === String(recipe._id)
-                                  ? undefined
-                                  : handleDelete
-                              }
-                            />
-                            {deletingId === String(recipe._id) && (
-                              <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-xl z-10 backdrop-blur-sm">
-                                <Loader2 className="w-8 h-8 animate-spin text-destructive" />
-                              </div>
-                            )}
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    </div>
-
-                    {totalPages > 1 && (
-                      <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={setCurrentPage}
-                      />
-                    )}
-                  </div>
-                )}
+        {/* Saved Recipes List - Collapsible Cookbook */}
+        <div className="border rounded-2xl bg-card text-card-foreground shadow-sm overflow-hidden">
+          <div
+            className="p-6 flex items-center justify-between cursor-pointer hover:bg-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-inset"
+            onClick={() => setIsCookbookOpen(!isCookbookOpen)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsCookbookOpen(!isCookbookOpen);
+              }
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                <BookOpen className="w-6 h-6" />
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <div>
+                <h2 className="text-2xl font-bold">
+                  {tRecipes("cookbook.title")}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {tRecipes("cookbook.savedCount", { count: recipes.length })}
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0"
+              tabIndex={-1}
+            >
+              {isCookbookOpen ? (
+                <ChevronUp className="w-5 h-5" />
+              ) : (
+                <ChevronDown className="w-5 h-5" />
+              )}
+            </Button>
+          </div>
+
+          <AnimatePresence initial={false}>
+            {isCookbookOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="p-6 pt-0 border-t">
+                  {recipes.length === 0 ? (
+                    <div className="text-center py-20 bg-muted/30 rounded-xl border border-dashed mt-6">
+                      <p className="text-muted-foreground">
+                        {tRecipes("cookbook.empty")}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-6 mt-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <AnimatePresence mode="wait">
+                          {currentRecipes.map((recipe) => (
+                            <motion.div
+                              key={String(recipe._id)}
+                              layout
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.2 }}
+                              className="relative"
+                            >
+                              <RecipeCard
+                                recipe={recipe}
+                                onDelete={
+                                  deletingId === String(recipe._id)
+                                    ? undefined
+                                    : handleDelete
+                                }
+                              />
+                              {deletingId === String(recipe._id) && (
+                                <div className="absolute inset-0 bg-background/80 flex items-center justify-center rounded-xl z-10 backdrop-blur-sm">
+                                  <Loader2 className="w-8 h-8 animate-spin text-destructive" />
+                                </div>
+                              )}
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </div>
+
+                      {totalPages > 1 && (
+                        <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={setCurrentPage}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

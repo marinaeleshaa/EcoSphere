@@ -1220,7 +1220,7 @@
   },
   "Recipes": {
     "hero": {
-      "title": "Chef Zéro Déchet 🍳",
+      "title": "Chef Zéro Déchet ",
       "subtitle": "Transformez vos restes en repas gastronomiques. Économisez de l'argent, sauvez la planète."
     },
     "generator": {
@@ -1232,7 +1232,7 @@
       "justForYou": "Juste pour vous :",
       "toasts": {
         "emptyInput": "Veuillez entrer au moins un ingrédient",
-        "success": "Recette générée avec succès ! 🍳",
+        "success": "Recette générée avec succès ! ",
         "error": "Échec de la génération de la recette. Veuillez réessayer."
       }
     },

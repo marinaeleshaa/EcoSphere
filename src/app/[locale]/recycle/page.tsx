@@ -8,7 +8,7 @@ export default function Recycle() {
   return (
     <div className="scroll-smooth">
       <HeroSection 
-        imgUrl="/recycle2.png"
+        imgUrl="/re3.png"
         title="A Greener Tomorrow Starts Today"
         subTitle="Join us in our mission to revolutionize waste management and build a sustainable future for our planet. Every piece counts."
       />

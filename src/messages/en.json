@@ -1235,7 +1235,7 @@
   },
   "Recipes": {
     "hero": {
-      "title": "Zero-Waste Chef 🍳",
+      "title": "Zero-Waste Chef ",
       "subtitle": "Turn your leftovers into gourmet meals. Save money, save the planet."
     },
     "generator": {
@@ -1247,7 +1247,7 @@
       "justForYou": "Just For You:",
       "toasts": {
         "emptyInput": "Please enter at least one ingredient",
-        "success": "Recipe generated successfully! 🍳",
+        "success": "Recipe generated successfully! ",
         "error": "Failed to generate recipe. Please try again."
       }
     },

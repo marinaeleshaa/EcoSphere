@@ -142,7 +142,7 @@ const RecycleDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <div className="bg-linear-to-br from-primary via-primary/90 to-primary/70 text-primary-foreground py-12 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
@@ -178,17 +178,17 @@ const RecycleDashboard = () => {
       {/* Tabs and Tables */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-gray-200">
+        <div className="flex gap-2 mb-6 border-b border-primary pb-2">
           <button
             onClick={() => setActiveTab("pending")}
-            className={`px-6 py-3 font-medium transition-colors relative ${
+            className={`px-6 py-3 font-medium transition-colors relative cursor-pointer ${
               activeTab === "pending"
                 ? "text-primary"
-                : "text-gray-500 hover:text-gray-700"
+                : "text-muted-foreground/80 hover:text-muted-foreground"
             }`}
           >
             Active Requests
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-200">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary text-primary-foreground">
               {pendingRequests.length}
             </span>
             {activeTab === "pending" && (
@@ -200,11 +200,11 @@ const RecycleDashboard = () => {
             className={`px-6 py-3 font-medium transition-colors relative ${
               activeTab === "completed"
                 ? "text-primary"
-                : "text-gray-500 hover:text-gray-700"
+                : "text-muted-foreground/80 hover:text-muted-foreground"
             }`}
           >
             Completed
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-gray-200">
+            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-primary text-primary-foreground">
               {completedRequests.length}
             </span>
             {activeTab === "completed" && (
@@ -214,49 +214,49 @@ const RecycleDashboard = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-lg overflow-visible">
+        <div className="bg-secondary/10 rounded-xl shadow-lg overflow-visible">
           <div className="overflow-x-auto overflow-visible">
-            <table className="w-full">
+            <table className="w-full rounded-2xl">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200 overflow-visible">
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                <tr className="bg-primary border-b border-primary text-primary-foreground overflow-visible">
+                  <th className="px-6 py-4  text-center text-xs  font-semibold  uppercase">
                     Customer Name
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-center  text-xs font-semibold  uppercase">
                     Email
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-center  text-xs font-semibold  uppercase">
                     Phone
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-center  text-xs font-semibold  uppercase">
                     Location
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <th className="px-6 py-4 text-center  text-xs font-semibold  uppercase">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 overflow-visible">
+              <tbody className="divide-y divide-primary overflow-visible">
                 {(activeTab === "pending"
                   ? pendingRequests
                   : completedRequests
                 ).map((request) => (
                   <tr
                     key={request.id}
-                    className="hover:bg-gray-50 transition-colors"
+                    className="hover:bg-primary/10 transition-colors"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-foreground">
                         {request.customerName}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-muted-foreground text-sm">
                       {request.email}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600 text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-muted-foreground text-sm">
                       {request.phone}
                     </td>
-                    <td className="px-6 py-4 text-gray-600 text-sm">
+                    <td className="px-6 py-4 text-muted-foreground text-sm">
                       {request.location}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap relative overflow-visible">

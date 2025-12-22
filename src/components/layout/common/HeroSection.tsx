@@ -9,26 +9,47 @@ interface IProps {
 
 const HeroSection = ({ imgUrl, subTitle, title }: IProps) => {
   return (
-    <section>
-      <div>
+    <div className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0">
         <Image
+          fill
           src={imgUrl}
-          width={1000}
-          height={1000}
-          alt="hero"
-          className="object-cover mx-auto h-112.5 relative z-0"
+          alt="Hero background"
+          className="w-full h-full object-cover blur-md"
         />
-        {/* Overlay Box */}
-        <BasicAnimatedWrapper className="relative z-10 mx-auto -translate-y-1/3 w-[80%] bg-primary/70  dark:bg-primary/50 backdrop-blur-lg to-transparent rounded-xl p-6 flex flex-col items-center text-center shadow-lg">
-          <h1 className="lg:text-5xl md:text-4xl text-3xl font-semibold mb-3 text-primary-foreground ">
+        {/* Modern gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-br from-primary  via-primary/60 to-primary"></div>
+        <div className="absolute inset-0 bg-primary/20"></div>
+      </div>
+
+      {/* Content Container */}
+      <div className="relative h-full flex items-center justify-center px-6 md:px-12 lg:px-24">
+        <div className="max-w-4xl w-full text-center">
+          {/* Decorative accent */}
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="h-px w-12 bg-linear-to-r from-transparent to-background"></div>
+            <div className="h-1.5 w-1.5 rounded-full bg-background"></div>
+            <div className="h-px w-12 bg-linear-to-l from-transparent to-background"></div>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 tracking-tight">
             {title}
           </h1>
-          <p className="mt-2 lg:text-lg text-base text-primary-foreground/80 w-[90%] leading-relaxed">
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-primary-foreground/90  max-w-2xl mx-auto">
             {subTitle}
           </p>
-        </BasicAnimatedWrapper>
+
+    
+        </div>
       </div>
-    </section>
+
+      {/* Subtle decorative blur */}
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-96 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+    </div>
   );
 };
 
