@@ -1,7 +1,7 @@
 "use client";
 
 import { IReview } from "@/types/ShopTypes";
-import { Star, MessageSquarePlus } from "lucide-react";
+import { Star, MessageSquareCode } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import BasicAnimatedWrapper from "../../common/BasicAnimatedWrapper";
@@ -22,7 +22,7 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
 
   const validReviews = localReviews.filter(
     (r): r is IReview =>
-      r && typeof r.rate === "number" && typeof r.review === "string"
+      r && typeof r.rate === "number" && typeof r.review === "string",
   );
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -69,19 +69,22 @@ const ShopTextComponent = ({ reviews, shopId }: ShopTextComponentProps) => {
   };
 
   return (
-    <section className="my-2 overflow-hidden">
+    <section className="overflow-hidden">
       <BasicAnimatedWrapper>
         {/* Header */}
         <div className="flex items-center justify-between gap-5 capitalize text-foreground text-lg md:text-xl border-b-2 p-5 border-primary">
-          <h2 className="text-primary font-semibold">{t("title")}</h2>
+          <div className="flex items-center gap-2">
+            <MessageSquareCode className="text-primary" />
+            <h2 className="text-primary font-semibold">{t("title")}</h2>
+          </div>
 
-          <button
+          {/*<button
             onClick={() => setShowReviewForm((prev) => !prev)}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition"
           >
             <MessageSquarePlus className="w-4 h-4" />
             Add review
-          </button>
+          </button>*/}
         </div>
 
         {/* Review Form */}

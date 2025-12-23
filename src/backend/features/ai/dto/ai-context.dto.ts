@@ -2,7 +2,6 @@ export interface ProductContextDTO {
   title: string;
   price: number;
   description: string;
-  rating: number;
   availableOnline: boolean;
   soldBy: string;
 }

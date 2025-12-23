@@ -29,11 +29,7 @@ const ProductPage = async ({ params }: Props) => {
     { cache: "no-store" }
   );
   const relatedData = await relatedRes.json();
-  // Handle both paginated and array response structure if needed, or assume array if my API supports it.
-  // My API `getAll` returns IProduct[]. `getByRestaurantId` returns Paginated or array.
-  // The endpoint `/api/products` usually maps to `getAll` or `getByRestaurantId`.
-  // Let's assume for now I need to fetch all or filter.
-  // Actually, I should check `/api/products` route handler.
+
   const relatedProducts = Array.isArray(relatedData.data)
     ? relatedData.data
     : Array.isArray(relatedData)
@@ -45,7 +41,7 @@ const ProductPage = async ({ params }: Props) => {
       <ProductHero product={product} />
       <div className="w-[80%] mx-auto">
         <ProductDetailsCard product={product} />
-        <TextComponent product={product} />
+        {/* <TextComponent product={product} /> */}
         <RelatedProducts products={relatedProducts} />
       </div>
     </div>

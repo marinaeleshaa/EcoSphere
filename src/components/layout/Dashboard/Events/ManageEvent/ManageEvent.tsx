@@ -44,7 +44,9 @@ import z from "zod";
 import { useTranslations } from "next-intl";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function ManageEvent({initialData,}: Readonly<{ initialData?: any }>) {
+export default function ManageEvent({
+  initialData,
+}: Readonly<{ initialData?: any }>) {
   const t = useTranslations("Events.Manage");
   const tEventTypes = useTranslations("Events.Manage.fields.EventTypes");
   const router = useRouter();
@@ -113,7 +115,7 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
     if (avatar instanceof File) {
       formData.append("avatar", avatar);
     } else if (avatar && typeof avatar === "object" && "key" in avatar) {
-      formData.append("avatarKey", avatar.key);
+      formData.append("avatar.key", avatar.key);
     }
     try {
       if (data._id) {
@@ -192,9 +194,13 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                             </SelectTrigger>
                           </div>
                         </FormControl>
-                        <SelectContent >
+                        <SelectContent>
                           {EVENT_TYPES.map((type) => (
-                            <SelectItem key={type} value={type} className="rtl:text-right rtl:flex-row-reverse">
+                            <SelectItem
+                              key={type}
+                              value={type}
+                              className="rtl:text-right rtl:flex-row-reverse"
+                            >
                               {tEventTypes(type)}
                             </SelectItem>
                           ))}
@@ -224,9 +230,9 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                 control={form.control}
                 name="avatar"
                 render={({ field: { onChange } }) => (
-                  <FormItem >
+                  <FormItem>
                     <FormLabel>{t("fields.image")}</FormLabel>
-                    <FormControl >
+                    <FormControl>
                       <Input
                         className="cursor-pointer"
                         type="file"
@@ -355,7 +361,6 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                 />
               </div>
             </div>
-
             {/* --- SECTION 3: Capacity & Sales --- */}
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold  border-b pb-2 flex items-center">
@@ -502,7 +507,7 @@ export default function ManageEvent({initialData,}: Readonly<{ initialData?: any
                         <FormControl>
                           <Textarea
                             placeholder={t(
-                              "fields.agendaDescriptionPlaceholder"
+                              "fields.agendaDescriptionPlaceholder",
                             )}
                             {...field}
                           />
