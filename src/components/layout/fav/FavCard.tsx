@@ -7,7 +7,11 @@ import { toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
-import { addItem, isInCartSelector, removeItem } from "@/frontend/redux/Slice/CartSlice";
+import {
+  addItem,
+  isInCartSelector,
+  removeItem,
+} from "@/frontend/redux/Slice/CartSlice";
 
 interface FavCardProps {
   product: IProduct;
@@ -73,10 +77,7 @@ const FavCard = ({ product }: FavCardProps) => {
         )}
         {/* <p className="text-primary">${product.price.toFixed(2)}</p> */}
         <div className="flex justify-evenly mt-4 gap-5">
-          <button
-            className="capitalize flex-1 cursor-pointer bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/80"
-            onClick={handleAddToCart}
-          >
+          <button className="myBtnPrimary" onClick={handleAddToCart}>
             {isInCart ? t("removeFromCart") : t("addToCart")}
           </button>
         </div>
