@@ -136,7 +136,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
         {/* Removed blue dot since badge is better indicator, or keep it if it means 'active' */}
-        <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
+        {/* <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div> */}
       </div>
 
       {/* product img - fixed height */}
