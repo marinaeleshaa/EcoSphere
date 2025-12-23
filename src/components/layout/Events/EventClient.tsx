@@ -1,4 +1,3 @@
-import React from 'react'
 import HeroSection from '../common/HeroSection'
 import WhyEcosphere from './WhyEcosphere'
 import MainDisplayEvents from '../common/events/MainDisplayEvents'

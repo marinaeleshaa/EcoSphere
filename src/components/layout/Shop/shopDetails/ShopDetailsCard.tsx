@@ -31,8 +31,8 @@ const ShopDetailsCard = ({ shop, liveAverageRating }: ShopDetailsCardProps) => {
   const [showContact, setShowContact] = useState(false);
 
   return (
-    <section className="">
-      <BasicAnimatedWrapper className="flex flex-col gap-10 my-30 w-full">
+    <section>
+      <BasicAnimatedWrapper className="flex flex-col gap-10 mt-30 w-full">
         <div className="flex flex-col justify-center items-center md:flex-row gap-10 w-full">
           <div className="relative shadow-lg rounded-lg  ">
             <Image

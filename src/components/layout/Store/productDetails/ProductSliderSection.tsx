@@ -12,8 +12,12 @@ interface ProductSliderSectionProps {
 const ProductSliderSection = ({ products }: ProductSliderSectionProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
 
+  if (products.length === 0) {
+    return <div className="text-center mb-6">There no related products</div>;
+  }
+
   return (
-    <div className="w-full  ">
+    <div className="w-full">
       <div
         ref={sliderRef}
         className="overflow-x-auto scroll-smooth scrollbar-hide py-5"

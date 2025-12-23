@@ -1,7 +1,8 @@
 import { injectable } from "tsyringe";
-import { IEvent, IUser, UserModel } from "../user/user.model";
+import { IUser, UserModel } from "../user/user.model";
+import { IEvent, EventModel } from "../event/event.model";
 import { DBInstance } from "@/backend/config/dbConnect";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IEventRepository {
   getEvents(): Promise<IEvent[]>;
@@ -14,267 +15,153 @@ export interface IEventRepository {
   rejectEvent(id: string, eventId: string): Promise<IEvent>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
   attendEvent(id: string, eventId: string): Promise<IEvent>;
-  getEventById(eventId: string): Promise<IEvent>;
 }
 
 @injectable()
 class EventRepository {
-  async getEvents() {
+  async getEvents(): Promise<IEvent[]> {
     await DBInstance.getConnection();
 
-    return await UserModel.aggregate([
-      { $unwind: "$events" },
-      {
-        $match: {
-          "events.eventDate": { $gte: new Date() },
-        },
-      },
-      {
-        $replaceRoot: {
-          newRoot: {
-            $mergeObjects: [
-              "$events",
-              {
-                user: {
-                  _id: "$_id",
-                  firstName: "$firstName",
-                  phoneNumber: "$phoneNumber",
-                  email: "$email",
-                },
-              },
-            ],
-          },
-        },
-      },
-    ]);
+    return EventModel.find({
+      eventDate: { $gte: new Date() },
+      isAccepted: true,
+    })
+      .populate("user", "firstName phoneNumber email")
+      .lean()
+      .exec();
   }
 
-  async getEvent(id: string, eventId: string): Promise<IEvent> {
+  async getEvent(userId: string, eventId: string): Promise<IEvent> {
     await DBInstance.getConnection();
-    const data = await UserModel.findOne(
-      { _id: id },
-      {
-        events: {
-          $elemMatch: { _id: eventId },
-        },
-      }
-    )
-      .lean<Pick<IUser, "events">>()
+
+    const event = await EventModel.findOne({
+      _id: eventId,
+      user: userId,
+    })
+      .lean()
       .exec();
 
-    return data as IEvent;
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    return event;
   }
 
   async getEventsByUserId(userId: string): Promise<IEvent[]> {
     await DBInstance.getConnection();
 
-    const user = await UserModel.findById(userId, { events: 1 })
-      .lean<{ events: IEvent[] }>()
-      .exec();
-
-    return user?.events || [];
+    return EventModel.find({ user: userId }).lean().exec();
   }
 
-  async createEvent(userId: string, eventData: IEvent): Promise<IEvent> {
+  async createEvent(userId: string, data: IEvent): Promise<IEvent> {
     await DBInstance.getConnection();
 
-    const eventId = new mongoose.Types.ObjectId();
+    const event = await EventModel.create({
+      ...data,
+      user: userId,
+    });
 
-    const eventToInsert = {
-      ...eventData,
+    return event.toObject();
+  }
+
+  async updateEvent(userId: string, data: Partial<IEvent>): Promise<IEvent> {
+    await DBInstance.getConnection();
+
+    const event = await EventModel.findOneAndUpdate(
+      { _id: data._id, user: userId },
+      { ...data, updatedAt: new Date() },
+      { new: true },
+    )
+      .lean()
+      .exec();
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    return event;
+  }
+
+  async deleteEvent(userId: string, eventId: string): Promise<IEvent> {
+    await DBInstance.getConnection();
+
+    const event = await EventModel.findOneAndDelete({
       _id: eventId,
-    };
-
-    const result = await UserModel.findOneAndUpdate(
-      { _id: userId },
-      { $push: { events: eventToInsert } },
-      {
-        new: true,
-        select: {
-          events: { $elemMatch: { _id: eventId } },
-        },
-      }
-    )
-      .lean<{ events: IEvent[] }>()
+      user: userId,
+    })
+      .lean()
       .exec();
 
-    console.log(result);
-    if (!result?.events || result.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found for user ${userId}.`);
+    if (!event) {
+      throw new Error("Event not found");
     }
 
-    return result.events[0];
-  }
-
-  async updateEvent(
-    userId: string,
-    eventData: Partial<IEvent>
-  ): Promise<IEvent> {
-    await DBInstance.getConnection();
-
-    const eventId = eventData._id;
-
-    const updateFields: Record<string, any> = {};
-
-    for (const [key, value] of Object.entries(eventData)) {
-      if (key !== "_id") {
-        updateFields[`events.$.${key}`] = value;
-      }
-    }
-
-    updateFields["events.$.updatedAt"] = new Date();
-
-    const result = await UserModel.findOneAndUpdate(
-      { _id: userId, "events._id": eventId },
-      { $set: updateFields },
-      {
-        new: true,
-        select: {
-          events: { $elemMatch: { _id: eventId } },
-        },
-      }
-    )
-      .lean<{ events: IEvent[] }>()
-      .exec();
-
-    if (!result?.events || result.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found for user ${userId}.`);
-    }
-
-    return result.events[0];
-  }
-
-  async deleteEvent(id: string, eventId: string): Promise<IEvent> {
-    await DBInstance.getConnection();
-    const eventProjection = await UserModel.findOne(
-      { _id: id },
-      { events: { $elemMatch: { _id: eventId } } }
-    )
-      .lean<Pick<IUser, "events">>()
-      .exec();
-
-    if (!eventProjection?.events || eventProjection.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found for user ${id}.`);
-    }
-
-    const deletedEvent: IEvent = eventProjection.events[0];
-
-    await UserModel.updateOne(
-      { _id: id },
-      {
-        $pull: { events: { _id: eventId } },
-      }
-    ).exec();
-
-    return deletedEvent;
+    return event;
   }
 
   async getUserIdByEventId(eventId: string): Promise<IUser> {
     await DBInstance.getConnection();
     const response = await UserModel.findOne(
       { "events._id": eventId },
-      { _id: 1 }
+      { _id: 1 },
     )
       .lean<IUser>()
       .exec();
     return response!;
   }
 
-  async acceptEvent(id: string, eventId: string): Promise<IEvent> {
+  async acceptEvent(_: string, eventId: string): Promise<IEvent> {
     await DBInstance.getConnection();
 
-    const eventProjection = await UserModel.findOne(
-      { _id: id },
-      { events: { $elemMatch: { _id: eventId } } }
+    const event = await EventModel.findByIdAndUpdate(
+      eventId,
+      { isAccepted: true, isEventNew: false },
+      { new: true },
     )
-      .lean<Pick<IUser, "events">>()
+      .lean()
       .exec();
 
-    if (!eventProjection?.events || eventProjection.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found for user ${id}.`);
-    }
+    if (!event) throw new Error("Event not found");
 
-    const updatedEvent: IEvent = eventProjection.events[0];
-
-    await UserModel.updateOne(
-      { _id: id, "events._id": eventId },
-      { $set: { "events.$.isAccepted": true, "events.$.isEventNew": false } }
-    ).exec();
-
-    return updatedEvent;
+    return event;
   }
 
-  async rejectEvent(id: string, eventId: string): Promise<IEvent> {
+  async rejectEvent(_: string, eventId: string): Promise<IEvent> {
     await DBInstance.getConnection();
-    const eventProjection = await UserModel.findOne(
-      {},
-      { events: { $elemMatch: { _id: eventId } } }
+
+    const event = await EventModel.findByIdAndUpdate(
+      eventId,
+      { isAccepted: false, isEventNew: false },
+      { new: true },
     )
-      .lean<Pick<IUser, "events">>()
+      .lean()
       .exec();
 
-    if (!eventProjection?.events || eventProjection.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found for user ${id}.`);
-    }
+    if (!event) throw new Error("Event not found");
 
-    const updatedEvent: IEvent = eventProjection.events[0];
-
-    await UserModel.updateOne(
-      { "events._id": eventId },
-      { $set: { "events.$.isAccepted": false, "events.$.isEventNew": false } }
-    ).exec();
-
-    return updatedEvent;
+    return event;
   }
 
   async attendEvent(userId: string, eventId: string): Promise<IEvent> {
     await DBInstance.getConnection();
 
-    const updatedUser = await UserModel.findOneAndUpdate(
-      { "events._id": eventId },
+    const event = await EventModel.findByIdAndUpdate(
+      eventId,
       {
-        $addToSet: {
-          "events.$.attenders": new Types.ObjectId(userId),
-        },
-        $set: {
-          "events.$.updatedAt": new Date(),
-        },
+        $addToSet: { attenders: new Types.ObjectId(userId) },
+        $set: { updatedAt: new Date() },
       },
-      {
-        new: true,
-        projection: { events: 1 },
-      }
-    ).lean<IUser>();
-
-    if (!updatedUser?.events) {
-      throw new Error(`Event with ID ${eventId} not found.`);
-    }
-
-    const updatedEvent = updatedUser.events.find(
-      (e) => e._id.toString() === eventId
-    );
-
-    if (!updatedEvent) {
-      throw new Error(`Event with ID ${eventId} not found.`);
-    }
-
-    return updatedEvent as IEvent;
-  }
-
-  async getEventById(eventId: string): Promise<IEvent> {
-    await DBInstance.getConnection();
-    const user = await UserModel.findOne(
-      { "events._id": eventId },
-      { events: { $elemMatch: { _id: eventId } } }
+      { new: true },
     )
-      .lean<Pick<IUser, "events">>()
+      .lean()
       .exec();
 
-    if (!user?.events || user.events.length === 0) {
-      throw new Error(`Event with ID ${eventId} not found.`);
+    if (!event) {
+      throw new Error("Event not found");
     }
 
-    return user.events[0] as IEvent;
+    return event;
   }
 }
 

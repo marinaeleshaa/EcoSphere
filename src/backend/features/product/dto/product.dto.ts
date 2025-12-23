@@ -21,14 +21,14 @@ export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
         productName: res.title,
       },
       null,
-      2
-    )
+      2,
+    ),
   );
 
   const productImg = res.avatar?.url || "";
   console.log(
     "[mapResponseToIProduct] Final productImg:",
-    productImg || "EMPTY"
+    productImg || "EMPTY",
   );
 
   return {
@@ -44,9 +44,7 @@ export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
     availableOnline: res.availableOnline,
     sustainabilityScore: res.sustainabilityScore,
     sustainabilityReason: res.sustainabilityReason,
-    itemRating: res.itemRating
-      ? JSON.parse(JSON.stringify(res.itemRating))
-      : [],
+    itemRating: [],
   };
 };
 

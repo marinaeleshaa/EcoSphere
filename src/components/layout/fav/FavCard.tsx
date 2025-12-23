@@ -1,31 +1,48 @@
-import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { RootState } from "@/frontend/redux/store";
 import { IProduct } from "@/types/ProductType";
 import { Star } from "lucide-react";
 import Image from "next/image";
-import { useDispatch, useSelector } from "react-redux";
 import { HiMiniTrash } from "react-icons/hi2";
 import { toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
+import {
+  addItem,
+  isInCartSelector,
+  removeItem,
+} from "@/frontend/redux/Slice/CartSlice";
 
 interface FavCardProps {
   product: IProduct;
 }
+
 const FavCard = ({ product }: FavCardProps) => {
   const t = useTranslations("Favorites.card");
-  const { view } = useSelector((state: RootState) => state.fav);
-  const dispatch = useDispatch<AppDispatch>();
+  const { view } = useAppSelector((state: RootState) => state.fav);
+  const isInCart = useAppSelector((state: RootState) =>
+    isInCartSelector(state, product.id),
+  );
+  const dispatch = useAppDispatch();
   const handleRemoveFromFav = () => {
     dispatch(toggleFavoriteAsync(product));
     toast.success(t("removedFromFavorites"));
   };
-  console.log(product);
+
+  const handleAddToCart = () => {
+    if (isInCart) {
+      dispatch(removeItem(product.id));
+      toast.success(t("removedFromCart"));
+    } else {
+      dispatch(addItem({ ...product, quantity: 1 }));
+      toast.success(t("addedToCart"));
+    }
+  };
+
   return (
     <div
       className={`${
-        view === "grid"
-          ? "flex-col"
-          : "flex-row items-center gap-4 h-75 p-2"
+        view === "grid" ? "flex-col" : "flex-row items-center gap-4 h-75 p-2"
       } flex shadow-md rounded-lg dark:bg-primary/10 bg-background/50 relative`}
     >
       {/* img */}
@@ -55,14 +72,13 @@ const FavCard = ({ product }: FavCardProps) => {
               </div>
               <span className="text-sm text-muted-foreground">(5.0)</span>
             </div>
-
             <p className="text-primary">{product.productSubtitle}</p>
           </>
         )}
         {/* <p className="text-primary">${product.price.toFixed(2)}</p> */}
         <div className="flex justify-evenly mt-4 gap-5">
-          <button className="capitalize flex-1 cursor-pointer bg-primary text-primary-foreground p-3 rounded-full hover:bg-primary/80 ">
-            {t("addToCart")}
+          <button className="myBtnPrimary" onClick={handleAddToCart}>
+            {isInCart ? t("removeFromCart") : t("addToCart")}
           </button>
         </div>
       </div>

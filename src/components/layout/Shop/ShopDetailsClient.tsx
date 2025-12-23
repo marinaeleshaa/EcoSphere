@@ -5,12 +5,12 @@ import ShopDetailsCard from "./shopDetails/ShopDetailsCard";
 import ShopProducts from "./shopDetails/ShopProducts";
 import ShopTextComponent from "./shopDetails/ShopTextComponent";
 import { IShop, IReview } from "@/types/ShopTypes";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { getAverageRating } from "./ShopSection";
 
 function ShopDetailsClient({ shop }: { shop: IShop }) {
-  const [reviews, setReviews] = useState<IReview[]>(
-    shop.restaurantRating || []
+  const [reviews, _] = useState<IReview[]>(
+    shop.restaurantRating || [],
   );
 
   const liveAverageRating = useMemo(() => {

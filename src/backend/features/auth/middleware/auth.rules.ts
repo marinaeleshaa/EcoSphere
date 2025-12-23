@@ -5,12 +5,12 @@ import { AuthSession, checkRoleAccess } from "./role.guards";
 export const applyAuthRules = (
   req: NextRequest,
   session: AuthSession | null,
-  pathname: string
+  pathname: string,
 ) => {
   const signedIn = !!session;
 
   // Strip locale prefix (e.g., /en/admin -> /admin)
-  const locales = ["en", "ar", "fr"];
+  const locales = ["en", "ar"];
   let normalizedPath = pathname;
   for (const loc of locales) {
     if (pathname.startsWith(`/${loc}/`)) {
@@ -31,7 +31,7 @@ export const applyAuthRules = (
 
   // 2. Not signed in → accessing protected route
   const isProtected = PROTECTED_ROUTES.some((r) =>
-    normalizedPath.startsWith(r)
+    normalizedPath.startsWith(r),
   );
 
   if (!signedIn && isProtected) {

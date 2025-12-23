@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IEvent } from "../user/user.model";
+import { IEvent } from "./event.model";
 import type { IEventRepository } from "./event.repository";
 
 export interface IEventService {
   getEvents: () => Promise<IEvent[]>;
-  getEvent: (id: string, eventId: string) => Promise<IEvent>;
+  getEventById: (id: string, eventId: string) => Promise<IEvent>;
   getEventsByUserId: (id: string) => Promise<IEvent[]>;
   createEvent: (id: string, event: IEvent) => Promise<IEvent>;
   updateEvent: (id: string, event: Partial<IEvent>) => Promise<IEvent>;
@@ -12,21 +12,20 @@ export interface IEventService {
   acceptEvent: (eventId: string) => Promise<IEvent>;
   rejectEvent: (eventId: string) => Promise<IEvent>;
   attendEvent: (id: string, eventId: string) => Promise<IEvent>;
-  getEventById: (eventId: string) => Promise<IEvent>;
 }
 
 @injectable()
 class EventService {
   constructor(
     @inject("IEventRepository")
-    private readonly eventRepository: IEventRepository
+    private readonly eventRepository: IEventRepository,
   ) {}
 
   async getEvents(): Promise<IEvent[]> {
     return await this.eventRepository.getEvents();
   }
 
-  async getEvent(id: string, eventId: string): Promise<IEvent> {
+  async getEventById(id: string, eventId: string): Promise<IEvent> {
     return await this.eventRepository.getEvent(id, eventId);
   }
 
@@ -39,7 +38,7 @@ class EventService {
 
     if (!createdEvent) {
       throw new Error(
-        `User ${userId} not found or event could not be created.`
+        `User ${userId} not found or event could not be created.`,
       );
     }
 
@@ -72,10 +71,6 @@ class EventService {
 
   async attendEvent(id: string, eventId: string): Promise<IEvent> {
     return await this.eventRepository.attendEvent(id, eventId);
-  }
-
-  async getEventById(eventId: string): Promise<IEvent> {
-    return await this.eventRepository.getEventById(eventId);
   }
 }
 

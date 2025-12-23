@@ -29,7 +29,7 @@ export interface IOrderService {
   getActiveRestaurantOrders(restaurantId: string): Promise<IOrder[]>;
   getRevenueByDateRange(
     startDate: string,
-    endDate: string
+    endDate: string,
   ): Promise<RevenuePerDate[]>;
 }
 
@@ -39,17 +39,17 @@ export class OrderService implements IOrderService {
     @inject("OrderRepository")
     private readonly orderRepository: IOrderRepository,
     @inject("IUserService") private readonly userService: IUserService,
-    @inject("IEventService") private readonly eventService: IEventService
+    @inject("IEventService") private readonly eventService: IEventService,
   ) {}
 
   async createOrder(
     userId: string,
-    orderData: CreateOrderDTO
+    orderData: CreateOrderDTO,
   ): Promise<IOrder> {
     if (orderData.items.length > 0 && orderData.items[0].eventId) {
       const item = orderData.items[0];
       const eventId = item.eventId as string;
-      const event = await this.eventService.getEventById(eventId);
+      const event = await this.eventService.getEventById(userId, eventId);
       if (!event) throw new Error("Event not found");
 
       const orderItem: IOrderItem = {
@@ -77,7 +77,7 @@ export class OrderService implements IOrderService {
 
     const orderItems: IOrderItem[] = orderData.items.map((item) => {
       const cartItem = userCart.items.find(
-        (ci) => `${ci.id}` === `${item.productId}`
+        (ci) => `${ci.id}` === `${item.productId}`,
       );
 
       if (!cartItem) {
@@ -98,7 +98,7 @@ export class OrderService implements IOrderService {
 
     const orderPrice = orderItems.reduce(
       (sum, item) => sum + item.totalPrice,
-      0
+      0,
     );
 
     const orderNewData = {
@@ -132,7 +132,7 @@ export class OrderService implements IOrderService {
             if (item.eventId) {
               await this.eventService.attendEvent(
                 order.userId.toString(),
-                item.eventId.toString()
+                item.eventId.toString(),
               );
             }
           }
@@ -173,7 +173,7 @@ export class OrderService implements IOrderService {
 
   async updateOrderStatus(
     orderId: string,
-    status: OrderStatus
+    status: OrderStatus,
   ): Promise<IOrder> {
     const updatedOrder = await this.orderRepository.updateOrderStatus(orderId, {
       status,
@@ -214,7 +214,7 @@ export class OrderService implements IOrderService {
 
   async getRevenueByDateRange(
     startDate: string,
-    endDate: string
+    endDate: string,
   ): Promise<RevenuePerDate[]> {
     return this.orderRepository.revenueFilteredByDate(startDate, endDate);
   }
