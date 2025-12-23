@@ -63,6 +63,14 @@ export interface RestaurantPageOptions {
   limit?: number;
   search?: string;
   sort?: "highestRating" | "lowestRating" | "default";
+  category?:
+    | "default"
+    | "supermarket"
+    | "hypermarket"
+    | "grocery"
+    | "bakery"
+    | "cafe"
+    | "other";
 }
 
 export interface PaginatedRestaurantResponse {

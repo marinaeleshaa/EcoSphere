@@ -13,6 +13,15 @@ export interface IShopAvatar {
 
 export type SortOption = "default" | "highestRating" | "lowestRating";
 
+export type CategoryOption =
+  | "default"
+  | "supermarket"
+  | "hypermarket"
+  | "grocery"
+  | "bakery"
+  | "cafe"
+  | "other";
+
 export interface IShop {
   _id: string;
   name: string;
@@ -23,4 +32,5 @@ export interface IShop {
   description: string;
   menus?: IProduct[];
   restaurantRating?: IReview[];
+  category: string;
 }
