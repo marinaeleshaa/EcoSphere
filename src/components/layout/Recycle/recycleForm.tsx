@@ -66,12 +66,12 @@ const RecycleForm = () => {
   };
 
   const handleNumberInput = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
+    e.currentTarget.value = e.currentTarget.value.replaceAll(/\D/g, "");
   };
 
   const onSubmit: SubmitHandler<RecycleFormValues> = async (formData) => {
     // 1. Determine Analysis/Calculation Data
-    let finalItems: any[] = [];
+    let finalItems: { type: string; amount: number }[] = [];
     let carbonSaved = 0;
 
     try {
@@ -247,7 +247,6 @@ const RecycleForm = () => {
                   removeMaterial={removeMaterial}
                   updateAmount={updateAmount}
                   updateType={updateType}
-                  register={register}
                   addMaterial={addMaterial}
                   errors={errors}
                 />

@@ -10,6 +10,11 @@ type MaterialItem = {
   amount: number;
 };
 
+interface RegisterField {
+  name: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
 type Props = {
   item: MaterialItem;
   index: number;
@@ -17,9 +22,9 @@ type Props = {
   onRemove: (id: number) => void;
   onAmountChange: (index: number, delta: number) => void;
   onTypeChange: (index: number, newType: string) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  register: (name: string) => any;
+  register: (name: string) => RegisterField;
   error?: string;
+  selectedTypes: string[];
 };
 
 const ItemCard = ({
@@ -31,11 +36,26 @@ const ItemCard = ({
   onTypeChange,
   register,
   error,
+  selectedTypes,
 }: Props) => {
   const t = useTranslations("RecycleForm.itemCard");
   const tMaterials = useTranslations("RecycleForm.materialTypes");
 
-  const typeRegistration = register(`type`);
+  const allMaterialOptions = [
+    tMaterials("plastic"),
+    tMaterials("paper"),
+    tMaterials("glass"),
+    tMaterials("electronic"),
+    tMaterials("metal"),
+    tMaterials("mixed"),
+  ];
+
+  // Filter out already selected types, but allow current item's type
+  const availableOptions = allMaterialOptions.filter(
+    (option) => !selectedTypes.includes(option) || option === item.type
+  );
+
+  const typeRegistration = register(`type-${item.id}`);
 
   return (
     <div className="space-y-6 relative transition-transform hover:scale-[1.01]  p-6 rounded-3xl border border-primary/30">
@@ -54,14 +74,7 @@ const ItemCard = ({
       <div className="grid md:grid-cols-2 gap-8">
         <SelectField
           label={t("typeLabel")}
-          options={[
-            tMaterials("plastic"),
-            tMaterials("paper"),
-            tMaterials("glass"),
-            tMaterials("electronic"),
-            tMaterials("metal"),
-            tMaterials("mixed"),
-          ]}
+          options={availableOptions}
           register={{
             ...typeRegistration,
             onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
