@@ -10,11 +10,8 @@ type MaterialItem = {
   amount: number;
 };
 
-interface RegisterField {
-  name: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
-
+import { UseFormRegisterReturn } from "react-hook-form";
+// ...
 type Props = {
   item: MaterialItem;
   index: number;
@@ -22,7 +19,7 @@ type Props = {
   onRemove: (id: number) => void;
   onAmountChange: (index: number, delta: number) => void;
   onTypeChange: (index: number, newType: string) => void;
-  register: (name: string) => RegisterField;
+  register: (name: string) => UseFormRegisterReturn;
   error?: string;
   selectedTypes: string[];
 };
@@ -52,7 +49,7 @@ const ItemCard = ({
 
   // Filter out already selected types, but allow current item's type
   const availableOptions = allMaterialOptions.filter(
-    (option) => !selectedTypes.includes(option) || option === item.type
+    (option) => !selectedTypes.includes(option) || option === item.type,
   );
 
   const typeRegistration = register(`type-${item.id}`);
@@ -77,9 +74,9 @@ const ItemCard = ({
           options={availableOptions}
           register={{
             ...typeRegistration,
-            onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
-              typeRegistration.onChange(e);
+            onChange: async (e) => {
               onTypeChange(index, e.target.value);
+              return await typeRegistration.onChange(e);
             },
           }}
           error={error}

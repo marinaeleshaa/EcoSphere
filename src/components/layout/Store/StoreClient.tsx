@@ -24,8 +24,8 @@ export default function StoreClient() {
         console.log("response", response);
         // Handle both array and paginated response formats
         if (response.success) {
-          const result =  response.data;
-          console.log(result.data.map((p) => p.id));
+          const result = response.data;
+          console.log(result.data.map((p: IProduct) => p.id));
 
           if (Array.isArray(result)) {
             setProducts(result);

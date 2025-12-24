@@ -1,7 +1,7 @@
 "use client";
 
 import { Package, Plus } from "lucide-react";
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { type RecycleFormValues } from "@/frontend/schema/recycle.schema";
 import ItemCard from "./UI/ItemCard";
@@ -19,6 +19,7 @@ interface MaterialSectionProps {
   updateType: (index: number, newType: string) => void;
   addMaterial: () => void;
   errors: FieldErrors<RecycleFormValues>;
+  register: UseFormRegister<any>;
 }
 
 const MaterialSection = ({
@@ -28,13 +29,12 @@ const MaterialSection = ({
   updateType,
   addMaterial,
   errors,
+  register,
 }: MaterialSectionProps) => {
   const t = useTranslations("RecycleForm.materialSection");
 
   // Collect all selected types (excluding empty selections)
-  const selectedTypes = materials
-    .filter((m) => m.type)
-    .map((m) => m.type);
+  const selectedTypes = materials.filter((m) => m.type).map((m) => m.type);
 
   return (
     <div className="space-y-6">
@@ -53,11 +53,8 @@ const MaterialSection = ({
             onRemove={removeMaterial}
             onAmountChange={updateAmount}
             onTypeChange={updateType}
-            register={(name: string) => ({
-              name,
-              onChange: () => {},
-            })}
-            error={errors[`type-${m.id}`]?.message}
+            register={register}
+            error={(errors as any)[`type-${m.id}`]?.message}
             selectedTypes={selectedTypes}
           />
         ))}

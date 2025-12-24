@@ -97,8 +97,11 @@ const RecycleForm = () => {
           return;
         }
         const data = await analyzeImages(imageFiles); // Now returns data
-        if (!data) return; // Error handled in hook
-        finalItems = data.items;
+        if (!data) return;
+        finalItems = data.items.map((item) => ({
+          type: item.type,
+          amount: item.estimatedWeight,
+        }));
         carbonSaved = data.estimatedCarbonSaved;
       }
 
@@ -249,14 +252,15 @@ const RecycleForm = () => {
                   updateType={updateType}
                   addMaterial={addMaterial}
                   errors={errors}
+                  register={register}
                 />
               </motion.div>
             )}
           </AnimatePresence>
 
           {/* Analysis Summary (Optional: Show if result available) */}
-          {/* Note: In one-shot flow, result might only show AFTER submit if we don't redirect. 
-              If we want checking before submit, we need the old buttons. 
+          {/* Note: In one-shot flow, result might only show AFTER submit if we don't redirect.
+              If we want checking before submit, we need the old buttons.
               Assuming user wants one-shot "Submit", we might show success state instead. */}
 
           <button
