@@ -65,7 +65,8 @@
         "orders": "Orders",
         "shops": "Shops",
         "events": "Events",
-        "recycling": "Recycling"
+        "recycling": "Recycling",
+        "recycleAgent": "Recycle Agents"
       },
       "footer": {
         "favorite": "Favorite",
@@ -771,6 +772,10 @@
         "venue": "Venue and Schedule",
         "capacity": "Capacity and Sales",
         "schedule": "Detailed Event Schedule (Agenda Items)",
+        "toasts": {
+          "updateSuccess": "Agent status updated successfully",
+          "updateError": "Failed to update agent status"
+        },
         "section": "section"
       },
       "fields": {
@@ -1199,6 +1204,56 @@
         "actions": {
           "hidden": "Hidden",
           "visible": "Visible"
+        }
+      }
+    },
+    "RecycleAgents": {
+      "title": "Recycle Agents Management",
+      "description": "Manage and monitor all recycle agents. Review, control status, and manage agent registrations.",
+      "stats": {
+        "total": "Total Recycle Agents",
+        "organizational": "Organizational Agents",
+        "independent": "Independent Agents"
+      },
+      "table": {
+        "headers": {
+          "name": "Agent Name",
+          "email": "Email",
+          "phone": "Phone",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "status": {
+          "enabled": "Enabled",
+          "disabled": "Disabled"
+        },
+        "actions": {
+          "addAgent": "Add Recycle Agent",
+          "enable": "Enable",
+          "disable": "Disable"
+        },
+        "toasts": {
+          "updateSuccess": "Agent status updated successfully",
+          "updateError": "Failed to update agent status"
+        }
+      },
+      "form": {
+        "title": "Add New Recycle Agent",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "type": "Agent Type",
+        "typeOptions": {
+          "independent": "Independent Agent",
+          "organizational": "Organizational Agent"
+        },
+        "submit": "Create Agent",
+        "cancel": "Cancel",
+        "toasts": {
+          "success": "Recycle agent created successfully!",
+          "error": "Failed to create recycle agent. Please try again.",
+          "validationError": "Please fill in all required fields."
         }
       }
     }

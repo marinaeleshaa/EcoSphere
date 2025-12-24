@@ -152,6 +152,11 @@ export default function SideBar() {
       url: "/admin/event",
       icon: MdEventAvailable,
     },
+     {
+      title: t("dashboard.recycleAgent"),
+      url: "/admin/recycleAgent",
+      icon: Recycle,
+    },
   ];
   // recycle dashboard items.
   const recycleItems = [
