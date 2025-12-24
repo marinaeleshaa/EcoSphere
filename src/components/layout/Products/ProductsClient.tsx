@@ -50,9 +50,9 @@ export default function ProductsClient({
   const [selectedCategory, setSelectedCategory] = useState<
     MenuItemCategory | "all"
   >("all");
-  const [sortBy, setSortBy] = useState<
-    "title" | "price" | "sustainabilityScore"
-  >("title");
+  const [sort, setSort] = useState<"price" | "sustainabilityScore">(
+    "price",
+  );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -70,12 +70,12 @@ export default function ProductsClient({
         limit: "12",
         search: debouncedSearch ?? "",
         ...(selectedCategory !== "all" && { category: selectedCategory }),
-        sortBy,
+        sort,
         sortOrder,
       });
 
       const res = await fetch(
-        `/api/restaurants/${restaurantId}/products?${params}`
+        `/api/restaurants/${restaurantId}/products?${params}`,
       );
       if (!res.ok) throw new Error();
 
@@ -97,7 +97,7 @@ export default function ProductsClient({
 
   useEffect(() => {
     fetchProducts();
-  }, [page, debouncedSearch, selectedCategory, sortBy, sortOrder]);
+  }, [page, debouncedSearch, selectedCategory, sort, sortOrder]);
 
   const handleCreate = async (payload: CreateProductDTO) => {
     try {
@@ -127,7 +127,7 @@ export default function ProductsClient({
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) throw new Error();
@@ -147,7 +147,7 @@ export default function ProductsClient({
     try {
       const res = await fetch(
         `/api/restaurants/${restaurantId}/products/${deleteProductId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       if (!res.ok) throw new Error();
@@ -267,9 +267,9 @@ export default function ProductsClient({
             {t("filter.sortBy")}:
           </Label>
           <Select
-            value={sortBy}
+            value={sort}
             onValueChange={(value) => {
-              setSortBy(value as "title" | "price" | "sustainabilityScore");
+              setSort(value as "price" | "sustainabilityScore");
               setPage(1);
             }}
           >
@@ -277,9 +277,6 @@ export default function ProductsClient({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="title">
-                {t("filter.sortOptions.name")}
-              </SelectItem>
               <SelectItem value="price">
                 {t("filter.sortOptions.price")}
               </SelectItem>

@@ -240,10 +240,20 @@
     "filter": {
       "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
         "highestRating": "Highest Rating",
         "lowestRating": "Lowest Rating"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "supermarket": "Supermarket",
+        "hypermarket": "Hypermarket",
+        "grocery": "Grocery",
+        "bakery": "Bakery",
+        "cafe": "Cafe",
+        "other": "Other"
       },
       "noProducts": "No products match your current search criteria."
     }
@@ -344,6 +354,29 @@
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
       "currency": "EGP"
+    },
+    "filter": {
+      "searchPlaceholder": "Search products",
+      "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
+      "sortOptions": {
+        "default": "Default",
+        "highestRating": "Highest Rating",
+        "lowestRating": "Lowest Rating",
+        "priceHigh": "Price: High to Low",
+        "priceLow": "Price: Low to High"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "Fruits": "Fruits",
+        "Vegetables": "Vegetables",
+        "Meat": "Meat",
+        "Dairy": "Dairy",
+        "Beverages": "Beverages",
+        "Snacks": "Snacks",
+        "Other": "Other"
+      },
+      "noProducts": "No products match your current search criteria."
     }
   },
   "ProductDetails": {

@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -54,7 +53,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const safeImg =
     productImg || (product as any).avatar?.url || "/store img/2.jpg";
   const safeId = id || (product as any)._id;
-
 
   const router = useRouter();
 
@@ -111,8 +109,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
     if (score >= 5) return "bg-yellow-500 text-black";
     return "bg-red-500/60 text-white";
   };
-
-  console.log(availableOnline);
 
   return (
     <div
@@ -210,7 +206,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className=" flex gap-3 text-2xl ">
           <button
             className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto ${
-              !availableOnline ? "cursor-not-allowed! opacity-50" : " cursor-pointer!"
+              !availableOnline
+                ? "cursor-not-allowed! opacity-50"
+                : " cursor-pointer!"
             }`}
             onClick={handleCart}
             disabled={!availableOnline}

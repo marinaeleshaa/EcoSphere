@@ -9,7 +9,6 @@ export type ProductResponse = IMenuItem & {
 };
 
 export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
-  // Removed verbose logging
   const productImg = res.avatar?.url || "";
 
   return {
@@ -23,9 +22,8 @@ export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
     productSubtitle: res.subtitle,
     productDescription: "", // res.description is not available in ProductResponse
     availableOnline: res.availableOnline,
-    sustainabilityScore: res.sustainabilityScore,
+    sustainabilityScore: res.sustainabilityScore || 0,
     sustainabilityReason: res.sustainabilityReason,
-    itemRating: [],
   };
 };
 
@@ -43,20 +41,15 @@ export interface CreateProductDTO {
   sustainabilityReason?: string;
 }
 
-export interface UpdateProductDTO extends Partial<CreateProductDTO> {}
+export type UpdateProductDTO = Partial<CreateProductDTO>;
 
 export interface ProductPageOptions {
   page?: number;
   limit?: number;
   search?: string;
-  category?: MenuItemCategory;
-  sortBy?:
-    | "price"
-    | "title"
-    | "itemRating"
-    | "createdAt"
-    | "sustainabilityScore";
+  sort?: "default" | "priceLow" | "priceHigh" | "price" | "sustainabilityScore";
   sortOrder?: "asc" | "desc";
+  category?: string;
 }
 
 export interface PaginatedProductResponse {

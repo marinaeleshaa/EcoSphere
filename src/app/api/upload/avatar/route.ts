@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { NextRequest } from "next/server";
 import { UploadController } from "@/backend/features/upload/upload.controller";
 import { requireAuth } from "@/backend/utils/authHelper";

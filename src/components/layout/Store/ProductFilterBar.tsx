@@ -12,19 +12,29 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { SortOption, CategoryOption } from "@/types/ShopTypes";
+export type ProductSortOption = "default" | "priceHigh" | "priceLow";
 
-export interface FilterBarProps {
-  onSortChange: (sort: SortOption) => void;
-  onCategoryChange: (category: CategoryOption) => void;
+export type ProductCategoryOption =
+  | "default"
+  | "Fruits"
+  | "Vegetables"
+  | "Meat"
+  | "Dairy"
+  | "Beverages"
+  | "Snacks"
+  | "Other";
+
+export interface ProductFilterBarProps {
+  onSortChange: (sort: ProductSortOption) => void;
+  onCategoryChange: (category: ProductCategoryOption) => void;
   onSearch: (query: string) => void;
   isSorting?: boolean;
-  currentSort: SortOption;
-  currentCategory: CategoryOption;
+  currentSort: ProductSortOption;
+  currentCategory: ProductCategoryOption;
   searchValue: string;
 }
 
-export default function FilterBar({
+export default function ProductFilterBar({
   onSortChange,
   onCategoryChange,
   onSearch,
@@ -32,31 +42,28 @@ export default function FilterBar({
   currentSort,
   currentCategory,
   searchValue,
-}: Readonly<FilterBarProps>) {
-  const t = useTranslations("Shop.filter");
+}: Readonly<ProductFilterBarProps>) {
+  const t = useTranslations("Store.filter");
 
   const [openDropdown, setOpenDropdown] = useState<"sort" | "filter" | null>(
     null,
   );
 
-  const sortOptions: SortOption[] = [
-    "default",
-    "highestRating",
-    "lowestRating",
-  ];
+  const sortOptions: ProductSortOption[] = ["default", "priceHigh", "priceLow"];
 
-  const categoryOptions: CategoryOption[] = [
+  const categoryOptions: ProductCategoryOption[] = [
     "default",
-    "supermarket",
-    "hypermarket",
-    "grocery",
-    "bakery",
-    "cafe",
-    "other",
+    "Fruits",
+    "Vegetables",
+    "Meat",
+    "Dairy",
+    "Beverages",
+    "Snacks",
+    "Other",
   ];
 
   return (
-    <div className="w-[80%] mx-auto py-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+    <div className="w-full py-8 flex flex-col md:flex-row gap-4 items-center justify-between">
       {/* Search */}
       <div className="relative w-full md:w-80">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -70,9 +77,9 @@ export default function FilterBar({
       </div>
 
       {isSorting && (
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-6 w-full md:w-auto">
           {/* Sort */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between sm:justify-start">
             <span className="font-semibold whitespace-nowrap">
               {t("sortBy")}
             </span>
@@ -81,7 +88,9 @@ export default function FilterBar({
               value={currentSort}
               open={openDropdown === "sort"}
               onOpenChange={(open) => setOpenDropdown(open ? "sort" : null)}
-              onValueChange={(value) => onSortChange(value as SortOption)}
+              onValueChange={(value) =>
+                onSortChange(value as ProductSortOption)
+              }
             >
               <SelectTrigger className="w-48 rounded-full border-primary">
                 <SelectValue />
@@ -98,7 +107,7 @@ export default function FilterBar({
           </div>
 
           {/* Filter */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-between sm:justify-start">
             <span className="font-semibold whitespace-nowrap">
               {t("filterBy")}
             </span>
@@ -108,7 +117,7 @@ export default function FilterBar({
               open={openDropdown === "filter"}
               onOpenChange={(open) => setOpenDropdown(open ? "filter" : null)}
               onValueChange={(value) =>
-                onCategoryChange(value as CategoryOption)
+                onCategoryChange(value as ProductCategoryOption)
               }
             >
               <SelectTrigger className="w-48 rounded-full border-primary">

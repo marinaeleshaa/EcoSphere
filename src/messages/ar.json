@@ -240,10 +240,20 @@
     "filter": {
       "searchPlaceholder": "ابحث عن المتاجر",
       "sortBy": "الترتيب حسب:",
+      "filterBy": "تصفية حسب:",
       "sortOptions": {
         "default": "افتراضي",
         "highestRating": "الأعلى تقييمًا",
         "lowestRating": "الأدنى تقييمًا"
+      },
+      "filterOptions": {
+        "default": "افتراضي",
+        "supermarket": "سوبر ماركت",
+        "hypermarket": "هابير ماركت",
+        "grocery": "بقالة",
+        "bakery": "مخبز",
+        "cafe": "كافيه",
+        "other": "أخرى"
       },
       "noProducts": "لا توجد منتجات تطابق معايير البحث الحالية."
     }
@@ -263,6 +273,29 @@
       "addedToCart": "تمت الإضافة للسلة",
       "removedFromCart": "تمت الإزالة من السلة",
       "currency": "ج.م"
+    },
+    "filter": {
+      "searchPlaceholder": "ابحث عن المنتجات",
+      "sortBy": "الترتيب حسب:",
+      "filterBy": "تصفية حسب:",
+      "sortOptions": {
+        "default": "افتراضي",
+        "highestRating": "الأعلى تقييمًا",
+        "lowestRating": "الأدنى تقييمًا",
+        "priceHigh": "السعر: من الأعلى إلى الأقل",
+        "priceLow": "السعر: من الأقل إلى الأعلى"
+      },
+      "filterOptions": {
+        "default": "افتراضي",
+        "Fruits": "فواكه",
+        "Vegetables": "خضروات",
+        "Meat": "لحوم",
+        "Dairy": "ألبان",
+        "Beverages": "مشروبات",
+        "Snacks": "سناكس",
+        "Other": "أخرى"
+      },
+      "noProducts": "لا توجد منتجات تطابق معايير البحث الحالية."
     }
   },
   "ProductDetails": {
