@@ -54,8 +54,13 @@ export class ProductRepository implements IProductRepository {
     const skip = (page - 1) * limit;
 
     const pipeline: PipelineStage[] = [
+      // 1. Filter out hidden restaurants first if possible (performance)
+      { $match: { isHidden: { $ne: true } } },
+
+      // 2. Unwind menus array
       { $unwind: "$menus" },
 
+      // 3. Project fields for easier matching and sorting
       {
         $project: {
           _id: "$menus._id",
@@ -72,6 +77,8 @@ export class ProductRepository implements IProductRepository {
           category: "$menus.category",
         },
       },
+
+      // 4. Calculate average rating
       {
         $addFields: {
           itemRatingAvg: {
@@ -88,39 +95,54 @@ export class ProductRepository implements IProductRepository {
           },
         },
       },
-
-      {
-        $match: {
-          $and: [
-            search
-              ? {
-                  $or: [
-                    { title: { $regex: search, $options: "i" } },
-                    { subtitle: { $regex: search, $options: "i" } },
-                  ],
-                }
-              : {},
-            category && category !== "default"
-              ? { category: { $regex: new RegExp(`^${category}$`, "i") } }
-              : {},
-          ],
-        },
-      },
     ];
 
-    // Sorting logic
-    if (sort === "highestRating") {
-      pipeline.push({ $sort: { itemRatingAvg: -1 } });
-    } else if (sort === "lowestRating") {
-      pipeline.push({ $sort: { itemRatingAvg: 1 } });
-    } else if (sort === "priceHigh") {
-      pipeline.push({ $sort: { price: -1 } });
-    } else if (sort === "priceLow") {
-      pipeline.push({ $sort: { price: 1 } });
-    } else {
-      pipeline.push({ $sort: { title: 1 } });
+    // 5. Build match conditions (Search & Category)
+    const matchConditions: any[] = [];
+    if (search && search.trim() !== "") {
+      matchConditions.push({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { subtitle: { $regex: search, $options: "i" } },
+        ],
+      });
     }
 
+    if (category && category !== "default") {
+      matchConditions.push({
+        category: { $regex: new RegExp(`^${category}$`, "i") },
+      });
+    }
+
+    if (matchConditions.length > 0) {
+      pipeline.push({ $match: { $and: matchConditions } });
+    }
+
+    // 6. Sorting logic
+    let sortStage: { [key: string]: 1 | -1 } = { title: 1 }; // Default
+
+    switch (sort) {
+      case "highestRating":
+        sortStage = { itemRatingAvg: -1, title: 1 };
+        break;
+      case "lowestRating":
+        sortStage = { itemRatingAvg: 1, title: 1 };
+        break;
+      case "priceHigh":
+        sortStage = { price: -1, title: 1 };
+        break;
+      case "priceLow":
+        sortStage = { price: 1, title: 1 };
+        break;
+      case "default":
+      default:
+        sortStage = { title: 1 };
+        break;
+    }
+
+    pipeline.push({ $sort: sortStage });
+
+    // 7. Paginate with $facet
     pipeline.push({
       $facet: {
         metadata: [{ $count: "total" }],
@@ -162,6 +184,7 @@ export class ProductRepository implements IProductRepository {
           sustainabilityScore: "$menus.sustainabilityScore",
           sustainabilityReason: "$menus.sustainabilityReason",
           itemRating: "$menus.itemRating",
+          category: "$menus.category",
         },
       },
     ]).exec();
@@ -180,6 +203,7 @@ export class ProductRepository implements IProductRepository {
       limit = 10,
       search = "",
       sort = "default",
+      category = "default",
     } = options ?? {};
 
     const skip = (page - 1) * limit;
@@ -200,6 +224,7 @@ export class ProductRepository implements IProductRepository {
           sustainabilityScore: "$menus.sustainabilityScore",
           sustainabilityReason: "$menus.sustainabilityReason",
           itemRating: "$menus.itemRating",
+          category: "$menus.category",
         },
       },
       {
@@ -218,28 +243,49 @@ export class ProductRepository implements IProductRepository {
           },
         },
       },
-      {
-        $match: {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { subtitle: { $regex: search, $options: "i" } },
-          ],
-        },
-      },
     ];
 
-    // Sorting logic
-    if (sort === "highestRating") {
-      pipeline.push({ $sort: { itemRatingAvg: -1 } });
-    } else if (sort === "lowestRating") {
-      pipeline.push({ $sort: { itemRatingAvg: 1 } });
-    } else if (sort === "priceHigh") {
-      pipeline.push({ $sort: { price: -1 } });
-    } else if (sort === "priceLow") {
-      pipeline.push({ $sort: { price: 1 } });
-    } else {
-      pipeline.push({ $sort: { title: 1 } });
+    // Build match conditions
+    const matchConditions: any[] = [];
+    if (search && search.trim() !== "") {
+      matchConditions.push({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { subtitle: { $regex: search, $options: "i" } },
+        ],
+      });
     }
+
+    if (category && category !== "default") {
+      matchConditions.push({
+        category: { $regex: new RegExp(`^${category}$`, "i") },
+      });
+    }
+
+    if (matchConditions.length > 0) {
+      pipeline.push({ $match: { $and: matchConditions } });
+    }
+
+    // Sorting logic
+    let sortStage: { [key: string]: 1 | -1 } = { title: 1 };
+    switch (sort) {
+      case "highestRating":
+        sortStage = { itemRatingAvg: -1, title: 1 };
+        break;
+      case "lowestRating":
+        sortStage = { itemRatingAvg: 1, title: 1 };
+        break;
+      case "priceHigh":
+        sortStage = { price: -1, title: 1 };
+        break;
+      case "priceLow":
+        sortStage = { price: 1, title: 1 };
+        break;
+      default:
+        sortStage = { title: 1 };
+        break;
+    }
+    pipeline.push({ $sort: sortStage });
 
     pipeline.push({
       $facet: {

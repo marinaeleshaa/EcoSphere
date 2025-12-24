@@ -55,7 +55,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
     productImg || (product as any).avatar?.url || "/store img/2.jpg";
   const safeId = id || (product as any)._id;
 
-
   const router = useRouter();
 
   const dispatch = useAppDispatch();
@@ -210,7 +209,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className=" flex gap-3 text-2xl ">
           <button
             className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto ${
-              !availableOnline ? "cursor-not-allowed! opacity-50" : " cursor-pointer!"
+              !availableOnline
+                ? "cursor-not-allowed! opacity-50"
+                : " cursor-pointer!"
             }`}
             onClick={handleCart}
             disabled={!availableOnline}

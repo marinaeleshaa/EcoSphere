@@ -38,6 +38,7 @@ export default function StoreClient() {
   }, [search]);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
@@ -48,52 +49,80 @@ export default function StoreClient() {
           sort,
           category,
         });
-        if (response.success) {
+        if (isMounted && response.success) {
           const result = response.data;
 
           if (Array.isArray(result)) {
-            setProducts(result);
+            setProducts([...result]);
             setTotalPages(1);
           } else {
-            setProducts(result.data);
-            setTotalPages(result.metadata.totalPages);
+            setProducts([...result.data]);
+            setTotalPages(result.metadata.totalPages || 1);
           }
         }
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        if (isMounted) console.error("Failed to fetch products:", error);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     };
 
     fetchProducts();
+    return () => {
+      isMounted = false;
+    };
   }, [currentPage, debouncedSearch, sort, category]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [debouncedSearch, sort, category]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of products section
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSortChange = (newSort: ProductSortOption) => {
+    setSort(newSort);
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (newCategory: ProductCategoryOption) => {
+    setCategory(newCategory);
+    setCurrentPage(1);
+  };
+
+  const handleSearchChange = (newSearch: string) => {
+    setSearch(newSearch);
+    setCurrentPage(1);
   };
 
   return (
     <div className="w-[80%] mx-auto">
       <ProductFilterBar
-        onSortChange={setSort}
-        onCategoryChange={setCategory}
-        onSearch={setSearch}
+        onSortChange={handleSortChange}
+        onCategoryChange={handleCategoryChange}
+        onSearch={handleSearchChange}
         currentSort={sort}
         currentCategory={category}
         searchValue={search}
       />
 
-      <ProductCardSection products={products} />
-      {products.length === 0 && (
-        <p className="text-center text-foreground py-10">{t("noProducts")}</p>
-      )}
+      <div className="relative min-h-[400px]">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <>
+            <ProductCardSection
+              key={`${debouncedSearch}-${sort}-${category}-${currentPage}`}
+              products={products}
+            />
+            {products.length === 0 && (
+              <p className="text-center text-foreground py-10">
+                {t("noProducts")}
+              </p>
+            )}
+          </>
+        )}
+      </div>
       <div className="flex justify-center mt-8 mb-8">
         <Pagination
           currentPage={currentPage}

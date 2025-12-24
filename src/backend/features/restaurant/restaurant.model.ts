@@ -15,6 +15,7 @@ export type MenuItemCategory =
   | "Meat"
   | "Dairy"
   | "Bakery"
+  | "Beverages"
   | "Snacks"
   | "Other";
 
@@ -70,7 +71,7 @@ export const ratingSchema = new Schema<IRating>(
     review: { type: String, required: true },
     orderId: { type: String, ref: "Order", required: true },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export const menuItemSchema = new Schema<IMenuItem>({
@@ -92,6 +93,7 @@ export const menuItemSchema = new Schema<IMenuItem>({
       "Meat",
       "Dairy",
       "Beverages",
+      "Bakery",
       "Snacks",
       "Other",
     ],
@@ -130,7 +132,7 @@ const restaurantSchema = new Schema<IRestaurant>(
       required: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 restaurantSchema.pre<IRestaurant>("save", function ():
@@ -146,7 +148,7 @@ restaurantSchema.pre<IRestaurant>("save", function ():
 });
 
 restaurantSchema.methods.comparePassword = async function (
-  candidatePassword: string,
+  candidatePassword: string
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };

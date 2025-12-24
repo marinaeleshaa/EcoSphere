@@ -14,6 +14,7 @@ export interface IProduct {
   sustainabilityScore?: number;
   sustainabilityReason?: string;
   itemRating?: IReview[];
+  category?: string;
 }
 
 export interface IProductCart extends IProduct {
