@@ -105,7 +105,7 @@ export default function ProductCard({
             {product.title}
           </h3>
           <span className="font-bold text-primary">
-            {t("currency")} {product.price.toFixed(2)}
+            {product.price.toFixed(2)} €
           </span>
         </div>
 
