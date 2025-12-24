@@ -21,10 +21,12 @@ export default function StoreClient() {
           page: currentPage,
           limit: itemsPerPage,
         });
-
+        console.log("response", response);
         // Handle both array and paginated response formats
         if (response.success) {
-          const result = response.data;
+          const result =  response.data;
+          console.log(result.data.map((p) => p.id));
+
           if (Array.isArray(result)) {
             setProducts(result);
             setTotalPages(1);
@@ -58,7 +60,7 @@ export default function StoreClient() {
   }
 
   return (
-    <div className="w-[80%] mx-auto">
+    <div className="w-[80%] mx-auto ">
       <ProductCardSection products={products} />
       {totalPages > 1 && (
         <Pagination

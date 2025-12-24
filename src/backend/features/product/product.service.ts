@@ -93,12 +93,14 @@ export class ProductService implements IProductService {
 
     // If options are provided, return paginated response
     if (options && (options.page || options.limit)) {
+      // console.log("productsWithUrls 1", productsWithUrls);
       return {
         data: productsWithUrls,
         metadata: result.metadata,
       };
     }
 
+    // console.log("productsWithUrls 2", productsWithUrls);
     // Otherwise return just the array for backward compatibility
     return productsWithUrls;
   }

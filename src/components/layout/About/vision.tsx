@@ -14,7 +14,7 @@ export default async function Vision() {
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
             {/* LEFT COLUMN: Content */}
-            <div className="flex flex-col space-y-8 order-2 lg:order-1">
+            <div className="flex flex-col space-y-8 order-2 lg:order-2">
               <div className="space-y-4">
                 <span className="text-xl font-bold tracking-widest text-accent-foreground uppercase flex items-center gap-2">
                   <BasicAnimatedSpanWrapper className="inline-flex items-center">
@@ -39,7 +39,7 @@ export default async function Vision() {
             </div>
 
             {/* RIGHT COLUMN: Image & Decor */}
-            <div className="relative order-1 lg:order-2 ltr:pl-4 rtl:pr-4 md:ltr:pl-8 md:rtl:pr-8">
+            <div className="relative order-1 lg:order-1 ltr:pl-4 rtl:pr-4 md:ltr:pl-8 md:rtl:pr-8">
               {/* Primary color decorative sidebar line */}
               <div className="absolute ltr:left-0 rtl:right-0 top-10 bottom-10 w-1.5 rounded-full hidden md:block bg-primary" />
               <div className="absolute -top-6 ltr:-right-6 rtl:-left-6 z-0 opacity-10"></div>

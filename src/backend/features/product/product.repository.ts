@@ -64,6 +64,7 @@ export class ProductRepository implements IProductRepository {
 
     const pipeline: PipelineStage[] = [
       { $unwind: "$menus" },
+
       {
         $project: {
           _id: "$menus._id",
@@ -79,6 +80,7 @@ export class ProductRepository implements IProductRepository {
           itemRating: "$menus.itemRating",
         },
       },
+
       {
         $match: {
           $or: [
@@ -87,7 +89,25 @@ export class ProductRepository implements IProductRepository {
           ],
         },
       },
+
+      {
+        $group: {
+          _id: "$_id",
+          restaurantId: { $first: "$restaurantId" },
+          restaurantName: { $first: "$restaurantName" },
+          title: { $first: "$title" },
+          subtitle: { $first: "$subtitle" },
+          price: { $first: "$price" },
+          avatar: { $first: "$avatar" },
+          availableOnline: { $first: "$availableOnline" },
+          sustainabilityScore: { $first: "$sustainabilityScore" },
+          sustainabilityReason: { $first: "$sustainabilityReason" },
+          itemRating: { $first: "$itemRating" },
+        },
+      },
+
       { $sort: { [sortField]: sortDirection } },
+
       {
         $facet: {
           metadata: [{ $count: "total" }],
@@ -100,17 +120,6 @@ export class ProductRepository implements IProductRepository {
 
     const data = result[0]?.data || [];
     const total = result[0]?.metadata[0]?.total || 0;
-
-    console.log(
-      "[findAllProducts] Page sample:",
-      data.length > 0
-        ? {
-            productId: data[0]._id?.toString(),
-            productName: data[0].title,
-            hasAvatar: !!data[0].avatar,
-          }
-        : "No products found"
-    );
 
     return {
       data,

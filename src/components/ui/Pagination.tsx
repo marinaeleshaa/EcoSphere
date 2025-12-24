@@ -51,7 +51,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 mt-6">
+    <div className="flex items-center justify-center gap-2 my-10">
       {/* Previous */}
       <button
         onClick={() => handlePageChange(currentPage - 1)}
