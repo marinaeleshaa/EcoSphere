@@ -10,7 +10,6 @@ import {
   PaginatedProductResponse,
   ProductPageOptions,
 } from "./dto/product.dto";
-import { PipelineStage } from "mongoose";
 
 export interface IProductRepository {
   findAllProducts(
