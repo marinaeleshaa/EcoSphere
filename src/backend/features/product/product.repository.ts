@@ -93,6 +93,14 @@ export class ProductRepository implements IProductRepository {
       pipeline.push({ $sort: { price: -1 } });
     }
 
+    if (sort === "sustainabilityLow") {
+      pipeline.push({ $sort: { sustainabilityScore: 1 } });
+    }
+
+    if (sort === "sustainabilityHigh") {
+      pipeline.push({ $sort: { sustainabilityScore: -1 } });
+    }
+
     //Optional search & category filters
     const matchConditions: any[] = [];
 
@@ -218,6 +226,10 @@ export class ProductRepository implements IProductRepository {
       pipeline.push({ $sort: { price: 1, title: 1 } });
     } else if (sort === "priceHigh") {
       pipeline.push({ $sort: { price: -1, title: 1 } });
+    } else if (sort === "sustainabilityLow") {
+      pipeline.push({ $sort: { sustainabilityScore: 1, title: 1 } });
+    } else if (sort === "sustainabilityHigh") {
+      pipeline.push({ $sort: { sustainabilityScore: -1, title: 1 } });
     } else {
       pipeline.push({ $sort: { title: 1 } });
     }

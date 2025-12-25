@@ -280,10 +280,10 @@
       "filterBy": "تصفية حسب:",
       "sortOptions": {
         "default": "افتراضي",
-        "highestRating": "الأعلى تقييمًا",
-        "lowestRating": "الأدنى تقييمًا",
         "priceHigh": "السعر: من الأعلى إلى الأقل",
-        "priceLow": "السعر: من الأقل إلى الأعلى"
+        "priceLow": "السعر: من الأقل إلى الأعلى",
+        "sustainabilityLow": "الاستدامة: من الأقل إلى الأعلى",
+        "sustainabilityHigh": "الاستدامة: من الأعلى إلى الأقل"
       },
       "filterOptions": {
         "default": "افتراضي",

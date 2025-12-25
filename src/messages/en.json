@@ -338,10 +338,10 @@
       "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
-        "highestRating": "Highest Rating",
-        "lowestRating": "Lowest Rating",
         "priceHigh": "Price: High to Low",
-        "priceLow": "Price: Low to High"
+        "priceLow": "Price: Low to High",
+        "sustainabilityLow": "Sustainability: Low to High",
+        "sustainabilityHigh": "Sustainability: High to Low"
       },
       "filterOptions": {
         "default": "Default",

@@ -44,6 +44,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     availableOnline = false,
     shopName,
     shopSubtitle,
+    category,
   } = product;
 
   // Fallbacks for data mismatch (handling raw IMenuItem structure)
@@ -58,10 +59,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const dispatch = useAppDispatch();
   const isFav = useSelector((state: RootState) =>
-    isInFavSelector(state, safeId)
+    isInFavSelector(state, safeId),
   );
   const isInCart = useSelector((state: RootState) =>
-    isInCartSelector(state, safeId)
+    isInCartSelector(state, safeId),
   );
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -97,7 +98,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           availableOnline: product.availableOnline || false,
           sustainabilityScore,
           sustainabilityReason,
-        })
+        }),
       );
       toast.success(t("addedToCart"));
     }
@@ -135,7 +136,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
         {/* Removed blue dot since badge is better indicator, or keep it if it means 'active' */}
-        <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
+        <div
+          className={`rounded-full w-3 h-3 bg-primary shrink-0 mr-5 ${availableOnline ? "bg-green-500" : "bg-red-500/60"}`}
+        ></div>
       </div>
 
       {/* product img - fixed height */}
@@ -155,10 +158,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </button>
       </div>
       {/* badges */}
-      <div className=" flex  items-center gap-2 ">
-        <div className="w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help bg-primary text-primary-foreground">
-          category
-        </div>
+      <div className="flex items-center gap-2 ">
+        {category && (
+          <div className="w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help bg-primary text-primary-foreground">
+            {category}
+          </div>
+        )}
         {/* Sustainability Badge with Shadcn Tooltip */}
         {sustainabilityScore !== undefined && (
           <TooltipProvider>
@@ -166,7 +171,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <TooltipTrigger asChild>
                 <div
                   className={` w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
-                    sustainabilityScore
+                    sustainabilityScore,
                   )}`}
                 >
                   <span>🌿</span>
