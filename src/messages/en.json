@@ -301,7 +301,30 @@
         "errors": {
           "titleRequired": "Title is required",
           "subtitleRequired": "Subtitle is required",
-          "priceRequired": "Price is required"
+          "priceRequired": "Price is required",
+          "categoryRequired": "Please select a category"
+        }
+      },
+      "Categories": {
+        "label": "Category",
+        "placeholder": "Select a category",
+        "fruits": "Fruits",
+        "vegetables": "Vegetables",
+        "meat": "Meat",
+        "dairy": "Dairy",
+        "bakery": "Bakery",
+        "beverages": "Beverages",
+        "snacks": "Snacks",
+        "other": "Other"
+      },
+      "filter": {
+        "category": "Category",
+        "allCategories": "All Categories",
+        "sortBy": "Sort By",
+        "sortOptions": {
+          "name": "Name",
+          "price": "Price",
+          "sustainability": "Sustainability Score"
         }
       },
 
@@ -338,10 +361,10 @@
       "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
-        "highestRating": "Highest Rating",
-        "lowestRating": "Lowest Rating",
         "priceHigh": "Price: High to Low",
-        "priceLow": "Price: Low to High"
+        "priceLow": "Price: Low to High",
+        "sustainabilityLow": "Sustainability: Low to High",
+        "sustainabilityHigh": "Sustainability: High to Low"
       },
       "filterOptions": {
         "default": "Default",
@@ -864,7 +887,10 @@
     },
     "card": {
       "removedFromFavorites": "Removed from favorites",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart",
+      "addedToCart": "Added to cart",
+      "removedFromCart": "Removed from cart"
     },
     "view": {
       "grid": "Grid View",

@@ -92,6 +92,7 @@ export const menuItemSchema = new Schema<IMenuItem>({
       "Vegetables",
       "Meat",
       "Dairy",
+      "Bakery",
       "Beverages",
       "Bakery",
       "Snacks",

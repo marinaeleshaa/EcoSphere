@@ -49,7 +49,7 @@ const FavCard = ({ product }: FavCardProps) => {
       <div className={`${view === "grid" ? "w-full h-62.5" : "w-1/3 h-full"}`}>
         <Image
           src={product.productImg || "/store img/2.png"}
-          alt="product img"
+          alt={product.productName}
           width={300}
           height={300}
           className="w-full h-full rounded-lg object-cover"
@@ -61,17 +61,6 @@ const FavCard = ({ product }: FavCardProps) => {
         </h3>
         {view === "horizontal" && (
           <>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className="w-5 h-5 fill-primary text-primary"
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-muted-foreground">(5.0)</span>
-            </div>
             <p className="text-primary">{product.productSubtitle}</p>
           </>
         )}
