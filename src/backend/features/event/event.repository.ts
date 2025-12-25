@@ -1,28 +1,28 @@
 import { injectable } from "tsyringe";
 import { IUser, UserModel } from "../user/user.model";
-import { IEvent, EventModel } from "../event/event.model";
+import { IEvent, EventModel, EventPopulated } from "../event/event.model";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { Types } from "mongoose";
 
 export interface IEventRepository {
-  getEvents(): Promise<IEvent[]>;
-  getEvent(id: string, eventId: string): Promise<IEvent>;
-  getEventsByUserId(id: string): Promise<IEvent[]>;
+  getEvents(): Promise<EventPopulated[]>;
+  getEvent(id: string, eventId: string): Promise<EventPopulated>;
+  getEventsByUserId(id: string): Promise<EventPopulated[]>;
   createEvent(
     user: { id: string; role: string },
-    data: IEvent
-  ): Promise<IEvent>;
-  updateEvent(id: string, data: Partial<IEvent>): Promise<IEvent>;
-  deleteEvent(id: string, eventId: string): Promise<IEvent>;
-  acceptEvent(id: string, eventId: string): Promise<IEvent>;
-  rejectEvent(id: string, eventId: string): Promise<IEvent>;
+    data: IEvent,
+  ): Promise<EventPopulated>;
+  updateEvent(id: string, data: Partial<IEvent>): Promise<EventPopulated>;
+  deleteEvent(id: string, eventId: string): Promise<EventPopulated>;
+  acceptEvent(id: string, eventId: string): Promise<EventPopulated>;
+  rejectEvent(id: string, eventId: string): Promise<EventPopulated>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
-  attendEvent(id: string, eventId: string): Promise<IEvent>;
+  attendEvent(id: string, eventId: string): Promise<EventPopulated>;
 }
 
 @injectable()
 class EventRepository {
-  async getEvents(): Promise<IEvent[]> {
+  async getEvents(): Promise<EventPopulated[]> {
     await DBInstance.getConnection();
 
     return EventModel.find({
@@ -34,7 +34,7 @@ class EventRepository {
       .exec();
   }
 
-  async getEvent(userId: string, eventId: string): Promise<IEvent> {
+  async getEvent(userId: string, eventId: string): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findOne({
@@ -51,7 +51,7 @@ class EventRepository {
     return event;
   }
 
-  async getEventsByUserId(userId: string): Promise<IEvent[]> {
+  async getEventsByUserId(userId: string): Promise<EventPopulated[]> {
     await DBInstance.getConnection();
 
     return EventModel.find({ owner: userId }).lean().exec();
@@ -59,8 +59,8 @@ class EventRepository {
 
   async createEvent(
     user: { id: string; role: string },
-    data: IEvent
-  ): Promise<IEvent> {
+    data: IEvent,
+  ): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.create({
@@ -72,13 +72,16 @@ class EventRepository {
     return event.toObject();
   }
 
-  async updateEvent(userId: string, data: Partial<IEvent>): Promise<IEvent> {
+  async updateEvent(
+    userId: string,
+    data: Partial<IEvent>,
+  ): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findOneAndUpdate(
       { _id: data._id, owner: userId },
       { ...data, updatedAt: new Date() },
-      { new: true }
+      { new: true },
     )
       .lean()
       .exec();
@@ -90,7 +93,7 @@ class EventRepository {
     return event;
   }
 
-  async deleteEvent(userId: string, eventId: string): Promise<IEvent> {
+  async deleteEvent(userId: string, eventId: string): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findOneAndDelete({
@@ -111,20 +114,20 @@ class EventRepository {
     await DBInstance.getConnection();
     const response = await UserModel.findOne(
       { "events._id": eventId },
-      { _id: 1 }
+      { _id: 1 },
     )
       .lean<IUser>()
       .exec();
     return response!;
   }
 
-  async acceptEvent(_: string, eventId: string): Promise<IEvent> {
+  async acceptEvent(_: string, eventId: string): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findByIdAndUpdate(
       eventId,
       { isAccepted: true, isEventNew: false },
-      { new: true }
+      { new: true },
     )
       .lean()
       .exec();
@@ -134,13 +137,13 @@ class EventRepository {
     return event;
   }
 
-  async rejectEvent(_: string, eventId: string): Promise<IEvent> {
+  async rejectEvent(_: string, eventId: string): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findByIdAndUpdate(
       eventId,
       { isAccepted: false, isEventNew: false },
-      { new: true }
+      { new: true },
     )
       .lean()
       .exec();
@@ -150,7 +153,7 @@ class EventRepository {
     return event;
   }
 
-  async attendEvent(userId: string, eventId: string): Promise<IEvent> {
+  async attendEvent(userId: string, eventId: string): Promise<EventPopulated> {
     await DBInstance.getConnection();
 
     const event = await EventModel.findByIdAndUpdate(
@@ -159,7 +162,7 @@ class EventRepository {
         $addToSet: { attenders: new Types.ObjectId(userId) },
         $set: { updatedAt: new Date() },
       },
-      { new: true }
+      { new: true },
     )
       .lean()
       .exec();

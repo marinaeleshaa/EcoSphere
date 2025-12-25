@@ -1,5 +1,5 @@
 import { ISubEvent } from "@/types/EventTypes";
-import { IsEventPopulated } from "./event.model";
+import { EventPopulated } from "./event.model";
 
 export type EventResponse = {
   _id: string;
@@ -25,7 +25,7 @@ export type EventResponse = {
   };
 };
 
-export const mapEventToEventData = (event: IsEventPopulated): EventResponse => {
+export const mapEventToEventData = (event: EventPopulated): EventResponse => {
   return {
     _id: event._id.toString(),
     name: event.name,

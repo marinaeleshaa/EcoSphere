@@ -10,7 +10,7 @@ export type EventType =
 
 export type EventUnpopulated = IEvent & { owner: string };
 export type EventOwner = IUser | IRestaurant;
-export type IsEventPopulated = Omit<IEvent, "owner"> & {
+export type EventPopulated = Omit<IEvent, "owner"> & {
   owner: EventOwner;
 };
 
@@ -53,7 +53,7 @@ export const sectionsSchema = new Schema<ISection>(
     startTime: { type: String, required: true },
     endTime: { type: String, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 export const eventSchema = new Schema<IEvent>(
@@ -98,7 +98,7 @@ export const eventSchema = new Schema<IEvent>(
       enum: ["User", "Restaurant"],
     },
   },
-  { _id: true, timestamps: true }
+  { _id: true, timestamps: true },
 );
 
 export const EventModel = models.Event || model<IEvent>("Event", eventSchema);

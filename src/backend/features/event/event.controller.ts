@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IEvent, EventWithPopulatedOwner } from "./event.model";
+import { IEvent } from "./event.model";
 import type { IEventService } from "./event.service";
 import { EventResponse, mapEventToEventData } from "./events.types";
 
@@ -11,28 +11,27 @@ class EventController {
 
   async getEvents(): Promise<EventResponse[]> {
     const response = await this.eventService.getEvents();
-    const mappedData = response.map((item) =>
-      mapEventToEventData(item as EventWithPopulatedOwner),
-    );
+    const mappedData = response.map(mapEventToEventData);
     return mappedData;
   }
 
   async getEvent(id: string, eventId: string): Promise<EventResponse> {
     const response = await this.eventService.getEventById(id, eventId);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async getEventsByUserId(id: string): Promise<EventResponse[]> {
     const response = await this.eventService.getEventsByUserId(id);
-    const mappedData = response.map((item) =>
-      mapEventToEventData(item as EventWithPopulatedOwner),
-    );
+    const mappedData = response.map(mapEventToEventData);
     return mappedData;
   }
 
-  async createEvent(user: { id: string; role: string }, event: IEvent): Promise<EventResponse> {
+  async createEvent(
+    user: { id: string; role: string },
+    event: IEvent,
+  ): Promise<EventResponse> {
     const response = await this.eventService.createEvent(user, event);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async updateEvent(
@@ -40,27 +39,27 @@ class EventController {
     event: Partial<IEvent>,
   ): Promise<EventResponse> {
     const response = await this.eventService.updateEvent(id, event);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async deleteEvent(id: string, eventId: string): Promise<EventResponse> {
     const response = await this.eventService.deleteEvent(id, eventId);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async acceptEvent(eventId: string): Promise<EventResponse> {
     const response = await this.eventService.acceptEvent(eventId);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async rejectEvent(eventId: string): Promise<EventResponse> {
     const response = await this.eventService.rejectEvent(eventId);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 
   async attendEvent(id: string, eventId: string): Promise<EventResponse> {
     const response = await this.eventService.attendEvent(id, eventId);
-    return mapEventToEventData(response as EventWithPopulatedOwner);
+    return mapEventToEventData(response);
   }
 }
 
