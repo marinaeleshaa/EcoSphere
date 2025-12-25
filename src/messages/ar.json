@@ -517,7 +517,16 @@
       "shopStep3": {
         "title": "بيانات المتجر",
         "location": "أدخل موقع المتجر",
-        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م"
+        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م",
+        "selectCategory": "اختر فئة",
+        "categories": {
+          "supermarket": "سوبر ماركت",
+          "hypermarket": "هايبر ماركت",
+          "grocery": "بقالة",
+          "bakery": "مخبز",
+          "cafe": "مقهى",
+          "other": "أخرى"
+        }
       },
       "lastStep": {
         "title": "الخطوة الأخيرة",
