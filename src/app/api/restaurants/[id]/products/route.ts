@@ -28,7 +28,6 @@ export const GET = async (
   const search = searchParams.get("search") || undefined;
   const category = (searchParams.get("category") as any) || undefined;
   const sort = (searchParams.get("sort") as any) || undefined;
-  const sortOrder = (searchParams.get("sortOrder") as any) || undefined;
 
   try {
     const result = await controller.getByRestaurantId(id, {
@@ -37,7 +36,6 @@ export const GET = async (
       search,
       category,
       sort,
-      sortOrder,
     });
     return ok(result);
   } catch (error) {
