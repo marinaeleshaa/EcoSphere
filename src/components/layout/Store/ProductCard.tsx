@@ -25,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IProduct } from "@/types/ProductType";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: IProduct;
@@ -110,14 +111,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return "bg-red-500/60 text-white";
   };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 39586735f91437c8f566711397a949c0a1c0c912
   return (
-    <div
+    <Link
+      href={`/store/${safeId}`}
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group p-4 space-y-2"
-      onClick={() => router.push(`/store/${safeId}`)}
     >
       {/* header - fixed height */}
       <div className="flex justify-between items-center  ">
@@ -210,7 +207,9 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className=" flex gap-3 text-2xl ">
           <button
             className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto text-nowrap text-base! ${
-              !availableOnline ? "cursor-not-allowed! opacity-50" : " cursor-pointer!"
+              !availableOnline
+                ? "cursor-not-allowed! opacity-50"
+                : " cursor-pointer!"
             }`}
             onClick={handleCart}
             disabled={!availableOnline}
@@ -233,7 +232,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
