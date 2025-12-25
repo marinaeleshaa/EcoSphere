@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -54,7 +53,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const safeImg =
     productImg || (product as any).avatar?.url || "/store img/2.jpg";
   const safeId = id || (product as any)._id;
-
 
   const router = useRouter();
 
@@ -112,7 +110,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return "bg-red-500/60 text-white";
   };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39586735f91437c8f566711397a949c0a1c0c912
   return (
     <div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group p-4 space-y-2"

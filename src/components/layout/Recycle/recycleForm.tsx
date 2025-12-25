@@ -16,7 +16,7 @@ import { Loader2, Sparkles } from "lucide-react";
 import { useRecycleAnalysis } from "@/hooks/useRecycleAnalysis";
 import VisionUploadArea from "./VisionUploadArea";
 import { toast } from "sonner";
-import { updateUserPoints } from "@/frontend/api/Users";
+import { useSession } from "next-auth/react";
 
 type MaterialItem = {
   id: number;
@@ -26,6 +26,7 @@ type MaterialItem = {
 
 const RecycleForm = () => {
   const t = useTranslations("RecycleForm");
+  const { data: session, status } = useSession();
 
   const [materials, setMaterials] = useState<MaterialItem[]>([
     { id: 1, type: "", amount: 1 },
@@ -71,7 +72,7 @@ const RecycleForm = () => {
 
   const onSubmit: SubmitHandler<RecycleFormValues> = async (formData) => {
     // 1. Determine Analysis/Calculation Data
-    let finalItems: any[] = [];
+    let finalItems = [];
     let carbonSaved = 0;
 
     try {
@@ -107,7 +108,8 @@ const RecycleForm = () => {
         ...formData,
         items: finalItems,
         totalCarbonSaved: carbonSaved,
-        isVerified: true,
+        userId: session?.user.id,
+        isVerified: status === "authenticated",
       };
 
       const createResponse = await fetch("/api/recycle", {
@@ -120,24 +122,13 @@ const RecycleForm = () => {
         // 3. Gamification: Calculate Points & Update User
         const pointsEarned = Math.round(carbonSaved * 100);
 
-        try {
-          await updateUserPoints(pointsEarned);
-          toast.success(t("success.title"), {
-            description: t("success.descriptionWithPoints", {
-              carbonSaved: carbonSaved.toFixed(2),
-              points: pointsEarned,
-            }),
-            duration: 5000,
-          });
-        } catch (pointError) {
-          console.error("Failed to update points", pointError);
-          // Fallback toast without points
-          toast.success(t("success.title"), {
-            description: t("success.description", {
-              carbonSaved: carbonSaved.toFixed(2),
-            }),
-          });
-        }
+        toast.success(t("success.title"), {
+          description: t("success.descriptionWithPoints", {
+            carbonSaved: carbonSaved.toFixed(2),
+            points: pointsEarned,
+          }),
+          duration: 5000,
+        });
 
         reset();
         setMaterials([{ id: 1, type: "", amount: 1 }]);
@@ -256,8 +247,8 @@ const RecycleForm = () => {
           </AnimatePresence>
 
           {/* Analysis Summary (Optional: Show if result available) */}
-          {/* Note: In one-shot flow, result might only show AFTER submit if we don't redirect. 
-              If we want checking before submit, we need the old buttons. 
+          {/* Note: In one-shot flow, result might only show AFTER submit if we don't redirect.
+              If we want checking before submit, we need the old buttons.
               Assuming user wants one-shot "Submit", we might show success state instead. */}
 
           <button

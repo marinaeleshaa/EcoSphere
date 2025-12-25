@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ): Promise<
   NextResponse<ApiResponse<PaginatedProductResponse | ProductResponse[]>>
 > => {
@@ -26,12 +26,18 @@ export const GET = async (
     ? parseInt(searchParams.get("limit")!)
     : undefined;
   const search = searchParams.get("search") || undefined;
+  const category = (searchParams.get("category") as any) || undefined;
+  const sort = (searchParams.get("sort") as any) || undefined;
+  const sortOrder = (searchParams.get("sortOrder") as any) || undefined;
 
   try {
     const result = await controller.getByRestaurantId(id, {
       page,
       limit,
       search,
+      category,
+      sort,
+      sortOrder,
     });
     return ok(result);
   } catch (error) {
@@ -42,7 +48,7 @@ export const GET = async (
 
 export const POST = async (
   _req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> },
 ): Promise<NextResponse<ApiResponse<IRestaurant>>> => {
   const { id } = await context.params;
   const body = await _req.json();

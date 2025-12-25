@@ -87,6 +87,13 @@ export default function ProductCard({
             {t("unavailable")}
           </div>
         )}
+
+        {/* Category Badge */}
+        {product.category && (
+          <div className="absolute bottom-2 left-2 bg-primary/90 text-primary-foreground text-xs px-3 py-1 rounded-full backdrop-blur-sm shadow-md">
+            {t(`Categories.${product.category.toLowerCase()}`)}
+          </div>
+        )}
       </div>
 
       <div className="p-4 flex-1 flex flex-col">
@@ -98,7 +105,7 @@ export default function ProductCard({
             {product.title}
           </h3>
           <span className="font-bold text-primary">
-            {t("currency")} {product.price.toFixed(2)}
+            {product.price.toFixed(2)} €
           </span>
         </div>
 

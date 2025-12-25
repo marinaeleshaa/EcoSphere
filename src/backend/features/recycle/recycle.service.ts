@@ -2,13 +2,19 @@ import { inject, injectable } from "tsyringe";
 import { type IRecycleRepository } from "./recycle.repository";
 import { mapRecycleToResponse, RecycleResponse } from "./recycle.types";
 import { IRecycle } from "./recycle.model";
+import { type IUserService } from "../user/user.service";
+import {
+  sendPointsAddedEmail,
+  sendRecycleRequestReceivedEmail,
+  sendUnregisteredRecycleEmail,
+} from "@/backend/utils/mailer";
 
 export interface IRecycleService {
   createRecycleEntry(data: Partial<IRecycle>): Promise<RecycleResponse>;
   getRecycleEntryById(id: string): Promise<RecycleResponse>;
   updateRecycleEntry(
     id: string,
-    data: Partial<IRecycle>
+    data: Partial<IRecycle>,
   ): Promise<RecycleResponse>;
   deleteRecycleEntry(id: string): Promise<RecycleResponse>;
   listRecycleEntries(): Promise<RecycleResponse[]>;
@@ -16,7 +22,7 @@ export interface IRecycleService {
   analyzeImages(files: Blob[]): Promise<any>;
   calculateCarbonFootprint(items: any[]): Promise<number>;
   calculateManualCarbon(
-    items: { type: string; amount: number }[]
+    items: { type: string; amount: number }[],
   ): Promise<any>;
 }
 
@@ -24,11 +30,14 @@ export interface IRecycleService {
 export class RecycleService implements IRecycleService {
   constructor(
     @inject("RecycleRepository")
-    private readonly recycleRepository: IRecycleRepository
+    private readonly recycleRepository: IRecycleRepository,
+    @inject("IUserService") private readonly userService: IUserService,
   ) {}
 
   async createRecycleEntry(data: Partial<IRecycle>): Promise<RecycleResponse> {
     const response = await this.recycleRepository.createRecycleEntry(data);
+    if (response)
+      await sendRecycleRequestReceivedEmail(response.email, response.firstName);
     return mapRecycleToResponse(response);
   }
 
@@ -39,9 +48,24 @@ export class RecycleService implements IRecycleService {
 
   async updateRecycleEntry(
     id: string,
-    data: Partial<IRecycle>
+    data: Partial<IRecycle>,
   ): Promise<RecycleResponse> {
     const response = await this.recycleRepository.updateRecycleEntry(id, data);
+    if (
+      response.status === "completed" &&
+      response?.totalCarbonSaved &&
+      response.userId
+    ) {
+      const pointsEarned = Math.round(response.totalCarbonSaved * 100);
+      const user = await this.userService.updateById(response.userId, {
+        points: pointsEarned,
+      });
+      if (user)
+        await sendPointsAddedEmail(user.email, user.firstName, user.points);
+
+      if (!response.userId)
+        await sendUnregisteredRecycleEmail(response.email, response.firstName);
+    }
     return mapRecycleToResponse(response);
   }
 
@@ -57,9 +81,8 @@ export class RecycleService implements IRecycleService {
   }
 
   async getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]> {
-    const response = await this.recycleRepository.getRecycleEntriesByEmail(
-      email
-    );
+    const response =
+      await this.recycleRepository.getRecycleEntriesByEmail(email);
     const mappedData = response.map((item) => mapRecycleToResponse(item));
     return mappedData;
   }
@@ -125,7 +148,7 @@ export class RecycleService implements IRecycleService {
         });
 
         return counts;
-      })
+      }),
     );
 
     const aggregatedCounts: Record<string, number> = {};
@@ -164,7 +187,7 @@ export class RecycleService implements IRecycleService {
       // Add to dominant key
       aggregatedCounts[maxKey!] += unknownTotal;
       console.log(
-        `🔄 Redistributed ${unknownTotal} unknown items to ${maxKey}`
+        `🔄 Redistributed ${unknownTotal} unknown items to ${maxKey}`,
       );
     }
 
@@ -182,7 +205,7 @@ export class RecycleService implements IRecycleService {
 
     const totalWeight = items.reduce(
       (sum, item) => sum + item.estimatedWeight,
-      0
+      0,
     );
     const estimatedCarbonSaved = await this.calculateCarbonFootprint(items);
 
@@ -194,7 +217,7 @@ export class RecycleService implements IRecycleService {
   }
 
   async calculateManualCarbon(
-    items: { type: string; amount: number }[]
+    items: { type: string; amount: number }[],
   ): Promise<any> {
     // Map frontend 'amount' (which is weight in kg) to 'estimatedWeight' for the calculation
     const formattedItems = items.map((item) => ({
@@ -205,11 +228,10 @@ export class RecycleService implements IRecycleService {
 
     const totalWeight = formattedItems.reduce(
       (sum, item) => sum + item.estimatedWeight,
-      0
+      0,
     );
-    const estimatedCarbonSaved = await this.calculateCarbonFootprint(
-      formattedItems
-    );
+    const estimatedCarbonSaved =
+      await this.calculateCarbonFootprint(formattedItems);
 
     return {
       items: formattedItems,
@@ -305,13 +327,13 @@ export class RecycleService implements IRecycleService {
                 weight_unit: "kg",
               },
             }),
-          }
+          },
         );
 
         if (!response.ok) {
           const errText = await response.text();
           console.warn(
-            `Climatiq API Error for ${type}: ${response.status} - ${errText}`
+            `Climatiq API Error for ${type}: ${response.status} - ${errText}`,
           );
           throw new Error("API_FAIL");
         }

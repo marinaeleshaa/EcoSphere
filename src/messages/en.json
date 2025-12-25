@@ -241,10 +241,20 @@
     "filter": {
       "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
         "highestRating": "Highest Rating",
         "lowestRating": "Lowest Rating"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "supermarket": "Supermarket",
+        "hypermarket": "Hypermarket",
+        "grocery": "Grocery",
+        "bakery": "Bakery",
+        "cafe": "Cafe",
+        "other": "Other"
       },
       "noProducts": "No products match your current search criteria."
     }
@@ -292,7 +302,30 @@
         "errors": {
           "titleRequired": "Title is required",
           "subtitleRequired": "Subtitle is required",
-          "priceRequired": "Price is required"
+          "priceRequired": "Price is required",
+          "categoryRequired": "Please select a category"
+        }
+      },
+      "Categories": {
+        "label": "Category",
+        "placeholder": "Select a category",
+        "fruits": "Fruits",
+        "vegetables": "Vegetables",
+        "meat": "Meat",
+        "dairy": "Dairy",
+        "bakery": "Bakery",
+        "beverages": "Beverages",
+        "snacks": "Snacks",
+        "other": "Other"
+      },
+      "filter": {
+        "category": "Category",
+        "allCategories": "All Categories",
+        "sortBy": "Sort By",
+        "sortOptions": {
+          "name": "Name",
+          "price": "Price",
+          "sustainability": "Sustainability Score"
         }
       },
 
@@ -322,6 +355,29 @@
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
       "currency": "EGP"
+    },
+    "filter": {
+      "searchPlaceholder": "Search products",
+      "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
+      "sortOptions": {
+        "default": "Default",
+        "highestRating": "Highest Rating",
+        "lowestRating": "Lowest Rating",
+        "priceHigh": "Price: High to Low",
+        "priceLow": "Price: Low to High"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "Fruits": "Fruits",
+        "Vegetables": "Vegetables",
+        "Meat": "Meat",
+        "Dairy": "Dairy",
+        "Beverages": "Beverages",
+        "Snacks": "Snacks",
+        "Other": "Other"
+      },
+      "noProducts": "No products match your current search criteria."
     }
   },
   "ProductDetails": {

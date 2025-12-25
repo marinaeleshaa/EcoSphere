@@ -12,8 +12,15 @@ export const GET = async (req: NextRequest) => {
   const limit = Number(searchParams.get("limit")) || 10;
   const sort = (searchParams.get("sort") as any) || "default";
   const search = searchParams.get("search") || "";
+  const category = searchParams.get("category") || "default";
 
-  const result = await controller.getAll({ page, limit, sort, search });
+  const result = await controller.getAll({
+    page,
+    limit,
+    sort,
+    search,
+    category: category as any,
+  });
 
   return ok(result);
 };

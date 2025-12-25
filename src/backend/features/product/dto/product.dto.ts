@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IMenuItem } from "../../restaurant/restaurant.model";
+import { IMenuItem, MenuItemCategory } from "../../restaurant/restaurant.model";
 import { IProduct } from "@/types/ProductType";
 
 // Single unified response type - always includes restaurant context
@@ -9,27 +9,7 @@ export type ProductResponse = IMenuItem & {
 };
 
 export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
-  console.log(
-    "[mapResponseToIProduct] Avatar data:",
-    JSON.stringify(
-      {
-        hasAvatar: !!res.avatar,
-        avatar: res.avatar,
-        avatarKey: res.avatar?.key,
-        avatarUrl: res.avatar?.url,
-        productId: res._id?.toString(),
-        productName: res.title,
-      },
-      null,
-      2,
-    ),
-  );
-
   const productImg = res.avatar?.url || "";
-  console.log(
-    "[mapResponseToIProduct] Final productImg:",
-    productImg || "EMPTY",
-  );
 
   return {
     id: `${res._id}`,
@@ -42,9 +22,8 @@ export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
     productSubtitle: res.subtitle,
     productDescription: "", // res.description is not available in ProductResponse
     availableOnline: res.availableOnline,
-    sustainabilityScore: res.sustainabilityScore,
+    sustainabilityScore: res.sustainabilityScore || 0,
     sustainabilityReason: res.sustainabilityReason,
-    itemRating: [],
   };
 };
 
@@ -52,6 +31,7 @@ export interface CreateProductDTO {
   title: string;
   subtitle: string;
   price: number;
+  category: MenuItemCategory;
   avatar?: {
     key: string;
     url?: string;
@@ -61,14 +41,15 @@ export interface CreateProductDTO {
   sustainabilityReason?: string;
 }
 
-export interface UpdateProductDTO extends Partial<CreateProductDTO> {}
+export type UpdateProductDTO = Partial<CreateProductDTO>;
 
 export interface ProductPageOptions {
   page?: number;
   limit?: number;
   search?: string;
-  sortBy?: "price" | "title" | "itemRating" | "createdAt";
+  sort?: "default" | "priceLow" | "priceHigh" | "price" | "sustainabilityScore";
   sortOrder?: "asc" | "desc";
+  category?: string;
 }
 
 export interface PaginatedProductResponse {

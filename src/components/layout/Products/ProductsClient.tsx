@@ -15,9 +15,18 @@ import {
   ProductResponse,
   CreateProductDTO,
 } from "@/backend/features/product/dto/product.dto";
-import { Plus, Search } from "lucide-react";
+import { MenuItemCategory } from "@/backend/features/restaurant/restaurant.model";
+import { Plus, Search, ArrowUpIcon, ArrowDownIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useDebounce } from "@/hooks/use-debounce";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 export default function ProductsClient({
   restaurantId,
@@ -38,6 +47,14 @@ export default function ProductsClient({
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebounce(searchTerm, 500);
 
+  const [selectedCategory, setSelectedCategory] = useState<
+    MenuItemCategory | "all"
+  >("all");
+  const [sort, setSort] = useState<"price" | "sustainabilityScore">(
+    "price",
+  );
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<
     ProductResponse | undefined
@@ -52,10 +69,13 @@ export default function ProductsClient({
         page: String(page),
         limit: "12",
         search: debouncedSearch ?? "",
+        ...(selectedCategory !== "all" && { category: selectedCategory }),
+        sort,
+        sortOrder,
       });
 
       const res = await fetch(
-        `/api/restaurants/${restaurantId}/products?${params}`
+        `/api/restaurants/${restaurantId}/products?${params}`,
       );
       if (!res.ok) throw new Error();
 
@@ -77,7 +97,7 @@ export default function ProductsClient({
 
   useEffect(() => {
     fetchProducts();
-  }, [page, debouncedSearch]);
+  }, [page, debouncedSearch, selectedCategory, sort, sortOrder]);
 
   const handleCreate = async (payload: CreateProductDTO) => {
     try {
@@ -107,7 +127,7 @@ export default function ProductsClient({
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) throw new Error();
@@ -127,7 +147,7 @@ export default function ProductsClient({
     try {
       const res = await fetch(
         `/api/restaurants/${restaurantId}/products/${deleteProductId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       if (!res.ok) throw new Error();
@@ -200,6 +220,92 @@ export default function ProductsClient({
         />
       </div>
 
+      {/* Filters and Sorting */}
+      <div className="flex flex-wrap gap-4 items-center shrink-0 mb-6">
+        {/* Category Filter */}
+        <div className="flex items-center gap-2">
+          <Label
+            htmlFor="category-filter"
+            className="text-sm font-medium whitespace-nowrap"
+          >
+            {t("filter.category")}:
+          </Label>
+          <Select
+            value={selectedCategory}
+            onValueChange={(value) => {
+              setSelectedCategory(value as MenuItemCategory | "all");
+              setPage(1);
+            }}
+          >
+            <SelectTrigger id="category-filter" className="w-[180px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">{t("filter.allCategories")}</SelectItem>
+              <SelectItem value="Fruits">{t("Categories.fruits")}</SelectItem>
+              <SelectItem value="Vegetables">
+                {t("Categories.vegetables")}
+              </SelectItem>
+              <SelectItem value="Meat">{t("Categories.meat")}</SelectItem>
+              <SelectItem value="Dairy">{t("Categories.dairy")}</SelectItem>
+              <SelectItem value="Bakery">{t("Categories.bakery")}</SelectItem>
+              <SelectItem value="Beverages">
+                {t("Categories.beverages")}
+              </SelectItem>
+              <SelectItem value="Snacks">{t("Categories.snacks")}</SelectItem>
+              <SelectItem value="Other">{t("Categories.other")}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Sort By */}
+        <div className="flex items-center gap-2">
+          <Label
+            htmlFor="sort-by"
+            className="text-sm font-medium whitespace-nowrap"
+          >
+            {t("filter.sortBy")}:
+          </Label>
+          <Select
+            value={sort}
+            onValueChange={(value) => {
+              setSort(value as "price" | "sustainabilityScore");
+              setPage(1);
+            }}
+          >
+            <SelectTrigger id="sort-by" className="w-[200px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="price">
+                {t("filter.sortOptions.price")}
+              </SelectItem>
+              <SelectItem value="sustainabilityScore">
+                {t("filter.sortOptions.sustainability")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Sort Order Toggle */}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+            setPage(1);
+          }}
+          className="rounded-full"
+          title={sortOrder === "asc" ? "Ascending" : "Descending"}
+        >
+          {sortOrder === "asc" ? (
+            <ArrowUpIcon className="h-4 w-4" />
+          ) : (
+            <ArrowDownIcon className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+
       {/* Products Grid */}
       <div className="flex-1 overflow-y-auto px-1 min-h-0">
         {renderProductsGrid()}
@@ -243,6 +349,7 @@ export default function ProductsClient({
                 subtitle: editingProduct.subtitle,
                 price: editingProduct.price,
                 availableOnline: editingProduct.availableOnline,
+                category: editingProduct.category,
                 avatar: editingProduct.avatar,
               }
             : undefined

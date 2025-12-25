@@ -1,8 +1,9 @@
 import { Document, model, models, Schema } from "mongoose";
+import { RecycleOrderStatus } from "./recycle.types";
 
 export interface IAddress {
   city: string;
-  nighborhood?: string;
+  neighborhood?: string;
   street: string;
   buildingNumber: string;
   floor: number;
@@ -11,7 +12,7 @@ export interface IAddress {
 
 export interface IRecycleItem {
   itemType: string;
-  quantity: number;
+  // quantity: number;
   weight: number; // in kilograms
 }
 
@@ -25,6 +26,8 @@ export interface IRecycle extends Document {
   totalCarbonSaved?: number;
   imageKeys?: string[];
   isVerified?: boolean;
+  userId?: string;
+  status: RecycleOrderStatus;
   createdAt: Date;
   updatedAt?: Date;
 }
@@ -37,7 +40,7 @@ export const recycleSchema = new Schema<IRecycle>(
     phoneNumber: { type: String, required: true },
     address: {
       city: { type: String, required: true },
-      nighborhood: { type: String },
+      neighborhood: { type: String },
       street: { type: String, required: true },
       buildingNumber: { type: String, required: true },
       floor: { type: Number, required: true },
@@ -46,17 +49,23 @@ export const recycleSchema = new Schema<IRecycle>(
     recycleItems: [
       {
         itemType: { type: String, required: true },
-        quantity: { type: Number, required: true },
+        // quantity: { type: Number, required: true },
         weight: { type: Number, required: true },
       },
     ],
     totalCarbonSaved: { type: Number, default: 0 },
     imageKeys: [{ type: String }],
     isVerified: { type: Boolean, default: false },
+    userId: { type: String },
+    status: {
+      type: String,
+      enum: RecycleOrderStatus,
+      default: RecycleOrderStatus.PENDING,
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const RecycleModel =

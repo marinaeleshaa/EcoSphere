@@ -15,6 +15,7 @@ export type MenuItemCategory =
   | "Meat"
   | "Dairy"
   | "Bakery"
+  | "Beverages"
   | "Snacks"
   | "Other";
 
@@ -22,7 +23,7 @@ export interface IRating extends Document {
   userId: string;
   rate: number;
   review: string;
-  orderId: string;
+  orderId?: string;
 }
 
 export interface IMenuItem extends Document {
@@ -68,7 +69,7 @@ export const ratingSchema = new Schema<IRating>(
     userId: { type: String, required: true },
     rate: { type: Number, required: true },
     review: { type: String, required: true },
-    orderId: { type: String, ref: "Order", required: true },
+    orderId: { type: String, ref: "Order", required: false },
   },
   { timestamps: true },
 );
@@ -91,7 +92,9 @@ export const menuItemSchema = new Schema<IMenuItem>({
       "Vegetables",
       "Meat",
       "Dairy",
+      "Bakery",
       "Beverages",
+      "Bakery",
       "Snacks",
       "Other",
     ],
