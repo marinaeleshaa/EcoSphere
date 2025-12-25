@@ -361,10 +361,10 @@
       "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
-        "highestRating": "Highest Rating",
-        "lowestRating": "Lowest Rating",
         "priceHigh": "Price: High to Low",
-        "priceLow": "Price: Low to High"
+        "priceLow": "Price: Low to High",
+        "sustainabilityLow": "Sustainability: Low to High",
+        "sustainabilityHigh": "Sustainability: High to Low"
       },
       "filterOptions": {
         "default": "Default",
@@ -881,7 +881,10 @@
     },
     "card": {
       "removedFromFavorites": "Removed from favorites",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart",
+      "addedToCart": "Added to cart",
+      "removedFromCart": "Removed from cart"
     },
     "view": {
       "grid": "Grid View",

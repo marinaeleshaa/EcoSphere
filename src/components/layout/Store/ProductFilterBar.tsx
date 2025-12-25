@@ -12,7 +12,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-export type ProductSortOption = "default" | "priceHigh" | "priceLow";
+export type ProductSortOption =
+  | "default"
+  | "priceHigh"
+  | "priceLow"
+  | "sustainabilityLow"
+  | "sustainabilityHigh";
 
 export type ProductCategoryOption =
   | "default"
@@ -49,7 +54,13 @@ export default function ProductFilterBar({
     null,
   );
 
-  const sortOptions: ProductSortOption[] = ["default", "priceHigh", "priceLow"];
+  const sortOptions: ProductSortOption[] = [
+    "default",
+    "priceHigh",
+    "priceLow",
+    "sustainabilityLow",
+    "sustainabilityHigh",
+  ];
 
   const categoryOptions: ProductCategoryOption[] = [
     "default",

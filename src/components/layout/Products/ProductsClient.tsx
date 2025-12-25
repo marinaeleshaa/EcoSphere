@@ -50,9 +50,7 @@ export default function ProductsClient({
   const [selectedCategory, setSelectedCategory] = useState<
     MenuItemCategory | "all"
   >("all");
-  const [sort, setSort] = useState<"price" | "sustainabilityScore">(
-    "price",
-  );
+  const [sort, setSort] = useState<"price" | "sustainabilityScore">("price");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -60,6 +58,18 @@ export default function ProductsClient({
     ProductResponse | undefined
   >();
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
+
+  const getBackendSort = () => {
+    if (sort === "price") {
+      return sortOrder === "asc" ? "priceLow" : "priceHigh";
+    }
+
+    if (sort === "sustainabilityScore") {
+      return sortOrder === "asc" ? "sustainabilityLow" : "sustainabilityHigh";
+    }
+
+    return "default";
+  };
 
   const fetchProducts = async () => {
     try {
@@ -70,8 +80,7 @@ export default function ProductsClient({
         limit: "12",
         search: debouncedSearch ?? "",
         ...(selectedCategory !== "all" && { category: selectedCategory }),
-        sort,
-        sortOrder,
+        sort: getBackendSort(),
       });
 
       const res = await fetch(
