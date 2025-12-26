@@ -23,6 +23,7 @@ export interface IRestaurantRepository {
   ): Promise<PaginatedRestaurantResponse | IRestaurant[]>;
   getById(id: string): Promise<IRestaurant>;
   getRestaurantsByIdes(restaurantIds: string[]): Promise<IRestaurant[]>;
+  getFirstRestaurants(limit?: number): Promise<IRestaurant[]>;
   // Find a restaurant by its Stripe customer id (used by subscription flow)
   getRestaurantByStripeId(
     stripeCustomerId: string
@@ -71,19 +72,32 @@ class RestaurantRepository {
     options: RestaurantPageOptions = {}
   ): Promise<PaginatedRestaurantResponse> {
     await DBInstance.getConnection();
-    const { page = 1, limit = 10, search = "", sort = "default" } = options;
+
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      sort = "default",
+      category = "default",
+    } = options;
+
     const skip = (page - 1) * limit;
 
-    // 1. Updated matchStage to exclude hidden restaurants
-    const matchStage: any = { isHidden: false };
+    const matchStage: any = {
+      isHidden: false,
+    };
 
     if (search) {
       const regex = new RegExp(search, "i");
       matchStage.$or = [{ name: regex }, { description: regex }];
     }
 
+    if (category && category !== "default") {
+      matchStage.category = { $regex: new RegExp(`^${category}$`, "i") };
+    }
+
     const pipeline: any[] = [
-      { $match: matchStage }, // This now filters both search AND visibility
+      { $match: matchStage },
       {
         $addFields: {
           restaurantRatingAvg: {
@@ -97,11 +111,13 @@ class RestaurantRepository {
       },
     ];
 
-    if (sort === "highestRating")
+    if (sort === "highestRating") {
       pipeline.push({ $sort: { restaurantRatingAvg: -1 } });
-    else if (sort === "lowestRating")
+    } else if (sort === "lowestRating") {
       pipeline.push({ $sort: { restaurantRatingAvg: 1 } });
-    else pipeline.push({ $sort: { name: 1 } });
+    } else {
+      pipeline.push({ $sort: { name: 1 } });
+    }
 
     pipeline.push({
       $facet: {
@@ -111,6 +127,7 @@ class RestaurantRepository {
     });
 
     const result = await RestaurantModel.aggregate(pipeline).exec();
+
     const data = result[0]?.data || [];
     const total = result[0]?.metadata[0]?.total || 0;
 
@@ -147,6 +164,19 @@ class RestaurantRepository {
       .select("name menus")
       .lean<IRestaurant[]>()
       .exec();
+  }
+
+  async getFirstRestaurants(limit: number = 15): Promise<IRestaurant[]> {
+    await DBInstance.getConnection();
+
+    // Simply get the first N non-hidden restaurants
+    const restaurants = await RestaurantModel.find({ isHidden: false })
+      .select("_id name avatar")
+      .limit(limit)
+      .lean<IRestaurant[]>()
+      .exec();
+
+    return restaurants;
   }
 
   // New helper: find restaurant by Stripe customer id so subscription webhooks

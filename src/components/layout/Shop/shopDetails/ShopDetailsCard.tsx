@@ -81,7 +81,7 @@ const ShopDetailsCard = ({ shop, liveAverageRating }: ShopDetailsCardProps) => {
                   className="rounded-full"
                 />
                 <div>
-                  <h1 className="text-lg font-bold text-foreground">
+                  <h1 className="text-lg font-bold text-primary-foreground">
                     {shop.name}
                   </h1>
                 </div>

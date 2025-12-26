@@ -65,7 +65,8 @@
         "orders": "Orders",
         "shops": "Shops",
         "events": "Events",
-        "recycling": "Recycling"
+        "recycling": "Recycling",
+        "news": "News"
       },
       "footer": {
         "favorite": "Favorite",
@@ -240,10 +241,20 @@
     "filter": {
       "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
         "highestRating": "Highest Rating",
         "lowestRating": "Lowest Rating"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "supermarket": "Supermarket",
+        "hypermarket": "Hypermarket",
+        "grocery": "Grocery",
+        "bakery": "Bakery",
+        "cafe": "Cafe",
+        "other": "Other"
       },
       "noProducts": "No products match your current search criteria."
     }
@@ -288,10 +299,39 @@
         "priceLabel": "Price (EGP)",
         "imageLabel": "Product Image",
         "availableLabel": "Available Online",
+        "quantityLabel": "Quantity",
+        "quantityPlaceholder": "Available quantity",
         "errors": {
           "titleRequired": "Title is required",
           "subtitleRequired": "Subtitle is required",
-          "priceRequired": "Price is required"
+          "priceRequired": "Price is required",
+          "categoryRequired": "Please select a category",
+          "quantityRequired": "Quantity is required",
+          "quantityNegative": "Quantity cannot be negative"
+        }
+      },
+      "Categories": {
+        "label": "Category",
+        "placeholder": "Select a category",
+        "fruits": "Fruits",
+        "vegetables": "Vegetables",
+        "meat": "Meat",
+        "dairy": "Dairy",
+        "bakery": "Bakery",
+        "beverages": "Beverages",
+        "snacks": "Snacks",
+        "other": "Other"
+      },
+      "stock": "Stock",
+      "outOfStock": "Out of Stock",
+      "filter": {
+        "category": "Category",
+        "allCategories": "All Categories",
+        "sortBy": "Sort By",
+        "sortOptions": {
+          "name": "Name",
+          "price": "Price",
+          "sustainability": "Sustainability Score"
         }
       },
 
@@ -313,14 +353,46 @@
     },
     "slider": {
       "title": "Our Partner Stores",
-      "scrollHint": "Scroll to explore more stores"
+      "scrollHint": "Scroll to explore more stores",
+      "loading": "Loading top stores...",
+      "error": "Failed to load stores. Please try again.",
+      "retry": "Retry",
+      "noStores": "No stores available at the moment"
     },
     "product": {
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
+      "outOfStock": "Out of Stock",
+      "lowStock": "Only {count} left!",
+      "availability": "Availability",
+      "inStock": "{count} available",
+      "sustainability": "Sustainability Score",
       "currency": "EGP"
+    },
+    "filter": {
+      "searchPlaceholder": "Search products",
+      "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
+      "sortOptions": {
+        "default": "Default",
+        "priceHigh": "Price: High to Low",
+        "priceLow": "Price: Low to High",
+        "sustainabilityLow": "Sustainability: Low to High",
+        "sustainabilityHigh": "Sustainability: High to Low"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "Fruits": "Fruits",
+        "Vegetables": "Vegetables",
+        "Meat": "Meat",
+        "Dairy": "Dairy",
+        "Beverages": "Beverages",
+        "Snacks": "Snacks",
+        "Other": "Other"
+      },
+      "noProducts": "No products match your current search criteria."
     }
   },
   "ProductDetails": {
@@ -336,8 +408,14 @@
       "description": "Description",
       "quantity": "Quantity:",
       "addToCart": "Add to Cart",
+      "removeFromCart": "Remove from Cart",
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
+      "addedToCart": "Added to cart",
+      "removedFromCart": "Removed from cart",
+      "outOfStock": "Out of Stock",
+      "availability": "Availability",
+      "inStock": "{count} available",
       "availableOnline": "Available Online",
       "notAvailableOnline": "Unavailable Online"
     },
@@ -462,7 +540,17 @@
       "shopStep3": {
         "title": "Shop Details",
         "location": "Enter shop location",
-        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM"
+        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM",
+
+        "selectCategory": "Select a category",
+        "categories": {
+          "supermarket": "Supermarket",
+          "hypermarket": "Hypermarket",
+          "grocery": "Grocery",
+          "bakery": "Bakery",
+          "cafe": "Cafe",
+          "other": "Other"
+        }
       },
       "lastStep": {
         "title": "Final Step",
@@ -514,13 +602,19 @@
       "recyclingHistory": {
         "title": "Recycling History",
         "date": "Date",
-        "items": "Items",
+        "createdAt": "Created At",
+        "updatedAt": "last Update was at",
+        "items": "items count",
         "itemsCount": "items",
-        "weight": "Weight (kg)",
+        "weight": "es. Weight (kg)",
         "carbonSaved": "Carbon Saved",
         "status": "Status",
         "verified": "Verified",
         "pending": "Pending",
+        "completed": "Completed",
+        "review": "Review",
+        "rejected": "Rejected",
+        "processing": "Processing",
         "noRecyclingOrders": "No recycling orders yet",
         "noRecyclingOrdersDescription": "Start recycling to see your eco-impact here",
         "browseRecycling": "Start Recycling"
@@ -658,6 +752,7 @@
       "securedByStripe": "Payments secured by Stripe"
     },
     "verification": {
+      "orderId": "Order ID",
       "successTitle": "Payment Confirmed",
       "successDesc": "Thank you for contributing to a greener future.",
       "transactionId": "Transaction ID",
@@ -825,7 +920,10 @@
     },
     "card": {
       "removedFromFavorites": "Removed from favorites",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart",
+      "addedToCart": "Added to cart",
+      "removedFromCart": "Removed from cart"
     },
     "view": {
       "grid": "Grid View",

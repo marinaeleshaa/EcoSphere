@@ -55,6 +55,7 @@ container.registerSingleton("ImageService", ImageService);
 container.registerSingleton("UploadService", UploadService);
 container.registerSingleton("UploadRepository", UploadRepository);
 container.registerSingleton("ProductRepository", ProductRepository);
+container.registerSingleton("IProductRepository", ProductRepository); // Alias for OrderService
 container.registerSingleton("ProductService", ProductService);
 container.registerSingleton("PaymentService", PaymentService);
 container.registerSingleton("SubscriptionService", SubscriptionService);

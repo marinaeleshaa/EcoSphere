@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -26,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IProduct } from "@/types/ProductType";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: IProduct;
@@ -42,6 +42,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
     restaurantId,
     sustainabilityScore,
     sustainabilityReason,
+    availableOnline = false,
+    shopName,
+    shopSubtitle,
+    category,
   } = product;
 
   // Fallbacks for data mismatch (handling raw IMenuItem structure)
@@ -64,7 +68,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log(safeId)
     // Use partial object logic or ensure FavSlice handles it
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
@@ -92,6 +95,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
           shopSubtitle: "", // Not passed currently
           productDescription: "",
           quantity: 1,
+          maxQuantity: product.quantity || 1,
+          inStock: product.inStock !== undefined ? product.inStock : true,
           availableOnline: product.availableOnline || false,
           sustainabilityScore,
           sustainabilityReason,
@@ -105,40 +110,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const getScoreColor = (score: number) => {
     if (score >= 8) return "bg-green-500 text-white";
     if (score >= 5) return "bg-yellow-500 text-black";
-    return "bg-red-500 text-white";
+    return "bg-red-500/60 text-white";
   };
 
   return (
-    <motion.div
-      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group"
+    <div
+      className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group p-4 space-y-2"
       onClick={() => router.push(`/store/${safeId}`)}
     >
-      {/* Sustainability Badge with Shadcn Tooltip */}
-      {sustainabilityScore && (
-        <TooltipProvider>
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <div
-                className={`absolute top-4 right-4 z-10 px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
-                  sustainabilityScore
-                )}`}
-              >
-                <span>🌿</span>
-                <span>{sustainabilityScore}/10</span>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent
-              side="left"
-              className="max-w-50 text-xs z-50 bg-black/90 text-white border-none"
-            >
-              <p>{sustainabilityReason}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
-
       {/* header - fixed height */}
-      <div className="flex justify-between items-center p-5 min-h-20">
+      <div className="flex justify-between items-center  ">
         <div className="flex gap-3 items-center flex-1 min-w-0">
           <Image
             width={100}
@@ -149,19 +130,23 @@ const ProductCard = ({ product }: ProductCardProps) => {
           />
           <div className="min-w-0 flex-1">
             <p className="line-clamp-1 font-medium text-sm leading-tight">
-              {safeName}
+              {shopName}
             </p>
             <p className="text-xs text-secondary-foreground line-clamp-1">
-              {safeSubtitle}
+              {shopSubtitle}
             </p>
           </div>
         </div>
         {/* Removed blue dot since badge is better indicator, or keep it if it means 'active' */}
-        <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
+        <div
+          className={`rounded-full w-3 h-3 bg-primary shrink-0 mr-5 ${
+            availableOnline ? "bg-green-500" : "bg-red-500/60"
+          }`}
+        ></div>
       </div>
 
       {/* product img - fixed height */}
-      <div className="w-full h-42.5 shrink-0">
+      <div className="w-full  relative  h-42.5 shrink-0">
         <Image
           width={1000}
           height={1000}
@@ -169,38 +154,106 @@ const ProductCard = ({ product }: ProductCardProps) => {
           alt={safeName || "Product Image"}
           className="w-full h-full object-cover"
         />
+        <button
+          onClick={handleFav}
+          className="cursor-pointer absolute top-3 right-0 hover:scale-130 transition text-primary duration-300 text-4xl"
+        >
+          {isFav ? <IoHeartCircleSharp /> : <IoHeartCircleOutline />}
+        </button>
       </div>
-
+      {/* badges */}
+      <div className=" flex  items-center gap-2 ">
+        <div className="w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help bg-primary text-primary-foreground">
+          {product.category || "Other"}
+        </div>
+        {/* Sustainability Badge with Shadcn Tooltip */}
+        {sustainabilityScore !== undefined && (
+          <TooltipProvider>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <div
+                  className={` w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
+                    sustainabilityScore
+                  )}`}
+                >
+                  <span>🌿</span>
+                  <span>{sustainabilityScore}/10</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                side="top"
+                className="max-w-50 text-xs z-50 bg-primary text-primary-foreground border-none"
+              >
+                <p>{sustainabilityReason}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
       {/* product details - flexible but controlled */}
-      <div className="p-5 flex flex-col flex-1 min-h-0">
-        <p className="text-lg font-semibold line-clamp-1 mb-1">{safeName}</p>
+      <div className=" flex flex-col flex-1 min-h-0">
+        <div className="text-lg flex justify-between font-semibold line-clamp-1 mb-1">
+          <span className="line-clamp-1">{safeName}</span>
+          <p className="text-lg text-primary font-semibold ">
+            {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"}
+            <span className="text-primary ml-1">€</span>
+          </p>
+        </div>
         <div className="grow ">
-          <p className="text-sm text-secondary-foreground/90 line-clamp-3 mb-3   ">
+          <p className="text-sm   text-secondary-foreground/90 line-clamp-1   ">
             {safeSubtitle}
           </p>
+          {/* Dynamic Stock Display */}
+          {product.quantity !== undefined &&
+            product.quantity > 0 &&
+            product.quantity <= 10 && (
+              <p>
+                <span className="text-sm capitalize text-red-400 line-clamp-1">
+                  {t("lowStock", { count: product.quantity })}
+                </span>
+              </p>
+            )}
+          {(!product.quantity || product.quantity <= 0) && (
+            <p>
+              <span className="text-sm capitalize text-red-500 font-semibold line-clamp-1">
+                {t("outOfStock")}
+              </span>
+            </p>
+          )}
         </div>
-        <div className="flex justify-between items-center">
-          <p className="text-lg font-semibold mt-auto ml-10">
-            {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"}
-            <span className="text-primary ml-1">{t("currency")}</span>
-          </p>
-          <div className=" flex gap-3 text-2xl">
-            <button
-              className="cursor-pointer hover:scale-130 transition duration-300"
-              onClick={handleCart}
-            >
-              {isInCart ? <RiShoppingCartFill /> : <RiShoppingCartLine />}
-            </button>
-            <button
-              onClick={handleFav}
-              className="cursor-pointer hover:scale-130 transition duration-300 text-3xl"
-            >
-              {isFav ? <IoHeartCircleSharp /> : <IoHeartCircleOutline />}
-            </button>
-          </div>
+
+        <div className=" flex gap-3 text-2xl ">
+          <button
+            className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto ${
+              !availableOnline || !product.quantity || product.quantity <= 0
+                ? "cursor-not-allowed! opacity-50"
+                : ""
+            }`}
+            onClick={handleCart}
+            disabled={
+              !availableOnline || !product.quantity || product.quantity <= 0
+            }
+          >
+            {!availableOnline || !product.quantity || product.quantity <= 0 ? (
+              <div className="flex gap-2 justify-evenly text-nowrap items-center">
+                <RiShoppingCartLine />
+                <span className="mr-2">{t("outOfStock")}</span>
+              </div>
+            ) : isInCart ? (
+              <div className="flex gap-2 justify-evenly text-nowrap items-center">
+                <RiShoppingCartFill />
+                <span className="mr-2">{t("removedFromCart")}</span>
+              </div>
+            ) : (
+              <div className="flex justify-evenly gap-2 items-center">
+                <RiShoppingCartLine />
+                <span className="mr-2">{t("addedToCart")}</span>
+              </div>
+            )}
+          </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -2,16 +2,23 @@
 import { IProduct } from "@/types/ProductType";
 import Image from "next/image";
 import { useState } from "react";
-import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
+import { Heart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { RootState } from "@/frontend/redux/store";
 import {
   isInFavSelector,
   toggleFavoriteAsync,
 } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
+import {
+  addItem,
+  isInCartSelector,
+  removeItem,
+} from "@/frontend/redux/Slice/CartSlice";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const t = useTranslations("ProductDetails.card");
@@ -37,10 +44,35 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const safeId = id || (product as any)._id;
 
   const [count, setCount] = useState(1);
-  const isFav = useSelector((state: RootState) =>
+  const isFav = useAppSelector((state: RootState) =>
     isInFavSelector(state, safeId)
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const isInCart = useAppSelector((state: RootState) =>
+    isInCartSelector(state, product.id)
+  );
+  const dispatch = useAppDispatch();
+
+  const handleCartToggle = () => {
+    if (!product.inStock) {
+      toast.error(t("outOfStock")); // Added toast for out of stock
+      return; // Don't allow cart actions for out-of-stock items
+    }
+
+    if (isInCart) {
+      dispatch(removeItem(product.id));
+      toast.success(t("removedFromCart")); // Added toast here
+    } else {
+      dispatch(
+        addItem({
+          ...product,
+          quantity: count, // Use the selected count from quantity selector
+          maxQuantity: product.quantity, // Set available stock as max
+        })
+      );
+      toast.success(t("addedToCart")); // Added toast here
+    }
+  };
+
   const handleFav = () => {
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
@@ -50,7 +82,14 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
     }
   };
 
-  const handleIncrement = () => setCount((prev) => prev + 1);
+  const handleIncrement = () => {
+    const maxAllowed = product.quantity || 999; // Use product quantity as max
+    if (count < maxAllowed) {
+      setCount((prev) => prev + 1);
+    } else {
+      toast.error(`Only ${maxAllowed} available in stock`);
+    }
+  };
   const handleDecrement = () => {
     if (count > 1) setCount((prev) => prev - 1);
   };
@@ -155,6 +194,22 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
             {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"} EGP
           </div>
 
+          {/* Stock Availability */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {t("availability")}:
+            </span>
+            {product.quantity !== undefined && product.quantity > 0 ? (
+              <span className="text-sm font-semibold text-green-600">
+                {t("inStock", { count: product.quantity })}
+              </span>
+            ) : (
+              <span className="text-sm font-semibold text-red-600">
+                {t("outOfStock")}
+              </span>
+            )}
+          </div>
+
           {/* Description */}
           <div>
             <h3 className="text-lg font-semibold mb-2">{t("description")}</h3>
@@ -166,31 +221,50 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           {/* Quantity selector */}
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium">{t("quantity")}</span>
-            <div className="flex items-center gap-3 border rounded-lg p-2">
+            <div className="flex items-center rounded-full text-primary border border-primary p-2">
               <button
                 onClick={handleDecrement}
-                className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
+                className="w-8 h-8 cursor-pointer text-foreground flex items-center justify-center rounded hover:bg-muted transition duration-400"
                 aria-label="Decrease quantity"
               >
-                <Minus className="w-4 h-4" />
+                <Minus className="w-4 h-4" strokeWidth={3} />
               </button>
-              <span className="w-12 text-center font-semibold">{count}</span>
+              <motion.div
+                key={count}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 0.2 }}
+                className="border-x"
+              >
+                <span className="w-12 px-4 text-center font-semibold">
+                  {count}
+                </span>
+              </motion.div>
               <button
                 onClick={handleIncrement}
                 className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
                 aria-label="Increase quantity"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4" strokeWidth={3} />
               </button>
             </div>
           </div>
 
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
-            <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
-              <ShoppingCart className="w-5 h-5" />
-              {t("addToCart")}
-            </button>
+            <Button
+              onClick={handleCartToggle}
+              disabled={!product.inStock}
+              className={cn(
+                "w-full",
+                isInCart && "bg-red-500 hover:bg-red-600"
+              )}
+            >
+              {!product.inStock
+                ? t("outOfStock")
+                : isInCart
+                ? t("removeFromCart")
+                : t("addToCart")}
+            </Button>
             <button
               onClick={handleFav}
               className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${

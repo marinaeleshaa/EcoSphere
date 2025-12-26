@@ -15,6 +15,7 @@ export const mapResponseToIShop = (res: RestaurantResponse): IShop => {
       url: res.avatar?.url,
     },
     description: res.description,
+    category: res.category ? res.category.toLowerCase() : "other",
     // Map menus to IProduct format
     menus: res.menus
       ? res.menus.map((menu) => ({
@@ -30,6 +31,8 @@ export const mapResponseToIShop = (res: RestaurantResponse): IShop => {
           availableOnline: menu.availableOnline ?? true,
           sustainabilityScore: menu.sustainabilityScore,
           sustainabilityReason: menu.sustainabilityReason,
+          quantity: menu.quantity ?? 1,
+          inStock: (menu.quantity ?? 1) > 0,
         }))
       : [],
     restaurantRating: res.restaurantRating
@@ -63,6 +66,14 @@ export interface RestaurantPageOptions {
   limit?: number;
   search?: string;
   sort?: "highestRating" | "lowestRating" | "default";
+  category?:
+    | "default"
+    | "supermarket"
+    | "hypermarket"
+    | "grocery"
+    | "bakery"
+    | "cafe"
+    | "other";
 }
 
 export interface PaginatedRestaurantResponse {

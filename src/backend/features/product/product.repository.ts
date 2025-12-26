@@ -1,6 +1,7 @@
 import { injectable } from "tsyringe";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { RestaurantModel, IRestaurant } from "../restaurant/restaurant.model";
+import { buildProductsPipeline } from "./dto/product.dto";
 import mongoose from "mongoose";
 import {
   ProductResponse,
@@ -45,6 +46,11 @@ export interface IProductRepository {
   getCheapestProducts(limit?: number): Promise<ProductResponse[]>;
   getTotalProductCount(): Promise<number>;
   getMostSustainableProducts(limit?: number): Promise<ProductResponse[]>;
+  decreaseStock(
+    restaurantId: string,
+    productId: string,
+    quantityToDecrease: number
+  ): Promise<IRestaurant | null>;
 }
 
 @injectable()
@@ -58,23 +64,26 @@ export class ProductRepository implements IProductRepository {
       page = 1,
       limit = 10,
       search = "",
-      sortBy = "title",
-      sortOrder = "asc",
+      sort = "default",
+      category = "default",
     } = options ?? {};
 
     const skip = (page - 1) * limit;
 
-    const SORT_FIELDS_MAP: Record<string, string> = {
-      title: "title",
-      price: "price",
-      rating: "itemRating",
-    };
-
-    const sortField = SORT_FIELDS_MAP[sortBy] || "title";
-    const sortDirection = sortOrder === "desc" ? -1 : 1;
-
     const pipeline: PipelineStage[] = [
-      { $unwind: "$menus" },
+      // 1️⃣ Filter visible restaurants (uses index)
+      {
+        $match: {
+          isHidden: false,
+        },
+      },
+
+      // 2️⃣ Unwind menus
+      {
+        $unwind: "$menus",
+      },
+
+      // 3️⃣ Project only what we need
       {
         $project: {
           _id: "$menus._id",
@@ -87,49 +96,68 @@ export class ProductRepository implements IProductRepository {
           availableOnline: "$menus.availableOnline",
           sustainabilityScore: "$menus.sustainabilityScore",
           sustainabilityReason: "$menus.sustainabilityReason",
+          category: "$menus.category",
+          quantity: "$menus.quantity",
+          inStock: { $gt: ["$menus.quantity", 0] },
           itemRating: "$menus.itemRating",
-        },
-      },
-      {
-        $match: {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { subtitle: { $regex: search, $options: "i" } },
-          ],
-        },
-      },
-      { $sort: { [sortField]: sortDirection } },
-      {
-        $facet: {
-          metadata: [{ $count: "total" }],
-          data: [{ $skip: skip }, { $limit: limit }],
         },
       },
     ];
 
+    if (sort === "priceLow") {
+      pipeline.push({ $sort: { price: 1 } });
+    }
+
+    if (sort === "priceHigh") {
+      pipeline.push({ $sort: { price: -1 } });
+    }
+
+    //Optional search & category filters
+    const matchConditions: any[] = [];
+
+    if (search.trim()) {
+      matchConditions.push({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { subtitle: { $regex: search, $options: "i" } },
+        ],
+      });
+    }
+
+    if (category !== "default") {
+      matchConditions.push({
+        category: category,
+      });
+    }
+
+    if (matchConditions.length > 0) {
+      pipeline.push({
+        $match: {
+          $and: matchConditions,
+        },
+      });
+    }
+
+    //Pagination
+    pipeline.push({
+      $facet: {
+        metadata: [{ $count: "total" }],
+        data: [{ $skip: skip }, { $limit: limit }],
+      },
+    });
+
     const result = await RestaurantModel.aggregate(pipeline).exec();
 
-    const data = result[0]?.data || [];
-    const total = result[0]?.metadata[0]?.total || 0;
-
-    console.log(
-      "[findAllProducts] Page sample:",
-      data.length > 0
-        ? {
-            productId: data[0]._id?.toString(),
-            productName: data[0].title,
-            hasAvatar: !!data[0].avatar,
-          }
-        : "No products found"
-    );
+    const data = result[0]?.data ?? [];
+    const total = result[0]?.metadata[0]?.total ?? 0;
 
     return {
       data,
       metadata: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: options?.page ?? 1,
+        limit: options?.limit ?? 10,
+        totalPages: Math.ceil(total / (options?.limit ?? 10)),
       },
     };
   }
@@ -152,6 +180,9 @@ export class ProductRepository implements IProductRepository {
           sustainabilityScore: "$menus.sustainabilityScore",
           sustainabilityReason: "$menus.sustainabilityReason",
           itemRating: "$menus.itemRating",
+          category: "$menus.category",
+          quantity: "$menus.quantity",
+          inStock: { $gt: ["$menus.quantity", 0] },
         },
       },
     ]).exec();
@@ -169,24 +200,22 @@ export class ProductRepository implements IProductRepository {
       page = 1,
       limit = 10,
       search = "",
-      sortBy = "title",
-      sortOrder = "asc",
+      sort = "default",
+      category = "default",
     } = options ?? {};
 
     const skip = (page - 1) * limit;
 
-    const SORT_FIELDS_MAP: Record<string, string> = {
-      title: "title",
-      price: "price",
-      rating: "itemRating",
-    };
-
-    const sortField = SORT_FIELDS_MAP[sortBy] || "title";
-    const sortDirection = sortOrder === "desc" ? -1 : 1;
-
     const pipeline: PipelineStage[] = [
-      { $match: { _id: new mongoose.Types.ObjectId(restaurantId) } },
+      // 1️⃣ Filter by restaurant ID
+      {
+        $match: { _id: new mongoose.Types.ObjectId(restaurantId) },
+      },
+
+      // 2️⃣ Unwind menus
       { $unwind: "$menus" },
+
+      // 3️⃣ Project only needed fields
       {
         $project: {
           _id: "$menus._id",
@@ -199,38 +228,63 @@ export class ProductRepository implements IProductRepository {
           availableOnline: "$menus.availableOnline",
           sustainabilityScore: "$menus.sustainabilityScore",
           sustainabilityReason: "$menus.sustainabilityReason",
+          category: "$menus.category",
           itemRating: "$menus.itemRating",
-        },
-      },
-      {
-        $match: {
-          $or: [
-            { title: { $regex: search, $options: "i" } },
-            { subtitle: { $regex: search, $options: "i" } },
-            // Add description if it exists in the schema, though subtitle seems to be the one used for description in this context
-          ],
-        },
-      },
-      { $sort: { [sortField]: sortDirection } },
-      {
-        $facet: {
-          metadata: [{ $count: "total" }],
-          data: [{ $skip: skip }, { $limit: limit }],
+          quantity: "$menus.quantity",
+          inStock: { $gt: ["$menus.quantity", 0] },
         },
       },
     ];
 
+    // 4️⃣ Sorting
+    if (sort === "priceLow") {
+      pipeline.push({ $sort: { price: 1, title: 1 } });
+    } else if (sort === "priceHigh") {
+      pipeline.push({ $sort: { price: -1, title: 1 } });
+    } else {
+      pipeline.push({ $sort: { title: 1 } });
+    }
+
+    // 5️⃣ Optional search & category filters
+    const matchConditions: any[] = [];
+
+    if (search.trim()) {
+      matchConditions.push({
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { subtitle: { $regex: search, $options: "i" } },
+        ],
+      });
+    }
+
+    if (category !== "default") {
+      matchConditions.push({ category });
+    }
+
+    if (matchConditions.length > 0) {
+      pipeline.push({ $match: { $and: matchConditions } });
+    }
+
+    // 6️⃣ Pagination
+    pipeline.push({
+      $facet: {
+        metadata: [{ $count: "total" }],
+        data: [{ $skip: skip }, { $limit: limit }],
+      },
+    });
+
     const result = await RestaurantModel.aggregate(pipeline).exec();
-    const data = result[0]?.data || [];
-    const total = result[0]?.metadata[0]?.total || 0;
+
+    const data = result[0]?.data ?? [];
+    const total = result[0]?.metadata[0]?.total ?? 0;
 
     return {
       data,
       metadata: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: options?.page ?? 1,
+        limit: options?.limit ?? 10,
+        totalPages: Math.ceil(total / (options?.limit ?? 10)),
       },
     };
   }
@@ -475,5 +529,26 @@ export class ProductRepository implements IProductRepository {
     ]).exec();
 
     return result[0]?.total || 0;
+  }
+
+  async decreaseStock(
+    restaurantId: string,
+    productId: string,
+    quantityToDecrease: number
+  ): Promise<IRestaurant | null> {
+    await DBInstance.getConnection();
+
+    // Use atomic operation to prevent race conditions
+    return await RestaurantModel.findOneAndUpdate(
+      {
+        _id: restaurantId,
+        "menus._id": productId,
+        "menus.quantity": { $gte: quantityToDecrease }, // Ensure enough stock
+      },
+      {
+        $inc: { "menus.$.quantity": -quantityToDecrease },
+      },
+      { new: true }
+    ).exec();
   }
 }

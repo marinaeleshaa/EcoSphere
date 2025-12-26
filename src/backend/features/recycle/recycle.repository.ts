@@ -1,5 +1,6 @@
 import { injectable } from "tsyringe";
 import { IRecycle, RecycleModel } from "./recycle.model";
+import { DBInstance } from "@/backend/config/dbConnect";
 
 export interface IRecycleRepository {
   createRecycleEntry(data: Partial<IRecycle>): Promise<IRecycle>;
@@ -22,18 +23,21 @@ export interface IRecycleRepository {
 @injectable()
 export class RecycleRepository implements IRecycleRepository {
   async createRecycleEntry(data: Partial<IRecycle>): Promise<IRecycle> {
+    await DBInstance.getConnection();
     return await RecycleModel.create(data);
   }
 
   async getRecycleEntryById(id: string): Promise<IRecycle> {
+    await DBInstance.getConnection();
     const response = await RecycleModel.findById(id).lean<IRecycle>().exec();
     return response!;
   }
 
   async updateRecycleEntry(
     id: string,
-    data: Partial<IRecycle>
+    data: Partial<IRecycle>,
   ): Promise<IRecycle> {
+    await DBInstance.getConnection();
     const response = await RecycleModel.findByIdAndUpdate(id, data, {
       new: true,
     })
@@ -43,6 +47,7 @@ export class RecycleRepository implements IRecycleRepository {
   }
 
   async deleteRecycleEntry(id: string): Promise<IRecycle> {
+    await DBInstance.getConnection();
     const response = await RecycleModel.findByIdAndDelete(id)
       .lean<IRecycle>()
       .exec();
@@ -50,11 +55,13 @@ export class RecycleRepository implements IRecycleRepository {
   }
 
   async listRecycleEntries(): Promise<IRecycle[]> {
+    await DBInstance.getConnection();
     return await RecycleModel.find().lean<IRecycle[]>().exec();
   }
 
-  async getRecycleEntriesByEmail(email: string): Promise<IRecycle[]> {
-    return await RecycleModel.find({ email })
+  async getRecycleEntriesByEmail(userId: string): Promise<IRecycle[]> {
+    await DBInstance.getConnection();
+    return await RecycleModel.find({ userId })
       .sort({ createdAt: -1 })
       .lean<IRecycle[]>()
       .exec();

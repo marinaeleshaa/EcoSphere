@@ -11,6 +11,8 @@ export const products: IProduct[] = [
     productPrice: 3.99,
     productSubtitle: "Fresh and juicy",
     productDescription: "Grown organically without pesticides.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5aeeff192ae1349f5eb",
@@ -22,6 +24,8 @@ export const products: IProduct[] = [
     productPrice: 59.99,
     productSubtitle: "Noise-cancelling",
     productDescription: "High-quality sound with long battery life.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5aeeff192ae1349f5ef",
@@ -33,6 +37,8 @@ export const products: IProduct[] = [
     productPrice: 49.99,
     productSubtitle: "Stylish wear",
     productDescription: "Classic fit, perfect for all seasons.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5afeff192ae1349f5f4",
@@ -44,6 +50,8 @@ export const products: IProduct[] = [
     productPrice: 14.99,
     productSubtitle: "Bestseller",
     productDescription: "A thrilling story that captivates readers.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5afeff192ae1349f5fa",
@@ -55,6 +63,8 @@ export const products: IProduct[] = [
     productPrice: 29.99,
     productSubtitle: "Creative Play",
     productDescription: "Encourages creativity and problem-solving.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5b1eff192ae1349f601",
@@ -66,6 +76,8 @@ export const products: IProduct[] = [
     productPrice: 2.99,
     productSubtitle: "Crunchy & Healthy",
     productDescription: "Grown naturally without chemicals.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5b1eff192ae1349f609",
@@ -77,6 +89,8 @@ export const products: IProduct[] = [
     productPrice: 99.99,
     productSubtitle: "Fitness Tracker",
     productDescription: "Track your health and notifications easily.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5b2eff192ae1349f61c",
@@ -88,6 +102,8 @@ export const products: IProduct[] = [
     productPrice: 69.99,
     productSubtitle: "Comfortable & Durable",
     productDescription: "Perfect for sports and daily wear.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5b3eff192ae1349f627",
@@ -99,6 +115,8 @@ export const products: IProduct[] = [
     productPrice: 9.99,
     productSubtitle: "Stationery Essentials",
     productDescription: "High-quality paper, ideal for notes.",
+    quantity: 10,
+    inStock: true,
   },
   {
     id: "693ac5b3eff192ae1349f633",
@@ -110,5 +128,7 @@ export const products: IProduct[] = [
     productPrice: 19.99,
     productSubtitle: "Brain Teaser",
     productDescription: "Fun and challenging for all ages.",
+    quantity: 10,
+    inStock: true,
   },
 ];

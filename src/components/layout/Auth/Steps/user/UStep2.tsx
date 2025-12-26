@@ -130,21 +130,20 @@ const UStep2 = () => {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              value="female"
+              value="male"
               {...register("gender")}
-              className="w-4 h-4 accent-primary"
+              className="w-4 h-4 accent-primary cursor-pointer"
             />
-            <span className="text-secondary-foreground">{t("female")}</span>
+            <span className="text-secondary-foreground">{t("male")}</span>
           </label>
-
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="radio"
-              value="male"
+              value="female"
               {...register("gender")}
-              className="w-4 h-4 accent-primary"
+              className="w-4 h-4 accent-primary cursor-pointer"
             />
-            <span className="text-secondary-foreground">{t("male")}</span>
+            <span className="text-secondary-foreground">{t("female")}</span>
           </label>
         </div>
 

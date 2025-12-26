@@ -57,7 +57,7 @@ export default function ShopCard({
         <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500 pointer-events-none" />
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-primary/80 transition-all duration-500 p-4 md:group-hover:p-5">
+      <div className="absolute backdrop-blur-md bottom-0 left-0 right-0 z-10 bg-primary/80 transition-all duration-500 p-4 md:group-hover:p-5">
         <div className="flex justify-between gap-4">
           <h3 className="text-primary-foreground font-semibold text-lg line-clamp-1">
             {shop.name}

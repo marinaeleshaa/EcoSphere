@@ -2,20 +2,26 @@
 import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
 import { useState } from "react";
 import { Check } from "lucide-react";
-import { selectCartTotal } from "@/frontend/redux/selector/cartSelector";
+import {
+  selectCartItems,
+  selectCartTotal,
+} from "@/frontend/redux/selector/cartSelector";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { updateCartTotal } from "@/frontend/redux/Slice/CartSlice";
+import { clearCart } from "@/frontend/redux/Slice/CartSlice";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function OrderSummary() {
   const t = useTranslations("Cart.orderSummary");
   const router = useRouter();
+  const { data: session } = useSession();
   const [couponCode, setCouponCode] = useState("");
   const [discountRate, setDiscountRate] = useState(0);
 
   const subtotalCents = useAppSelector(selectCartTotal);
   const dispatch = useAppDispatch();
+  const cartItems = useAppSelector(selectCartItems);
 
   const discountCents = Math.round(subtotalCents! * discountRate);
   let deliveryCents = 0;
@@ -25,10 +31,10 @@ export default function OrderSummary() {
   const total = subtotalCents - discountCents + deliveryCents;
 
   const handleApplyCoupon = () => {
-    fetch(`/api/discount/${couponCode.trim()}`, { method: "GET" })
+    fetch(`/api/discount/${couponCode.trim()}`, { method: "POST" })
       .then((res) => {
         if (res.ok)
-          res.json().then((data) => {
+          res.json().then(({ data }) => {
             toast.success(t("toasts.couponApplied"));
             setDiscountRate(data.rate ?? 0);
           });
@@ -39,8 +45,31 @@ export default function OrderSummary() {
   };
 
   const handleCheckout = () => {
-    dispatch(updateCartTotal({ cartTotal: total }));
-    router.push("/checkout");
+    if (!session?.user) {
+      toast.error(t("toasts.notCustomer"));
+      router.push("/auth?reason=unauthorized");
+      return;
+    }
+    fetch("/api/payment/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: session?.user.id,
+        email: session?.user.email,
+        cartItems: Object.values(cartItems),
+      }),
+    })
+      .then((res) => {
+        if (res.ok)
+          res.json().then((session) => {
+            dispatch(clearCart());
+            window.location.href = session.url;
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error(t("toasts.paymentFailed"));
+      });
   };
 
   return (
@@ -110,7 +139,7 @@ export default function OrderSummary() {
       <div className="flex items-start gap-2 mb-6 p-3 bg-muted/50 rounded-full">
         <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div className="text-sm">
-          <span>{t("warranty")}</span>
+          <span>{t("warranty")}</span>{" "}
           <button className="text-primary hover:underline font-medium">
             {t("details")}
           </button>

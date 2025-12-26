@@ -1,8 +1,7 @@
-export async function getUserRecyclingEntries(email: string) {
+export async function getUserRecyclingEntries(userId: string) {
   try {
-    const response = await fetch(
-      `/api/recycle/user/${encodeURIComponent(email)}`
-    );
+    console.log(userId)
+    const response = await fetch(`/api/recycle/user/${userId}`);
     if (!response.ok) {
       throw new Error("Failed to fetch recycling entries");
     }
