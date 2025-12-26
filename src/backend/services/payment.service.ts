@@ -1,9 +1,14 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import { stripe } from "../config/stripe.config";
 import Stripe from "stripe";
+import { IProductCart } from "@/types/ProductType";
+import { OrderService } from "../features/orders/order.service";
 
 @injectable()
 export class PaymentService {
+  constructor(
+    @inject("OrderService") private readonly orderService: OrderService
+  ) {}
   /**
    * Creates a Stripe PaymentIntent.
    * @param amount Amount in cents (e.g., 2000 for $20.00)
@@ -102,5 +107,60 @@ export class PaymentService {
       console.error("Error creating customer portal session:", error);
       throw error;
     }
+  }
+
+  async createSession({
+    successUrl,
+    cancelUrl,
+    cartItems,
+    userEmail,
+    userId,
+  }: {
+    successUrl: string;
+    cancelUrl: string;
+    cartItems: IProductCart[];
+    userEmail: string;
+    userId: string;
+  }) {
+    const order = await this.orderService.createOrder(userId, {
+      userId,
+      items: cartItems.map((item) => ({ ...item, productId: item.id })),
+      paymentMethod: "stripe",
+    });
+
+    // Prepare items data for webhook to decrease stock on payment success
+    const itemsForStock = cartItems.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+      restaurantId: item.restaurantId,
+    }));
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      line_items: cartItems.map((item) => ({
+        quantity: item.quantity,
+        price_data: {
+          currency: "egp",
+          unit_amount: item.productPrice * 100, // cents
+          product_data: {
+            name: item.productName,
+            // description: item.productDescription, // encomment it only if the products have a description
+            images: [item.productImg],
+          },
+        },
+      })),
+      success_url: `${successUrl}?orderId=${order._id}`, // `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${cancelUrl}?orderId=${order._id}`, // `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
+      customer_email: userEmail,
+      metadata: {
+        userId,
+        orderId: `${order._id}`,
+        items: JSON.stringify(itemsForStock), // Items for stock decrease on payment success
+      },
+      // Allow promotion codes and automatic tax behavior if desired
+      allow_promotion_codes: true,
+    });
+    return session;
   }
 }

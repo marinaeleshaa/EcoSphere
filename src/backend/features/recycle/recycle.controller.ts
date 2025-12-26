@@ -5,7 +5,7 @@ import { RecycleRequest, RecycleResponse } from "./recycle.types";
 @injectable()
 export class RecycleController {
   constructor(
-    @inject("RecycleService") private readonly recycleService: IRecycleService
+    @inject("RecycleService") private readonly recycleService: IRecycleService,
   ) {}
 
   async createRecycleEntry(fromData: RecycleRequest): Promise<RecycleResponse> {
@@ -22,7 +22,7 @@ export class RecycleController {
 
   async updateRecycleEntry(
     id: string,
-    fromData: RecycleRequest
+    fromData: RecycleRequest,
   ): Promise<RecycleResponse> {
     if (!id) throw new Error("No ID provided");
     if (!fromData) throw new Error("No data provided");
@@ -38,9 +38,9 @@ export class RecycleController {
     return await this.recycleService.listRecycleEntries();
   }
 
-  async getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]> {
-    if (!email) throw new Error("No email provided");
-    return await this.recycleService.getRecycleEntriesByEmail(email);
+  async getRecycleEntriesByEmail(userId: string): Promise<RecycleResponse[]> {
+    if (!userId) throw new Error("No user id provided");
+    return await this.recycleService.getRecycleEntriesByEmail(userId);
   }
 
   async analyzeImages(formData: FormData): Promise<any> {
@@ -67,7 +67,7 @@ export class RecycleController {
       if (!items || !Array.isArray(items)) {
         return Response.json(
           { error: "Invalid items format" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 

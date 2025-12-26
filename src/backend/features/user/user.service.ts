@@ -63,13 +63,13 @@ export interface IUserService {
 
 @injectable()
 class UserService implements IUserService {
-	constructor(
-		@inject("IUserRepository") private readonly userRepository: IUserRepository,
-		@inject("IRestaurantRepository")
-		private readonly restRepo: IRestaurantRepository,
-		@inject("CouponService") private readonly couponService: ICouponService,
-		@inject("ImageService") private readonly imageService: ImageService
-	) {}
+  constructor(
+    @inject("IUserRepository") private readonly userRepository: IUserRepository,
+    @inject("IRestaurantRepository")
+    private readonly restRepo: IRestaurantRepository,
+    @inject("CouponService") private readonly couponService: ICouponService,
+    @inject("ImageService") private readonly imageService: ImageService,
+  ) {}
 
 	async getAll(): Promise<IUser[]> {
 		const users = await this.userRepository.getAll();
@@ -81,20 +81,20 @@ class UserService implements IUserService {
 		return await this.populateAvatar(user);
 	}
 
-	async getDashBoardData(
-		limit?: number,
-		sortBy?: string,
-		sortOrder?: 1 | -1,
-		selectFields?: string | Record<string, 0 | 1>
-	): Promise<DashboardUsers> {
-		const result = await this.userRepository.getUsersByRoleAdvanced({
-			limit,
-			sortBy,
-			sortOrder,
-			selectFields,
-		});
-		return result;
-	}
+  async getDashBoardData(
+    limit?: number,
+    sortBy?: string,
+    sortOrder?: 1 | -1,
+    selectFields?: string | Record<string, 0 | 1>,
+  ): Promise<DashboardUsers> {
+    const result = await this.userRepository.getUsersByRoleAdvanced({
+      limit,
+      sortBy,
+      sortOrder,
+      selectFields,
+    });
+    return result;
+  }
 
 	async getRecycleAgents(): Promise<PagedData<IUser>> {
 		const usersData = await this.userRepository.getUsersByRole("recycleAgent");

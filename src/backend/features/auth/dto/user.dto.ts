@@ -51,7 +51,7 @@ export type ShopRegisterDTO = RegisterWithCredentialsDTO &
     hotline: string;
     location?: string;
     workingHours: string;
-    category: ShopCategory;
+    category: string;
   };
 
 export type RegisterRequestDTO = {

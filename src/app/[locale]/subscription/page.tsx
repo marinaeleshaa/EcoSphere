@@ -6,7 +6,7 @@ export default async function page(params: {
 }) {
   const { locale } = await params.params;
   return (
-    <div>
+    <>
       {/* decorations */}
       <div className="relative">
         <div className="dark:bg-primary/10 absolute top-0 left-0 w-64 h-64 bg-primary/30 rounded-full blur-3xl pointer-events-none" />
@@ -16,6 +16,6 @@ export default async function page(params: {
       <div>
         <SubscriptionSection locale={locale} />
       </div>
-    </div>
+    </>
   );
 }
