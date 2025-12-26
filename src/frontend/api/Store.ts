@@ -2,8 +2,8 @@ type GetProductsParams = {
   page?: number;
   limit?: number;
   search?: string;
-  sortBy?: "price" | "title" | "itemRating" | "createdAt";
-  sortOrder?: "asc" | "desc";
+  sort?: string;
+  category?: string;
 };
 
 export const getProducts = async (params?: GetProductsParams) => {
@@ -12,8 +12,8 @@ export const getProducts = async (params?: GetProductsParams) => {
   if (params?.page) queryParams.set("page", params.page.toString());
   if (params?.limit) queryParams.set("limit", params.limit.toString());
   if (params?.search) queryParams.set("search", params.search);
-  if (params?.sortBy) queryParams.set("sortBy", params.sortBy);
-  if (params?.sortOrder) queryParams.set("sortOrder", params.sortOrder);
+  if (params?.sort) queryParams.set("sort", params.sort);
+  if (params?.category) queryParams.set("category", params.category);
 
   const queryString = queryParams.toString();
   const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/products${

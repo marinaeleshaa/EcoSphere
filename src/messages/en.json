@@ -65,7 +65,8 @@
         "orders": "Orders",
         "shops": "Shops",
         "events": "Events",
-        "recycling": "Recycling"
+        "recycling": "Recycling",
+        "news": "News"
       },
       "footer": {
         "favorite": "Favorite",
@@ -240,10 +241,20 @@
     "filter": {
       "searchPlaceholder": "Search shops",
       "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
       "sortOptions": {
         "default": "Default",
         "highestRating": "Highest Rating",
         "lowestRating": "Lowest Rating"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "supermarket": "Supermarket",
+        "hypermarket": "Hypermarket",
+        "grocery": "Grocery",
+        "bakery": "Bakery",
+        "cafe": "Cafe",
+        "other": "Other"
       },
       "noProducts": "No products match your current search criteria."
     }
@@ -291,7 +302,30 @@
         "errors": {
           "titleRequired": "Title is required",
           "subtitleRequired": "Subtitle is required",
-          "priceRequired": "Price is required"
+          "priceRequired": "Price is required",
+          "categoryRequired": "Please select a category"
+        }
+      },
+      "Categories": {
+        "label": "Category",
+        "placeholder": "Select a category",
+        "fruits": "Fruits",
+        "vegetables": "Vegetables",
+        "meat": "Meat",
+        "dairy": "Dairy",
+        "bakery": "Bakery",
+        "beverages": "Beverages",
+        "snacks": "Snacks",
+        "other": "Other"
+      },
+      "filter": {
+        "category": "Category",
+        "allCategories": "All Categories",
+        "sortBy": "Sort By",
+        "sortOptions": {
+          "name": "Name",
+          "price": "Price",
+          "sustainability": "Sustainability Score"
         }
       },
 
@@ -325,6 +359,29 @@
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
       "currency": "EGP"
+    },
+    "filter": {
+      "searchPlaceholder": "Search products",
+      "sortBy": "Sort by:",
+      "filterBy": "Filter by:",
+      "sortOptions": {
+        "default": "Default",
+        "priceHigh": "Price: High to Low",
+        "priceLow": "Price: Low to High",
+        "sustainabilityLow": "Sustainability: Low to High",
+        "sustainabilityHigh": "Sustainability: High to Low"
+      },
+      "filterOptions": {
+        "default": "Default",
+        "Fruits": "Fruits",
+        "Vegetables": "Vegetables",
+        "Meat": "Meat",
+        "Dairy": "Dairy",
+        "Beverages": "Beverages",
+        "Snacks": "Snacks",
+        "Other": "Other"
+      },
+      "noProducts": "No products match your current search criteria."
     }
   },
   "ProductDetails": {
@@ -466,7 +523,17 @@
       "shopStep3": {
         "title": "Shop Details",
         "location": "Enter shop location",
-        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM"
+        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM",
+
+        "selectCategory": "Select a category",
+        "categories": {
+          "supermarket": "Supermarket",
+          "hypermarket": "Hypermarket",
+          "grocery": "Grocery",
+          "bakery": "Bakery",
+          "cafe": "Cafe",
+          "other": "Other"
+        }
       },
       "lastStep": {
         "title": "Final Step",
@@ -518,13 +585,19 @@
       "recyclingHistory": {
         "title": "Recycling History",
         "date": "Date",
-        "items": "Items",
+        "createdAt": "Created At",
+        "updatedAt": "last Update was at",
+        "items": "items count",
         "itemsCount": "items",
-        "weight": "Weight (kg)",
+        "weight": "es. Weight (kg)",
         "carbonSaved": "Carbon Saved",
         "status": "Status",
         "verified": "Verified",
         "pending": "Pending",
+        "completed": "Completed",
+        "review": "Review",
+        "rejected": "Rejected",
+        "processing": "Processing",
         "noRecyclingOrders": "No recycling orders yet",
         "noRecyclingOrdersDescription": "Start recycling to see your eco-impact here",
         "browseRecycling": "Start Recycling"
@@ -829,7 +902,10 @@
     },
     "card": {
       "removedFromFavorites": "Removed from favorites",
-      "addToCart": "Add to cart"
+      "addToCart": "Add to cart",
+      "removeFromCart": "Remove from cart",
+      "addedToCart": "Added to cart",
+      "removedFromCart": "Removed from cart"
     },
     "view": {
       "grid": "Grid View",

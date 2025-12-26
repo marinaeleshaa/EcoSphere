@@ -129,7 +129,7 @@ export function shopWelcomeTemplate(user: BasicUserInfo): string {
 
 export function getRegistrationTemplate(
   userType: UserType,
-  user: BasicUserInfo
+  user: BasicUserInfo,
 ): string {
   switch (userType) {
     case "customer":
@@ -156,7 +156,7 @@ export function newEventSubject(event: Partial<EventInfo>): string {
 
 export function newEventTemplate(
   user: BasicUserInfo,
-  event: EventInfo
+  event: EventInfo,
 ): string {
   const name = formatName(user.name);
 
@@ -198,7 +198,7 @@ export const redeemCouponTemplate = (
   code: string,
   validTo: Date,
   rate: number,
-  name: string = "EcoSphere friend"
+  name: string = "EcoSphere friend",
 ): string => {
   return `
     <div style="${baseStyles.wrapper}">
@@ -259,7 +259,7 @@ export const redeemCouponTemplate = (
 export const forgetPasswordTemplate = (
   code: string,
   validTo: string,
-  name: string = "EcoSphere friend"
+  name: string = "EcoSphere friend",
 ): string => {
   return `
     <div style="${baseStyles.wrapper}">
@@ -304,3 +304,168 @@ export const forgetPasswordTemplate = (
     </div>
   `;
 };
+
+export function pointsAddedTemplate(
+  user: BasicUserInfo,
+  points: number,
+): string {
+  const name = formatName(user.name);
+
+  return `
+  <div style="${baseStyles.wrapper}">
+    <div style="${baseStyles.card}">
+      <h2 style="${baseStyles.title}">
+        Thank you for recycling, ${name}! ♻️💚
+      </h2>
+
+      <p style="${baseStyles.subtitle}">
+        Your eco-friendly action just made a real impact!
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        We’re happy to let you know that
+        <strong>${points} Eco Points</strong> have been successfully added to
+        your EcoSphere account.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Every item you recycle helps protect our planet, and we truly
+        appreciate your contribution toward a greener future 🌍.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        You can view your updated Eco Points balance anytime by visiting
+        your <strong>Profile page</strong>.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Don’t forget — you can use your Eco Points to unlock
+        <strong>special offers and discounts</strong> in our Eco Store and
+        partner shops.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Keep up the amazing work and stay green,
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        <strong>The EcoSphere Team</strong>
+      </p>
+
+      <div style="${baseStyles.footer}">
+        You received this email because you earned Eco Points through recycling on EcoSphere.
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+export function unregisteredRecycleTemplate(user: BasicUserInfo): string {
+  const name = formatName(user.name);
+
+  return `
+  <div style="${baseStyles.wrapper}">
+    <div style="${baseStyles.card}">
+      <h2 style="${baseStyles.title}">
+        Thank You for Recycling, ${name}! ♻️💚
+      </h2>
+
+      <p style="${baseStyles.subtitle}">
+        Your action matters, and we truly appreciate your effort!
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        We noticed that your recent recycling request was completed
+        <strong>without an EcoSphere account</strong>.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Because of that, we couldn’t add <strong>Eco Points</strong> to your
+        profile for this recycling order.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        The good news? Creating an EcoSphere account is quick, free 🌱
+        and you will get a 1000 point as a registration gift 
+        Next time you recycle while logged in, you’ll automatically earn
+        Eco Points for every eco-friendly action you take.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Your Eco Points can be used to unlock
+        <strong>special offers and discounts</strong> in our Eco Store and
+        at EcoSphere partner shops.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        We’d love to reward you for your impact — just make sure to
+        <strong>register or log in</strong> before submitting your next
+        recycling request.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Thank you for helping us build a greener future 🌍,
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        <strong>The EcoSphere Team</strong>
+      </p>
+
+      <div style="${baseStyles.footer}">
+        You received this email because you submitted a recycling request on EcoSphere.
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+export function recycleRequestReceivedTemplate(user: BasicUserInfo): string {
+  const name = formatName(user.name);
+
+  return `
+  <div style="${baseStyles.wrapper}">
+    <div style="${baseStyles.card}">
+      <h2 style="${baseStyles.title}">
+        Recycling Request Received, ${name}! ♻️💚
+      </h2>
+
+      <p style="${baseStyles.subtitle}">
+        Thank you for taking a step toward a greener future 🌍
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        We’re happy to let you know that we’ve successfully
+        <strong>received your recycling request</strong>.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Our recycling team is currently reviewing your request and
+        will <strong>reach out to you soon</strong> to complete the
+        next steps.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Please make sure that your <strong>phone has network coverage</strong>
+        and is reachable, so our team can contact you easily without delay.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        We truly appreciate your effort to recycle responsibly and
+        help protect our environment.
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        Thank you for choosing EcoSphere ♻️,
+      </p>
+
+      <p style="${baseStyles.paragraph}">
+        <strong>The EcoSphere Team</strong>
+      </p>
+
+      <div style="${baseStyles.footer}">
+        You received this email because you submitted a recycling request on EcoSphere.
+      </div>
+    </div>
+  </div>
+  `;
+}

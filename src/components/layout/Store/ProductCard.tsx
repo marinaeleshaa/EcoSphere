@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { RiShoppingCartFill, RiShoppingCartLine } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
@@ -26,6 +25,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IProduct } from "@/types/ProductType";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: IProduct;
@@ -45,6 +45,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     availableOnline = false,
     shopName,
     shopSubtitle,
+    category,
   } = product;
 
   // Fallbacks for data mismatch (handling raw IMenuItem structure)
@@ -54,7 +55,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const safeImg =
     productImg || (product as any).avatar?.url || "/store img/2.jpg";
   const safeId = id || (product as any)._id;
-
 
   const router = useRouter();
 
@@ -68,7 +68,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log(safeId);
     // Use partial object logic or ensure FavSlice handles it
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
@@ -112,8 +111,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
     return "bg-red-500/60 text-white";
   };
 
-  console.log(availableOnline);
-
   return (
     <div
       className="rounded-tr-[80px] rounded-bl-[80px] shadow-2xl h-110 flex flex-col overflow-hidden hover:scale-105 transition-transform duration-300 dark:bg-primary/10 cursor-pointer relative group p-4 space-y-2"
@@ -139,7 +136,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
         {/* Removed blue dot since badge is better indicator, or keep it if it means 'active' */}
-        <div className="rounded-full w-3 h-3 bg-primary shrink-0 mr-5"></div>
+        <div
+          className={`rounded-full w-3 h-3 bg-primary shrink-0 mr-5 ${
+            availableOnline ? "bg-green-500" : "bg-red-500/60"
+          }`}
+        ></div>
       </div>
 
       {/* product img - fixed height */}
@@ -159,10 +160,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </button>
       </div>
       {/* badges */}
-      <div className=" flex  items-center gap-2 ">
-        <div className="w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help bg-primary text-primary-foreground">
-          category
-        </div>
+      <div className="flex items-center gap-2 ">
+        {category && (
+          <div className="w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help bg-primary text-primary-foreground">
+            {category}
+          </div>
+        )}
         {/* Sustainability Badge with Shadcn Tooltip */}
         {sustainabilityScore !== undefined && (
           <TooltipProvider>
@@ -209,8 +212,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         <div className=" flex gap-3 text-2xl ">
           <button
-            className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto ${
-              !availableOnline ? "cursor-not-allowed! opacity-50" : " cursor-pointer!"
+            className={`myBtnPrimary rounded-tl-none! rounded-br-none! w-full  mx-auto text-nowrap text-base! ${
+              !availableOnline
+                ? "cursor-not-allowed! opacity-50"
+                : " cursor-pointer!"
             }`}
             onClick={handleCart}
             disabled={!availableOnline}
