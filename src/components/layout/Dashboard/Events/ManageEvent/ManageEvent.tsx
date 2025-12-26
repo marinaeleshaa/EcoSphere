@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useEffect } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
@@ -43,7 +44,7 @@ import Image from "next/image";
 import z from "zod";
 import { useTranslations } from "next-intl";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export default function ManageEvent({
   initialData,
 }: Readonly<{ initialData?: any }>) {

@@ -17,9 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { EventType } from '@/backend/features/event/event.model';
 
-// ---------------------- UTILS ----------------------
 const parseEventDate = (dateStr: string) => {
-    // Supports both YYYY-MM-DD or DD-MM-YYYY
     if (dateStr.includes('-')) {
         const parts = dateStr.split('-').map(Number);
         if (parts[0] > 31) {
@@ -30,7 +28,7 @@ const parseEventDate = (dateStr: string) => {
             return new Date(parts[2], parts[1] - 1, parts[0]);
         }
     }
-    return new Date(dateStr); // fallback
+    return new Date(dateStr);
 };
 
 export const getEventStartDateTime = (event: any) => {
@@ -55,7 +53,6 @@ export const getEventEndDateTime = (event: any) => {
     return date;
 };
 
-// ---------------------- COMPONENT ----------------------
 export default function UpcomingEvents({ events }: EventProps) {
     const t = useTranslations("Events.displayEvents");
 

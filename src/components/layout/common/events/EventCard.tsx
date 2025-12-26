@@ -17,6 +17,8 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 
 export default function EventCard({ event }: { event: any }) {
+  console.log(event);
+  
   const t = useTranslations("Events.displayEvents.EventCard");
   const locale = useLocale();
   const { data: session } = useSession();
@@ -116,7 +118,7 @@ export default function EventCard({ event }: { event: any }) {
               <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
                 <FaUserTie className="text-primary" />
                 <div className="flex flex-col text-sm">
-                  <span className="font-medium text-foreground">{event.user?.firstName}</span>
+                  <span className="font-medium text-foreground">{event.user?.name}</span>
                 </div>
               </div>
             )}

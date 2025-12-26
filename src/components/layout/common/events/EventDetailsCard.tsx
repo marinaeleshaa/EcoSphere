@@ -142,7 +142,7 @@ export default function EventDetailsCard({ event, userId }: { event: any; userId
                       <FaUserTie className="text-primary" />
                     </div>
                     <div className="flex flex-col text-sm">
-                      <span className="font-medium text-foreground">{event.user?.firstName}</span>
+                      <span className="font-medium text-foreground">{event.user?.name}</span>
                       <span className="text-muted-foreground text-xs">{event.user?.email}</span>
                     </div>
                   </div>
