@@ -2,12 +2,12 @@ import { Document, model, models, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 export type ShopCategory =
-  | "Supermarket"
-  | "Hypermarket"
-  | "Grocery"
-  | "Bakery"
-  | "Cafe"
-  | "Other";
+  | "supermarket"
+  | "hypermarket"
+  | "grocery"
+  | "bakery"
+  | "cafe"
+  | "other";
 
 export type MenuItemCategory =
   | "Fruits"
@@ -123,12 +123,12 @@ const restaurantSchema = new Schema<IRestaurant>(
     category: {
       type: String,
       enum: [
-        "Supermarket",
-        "Grocery",
-        "Hypermarket",
-        "Cafe",
-        "Bakery",
-        "Other",
+        "supermarket",
+        "grocery",
+        "hypermarket",
+        "cafe",
+        "bakery",
+        "other",
       ],
       required: true,
     },
