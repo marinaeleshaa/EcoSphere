@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { ICart, IUser, UserModel, UserRole } from "./user.model";
 import { DBInstance } from "@/backend/config/dbConnect";
-import { DashboardUsers } from "./user.types";
+import { DashboardUsers, PagedData } from "./user.types";
 import { ProjectionFields, Types } from "mongoose";
 import { IMenuItem, RestaurantModel } from "../restaurant/restaurant.model";
 import { ProductResponse } from "../product/dto/product.dto";
@@ -16,6 +16,11 @@ export interface IUserRepository {
     sortOrder?: 1 | -1;
     selectFields?: string | Record<string, 0 | 1>;
   }): Promise<DashboardUsers>;
+  getUsersByRole(
+    userType: string,
+    limit?: number,
+    skip?: number,
+  ): Promise<PagedData<IUser>>;
   redeemPoints(userId: string): Promise<IUser>;
   getUserIdByEmail(email: string): Promise<IUser>;
   getUserByStripeId(stripeCustomerId: string): Promise<IUser | null>;
@@ -71,6 +76,40 @@ class UserRepository implements IUserRepository {
     return user;
   }
 
+  async getUsersByRole(
+    userType: string,
+    limit?: number,
+    page?: number,
+  ): Promise<PagedData<IUser>> {
+    await DBInstance.getConnection();
+    const pageSafe = Math.max(page ?? 1, 1);
+    const limitSafe = Math.min(limit ?? 10, 100);
+    const skipSafe = (pageSafe - 1) * limitSafe;
+    const filter = { role: userType };
+
+    const [items, total] = await Promise.all([
+      UserModel.find(filter)
+        .select("firstName lastName email phoneNumber birthDate role isActive")
+        .lean<IUser[]>()
+        .sort({ createdAt: -1 })
+        .limit(limitSafe)
+        .skip(skipSafe)
+        .exec(),
+      UserModel.countDocuments(filter),
+    ]);
+    return {
+      data: items,
+      meta: {
+        page: pageSafe,
+        limit: limitSafe,
+        total,
+        totalPages: Math.ceil(total / limitSafe),
+        hasNextPage: pageSafe * limitSafe < total,
+        hasPrevPage: pageSafe > 1,
+      },
+    };
+  }
+
   async getUsersByRoleAdvanced(options?: {
     limit?: number;
     sortBy?: string;
@@ -85,7 +124,7 @@ class UserRepository implements IUserRepository {
       selectFields = "-password -cart -paymentHistory",
     } = options || {};
 
-    const roles: UserRole[] = ["organizer", "admin", "recycleMan"];
+    const roles: UserRole[] = ["organizer", "admin", "recycleAgent"];
     // Convert selectFields to $project format
     const projectStage = this.parseSelectFields(selectFields);
 
@@ -202,8 +241,6 @@ class UserRepository implements IUserRepository {
     restaurants.forEach((restaurant) => {
       restaurant.menus.forEach((menu: IMenuItem) => {
         if (objectIds.some((id) => id.equals(menu._id))) {
-          
-
           favoriteItems.push({
             ...menu,
             restaurantId: restaurant._id,
@@ -213,7 +250,6 @@ class UserRepository implements IUserRepository {
       });
     });
 
-   
     return favoriteItems;
   }
 

@@ -34,6 +34,12 @@ class UserController {
     );
     return result;
   }
+  
+  async getRecycleAgents() { 
+    const agents = await this.userService.getRecycleAgents();
+    console.log(agents);
+    return agents;
+  }
 
   async redeemUserPoints(userId: string) {
     if (!userId) return;
