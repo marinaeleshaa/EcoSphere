@@ -66,11 +66,7 @@
         "shops": "Shops",
         "events": "Events",
         "recycling": "Recycling",
-<<<<<<< HEAD
         "recycleAgent": "Recycle Agents"
-=======
-        "news": "News"
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
       },
       "footer": {
         "favorite": "Favorite",

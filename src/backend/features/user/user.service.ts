@@ -242,10 +242,6 @@ class UserService implements IUserService {
 
     const rests = await this.restRepo.getRestaurantsByIdes(restaurantIds);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
     // Step 4: Create lookup map for efficient access
     // Key format: "restaurantId-menuItemId"
     const menuItemMap = new Map();
@@ -261,14 +257,11 @@ class UserService implements IUserService {
               name: restaurant.name,
             },
           });
-<<<<<<< HEAD
 
           // Log first menu item structure
           if (menuItemMap.size === 1) {
           
           }
-=======
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
         });
       }
     });
@@ -286,11 +279,6 @@ class UserService implements IUserService {
 
         const { menuItem, restaurant } = data;
 
-<<<<<<< HEAD
-      
-
-=======
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
         const avatarKey = menuItem.avatar?.key;
         let productImg = "";
         if (avatarKey && typeof avatarKey === "string") {
@@ -299,11 +287,6 @@ class UserService implements IUserService {
           } catch (error) {
             console.error("[getCart] Error generating image URL:", error);
           }
-<<<<<<< HEAD
-        } else {
-         
-=======
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
         }
 
         return {
@@ -380,13 +363,7 @@ class UserService implements IUserService {
         );
       }
     } else {
-<<<<<<< HEAD
      
-=======
-      console.log(
-        "[userService.attachSignedUrl] No avatar.key found, skipping URL generation",
-      );
->>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
     }
     return product;
   }

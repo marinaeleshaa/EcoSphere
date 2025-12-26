@@ -45,22 +45,12 @@ export class ProductService implements IProductService {
   private async attachSignedUrl(
     product: ProductResponse
   ): Promise<ProductResponse> {
-<<<<<<< HEAD
-  
-=======
     // Removed verbose logging to avoid terminal flooding
->>>>>>> cf340dc5eb4888700321a8ee5e6e55db0d5e3f90
 
     if (product?.avatar?.key) {
       try {
         const url = await this.imageService.getSignedUrl(product.avatar.key);
-<<<<<<< HEAD
-        // We ensure we don't mutate the original read-only object if it's frozen,
-        // essentially returning a new object or modifying it if allowed.
-        // For standard JS objects from Mongoose lean/aggregate, this is fine.
-=======
         // URL generated successfully
->>>>>>> cf340dc5eb4888700321a8ee5e6e55db0d5e3f90
         product.avatar.url = url;
       } catch (error) {
         console.error(
@@ -152,11 +142,6 @@ export class ProductService implements IProductService {
         "AI Analysis Failed. Check server logs.";
     }
 
-<<<<<<< HEAD
-   
-
-=======
->>>>>>> cf340dc5eb4888700321a8ee5e6e55db0d5e3f90
     const result = await this.productRepository.addProduct(
       restaurantId,
       productData
