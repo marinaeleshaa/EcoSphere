@@ -126,6 +126,11 @@ export default function SideBar() {
       url: "/organizer/browse",
       icon: PiListMagnifyingGlassBold,
     },
+    {
+      title: t("dashboard.news"),
+      url: "/organizer/news",
+      icon: Newspaper,
+    }
   ];
   // Restaurant dashboard items.
   const restaurantItems = [
