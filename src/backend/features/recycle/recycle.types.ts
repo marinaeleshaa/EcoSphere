@@ -14,6 +14,8 @@ export type RecycleResponse = {
   isVerified?: boolean;
   totalCarbonSaved?: number;
   status?: RecycleOrderStatus;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export interface RecycleRowData {
@@ -30,7 +32,7 @@ export interface RecycleRowData {
   apartment: number;
   items: { type: string; estimatedWeight: number }[];
   userId?: string;
-  totalCarbon: number;
+  totalCarbonSaved: number;
   isVerified: boolean;
 }
 
@@ -72,7 +74,7 @@ export const mapFromRawDataToRecyeleRequest = (
     recycleItems: mapToRecycleItems(data.items),
     userId: data.userId,
     isVerified: data.isVerified,
-    totalCarbonSaved: data.totalCarbon,
+    totalCarbonSaved: data.totalCarbonSaved,
   };
 };
 
@@ -89,5 +91,7 @@ export const mapRecycleToResponse = (data: IRecycle): RecycleResponse => {
     isVerified: data.isVerified,
     totalCarbonSaved: data.totalCarbonSaved,
     status: data.status,
+    createdAt: `${data.createdAt}`,
+    updatedAt: `${data.updatedAt}`,
   };
 };

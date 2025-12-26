@@ -266,7 +266,11 @@
     },
     "slider": {
       "title": "متاجر شركائنا",
-      "scrollHint": "قم بالتمرير لاستكشاف المزيد"
+      "scrollHint": "قم بالتمرير لاستكشاف المزيد",
+      "loading": "جاري تحميل المتاجر...",
+      "error": "فشل تحميل المتاجر. يرجى المحاولة مرة أخرى.",
+      "retry": "إعادة المحاولة",
+      "noStores": "لا توجد متاجر متاحة في الوقت الحالى"
     },
     "product": {
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
@@ -517,7 +521,16 @@
       "shopStep3": {
         "title": "بيانات المتجر",
         "location": "أدخل موقع المتجر",
-        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م"
+        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م",
+        "selectCategory": "اختر فئة",
+        "categories": {
+          "supermarket": "سوبر ماركت",
+          "hypermarket": "هايبر ماركت",
+          "grocery": "بقالة",
+          "bakery": "مخبز",
+          "cafe": "مقهى",
+          "other": "أخرى"
+        }
       },
       "lastStep": {
         "title": "الخطوة الأخيرة",
@@ -569,13 +582,19 @@
       "recyclingHistory": {
         "title": "سجل إعادة التدوير",
         "date": "التاريخ",
+        "createdAt": "تاريخ الانشاء",
+        "updatedAt": "تاريخ اخر تحديث",
         "items": "العناصر",
-        "itemsCount": "عناصر",
-        "weight": "الوزن (كجم)",
+        "itemsCount": "عدد الوحدات",
+        "weight": "الوزن تقريبا (كجم)",
         "carbonSaved": "الكربون المحفوظ",
         "status": "الحالة",
         "verified": "محقق",
         "pending": "قيد الانتظار",
+        "completed": "مكتمل",
+        "review": "مراجعة",
+        "rejected": "مرفوض",
+        "processing": "قيد المعالجة",
         "noRecyclingOrders": "لا توجد طلبات إعادة تدوير بعد",
         "noRecyclingOrdersDescription": "ابدأ بإعادة التدوير لرؤية تأثيرك البيئي هنا",
         "browseRecycling": "ابدأ إعادة التدوير"

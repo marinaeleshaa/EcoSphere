@@ -7,10 +7,16 @@ import { PaymentFailedClient } from "@/components/layout/payment/PaymentFailedCl
 import Link from "next/link";
 
 interface PaymentFailureProps {
-  searchParams: Promise<{ orderId?: string; errorCode?: string; errorMessage?: string }>;
+  searchParams: Promise<{
+    orderId?: string;
+    errorCode?: string;
+    errorMessage?: string;
+  }>;
 }
 
-export default async function PaymentFailure({ searchParams }: PaymentFailureProps) {
+export default async function PaymentFailure({
+  searchParams,
+}: PaymentFailureProps) {
   const t = await getTranslations("Checkout.verification");
   const params = await searchParams;
   const { orderId, errorCode, errorMessage } = params;
@@ -46,11 +52,18 @@ export default async function PaymentFailure({ searchParams }: PaymentFailurePro
           </MotionItem>
 
           {/* Error Details - Client component will display error info from URL params */}
-          <PaymentFailedClient orderId={orderId} errorCode={errorCode} errorMessage={errorMessage} />
+          <PaymentFailedClient
+            orderId={orderId}
+            errorCode={errorCode}
+            errorMessage={errorMessage}
+          />
 
           {/* Action */}
           <MotionItem className="w-full space-y-3">
-            <Link href="/checkout" className="myBtnPrimary w-full flex items-center justify-center gap-2">
+            <Link
+              href="/checkout"
+              className="myBtnPrimary w-full flex items-center justify-center gap-2"
+            >
               {t("tryAgain")}
               <RefreshCcw className="w-4 h-4" />
             </Link>

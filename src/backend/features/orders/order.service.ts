@@ -88,8 +88,9 @@ export class OrderService implements IOrderService {
       const totalPrice = unitPrice * item.quantity;
 
       return {
-        restaurantId: `${item.restaurantId}`,
-        productId: `${item.productId}`,
+        restaurantId: `${cartItem.restaurantId}`,
+        productId: `${cartItem.id}`,
+        productAvatar: cartItem.productImg,
         quantity: item.quantity,
         unitPrice,
         totalPrice,
@@ -110,14 +111,14 @@ export class OrderService implements IOrderService {
     };
 
     const order = await this.orderRepository.makeOrder(orderNewData);
-    await this.userService.saveUserCart(userId, []);
+
     return order;
   }
 
   async handleStripeEvent(event: Stripe.Event): Promise<void> {
     const intent = event.data.object as Stripe.PaymentIntent;
     switch (event.type) {
-      case "payment_intent.succeeded": {
+      case "checkout.session.completed": {
         const orderId = intent.metadata.orderId;
         if (!orderId) return;
 
@@ -144,15 +145,24 @@ export class OrderService implements IOrderService {
         break;
       }
       case "payment_intent.payment_failed": {
+        console.log(intent.metadata, "metaData");
+        const orderId = intent.metadata.orderId;
+        if (!orderId) return;
+        await this.orderRepository.updateOrderStatus(orderId, {
+          status: "failed",
+        });
+        break;
+      }
+      case "checkout.session.expired": {
         const orderId = intent.metadata.orderId;
         if (!orderId) return;
         await this.orderRepository.updateOrderStatus(orderId, {
           status: "canceled",
         });
-        break;
       }
       default:
         // ignore other events
+        console.warn("un handled event" + event.type);
         break;
     }
   }

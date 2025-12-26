@@ -21,6 +21,13 @@ export type CategoryOption =
   | "bakery"
   | "cafe"
   | "other";
+export type CategoryOptionClient =
+  | "supermarket"
+  | "hypermarket"
+  | "grocery"
+  | "bakery"
+  | "cafe"
+  | "other";
 
 export interface IShop {
   _id: string;

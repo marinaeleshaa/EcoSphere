@@ -6,6 +6,7 @@ export type PaymentMethod = "cashOnDelivery" | "paymob" | "fawry" | "stripe";
 export type OrderStatus =
   | "pending" // created, not paid
   | "paid" // payment confirmed
+  | "failed"
   | "preparing"
   | "delivering"
   | "completed"

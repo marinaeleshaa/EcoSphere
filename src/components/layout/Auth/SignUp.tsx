@@ -93,6 +93,7 @@ const SignUp = () => {
         onFinalStepCompleted={handleComplete}
         nextButtonProps={{ disabled: loading }}
         nextButtonText={loading ? t("registering") : t("continue")}
+        className=""
       >
         <Step>
           <Step1 />
@@ -113,7 +114,7 @@ const SignUp = () => {
         {/* step 3 */}
 
         {selectedType === "shop" && (
-          <Step>
+          <Step >
             <ShStep3 />
           </Step>
         )}

@@ -50,9 +50,9 @@ export class RecycleRepository implements IRecycleRepository {
     return await RecycleModel.find().lean<IRecycle[]>().exec();
   }
 
-  async getRecycleEntriesByEmail(email: string): Promise<IRecycle[]> {
+  async getRecycleEntriesByEmail(userId: string): Promise<IRecycle[]> {
     await DBInstance.getConnection();
-    return await RecycleModel.find({ email })
+    return await RecycleModel.find({ userId })
       .sort({ createdAt: -1 })
       .lean<IRecycle[]>()
       .exec();

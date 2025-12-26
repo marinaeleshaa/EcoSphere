@@ -12,7 +12,9 @@ interface PaymentSuccessProps {
   searchParams: Promise<{ orderId?: string; paymentIntentId?: string }>;
 }
 
-export default async function PaymentSuccess({ searchParams }: PaymentSuccessProps) {
+export default async function PaymentSuccess({
+  searchParams,
+}: PaymentSuccessProps) {
   const t = await getTranslations("Checkout.verification");
   const params = await searchParams;
   const { orderId, paymentIntentId } = params;
@@ -58,16 +60,25 @@ export default async function PaymentSuccess({ searchParams }: PaymentSuccessPro
           </MotionItem>
 
           {/* Receipt - Client component will fetch and display order data */}
-          <PaymentSuccessClient orderId={orderId} paymentIntentId={paymentIntentId} />
+          <PaymentSuccessClient
+            orderId={orderId}
+            paymentIntentId={paymentIntentId}
+          />
 
           {/* Actions */}
           <MotionItem className="w-full space-y-3">
-            <Link href="/" className="myBtnPrimary w-full group flex items-center justify-center gap-2">
+            <Link
+              href="/"
+              className="myBtnPrimary w-full group flex items-center justify-center gap-2"
+            >
               {t("returnHome")}
               <Home className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
 
-            <button className="myBtnPrimary w-full group flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
+            <button
+              className="myBtnPrimary w-full group flex items-center justify-center gap-2 opacity-50 cursor-not-allowed"
+              disabled
+            >
               {t("downloadReceipt")}
               <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
             </button>

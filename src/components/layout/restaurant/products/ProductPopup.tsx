@@ -94,7 +94,30 @@ export default function ProductPopup({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-card rounded-lg p-6 w-full max-w-md border border-border shadow-lg max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4 text-card-foreground">{title}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold mb-4 text-card-foreground">
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            className="bg-primary p-2 rounded-full hover:scale-105 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-primary-foreground  "
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
         {description && (
           <p className="text-sm text-muted-foreground mb-4">{description}</p>
         )}

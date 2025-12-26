@@ -66,7 +66,11 @@
         "shops": "Shops",
         "events": "Events",
         "recycling": "Recycling",
+<<<<<<< HEAD
         "recycleAgent": "Recycle Agents"
+=======
+        "news": "News"
+>>>>>>> 98150a8b40dc1e325a9a0d2bb53618aafd9a1b0d
       },
       "footer": {
         "favorite": "Favorite",
@@ -347,7 +351,11 @@
     },
     "slider": {
       "title": "Our Partner Stores",
-      "scrollHint": "Scroll to explore more stores"
+      "scrollHint": "Scroll to explore more stores",
+      "loading": "Loading top stores...",
+      "error": "Failed to load stores. Please try again.",
+      "retry": "Retry",
+      "noStores": "No stores available at the moment"
     },
     "product": {
       "addedToFavorites": "Added to favorites",
@@ -519,7 +527,17 @@
       "shopStep3": {
         "title": "Shop Details",
         "location": "Enter shop location",
-        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM"
+        "workingHours": "e.g., Mon-Fri 9:00 AM - 6:00 PM",
+
+        "selectCategory": "Select a category",
+        "categories": {
+          "supermarket": "Supermarket",
+          "hypermarket": "Hypermarket",
+          "grocery": "Grocery",
+          "bakery": "Bakery",
+          "cafe": "Cafe",
+          "other": "Other"
+        }
       },
       "lastStep": {
         "title": "Final Step",
@@ -571,13 +589,19 @@
       "recyclingHistory": {
         "title": "Recycling History",
         "date": "Date",
-        "items": "Items",
+        "createdAt": "Created At",
+        "updatedAt": "last Update was at",
+        "items": "items count",
         "itemsCount": "items",
-        "weight": "Weight (kg)",
+        "weight": "es. Weight (kg)",
         "carbonSaved": "Carbon Saved",
         "status": "Status",
         "verified": "Verified",
         "pending": "Pending",
+        "completed": "Completed",
+        "review": "Review",
+        "rejected": "Rejected",
+        "processing": "Processing",
         "noRecyclingOrders": "No recycling orders yet",
         "noRecyclingOrdersDescription": "Start recycling to see your eco-impact here",
         "browseRecycling": "Start Recycling"
