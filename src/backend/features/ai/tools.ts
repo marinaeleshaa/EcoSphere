@@ -425,6 +425,18 @@ export const AI_TOOLS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "getMyPoints",
+      description:
+        "Get the current user's available eco-points. Use when user asks 'how many points do I have', 'show my points', or 'what is my balance'. Requires authentication.",
+      parameters: {
+        type: "object",
+        properties: {},
+      },
+    },
+  },
 
   // ==================== CUSTOMER CRUD OPERATIONS ====================
   {

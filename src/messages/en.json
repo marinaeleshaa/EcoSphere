@@ -362,6 +362,8 @@
     "product": {
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
+      "addToCart": "Add to Cart",
+      "removeFromCart": "Remove from Cart",
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
       "outOfStock": "Out of Stock",

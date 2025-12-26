@@ -146,9 +146,20 @@ export class ToolExecutor {
         case "getTopUsersByPoints":
           return await this.userRepo.getTopUsersByPoints(args.limit || 10);
 
+        case "getMyPoints":
+          if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
+          const userWithPoints = await this.userRepo.getById(
+            session.userId,
+            "points"
+          );
+          return { points: userWithPoints.points || 0 };
+
         case "viewMyCart":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          const userWithCart = await this.userRepo.getById(session.userId);
+          const userWithCart = await this.userRepo.getById(
+            session.userId,
+            "cart"
+          );
           const cartItems = userWithCart.cart || [];
 
           // Enrich cart items with product details
@@ -168,7 +179,10 @@ export class ToolExecutor {
 
         case "viewMyFavorites":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          const userWithFavs = await this.userRepo.getById(session.userId);
+          const userWithFavs = await this.userRepo.getById(
+            session.userId,
+            "favoritesIds"
+          );
           if (
             !userWithFavs.favoritesIds ||
             userWithFavs.favoritesIds.length === 0
@@ -183,7 +197,7 @@ export class ToolExecutor {
         case "addToCart":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
           // Get current user to access cart
-          const user = await this.userRepo.getById(session.userId);
+          const user = await this.userRepo.getById(session.userId, "cart");
           const currentCart = user.cart || [];
 
           // Check if product already in cart
@@ -208,7 +222,10 @@ export class ToolExecutor {
 
         case "removeFromCart":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          const userForRemove = await this.userRepo.getById(session.userId);
+          const userForRemove = await this.userRepo.getById(
+            session.userId,
+            "cart"
+          );
           const cartForRemove = (userForRemove.cart || []).filter(
             (item) => item.productId !== args.productId
           );
@@ -217,7 +234,10 @@ export class ToolExecutor {
 
         case "updateCartQuantity":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          const userForUpdate = await this.userRepo.getById(session.userId);
+          const userForUpdate = await this.userRepo.getById(
+            session.userId,
+            "cart"
+          );
           const cartForUpdate = userForUpdate.cart || [];
           const index = cartForUpdate.findIndex(
             (item) => item.productId === args.productId
@@ -235,16 +255,15 @@ export class ToolExecutor {
 
         case "addToFavorites":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          await this.userRepo.updateFavorites(session.userId, args.productId);
+          await this.userRepo.addToFavorites(session.userId, args.productId);
           return { success: true, message: "Added to favorites" };
 
         case "removeFromFavorites":
           if (!session?.userId) throw new Error("AUTHENTICATION_REQUIRED");
-          // Repository has updateFavorites which toggles. To explicitly remove, we use pull.
-          await this.userRepo.updateById(session.userId, {
-            // @ts-ignore - Using MongoDB pull operator
-            $pull: { favoritesIds: args.productId },
-          } as any);
+          await this.userRepo.removeFromFavorites(
+            session.userId,
+            args.productId
+          );
           return { success: true, message: "Removed from favorites" };
 
         // ==================== RESTAURANT CRUD OPERATIONS ====================
@@ -426,6 +445,7 @@ export class ToolExecutor {
       "removeFromFavorites",
       "viewMyCart",
       "viewMyFavorites",
+      "getMyPoints",
       // Restaurant tools
       "createProduct",
       "updateProduct",
@@ -458,6 +478,7 @@ export class ToolExecutor {
         "removeFromFavorites",
         "viewMyCart",
         "viewMyFavorites",
+        "getMyPoints",
       ].includes(toolName)
     ) {
       if (!session.userId) {

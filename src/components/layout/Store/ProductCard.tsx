@@ -242,12 +242,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ) : isInCart ? (
               <div className="flex gap-2 justify-evenly text-nowrap items-center">
                 <RiShoppingCartFill />
-                <span className="mr-2">{t("removedFromCart")}</span>
+                <span className="mr-2">{t("removeFromCart")}</span>
               </div>
             ) : (
               <div className="flex justify-evenly gap-2 items-center">
                 <RiShoppingCartLine />
-                <span className="mr-2">{t("addedToCart")}</span>
+                <span className="mr-2">{t("addToCart")}</span>
               </div>
             )}
           </button>

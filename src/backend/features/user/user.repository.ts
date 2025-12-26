@@ -22,6 +22,8 @@ export interface IUserRepository {
   saveCart(userId: string, cart: ICart[]): Promise<IUser>;
   updateById(id: string, data: Partial<IUser>): Promise<IUser>;
   updateFavorites(id: string, data: string): Promise<IUser>;
+  addToFavorites(id: string, productId: string): Promise<IUser>;
+  removeFromFavorites(id: string, productId: string): Promise<IUser>;
   deleteById(id: string): Promise<IUser>;
   savePasswordResetCode(
     userId: string,
@@ -182,6 +184,30 @@ class UserRepository implements IUserRepository {
       .lean<IUser>()
       .exec();
 
+    return updatedUser!;
+  }
+
+  async addToFavorites(id: string, item: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { favoritesIds: item } },
+      { new: true, projection: { favoritesIds: 1, _id: 0 } }
+    )
+      .lean<IUser>()
+      .exec();
+    return updatedUser!;
+  }
+
+  async removeFromFavorites(id: string, item: string): Promise<IUser> {
+    await DBInstance.getConnection();
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      id,
+      { $pull: { favoritesIds: item } },
+      { new: true, projection: { favoritesIds: 1, _id: 0 } }
+    )
+      .lean<IUser>()
+      .exec();
     return updatedUser!;
   }
 
