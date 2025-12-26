@@ -58,9 +58,9 @@
       },
       "dashboard": {
         "overview": "OverView",
-        "addEvent": "Add Event",
-        "browseEvents": "Browse Events",
-        "eventDetails": "Event Details",
+        "mangeevent": "Manage Event",
+        "upcomingevents": "upcoming events",
+        "history": "History",
         "products": "Products",
         "orders": "Orders",
         "shops": "Shops",
@@ -362,6 +362,8 @@
     "product": {
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
+      "addToCart": "Add to Cart",
+      "removeFromCart": "Remove from Cart",
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
       "outOfStock": "Out of Stock",
@@ -597,7 +599,8 @@
         "orderId": "Order ID",
         "date": "Date",
         "total": "Total",
-        "status": "Status"
+        "status": "Status",
+        "loading": "Loading..."
       },
       "recyclingHistory": {
         "title": "Recycling History",
@@ -775,8 +778,6 @@
       "title": "Dashboard Overview",
       "quickActions": "Quick Actions",
       "createNewEvent": "Create new Event",
-      "viewAllEvents": "View Your events",
-      "browseEvents": "Browse Events",
       "keyMetrics": "Key Metrics",
       "realTimeData": "Real-time data",
       "totalTicketSales": "Total Ticket Sales",
@@ -784,6 +785,7 @@
       "confirmedAttendees": "Confirmed Attendees",
       "activeEvents": "Active Events",
       "upcomingEvents": "upcoming events",
+      "history": "History",
       "viewAll": "view all",
       "manage": "Manage",
       "noUpcomingEvents": "No upcoming events found."
@@ -791,9 +793,27 @@
     "MainDisplayEvents": {
       "title": "Browse Events",
       "search": "Search",
+      "upcomingEvents": "Upcoming Events",
       "searchPlaceholder": "Search events...",
+      "filterByPrice": "Filter by price",
+      "all": "All",
+      "free": "Free",
+      "paid": "Paid",
       "emptyTitle": "No upcoming events found",
-      "emptySubtitle": "Please check back later for upcoming events"
+      "emptySubtitle": "Please check back later for upcoming events",
+      "eventType": "Event Type",
+      "date": "Date",
+      "price": "Price",
+      "clearFilters": "Clear Filters",
+      "filterByType": "Filter by Type",
+      "filterByDate": "Filter by Date",
+      "today": "Today",
+      "thisWeek": "This Week",
+      "thisMonth": "This Month",
+      "environmental_seminar": "Environmental Seminar",
+      "community_cleanup": "Community Cleanup",
+      "sustainable_brands_showcase": "Sustainable Brands Showcase",
+      "other": "Other"
     },
     "WhyEcosphere": {
       "title": "Why Attend Events on Ecosphere?",
@@ -815,8 +835,29 @@
       "title": "My Events",
       "addEventBtn": "Add New Event",
       "UpComingEvents": "Upcoming Events",
-      "PastEvents": "Past Events",
+      "history": "History",
+      "search": "Search",
+      "searchPlaceholder": "Search events...",
+      "filterByPrice": "Filter by price",
+      "all": "All",
+      "free": "Free",
+      "paid": "Paid",
+      "filterByType": "Filter by type",
+      "environmental_seminar": "Environmental Seminar",
+      "community_cleanup": "Community Cleanup",
+      "sustainable_brands_showcase": "Sustainable Brands Showcase",
+      "other": "Other",
+      "eventType": "Event Type",
+      "date": "Date",
+      "today": "Today",
+      "thisWeek": "This Week",
+      "thisMonth": "This Month",
+      "location": "Location",
+      "price": "Price",
+      "clearFilters": "Clear Filters",
       "noEvents": "No events found",
+      "noupcomingEvents": "No Upcoming events found",
+      "nohistory": "No history events found",
       "EventCard": {
         "organizer": "You are the organizer",
         "status": {
@@ -1249,6 +1290,12 @@
         "active": "Active",
         "pending": "Pending"
       },
+      "filter": {
+        "all": "All",
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
       "card": {
         "organizer": "Organizer",
         "email": "Email",
@@ -1269,6 +1316,7 @@
           "acceptError": "Failed to accept event.",
           "denyError": "Failed to deny event."
         },
+        "noEventsInFilter": "No events found matching this status.",
         "Loading": "Loading Events..."
       }
     },
@@ -1281,6 +1329,13 @@
         "pending": "Pending",
         "hidden": "Hidden"
       },
+      "filter": {
+        "all": "All",
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "noShopsFound": "No shops found matching this filter."
+      },
+      "Loading": "Loading Shops...",
       "table": {
         "headers": {
           "name": "Shop Name",

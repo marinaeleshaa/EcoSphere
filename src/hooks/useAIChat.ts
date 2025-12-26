@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 interface Message {
   role: "user" | "assistant";
@@ -13,7 +13,7 @@ export const useAIChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const t = useTranslations("AI.errors");
-  const locale = useLocale();
+  // REMOVED: const locale = useLocale(); - AI now auto-detects language!
 
   const toggleOpen = () => setIsOpen((prev) => !prev);
 
@@ -63,12 +63,17 @@ export const useAIChat = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: content,
+          conversationHistory: messages, // NEW: Send conversation history
           context: context,
-          locale: locale,
+          // REMOVED: locale - AI auto-detects language now
         }),
       });
 
+      // Enhanced error handling
       if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error("RATE_LIMIT");
+        }
         throw new Error("Failed to fetch response");
       }
 
@@ -76,13 +81,20 @@ export const useAIChat = () => {
       const aiMessage: Message = { role: "assistant", content: data.answer };
 
       setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
+
+      // Specific error messages
+      let errorMessage = t("connection");
+      if (error.message === "RATE_LIMIT") {
+        errorMessage = "Too many requests. Please wait a moment and try again.";
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: t("connection"),
+          content: errorMessage,
         },
       ]);
     } finally {

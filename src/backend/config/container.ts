@@ -33,6 +33,7 @@ import { RecipeRepository } from "../features/recipe/recipe.repository";
 import { RecipeService } from "../features/recipe/recipe.service";
 import { SubscriptionRepository } from "../features/subscription/subscription.repository";
 import { WebhookEventRepository } from "../features/webhookEvent/webhook.event.repository";
+import { ToolExecutor } from "../features/ai/tool.executor";
 
 // you will register any
 container.registerSingleton("IUserRepository", UserRepository);
@@ -68,5 +69,6 @@ container.registerSingleton("AIRepository", AIRepository);
 container.registerSingleton("AIService", AIService);
 container.registerSingleton("RecipeRepository", RecipeRepository);
 container.registerSingleton("RecipeService", RecipeService);
+container.registerSingleton("ToolExecutor", ToolExecutor);
 
 export { container as rootContainer } from "tsyringe";

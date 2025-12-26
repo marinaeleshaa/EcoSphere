@@ -5,7 +5,9 @@ import { Send, X, Eraser, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ChatMessage } from "./ChatMessage";
 import { ThinkingIndicator } from "./ThinkingIndicator";
+import { SuggestedPrompts } from "./SuggestedPrompts";
 import { useTranslations, useLocale } from "next-intl";
+import { useSession } from "next-auth/react";
 
 interface Message {
   role: "user" | "assistant";
@@ -35,6 +37,27 @@ export const AIChatWindow: React.FC<AIChatWindowProps> = ({
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const { data: session } = useSession();
+
+  // Determine user role for suggested prompts
+  const getUserRole = ():
+    | "guest"
+    | "customer"
+    | "restaurant"
+    | "organizer"
+    | "recycleMan"
+    | "admin" => {
+    if (!session?.user) return "guest";
+    const role = session.user.role as string;
+    if (
+      ["customer", "restaurant", "organizer", "recycleMan", "admin"].includes(
+        role
+      )
+    ) {
+      return role as any;
+    }
+    return "guest";
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -66,7 +89,13 @@ export const AIChatWindow: React.FC<AIChatWindowProps> = ({
     }
   };
 
+  const handlePromptClick = (promptText: string) => {
+    onSendMessage(promptText);
+  };
+
   if (!isOpen) return null;
+
+  const userRole = getUserRole();
 
   return (
     <div
@@ -118,12 +147,34 @@ export const AIChatWindow: React.FC<AIChatWindowProps> = ({
             <p className="text-sm mt-2 opacity-75">
               {t("emptyState.subtitle")}
             </p>
+
+            {/* Suggested Prompts - NEW */}
+            <div className="mt-6 w-full">
+              <SuggestedPrompts
+                userRole={userRole}
+                onPromptClick={handlePromptClick}
+              />
+            </div>
           </div>
         )}
 
-        {messages.map((msg, idx) => (
-          <ChatMessage key={idx} role={msg.role} content={msg.content} />
-        ))}
+        {messages.map((msg, idx) => {
+          // Get previous user message for feedback context
+          const prevUserMsg =
+            idx > 0 && messages[idx - 1].role === "user"
+              ? messages[idx - 1].content
+              : "";
+
+          return (
+            <ChatMessage
+              key={idx}
+              role={msg.role}
+              content={msg.content}
+              userMessage={prevUserMsg}
+              index={idx}
+            />
+          );
+        })}
 
         {isLoading && <ThinkingIndicator />}
         <div ref={messagesEndRef} />

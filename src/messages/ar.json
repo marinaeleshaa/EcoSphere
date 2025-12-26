@@ -58,9 +58,9 @@
       },
       "dashboard": {
         "overview": "نظرة عامة",
-        "addEvent": "إضافة فعالية",
-        "browseEvents": "تصفح الفعاليات",
-        "eventDetails": "تفاصيل الفعالية",
+        "mangeevent": "إدارة الفعاليات",
+        "upcomingevents": "الفعاليات القادمة",
+        "history": "السجل",
         "products": "المنتجات",
         "orders": "الطلبات",
         "shops": "المتاجر",
@@ -352,22 +352,7 @@
       "workingHours": "ساعات العمل:",
       "about": "حول المتجر",
       "visitShop": "زيارة المتجر",
-      "contact": "تواصل"
-    },
-    "reviews": {
-      "title": "المراجعات",
-      "noReviews": "لا توجد مراجعات بعد. كن أول من يقيم هذا المتجر!"
-    },
-    "related": {
-      "title": "متاجر ذات صلة",
-      "subtitle": "استكشف مجموعتنا الواسعة من المتاجر ذات الصلة"
-    },
-    "products": {
-      "title": "منتجات المتجر",
-      "subtitle": "استكشف منتجات هذا المتجر",
-      "noProducts": "لا توجد منتجات متاحة لهذا المتجر."
-    },
-    "card": {
+      "contact": "تواصل",
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
       "addedToCart": "تمت الإضافة للسلة",
@@ -381,6 +366,19 @@
       "removeFromCart": "إزالة من السلة",
       "availableOnline": "متاح أونلاين",
       "notAvailableOnline": "غير متاح أونلاين"
+    },
+    "reviews": {
+      "title": "المراجعات",
+      "noReviews": "لا توجد مراجعات بعد. كن أول من يقيم هذا المتجر!"
+    },
+    "related": {
+      "title": "متاجر ذات صلة",
+      "subtitle": "استكشف مجموعتنا الواسعة من المتاجر ذات الصلة"
+    },
+    "products": {
+      "title": "منتجات المتجر",
+      "subtitle": "استكشف منتجات هذا المتجر",
+      "noProducts": "لا توجد منتجات متاحة لهذا المتجر."
     }
   },
   "Restaurant": {
@@ -606,7 +604,8 @@
         "orderId": "رقم الطلب",
         "date": "التاريخ",
         "total": "الإجمالي",
-        "status": "الحالة"
+        "status": "الحالة",
+        "loading": "جاري التحميل..."
       },
       "recyclingHistory": {
         "title": "سجل إعادة التدوير",
@@ -740,40 +739,6 @@
       }
     }
   },
-  "Checkout": {
-    "page": {
-      "title": "إتمام الدفع",
-      "payWithCard": "الدفع بالبطاقة",
-      "payWithCash": "الدفع عند الاستلام",
-      "somethingWentWrong": "فعالية خطأ ما",
-      "youWillPay": "ستدفع",
-      "directlyToCourier": "مباشرة إلى المندوب عند الاستلام.",
-      "confirmOrder": "تأكيد الطلب"
-    },
-    "form": {
-      "initializing": "جاري تحضير الدفع الآمن...",
-      "securePayment": "دفع آمن",
-      "securePaymentDesc": "أكمل عملية الشراء بأمان.",
-      "errorTitle": "خطأ",
-      "unexpectedError": "فعالية خطأ غير متوقع.",
-      "processing": "جاري المعالجة...",
-      "pay": "ادفع {amount}",
-      "securedByStripe": "المدفوعات مؤمنة بواسطة Stripe"
-    },
-    "verification": {
-      "successTitle": "تم تأكيد الدفع",
-      "successDesc": "شكرًا لمساهمتك في مستقبل أكثر خضرة.",
-      "transactionId": "رقم المعاملة",
-      "totalAmount": "المبلغ الإجمالي",
-      "returnHome": "العودة للرئيسية",
-      "downloadReceipt": "تحميل الإيصال",
-      "failedTitle": "فشل الدفع",
-      "failedDesc": "واجهنا مشكلة في معالجة مساهمتك البيئية. لم يتم خصم أي أموال.",
-      "errorCode": "رمز الخطأ: {code}",
-      "cardDeclined": "تم رفض البطاقة. يرجى التحقق من تفاصيل البطاقة أو المحاولة بطريقة دفع أخرى.",
-      "tryAgain": "حاول مرة أخرى"
-    }
-  },
   "Events": {
     "hero": {
       "title": "لا تفوت أي فعالية في Ecosphere",
@@ -783,8 +748,6 @@
       "title": "نظرة عامة على لوحة التحكم",
       "quickActions": "إجراءات سريعة",
       "createNewEvent": "إنشاء فعالية جديدة",
-      "viewAllEvents": "عرض جميع فعالياتك",
-      "browseEvents": "تصفح الفعاليات",
       "keyMetrics": "المؤشرات الرئيسية",
       "realTimeData": "البيانات اللحظية",
       "totalTicketSales": "إجمالي مبيعات التذاكر",
@@ -792,6 +755,7 @@
       "confirmedAttendees": "الحضور المؤكد",
       "activeEvents": "الفعاليات النشطة",
       "upcomingEvents": "الفعاليات القادمة",
+      "history": "سجل الفعاليات",
       "viewAll": "عرض الكل",
       "manage": "إدارة",
       "noUpcomingEvents": "لا توجد فعاليات قادمة."
@@ -800,8 +764,26 @@
       "title": "تصفح الفعاليات",
       "search": "بحث",
       "searchPlaceholder": "ابحث عن الفعاليات...",
+      "upcomingEvents": "الفعاليات القادمة",
+      "filterByPrice": "تصفية حسب السعر",
+      "all": "الكل",
+      "free": "مجاني",
+      "paid": "مدفوع",
       "emptyTitle": "لا توجد فعاليات قادمة",
-      "emptySubtitle": "يرجى التحقق لاحقًا من الفعاليات القادمة"
+      "emptySubtitle": "يرجى التحقق لاحقًا من الفعاليات القادمة",
+      "eventType": "نوع الفعالية",
+      "date": "التاريخ",
+      "price": "السعر",
+      "clearFilters": "مسح الفلاتر",
+      "filterByType": "تصفية حسب النوع",
+      "filterByDate": "تصفية حسب التاريخ",
+      "today": "اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "thisMonth": "هذا الشهر",
+      "environmental_seminar": "ندوة بيئية",
+      "community_cleanup": "تنظيف المجتمع",
+      "sustainable_brands_showcase": "عرض العلامات التجارية المستدامة",
+      "other": "أخرى"
     },
     "WhyEcosphere": {
       "title": "لماذا حضور الفعاليات على Ecosphere؟",
@@ -823,8 +805,29 @@
       "title": "فعالياتي",
       "addEventBtn": "إضافة فعالية جديد",
       "UpComingEvents": "الفعاليات القادمة",
-      "PastEvents": "الفعاليات السابقة",
+      "history": "سجل الفعاليات",
+      "search": "بحث",
+      "searchPlaceholder": "ابحث عن الفعاليات...",
+      "filterByPrice": "تصفية حسب السعر",
+      "all": "الكل",
+      "free": "مجاني",
+      "paid": "مدفوع",
+      "filterByType": "التصفية حسب النوع",
+      "environmental_seminar": "ندوة بيئية",
+      "community_cleanup": "حملة تنظيف مجتمعية",
+      "sustainable_brands_showcase": "معرض العلامات التجارية المستدامة",
+      "other": "أخرى",
+      "eventType": "نوع الفعالية",
+      "date": "التاريخ",
+      "today": "اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "thisMonth": "هذا الشهر",
+      "location": "الموقع",
+      "price": "السعر",
+      "clearFilters": "مسح الفلاتر",
       "noEvents": "لا توجد فعاليات",
+      "noupcomingEvents": "لا توجد فعاليات قادمة",
+      "nohistory": "لم يتم العثور على فعاليات سابقة",
       "EventCard": {
         "organizer": "أنت منظم الفعالية",
         "status": {
@@ -1258,6 +1261,12 @@
         "active": "نشط",
         "pending": "قيد الانتظار"
       },
+      "filter": {
+        "all": "الكل",
+        "pending": "قيد الانتظار",
+        "accepted": "مقبول",
+        "rejected": "مرفوض"
+      },
       "card": {
         "organizer": "المنظم",
         "email": "البريد الإلكتروني",
@@ -1278,6 +1287,7 @@
           "acceptError": "فشل قبول الفعالية.",
           "denyError": "فشل رفض الفعالية."
         },
+        "noEventsInFilter": "لم يتم العثور على فعاليات تطابق حالة الفلتر هذه.",
         "Loading": "جاري تحميل الفعاليات...."
       }
     },
@@ -1290,6 +1300,13 @@
         "pending": "قيد الانتظار",
         "hidden": "مخفي"
       },
+      "filter": {
+        "all": "الكل",
+        "visible": "ظاهر",
+        "hidden": "مخفي",
+        "noShopsFound": "لم يتم العثور على متاجر تطابق هذا الفلتر."
+      },
+      "Loading": "جاري تحميل المتاجر...",
       "table": {
         "headers": {
           "name": "اسم المتجر",

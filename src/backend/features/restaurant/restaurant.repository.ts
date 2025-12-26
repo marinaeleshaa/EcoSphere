@@ -5,7 +5,7 @@ import {
   PaginatedRestaurantResponse,
 } from "./dto/restaurant.dto";
 import { DBInstance } from "@/backend/config/dbConnect";
-import { Types } from "mongoose";
+import { Types, PipelineStage } from "mongoose";
 
 export interface IRestaurantRepository {
   create(
@@ -31,6 +31,16 @@ export interface IRestaurantRepository {
   updateById(id: string, data: Partial<IRestaurant>): Promise<IRestaurant>;
   updateFavoritedBy(userId: string, restaurantId: string): Promise<IRestaurant>;
   deleteById(id: string): Promise<IRestaurant>;
+  // Category filtering methods for AI chatbot
+  getRestaurantsByCategory(
+    category: string,
+    limit?: number
+  ): Promise<IRestaurant[]>;
+  getRestaurantCategoryCounts(): Promise<{ category: string; count: number }[]>;
+  // Analytics methods for AI chatbot
+  getTopRestaurantsByRating(limit?: number): Promise<IRestaurant[]>;
+  getTotalRestaurantCount(): Promise<number>;
+  getRestaurantsWithMostProducts(limit?: number): Promise<any[]>;
 }
 
 @injectable()
@@ -69,13 +79,19 @@ class RestaurantRepository {
       search = "",
       sort = "default",
       category = "default",
+      status = "visible",
     } = options;
 
     const skip = (page - 1) * limit;
 
-    const matchStage: any = {
-      isHidden: false,
-    };
+    const matchStage: any = {};
+
+    if (status === "visible") {
+      matchStage.isHidden = false;
+    } else if (status === "hidden") {
+      matchStage.isHidden = true;
+    }
+    // If status is "all", we don't add isHidden to matchStage
 
     if (search) {
       const regex = new RegExp(search, "i");
@@ -202,6 +218,135 @@ class RestaurantRepository {
       throw new Error(`Restaurant with id ${id} not found`);
     }
     return await restaurant.deleteOne();
+  }
+
+  // Category filtering methods for AI chatbot
+  async getRestaurantsByCategory(
+    category: string,
+    limit: number = 10
+  ): Promise<IRestaurant[]> {
+    await DBInstance.getConnection();
+
+    // Use aggregation to calculate average rating and sort by it
+    const pipeline: PipelineStage[] = [
+      {
+        $match: {
+          category,
+          isHidden: false,
+        },
+      },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: [
+              { $gt: [{ $size: { $ifNull: ["$restaurantRating", []] } }, 0] },
+              { $avg: "$restaurantRating.rate" },
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { avgRating: -1 } }, // Sort by highest rating first
+      { $limit: limit },
+      {
+        $project: {
+          name: 1,
+          location: 1,
+          category: 1,
+          description: 1,
+          restaurantRating: 1,
+          workingHours: 1,
+          phoneNumber: 1,
+          avatar: 1,
+          avgRating: 1,
+        },
+      },
+    ];
+
+    const results = await RestaurantModel.aggregate(pipeline).exec();
+    return results as IRestaurant[];
+  }
+
+  async getRestaurantCategoryCounts(): Promise<
+    { category: string; count: number }[]
+  > {
+    await DBInstance.getConnection();
+
+    const result = await RestaurantModel.aggregate([
+      { $match: { isHidden: false } },
+      {
+        $group: {
+          _id: "$category",
+          count: { $count: {} },
+        },
+      },
+      {
+        $project: {
+          category: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+      { $sort: { count: -1 } },
+    ]).exec();
+
+    return result;
+  }
+
+  // Analytics methods for AI chatbot
+  async getTopRestaurantsByRating(limit: number = 10): Promise<IRestaurant[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $match: { isHidden: false } },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: [
+              { $gt: [{ $size: { $ifNull: ["$restaurantRating", []] } }, 0] },
+              { $avg: "$restaurantRating.rate" },
+              0,
+            ],
+          },
+        },
+      },
+      { $match: { avgRating: { $gt: 0 } } }, // Only restaurants with ratings
+      { $sort: { avgRating: -1 } },
+      { $limit: limit },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
+  }
+
+  async getTotalRestaurantCount(): Promise<number> {
+    await DBInstance.getConnection();
+
+    return await RestaurantModel.countDocuments({ isHidden: false }).exec();
+  }
+
+  async getRestaurantsWithMostProducts(limit: number = 10): Promise<any[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $match: { isHidden: false } },
+      {
+        $addFields: {
+          productCount: { $size: { $ifNull: ["$menus", []] } },
+        },
+      },
+      { $sort: { productCount: -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          name: 1,
+          productCount: 1,
+          location: 1,
+          category: 1,
+        },
+      },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
   }
 }
 

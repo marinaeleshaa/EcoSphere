@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MdAddCircleOutline } from "react-icons/md";
 import { FaRegRectangleList } from "react-icons/fa6";
-import { TbListSearch } from "react-icons/tb";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -13,6 +12,7 @@ import { EventListItemProps, EventProps, MetricData } from "@/types/EventTypes";
 import React from "react";
 import { formatDate, formatTime } from "@/frontend/utils/Event";
 import { useLocale } from "next-intl";
+import { LuHistory } from "react-icons/lu";
 const MetricCard: React.FC<MetricData> = ({ title, value, change }) => {
   const isPositive = change && change.startsWith("+");
 
@@ -62,7 +62,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
   const locale = useLocale();
   const buttonText = t("manage");
   const lineColor = "bg-primary";
-  const imageSource = avatar || "/events/defaultImgEvent.png";
+  const imageSource = (avatar as string) || "/events/defaultImgEvent.png";
   return (
     <div
       className="
@@ -77,7 +77,7 @@ const EventListItem: React.FC<EventListItemProps> = ({
 
       {/* 2. Event Image */}
       <Image
-        src={typeof imageSource === "string" ? imageSource : imageSource.url}
+        src={imageSource}
         alt={`Image for ${name}`}
         className="w-14 h-14 object-cover rounded-md mr-4 ml-2 shrink-0"
         width={100}
@@ -141,7 +141,7 @@ export default function EventOverview({ events }: EventProps) {
     events?.reduce(
       (acc, event) =>
         acc + (event.attenders?.length || 0) * (event.ticketPrice || 0),
-      0
+      0,
     ) || 0;
 
   const confirmedAttendees = totalTicketSales;
@@ -212,16 +212,16 @@ export default function EventOverview({ events }: EventProps) {
               <span className="capitalize">{t("createNewEvent")}</span>
             </Button>
           </Link>
-          <Link href="/organizer/details" className="col-span-1 ">
+          <Link href="/organizer/upcomingEvents" className="col-span-1 ">
             <Button className="w-full py-6 text-xl cursor-pointer text-primary-foreground rounded-2xl">
               <FaRegRectangleList className="size-6" />
-              <span className="capitalize">{t("viewAllEvents")}</span>
+              <span className="capitalize">{t("upcomingEvents")}</span>
             </Button>
           </Link>
-          <Link href="/organizer/browse" className="col-span-1 ">
+          <Link href="/organizer/history" className="col-span-1 ">
             <Button className="w-full py-6 text-xl cursor-pointer text-primary-foreground rounded-2xl">
-              <TbListSearch className="size-6" />
-              <span className="capitalize">{t("browseEvents")}</span>
+              <LuHistory className="size-6" />
+              <span className="capitalize">{t("history")}</span>
             </Button>
           </Link>
         </div>
@@ -254,7 +254,7 @@ export default function EventOverview({ events }: EventProps) {
           <h2 className="capitalize font-bold text-2xl mb-2 text-foreground">
             {t("upcomingEvents")}
           </h2>
-          <Link href="/organizer/details">
+          <Link href="/organizer/upcomingEvents">
             <h4 className="text-muted-foreground underline text-md">
               {t("viewAll")}
             </h4>
@@ -272,8 +272,8 @@ export default function EventOverview({ events }: EventProps) {
                 endTime={event.endTime}
                 locate={event.locate}
                 avatar={
-                  typeof event.avatar === "string"
-                    ? event.avatar
+                  typeof event.avatar?.url === "string"
+                    ? event.avatar?.url
                     : "/events/defaultImgEvent.png"
                 }
               />

@@ -38,9 +38,12 @@ export interface IEventDetails {
   isAccepted?: boolean;
   isEventNew?: boolean;
   user?: {
-    firstName: string;
+    _id?: string;
+    name?: string;
+    firstName?: string;
     email: string;
-    phoneNumber: string;
+    phoneNumber?: string;
+    role?: string;
   };
 }
 

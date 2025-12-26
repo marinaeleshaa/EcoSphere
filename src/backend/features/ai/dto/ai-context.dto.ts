@@ -25,10 +25,45 @@ export interface GeneralContextDTO {
   features: string[];
 }
 
-export interface ChatRequestDTO {
-  message: string;
-  context?: { type: types; id?: string };
-  locale?: string;
+// NEW: Message interface for conversation history
+export interface Message {
+  role: "user" | "assistant";
+  content: string;
 }
 
-export type types = "product" | "restaurant" | "static"
+// NEW: User context DTO for authenticated users
+export interface UserContextDTO {
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: "customer" | "organizer" | "admin" | "recycleMan";
+  points: number;
+  favoritesCount: number;
+  cartItemsCount: number;
+  ordersCount?: number;
+  recyclingEntriesCount?: number;
+  eventsCount?: number;
+}
+
+// NEW: Restaurant owner context DTO
+export interface RestaurantOwnerContextDTO {
+  restaurantId: string;
+  name: string;
+  email: string;
+  productsCount: number;
+  ordersCount: number;
+  totalRevenue?: number;
+  subscribed: boolean;
+}
+
+// UPDATED: Chat request DTO with conversation history
+export interface ChatRequestDTO {
+  message: string;
+  conversationHistory?: Message[]; // NEW
+  context?: { type: types; id?: string };
+  locale?: string; // Keep for now, will be removed in Phase 1
+}
+
+// UPDATED: Added "user" type
+export type types = "product" | "restaurant" | "static" | "user";
