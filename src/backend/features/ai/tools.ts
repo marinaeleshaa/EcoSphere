@@ -218,7 +218,7 @@ export const AI_TOOLS = [
     function: {
       name: "getPendingRecyclingRequests",
       description:
-        "Get pending recycling pickup requests (for RecycleMan users). Use when user asks about pending requests or pickups.",
+        "Get pending recycling pickup requests (for recycleAgent users). Use when user asks about pending requests or pickups.",
       parameters: {
         type: "object",
         properties: {
@@ -372,13 +372,13 @@ export const AI_TOOLS = [
     function: {
       name: "getUserCountByRole",
       description:
-        "Get count of users by role (customer, organizer, admin, recycleMan). Use when asking about user statistics.",
+        "Get count of users by role (customer, organizer, admin, recycleAgent). Use when asking about user statistics.",
       parameters: {
         type: "object",
         properties: {
           role: {
             type: "string",
-            enum: ["customer", "organizer", "admin", "recycleMan"],
+            enum: ["customer", "organizer", "admin", "recycleAgent"],
             description:
               "User role to filter by (optional - omit for total count)",
           },
@@ -845,13 +845,13 @@ export const AI_TOOLS = [
     },
   },
 
-  // ==================== RECYCLEMAN CRUD OPERATIONS ====================
+  // ==================== recycleAgent CRUD OPERATIONS ====================
   {
     type: "function",
     function: {
       name: "updateRecyclingRequestStatus",
       description:
-        "Update status of a recycling request (approve, complete, reject). Use when recycleMan wants to manage requests. Requires recycleMan authentication.",
+        "Update status of a recycling request (approve, complete, reject). Use when recycleAgent wants to manage requests. Requires recycleAgent authentication.",
       parameters: {
         type: "object",
         properties: {

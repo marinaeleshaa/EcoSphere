@@ -330,8 +330,8 @@ export default function SideBar() {
           </SidebarGroup>
         )}
 
-        {/* **! change the role to be recycleMan */}
-        {session?.user.role == "recycleMan" && (
+        {/* **! change the role to be recycleAgent */}
+        {session?.user.role == "recycleAgent" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>

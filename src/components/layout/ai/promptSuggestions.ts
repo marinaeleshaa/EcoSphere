@@ -28,7 +28,7 @@ export const ROLE_PROMPTS: Record<string, PromptSuggestion[]> = {
     { icon: "📅", text: "Upcoming events" },
     { icon: "➕", text: "How to create a new event?" },
   ],
-  recycleMan: [
+  recycleAgent: [
     { icon: "📋", text: "Pending recycling requests" },
     { icon: "🚚", text: "Show today's pickups" },
     { icon: "♻️", text: "Carbon saved this month" },

@@ -170,7 +170,7 @@ export interface UserContextDTO {
   email: string;
   firstName: string;
   lastName: string;
-  role: "customer" | "organizer" | "admin" | "recycleMan";
+  role: "customer" | "organizer" | "admin" | "recycleAgent";
   points: number;
   favoritesCount: number;
   cartItemsCount: number;

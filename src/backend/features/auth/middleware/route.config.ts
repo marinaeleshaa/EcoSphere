@@ -21,7 +21,7 @@ export type Role =
   | "admin"
   | "organizer"
   | "shop"
-  | "recycleMan"
+  | "recycleAgent"
   | "restaurant"
   | "customer";
 
@@ -30,7 +30,7 @@ export const ROLE_ROUTES: Record<string, string[]> = {
   "/admin": ["admin"],
   "/organizer": ["organizer", "shop", "restaurant"],
   "/restaurant": ["shop", "restaurant"],
-  "/recycleDash": ["recycleMan"],
+  "/recycleDash": ["recycleAgent"],
   "/shop": ["customer"],
   "/store": ["customer"],
   "/game": ["customer"],
@@ -75,5 +75,5 @@ const createGuard = (roles: Role[]) => {
 export const adminOnly = createGuard(["admin"]);
 export const organizerOnly = createGuard(["organizer", "shop", "restaurant"]);
 export const shopOnly = createGuard(["shop"]);
-export const recycleManOnly = createGuard(["recycleMan"]);
+export const recycleAgentOnly = createGuard(["recycleAgent"]);
 export const userOnly = createGuard(["customer"]);

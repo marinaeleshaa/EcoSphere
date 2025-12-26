@@ -45,12 +45,12 @@ export const AIChatWindow: React.FC<AIChatWindowProps> = ({
     | "customer"
     | "restaurant"
     | "organizer"
-    | "recycleMan"
+    | "recycleAgent"
     | "admin" => {
     if (!session?.user) return "guest";
     const role = session.user.role as string;
     if (
-      ["customer", "restaurant", "organizer", "recycleMan", "admin"].includes(
+      ["customer", "restaurant", "organizer", "recycleAgent", "admin"].includes(
         role
       )
     ) {

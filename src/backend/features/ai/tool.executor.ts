@@ -401,10 +401,10 @@ export class ToolExecutor {
             message: "Event deleted successfully",
           };
 
-        // ==================== RECYCLEMAN CRUD OPERATIONS ====================
+        // ==================== recycleAgent CRUD OPERATIONS ====================
         case "updateRecyclingRequestStatus":
-          if (!session?.userId || session.userRole !== "recycleMan")
-            throw new Error("RECYCLEMAN_AUTH_REQUIRED");
+          if (!session?.userId || session.userRole !== "recycleAgent")
+            throw new Error("recycleAgent_AUTH_REQUIRED");
 
           await this.recycleRepo.updateRecycleEntry(args.requestId, {
             status: args.status,
@@ -456,7 +456,7 @@ export class ToolExecutor {
       "createEvent",
       "updateEvent",
       "deleteEvent",
-      // RecycleMan tools
+      // recycleAgent tools
       "updateRecyclingRequestStatus",
     ];
     return authRequiredTools.includes(toolName);
@@ -508,10 +508,10 @@ export class ToolExecutor {
       }
     }
 
-    // Check recycleMan auth
+    // Check recycleAgent auth
     if (["updateRecyclingRequestStatus"].includes(toolName)) {
-      if (!session.userId || session.userRole !== "recycleMan") {
-        throw new Error("RECYCLEMAN_AUTH_REQUIRED");
+      if (!session.userId || session.userRole !== "recycleAgent") {
+        throw new Error("recycleAgent_AUTH_REQUIRED");
       }
     }
   }
