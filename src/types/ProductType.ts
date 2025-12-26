@@ -15,8 +15,11 @@ export interface IProduct {
   sustainabilityReason?: string;
   itemRating?: IReview[];
   category?: string;
+  quantity: number;
+  inStock: boolean;
 }
 
 export interface IProductCart extends IProduct {
-  quantity: number;
+  quantity: number; // Quantity user wants to buy
+  maxQuantity: number; // Available stock limit
 }

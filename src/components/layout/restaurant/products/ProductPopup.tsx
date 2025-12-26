@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
 import ImageUpload from "@/components/layout/common/ImageUpload";
@@ -43,15 +44,19 @@ export default function ProductPopup({
       subtitle: "",
       price: 0,
       availableOnline: true,
+      quantity: 1, // Added default quantity
     },
   });
 
   const [imageKey, setImageKey] = React.useState<string | undefined>(
     initialData?.avatar?.key
   );
-  const [selectedCategory, setSelectedCategory] = React.useState<
-    MenuItemCategory | undefined
-  >(initialData?.category);
+  const [category, setCategory] = React.useState<MenuItemCategory | undefined>(
+    initialData?.category
+  );
+  const [quantity, setQuantity] = React.useState<number>(
+    initialData?.quantity ?? 1
+  );
   const [categoryError, setCategoryError] = React.useState<
     string | undefined
   >();
@@ -61,30 +66,39 @@ export default function ProductPopup({
       if (initialData) {
         reset(initialData);
         setImageKey(initialData.avatar?.key);
-        setSelectedCategory(initialData.category);
+        setCategory(initialData.category);
+        setQuantity(initialData.quantity ?? 1);
       } else {
         reset({
           title: "",
           subtitle: "",
           price: 0,
           availableOnline: true,
+          quantity: 1,
         });
         setImageKey(undefined);
-        setSelectedCategory(undefined);
+        setCategory(undefined);
+        setQuantity(1);
       }
       setCategoryError(undefined);
     }
   }, [isOpen, initialData, reset]);
 
   const handleFormSubmit = async (data: CreateProductDTO) => {
-    if (!selectedCategory) {
-      setCategoryError(t("popup.errors.categoryRequired"));
+    if (!category) {
+      setCategoryError(t("popup.errors.categoryRequired")); // Changed to setCategoryError
+      toast.error(t("popup.errors.categoryRequired")); // Added toast
+      return;
+    }
+    if (quantity < 0) {
+      toast.error(t("popup.errors.quantityNegative")); // Added toast
       return;
     }
     if (imageKey) {
       data.avatar = { key: imageKey };
     }
-    data.category = selectedCategory;
+    data.category = category;
+    data.quantity = quantity; // Added quantity to data
     await onSubmit(data);
     onClose();
   };
@@ -94,7 +108,30 @@ export default function ProductPopup({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-card rounded-lg p-6 w-full max-w-md border border-border shadow-lg max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-bold mb-4 text-card-foreground">{title}</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold mb-4 text-card-foreground">
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            className="bg-primary p-2 rounded-full hover:scale-105 cursor-pointer"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-primary-foreground  "
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
         {description && (
           <p className="text-sm text-muted-foreground mb-4">{description}</p>
         )}
@@ -146,14 +183,24 @@ export default function ProductPopup({
           </div>
 
           <CategorySelect
-            value={selectedCategory}
+            value={category}
             onChange={(value) => {
-              setSelectedCategory(value);
+              setCategory(value);
               setCategoryError(undefined);
             }}
             error={categoryError}
           />
 
+          <div className="space-y-2">
+            <Label htmlFor="quantity">{t("popup.quantityLabel")}</Label>
+            <Input
+              id="quantity"
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              min={0}
+            />
+          </div>
           <div className="space-y-2">
             <Label>{t("popup.imageLabel")}</Label>
             <div className="h-40 w-full border rounded-md">
@@ -170,7 +217,6 @@ export default function ProductPopup({
               />
             </div>
           </div>
-
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"

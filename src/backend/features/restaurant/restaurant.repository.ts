@@ -23,6 +23,7 @@ export interface IRestaurantRepository {
   ): Promise<PaginatedRestaurantResponse | IRestaurant[]>;
   getById(id: string): Promise<IRestaurant>;
   getRestaurantsByIdes(restaurantIds: string[]): Promise<IRestaurant[]>;
+  getFirstRestaurants(limit?: number): Promise<IRestaurant[]>;
   // Find a restaurant by its Stripe customer id (used by subscription flow)
   getRestaurantByStripeId(
     stripeCustomerId: string
@@ -153,6 +154,19 @@ class RestaurantRepository {
       .select("name menus")
       .lean<IRestaurant[]>()
       .exec();
+  }
+
+  async getFirstRestaurants(limit: number = 15): Promise<IRestaurant[]> {
+    await DBInstance.getConnection();
+
+    // Simply get the first N non-hidden restaurants
+    const restaurants = await RestaurantModel.find({ isHidden: false })
+      .select("_id name avatar")
+      .limit(limit)
+      .lean<IRestaurant[]>()
+      .exec();
+
+    return restaurants;
   }
 
   // New helper: find restaurant by Stripe customer id so subscription webhooks

@@ -33,7 +33,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import RecyclingHistoryEmptyState from "./RecyclingHistoryEmptyState";
 
-const OrderHistoryComponent = ({ user }: { user: User }) => {
+const OrderHistoryComponent = () => {
   const t = useTranslations("Profile.customer.orderHistory");
   const [orders, setOrders] = useState<IOrder[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
   const totalPages = Math.ceil(orders.length / itemsPerPage);
   const currentOrders = orders.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (newPage: number) => {
@@ -135,10 +135,10 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
                               order.status === "completed"
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                                 : order.status === "pending"
-                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                : order.status === "canceled"
-                                ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                  : order.status === "canceled"
+                                    ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                    : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                             }`}
                           >
                             {order.status}
@@ -167,10 +167,10 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
                           order.status === "completed"
                             ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                             : order.status === "pending"
-                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                            : order.status === "canceled"
-                            ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                            : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                              : order.status === "canceled"
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                         }`}
                       >
                         {order.status}
@@ -225,7 +225,7 @@ const OrderHistoryComponent = ({ user }: { user: User }) => {
 };
 
 // Recycling History Component
-const RecyclingHistoryComponent = ({ user }: { user: User }) => {
+const RecyclingHistoryComponent = ({ id }: { id: string }) => {
   const t = useTranslations("Profile.customer.recyclingHistory");
   const [recyclingEntries, setRecyclingEntries] = useState<IRecycle[]>([]);
   const [loading, setLoading] = useState(true);
@@ -236,7 +236,7 @@ const RecyclingHistoryComponent = ({ user }: { user: User }) => {
   useEffect(() => {
     const fetchRecyclingEntries = async () => {
       try {
-        const data = await getUserRecyclingEntries(user.email);
+        const data = await getUserRecyclingEntries(id);
         setRecyclingEntries(data);
       } catch (error) {
         console.error("Failed to fetch recycling entries", error);
@@ -245,12 +245,12 @@ const RecyclingHistoryComponent = ({ user }: { user: User }) => {
       }
     };
     fetchRecyclingEntries();
-  }, [user.email]);
-
+  }, []);
+  console.log(recyclingEntries);
   const totalPages = Math.ceil(recyclingEntries.length / itemsPerPage);
   const currentEntries = recyclingEntries.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (newPage: number) => {
@@ -294,24 +294,34 @@ const RecyclingHistoryComponent = ({ user }: { user: User }) => {
             <>
               {/* Desktop View (Table) */}
               <div className="hidden md:block overflow-x-auto">
-                <table className="w-full text-sm text-left">
+                <table className="w-full text-sm text-center ">
                   <thead className="bg-muted/50 text-muted-foreground uppercase text-xs">
                     <tr>
-                      <th className="px-4 py-3 rounded-tl-lg">{t("date")}</th>
+                      <th className="px-4 py-3 rounded-tl-lg">
+                        {t("createdAt")}
+                      </th>
+                      <th className="px-4 py-3 rounded-tl-lg">
+                        {t("updatedAt")}
+                      </th>
                       <th className="px-4 py-3">{t("items")}</th>
                       <th className="px-4 py-3">{t("weight")}</th>
                       <th className="px-4 py-3">{t("carbonSaved")}</th>
-                      <th className="px-4 py-3 rounded-tr-lg">{t("status")}</th>
+                      <th className="px-4 py-3 rounded-tr-lg ">
+                        {t("status")}
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {currentEntries.map((entry) => (
                       <tr
-                        key={entry._id?.toString()}
+                        key={`${entry._id}`}
                         className="hover:bg-muted/20 transition-colors"
                       >
                         <td className="px-4 py-3">
                           {new Date(entry.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-4 py-3">
+                          {new Date(entry.updatedAt!).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3">
                           {entry.recycleItems?.length || 0} {t("itemsCount")}
@@ -333,7 +343,7 @@ const RecyclingHistoryComponent = ({ user }: { user: User }) => {
                                 : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                             }`}
                           >
-                            {entry.isVerified ? t("verified") : t("pending")}
+                            {entry.status && t(entry.status)}
                           </span>
                         </td>
                       </tr>
@@ -472,7 +482,7 @@ export default function CustomerProfile({
         const userData = await getUserData<User>(
           id,
           role,
-          "firstName lastName email phoneNumber address birthDate gender points avatar role"
+          "firstName lastName email phoneNumber address birthDate gender points avatar role",
         );
         setUser(userData);
       } catch (error) {
@@ -518,7 +528,7 @@ export default function CustomerProfile({
     try {
       const response = await changeUserPassword(
         passwordData.currentPassword,
-        passwordData.newPassword
+        passwordData.newPassword,
       );
       if (response.success) {
         toast.success(tToasts("passwordChanged"));
@@ -553,14 +563,14 @@ export default function CustomerProfile({
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { name, value } = e.target;
     const newData = { ...passwordData, [name]: value };
@@ -572,7 +582,7 @@ export default function CustomerProfile({
   const handleSave = async () => {
     if (user._id) {
       await dispatch(
-        updateUserProfile({ id: user._id, data: formData as any })
+        updateUserProfile({ id: user._id, data: formData as any }),
       );
       setIsEditing(false);
     }
@@ -597,7 +607,7 @@ export default function CustomerProfile({
 
         <div className="flex flex-col xl:flex-row items-start gap-8">
           {/* Left Side: Identity */}
-          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-[350px]">
+          <div className="flex flex-col gap-6 w-full xl:w-auto xl:min-w-87.5">
             <div className="flex flex-col items-center gap-4 sm:gap-6">
               <ImageUpload
                 currentImageUrl={user.avatar?.url}
@@ -701,7 +711,7 @@ export default function CustomerProfile({
                         const userData = await getUserData<User>(
                           id,
                           role,
-                          "firstName lastName email phoneNumber address birthDate gender points avatar role"
+                          "firstName lastName email phoneNumber address birthDate gender points avatar role",
                         );
                         setUser(userData);
                       }
@@ -875,11 +885,14 @@ export default function CustomerProfile({
         )}
       </div>
 
-      {/* Order History */}
-      {role === "customer" && <OrderHistoryComponent user={user} />}
-
-      {/* Recycling History */}
-      {role === "customer" && <RecyclingHistoryComponent user={user} />}
+      {role === "customer" && (
+        <>
+          {/* Order History */}
+          <OrderHistoryComponent />
+          {/* Recycling History */}
+          <RecyclingHistoryComponent id={user._id} />
+        </>
+      )}
 
       {/* Edit Modal */}
       {isEditing && (

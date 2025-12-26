@@ -25,6 +25,8 @@ export const mapResponseToIProduct = (res: ProductResponse): IProduct => {
     sustainabilityScore: res.sustainabilityScore || 0,
     sustainabilityReason: res.sustainabilityReason,
     category: res.category,
+    quantity: res.quantity,
+    inStock: res.inStock,
   };
 };
 
@@ -33,6 +35,7 @@ export interface CreateProductDTO {
   subtitle: string;
   price: number;
   category: MenuItemCategory;
+  quantity?: number; // Optional - defaults to 1 in schema
   avatar?: {
     key: string;
     url?: string;

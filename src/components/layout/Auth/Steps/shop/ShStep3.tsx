@@ -3,21 +3,32 @@
 import { saveStep3Data, setStepValid } from "@/frontend/redux/Slice/AuthSlice";
 import { Step3ShopSchema } from "@/frontend/schema/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";
-import { useTranslations } from 'next-intl';
-
+import { useTranslations } from "next-intl";
+import { CategoryOptionClient } from "@/types/ShopTypes";
 
 const ShStep3 = () => {
-  const t = useTranslations('Auth.steps.shopStep3');
+  const t = useTranslations("Auth.steps.shopStep3");
   const dispatch = useDispatch();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const categories: CategoryOptionClient[] = [
+    "supermarket",
+    "hypermarket",
+    "grocery",
+    "bakery",
+    "cafe",
+    "other",
+  ];
 
   const form = useForm<Z.infer<typeof Step3ShopSchema>>({
     resolver: zodResolver(Step3ShopSchema),
     mode: "onChange",
     defaultValues: {
+      category: undefined,
       location: "",
       workingHours: "",
     },
@@ -32,7 +43,7 @@ const ShStep3 = () => {
       dispatch(saveStep3Data(value));
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, dispatch]);
+  }, [form.watch, dispatch, form]);
 
   useEffect(() => {
     dispatch(setStepValid({ step: 3, valid: form.formState.isValid }));
@@ -41,94 +52,78 @@ const ShStep3 = () => {
   const {
     register,
     formState: { errors },
+    setValue,
+    watch,
   } = form;
+
+  const selectedCategory = watch("category");
+
+  const handleCategorySelect = (category: CategoryOptionClient) => {
+    setValue("category", category, { shouldValidate: true });
+    setIsDropdownOpen(false);
+  };
+
   return (
-    <div className="flex flex-col gap-5 p-5 text-foreground rounded-lg">
+    <div className="flex flex-col gap-5 px-5 py-10 text-foreground rounded-lg h-[60vh]!">
       <form
         action=""
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-5 "
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          {t('title')}
+          {t("title")}
         </p>
 
-        {/* Logo upload */}
-        <div>
-          {/* <Controller
-            name="avatar"
-            control={control}
-            render={({ field }) => (
-              <input
-                type="file"
-                accept="image/png,image/jpeg,image/webp"
-                className="myInput"
-                name={field.name}
-                ref={field.ref}
-                onChange={(event) =>
-                  field.onChange(event.target.files ?? undefined)
-                }
+        {/* Category Dropdown */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="myInput w-full text-left flex justify-between items-center cursor-pointer"
+          >
+            <span className={selectedCategory ? "" : "text-gray-400"}>
+              {selectedCategory
+                ? t(`categories.${selectedCategory}`)
+                : t("selectCategory")}
+            </span>
+            <svg
+              className={`w-5 h-5 transition-transform ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
               />
-            )}
-          /> */}
-              {/* <div className="flex flex-col items-center gap-4">
-                <div className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
-                  {previewUrl ? (
-                    <Image
-                      src={previewUrl}
-                      alt="Shop Logo"
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center text-gray-400">
-                      <UploadCloud size={24} />
-                      <span className="text-xs mt-1">Upload Logo</span>
-                    </div>
-                  )}
+            </svg>
+          </button>
 
-                  {isUploading && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
-                      <Loader2 className="w-6 h-6 text-white animate-spin" />
-                    </div>
-                  )}
+          {isDropdownOpen && (
+            <div className="absolute  z-10 w-full mt-1 bg-background  border border-primary rounded-md shadow-lg max-h-60 overflow-y-auto">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => handleCategorySelect(category)}
+                  className={`w-full text-left px-4 py-2 hover:bg-primary/25 transition-colors cursor-pointer ${
+                    selectedCategory === category
+                      ? "bg-primary text-primary-foreground font-medium"
+                      : ""
+                  }`}
+                >
+                  {t(`categories.${category}`)}
+                </button>
+              ))}
+            </div>
+          )}
 
-                  <input
-                    type="file"
-                    accept="image/png,image/jpeg,image/webp"
-                    className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
-                    disabled={isUploading}
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-
-                      if (file.size > 2 * 1024 * 1024) {
-                        toast.error("File size must be less than 2MB");
-                        return;
-                      }
-
-                      setIsUploading(true);
-
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        const base64String = reader.result as string;
-                        setPreviewUrl(base64String);
-                        field.onChange(base64String); // Store Base64 string
-                        setIsUploading(false);
-                      };
-                      reader.onerror = () => {
-                        toast.error("Failed to read file");
-                        setIsUploading(false);
-                      };
-                      reader.readAsDataURL(file);
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          /> */}
-          {errors.avatar && (
-            <p className="text-red-500">{errors.avatar.message}</p>
+          {errors.category && (
+            <p className="text-red-500 mt-1">{errors.category.message}</p>
           )}
         </div>
 
@@ -136,7 +131,7 @@ const ShStep3 = () => {
         <div>
           <input
             type="text"
-            placeholder={t('location')}
+            placeholder={t("location")}
             className="myInput"
             {...register("location")}
           />
@@ -146,11 +141,10 @@ const ShStep3 = () => {
         </div>
 
         {/* Working hours */}
-
         <div>
           <input
             type="text"
-            placeholder={t('workingHours')}
+            placeholder={t("workingHours")}
             className="myInput"
             {...register("workingHours")}
           />

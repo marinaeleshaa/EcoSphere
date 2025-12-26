@@ -44,6 +44,7 @@ const orderSchema = new Schema<IOrder>(
         "pending",
         "paid",
         "preparing",
+        "failed",
         "delivering",
         "completed",
         "canceled",

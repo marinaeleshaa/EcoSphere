@@ -65,7 +65,8 @@
         "orders": "الطلبات",
         "shops": "المتاجر",
         "events": "الفعاليات",
-        "recycling": "التدوير"
+        "recycling": "التدوير",
+        "news": "الأخبار"
       },
       "footer": {
         "favorite": "المفضلة",
@@ -265,13 +266,19 @@
     },
     "slider": {
       "title": "متاجر شركائنا",
-      "scrollHint": "قم بالتمرير لاستكشاف المزيد"
+      "scrollHint": "قم بالتمرير لاستكشاف المزيد",
+      "loading": "جاري تحميل المتاجر...",
+      "error": "فشل تحميل المتاجر. يرجى المحاولة مرة أخرى.",
+      "retry": "إعادة المحاولة",
+      "noStores": "لا توجد متاجر متاحة في الوقت الحالى"
     },
     "product": {
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
-      "addedToCart": "تمت الإضافة للسلة",
-      "removedFromCart": "تمت الإزالة من السلة",
+      "addToCart": "أضف إلى السلة",
+      "removeFromCart": "إزالة من السلة",
+      "outOfStock": "نفذت الكمية",
+      "lowStock": "فقط {count} متبقي!",
       "currency": "ج.م"
     },
     "filter": {
@@ -311,8 +318,14 @@
       "description": "الوصف",
       "quantity": "الكمية:",
       "addToCart": "أضف إلى السلة",
+      "removeFromCart": "إزالة من السلة",
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
+      "addedToCart": "تمت الإضافة للسلة",
+      "removedFromCart": "تمت الإزالة من السلة",
+      "outOfStock": "نفذت الكمية",
+      "availability": "التوفر",
+      "inStock": "{count} متوفر",
       "availableOnline": "متاح عبر الانترنت",
       "notAvailableOnline": "غير متاح عبر الانترنت"
     },
@@ -353,6 +366,21 @@
       "title": "منتجات المتجر",
       "subtitle": "استكشف منتجات هذا المتجر",
       "noProducts": "لا توجد منتجات متاحة لهذا المتجر."
+    },
+    "card": {
+      "addedToFavorites": "تمت الإضافة إلى المفضلة",
+      "removedFromFavorites": "تمت الإزالة من المفضلة",
+      "addedToCart": "تمت الإضافة للسلة",
+      "removedFromCart": "تمت الإزالة من السلة",
+      "outOfStock": "نفذت الكمية",
+      "availability": "التوفر",
+      "inStock": "{count} متوفر",
+      "description": "الوصف",
+      "quantity": "الكمية",
+      "addToCart": "أضف إلى السلة",
+      "removeFromCart": "إزالة من السلة",
+      "availableOnline": "متاح أونلاين",
+      "notAvailableOnline": "غير متاح أونلاين"
     }
   },
   "Restaurant": {
@@ -388,11 +416,15 @@
         "priceLabel": "السعر (ج.م)",
         "imageLabel": "صورة المنتج",
         "availableLabel": "متاح أونلاين",
+        "quantityLabel": "الكمية",
+        "quantityPlaceholder": "الكمية المتاحة",
         "errors": {
           "titleRequired": "العنوان مطلوب",
           "subtitleRequired": "الوصف مطلوب",
           "priceRequired": "السعر مطلوب",
-          "categoryRequired": "يرجى اختيار فئة"
+          "categoryRequired": "يرجى اختيار فئة",
+          "quantityRequired": "الكمية مطلوبة",
+          "quantityNegative": "الكمية لا يمكن أن تكون سالبة"
         }
       },
       "Categories": {
@@ -407,6 +439,8 @@
         "snacks": "وجبات خفيفة",
         "other": "أخرى"
       },
+      "stock": "المخزون",
+      "outOfStock": "نفذت الكمية",
       "filter": {
         "category": "الفئة",
         "allCategories": "جميع الفئات",
@@ -516,7 +550,16 @@
       "shopStep3": {
         "title": "بيانات المتجر",
         "location": "أدخل موقع المتجر",
-        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م"
+        "workingHours": "مثال: الإثنين–الجمعة 9:00 ص – 6:00 م",
+        "selectCategory": "اختر فئة",
+        "categories": {
+          "supermarket": "سوبر ماركت",
+          "hypermarket": "هايبر ماركت",
+          "grocery": "بقالة",
+          "bakery": "مخبز",
+          "cafe": "مقهى",
+          "other": "أخرى"
+        }
       },
       "lastStep": {
         "title": "الخطوة الأخيرة",
@@ -568,13 +611,19 @@
       "recyclingHistory": {
         "title": "سجل إعادة التدوير",
         "date": "التاريخ",
+        "createdAt": "تاريخ الانشاء",
+        "updatedAt": "تاريخ اخر تحديث",
         "items": "العناصر",
-        "itemsCount": "عناصر",
-        "weight": "الوزن (كجم)",
+        "itemsCount": "عدد الوحدات",
+        "weight": "الوزن تقريبا (كجم)",
         "carbonSaved": "الكربون المحفوظ",
         "status": "الحالة",
         "verified": "محقق",
         "pending": "قيد الانتظار",
+        "completed": "مكتمل",
+        "review": "مراجعة",
+        "rejected": "مرفوض",
+        "processing": "قيد المعالجة",
         "noRecyclingOrders": "لا توجد طلبات إعادة تدوير بعد",
         "noRecyclingOrdersDescription": "ابدأ بإعادة التدوير لرؤية تأثيرك البيئي هنا",
         "browseRecycling": "ابدأ إعادة التدوير"
@@ -1338,6 +1387,41 @@
         "deleted": "تم حذف الوصفة",
         "deleteError": "تعذر حذف الوصفة"
       }
+    }
+  },
+  "Checkout": {
+    "page": {
+      "title": "الدفع",
+      "payWithCard": "الدفع بالبطاقة",
+      "payWithCash": "الدفع عند الاستلام",
+      "somethingWentWrong": "حدث خطأ ما",
+      "youWillPay": "ستدفع",
+      "directlyToCourier": "مباشرة للمندوب عند التسليم.",
+      "confirmOrder": "تأكيد الطلب"
+    },
+    "form": {
+      "initializing": "جار تهيئة الدفع الآمن...",
+      "securePayment": "دفع آمن",
+      "securePaymentDesc": "أتمم عملية الشراء بأمان.",
+      "errorTitle": "خطأ",
+      "unexpectedError": "حدث خطأ غير متوقع.",
+      "processing": "جار المعالجة...",
+      "pay": "ادفع {amount}",
+      "securedByStripe": "الدفع مؤمن بواسطة Stripe"
+    },
+    "verification": {
+      "orderId": "رقم الطلب",
+      "successTitle": "تم الدفع بنجاح",
+      "successDesc": "شكراً لمساهمتك في مستقبل أخضر.",
+      "transactionId": "رقم العملية",
+      "totalAmount": "المبلغ الإجمالي",
+      "returnHome": "العودة للرئيسية",
+      "downloadReceipt": "تحميل الإيصال",
+      "failedTitle": "فشل الدفع",
+      "failedDesc": "واجهنا مشكلة في معالجة دفعتك. لم يتم خصم أي أموال.",
+      "errorCode": "رمز الخطأ: {code}",
+      "cardDeclined": "تم رفض البطاقة. يرجى التحقق من تفاصيل بطاقتك أو تجربة طريقة دفع أخرى.",
+      "tryAgain": "حاول مرة أخرى"
     }
   }
 }

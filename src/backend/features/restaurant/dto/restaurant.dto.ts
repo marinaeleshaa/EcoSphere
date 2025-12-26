@@ -31,6 +31,8 @@ export const mapResponseToIShop = (res: RestaurantResponse): IShop => {
           availableOnline: menu.availableOnline ?? true,
           sustainabilityScore: menu.sustainabilityScore,
           sustainabilityReason: menu.sustainabilityReason,
+          quantity: menu.quantity ?? 1,
+          inStock: (menu.quantity ?? 1) > 0,
         }))
       : [],
     restaurantRating: res.restaurantRating

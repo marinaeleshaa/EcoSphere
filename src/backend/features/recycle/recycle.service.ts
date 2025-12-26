@@ -80,9 +80,9 @@ export class RecycleService implements IRecycleService {
     return mappedData;
   }
 
-  async getRecycleEntriesByEmail(email: string): Promise<RecycleResponse[]> {
+  async getRecycleEntriesByEmail(userId: string): Promise<RecycleResponse[]> {
     const response =
-      await this.recycleRepository.getRecycleEntriesByEmail(email);
+      await this.recycleRepository.getRecycleEntriesByEmail(userId);
     const mappedData = response.map((item) => mapRecycleToResponse(item));
     return mappedData;
   }

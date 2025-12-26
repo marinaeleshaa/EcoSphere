@@ -21,6 +21,7 @@ interface IThirdShopStep {
   avatar: string;
   location: string;
   workingHours: string;
+  category: CategoryOptionClient;
 }
 
 interface IFourthStep {
@@ -66,6 +67,7 @@ const initialState: AuthState = {
 };
 
 import { signIn, signOut } from "next-auth/react";
+import { CategoryOptionClient } from "@/types/ShopTypes";
 
 // Real Login Thunk
 export const loginUser = createAsyncThunk(
@@ -95,21 +97,21 @@ export const loginUser = createAsyncThunk(
       // 1. Call /api/login directly (as before) AND call signIn (double auth?) - Bad.
       // 2. Trust that signIn called the controller and set the cookie.
       //    But signIn response doesn't have the user data.
-      
+
       // We need to fetch the user profile.
-      // Let's call the original /api/login endpoint? 
+      // Let's call the original /api/login endpoint?
       // No, that would try to log in again.
-      
+
       // We need an endpoint to get the current user profile.
       // The user might not have one.
-      
+
       // TEMPORARY SOLUTION:
       // Call /api/login to get the data for Redux, AND call signIn to set the cookie for Middleware.
       // It's inefficient but solves the immediate problem of "Middleware redirecting" + "Redux needing data".
-      
+
       // 1. Call signIn to satisfy Middleware (sets cookie)
       // Already done above.
-      
+
       // 2. Call /api/login to get data for Redux
       const response = await fetch("/api/login", {
         method: "POST",
@@ -128,10 +130,10 @@ export const loginUser = createAsyncThunk(
       }
 
       const userData = data.data?.user || data.user; // Handle both structures
-      
+
       // Store token in localStorage as backup/for API calls if needed
       if (data.data?.token || data.token) {
-          localStorage.setItem("token", data.data?.token || data.token);
+        localStorage.setItem("token", data.data?.token || data.token);
       }
 
       dispatch(setUser({ ...userData, isLoggedIn: true }));

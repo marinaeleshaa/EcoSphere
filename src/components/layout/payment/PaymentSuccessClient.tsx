@@ -22,8 +22,14 @@ export function PaymentSuccessClient({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchOrder = async () => {
+    const confirmAndFetchOrder = async () => {
       try {
+        // First, confirm the order and decrease stock (idempotent - safe to call multiple times)
+        await fetch(`/api/orders/${orderId}/confirm`, {
+          method: "POST",
+        });
+
+        // Then fetch order details
         const response = await getOrderById(orderId);
         if (response?.data) {
           setOrder(response.data);
@@ -38,7 +44,7 @@ export function PaymentSuccessClient({
       }
     };
 
-    fetchOrder();
+    confirmAndFetchOrder();
   }, [orderId]);
 
   if (loading) {

@@ -4,12 +4,12 @@ import { RecycleController } from "@/backend/features/recycle/recycle.controller
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ email: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { email } = await params;
+    const { id } = await params;
     const controller = rootContainer.resolve(RecycleController);
-    const entries = await controller.getRecycleEntriesByEmail(email);
+    const entries = await controller.getRecycleEntriesByEmail(id);
     return NextResponse.json(entries);
   } catch (error: any) {
     return NextResponse.json(

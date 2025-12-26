@@ -2,12 +2,12 @@ import { Document, model, models, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
 export type ShopCategory =
-  | "Supermarket"
-  | "Hypermarket"
-  | "Grocery"
-  | "Bakery"
-  | "Cafe"
-  | "Other";
+  | "supermarket"
+  | "hypermarket"
+  | "grocery"
+  | "bakery"
+  | "cafe"
+  | "other";
 
 export type MenuItemCategory =
   | "Fruits"
@@ -38,6 +38,8 @@ export interface IMenuItem extends Document {
   sustainabilityReason?: string;
   availableOnline: boolean;
   category: MenuItemCategory;
+  quantity: number;
+  readonly inStock: boolean; // Virtual field computed from quantity > 0
 }
 
 export interface IRestaurant extends Document {
@@ -100,7 +102,17 @@ export const menuItemSchema = new Schema<IMenuItem>({
     ],
     required: true,
   },
+  quantity: { type: Number, required: true, default: 1, min: 0 },
 });
+
+// Add virtual field for inStock
+menuItemSchema.virtual("inStock").get(function () {
+  return this.quantity > 0;
+});
+
+// Ensure virtuals are included in JSON/Object conversion
+menuItemSchema.set("toJSON", { virtuals: true });
+menuItemSchema.set("toObject", { virtuals: true });
 
 const restaurantSchema = new Schema<IRestaurant>(
   {
@@ -123,12 +135,12 @@ const restaurantSchema = new Schema<IRestaurant>(
     category: {
       type: String,
       enum: [
-        "Supermarket",
-        "Grocery",
-        "Hypermarket",
-        "Cafe",
-        "Bakery",
-        "Other",
+        "supermarket",
+        "grocery",
+        "hypermarket",
+        "cafe",
+        "bakery",
+        "other",
       ],
       required: true,
     },
