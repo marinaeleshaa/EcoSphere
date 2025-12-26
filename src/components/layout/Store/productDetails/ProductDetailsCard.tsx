@@ -2,7 +2,7 @@
 import { IProduct } from "@/types/ProductType";
 import Image from "next/image";
 import { useState } from "react";
-import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
+import { Heart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 import { RootState } from "@/frontend/redux/store";
 import {
@@ -17,6 +17,8 @@ import {
   isInCartSelector,
   removeItem,
 } from "@/frontend/redux/Slice/CartSlice";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const t = useTranslations("ProductDetails.card");
@@ -43,21 +45,34 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
   const [count, setCount] = useState(1);
   const isFav = useAppSelector((state: RootState) =>
-    isInFavSelector(state, safeId),
+    isInFavSelector(state, safeId)
   );
   const isInCart = useAppSelector((state: RootState) =>
-    isInCartSelector(state, product.id),
+    isInCartSelector(state, product.id)
   );
-  const handleAddToCart = () => {
+  const dispatch = useAppDispatch();
+
+  const handleCartToggle = () => {
+    if (!product.inStock) {
+      toast.error(t("outOfStock")); // Added toast for out of stock
+      return; // Don't allow cart actions for out-of-stock items
+    }
+
     if (isInCart) {
       dispatch(removeItem(product.id));
-      toast.success(t("removedFromCart"));
+      toast.success(t("removedFromCart")); // Added toast here
     } else {
-      dispatch(addItem({ ...product, quantity: count }));
-      toast.success(t("addedToCart"));
+      dispatch(
+        addItem({
+          ...product,
+          quantity: count, // Use the selected count from quantity selector
+          maxQuantity: product.quantity, // Set available stock as max
+        })
+      );
+      toast.success(t("addedToCart")); // Added toast here
     }
   };
-  const dispatch = useAppDispatch();
+
   const handleFav = () => {
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
@@ -67,7 +82,14 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
     }
   };
 
-  const handleIncrement = () => setCount((prev) => prev + 1);
+  const handleIncrement = () => {
+    const maxAllowed = product.quantity || 999; // Use product quantity as max
+    if (count < maxAllowed) {
+      setCount((prev) => prev + 1);
+    } else {
+      toast.error(`Only ${maxAllowed} available in stock`);
+    }
+  };
   const handleDecrement = () => {
     if (count > 1) setCount((prev) => prev - 1);
   };
@@ -172,6 +194,22 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
             {typeof safePrice === "number" ? safePrice.toFixed(2) : "0.00"} EGP
           </div>
 
+          {/* Stock Availability */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {t("availability")}:
+            </span>
+            {product.quantity !== undefined && product.quantity > 0 ? (
+              <span className="text-sm font-semibold text-green-600">
+                {t("inStock", { count: product.quantity })}
+              </span>
+            ) : (
+              <span className="text-sm font-semibold text-red-600">
+                {t("outOfStock")}
+              </span>
+            )}
+          </div>
+
           {/* Description */}
           <div>
             <h3 className="text-lg font-semibold mb-2">{t("description")}</h3>
@@ -213,13 +251,20 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
 
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
-            <button
-              className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer"
-              onClick={handleAddToCart}
+            <Button
+              onClick={handleCartToggle}
+              disabled={!product.inStock}
+              className={cn(
+                "w-full",
+                isInCart && "bg-red-500 hover:bg-red-600"
+              )}
             >
-              <ShoppingCart className="w-5 h-5" />
-              {isInCart ? t("removeFromCart") : t("addToCart")}
-            </button>
+              {!product.inStock
+                ? t("outOfStock")
+                : isInCart
+                ? t("removeFromCart")
+                : t("addToCart")}
+            </Button>
             <button
               onClick={handleFav}
               className={`p-3 rounded-lg border-2 transition-colors cursor-pointer ${

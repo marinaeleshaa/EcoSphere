@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 import { Loader2 } from "lucide-react";
 import ImageUpload from "@/components/layout/common/ImageUpload";
@@ -43,15 +44,19 @@ export default function ProductPopup({
       subtitle: "",
       price: 0,
       availableOnline: true,
+      quantity: 1, // Added default quantity
     },
   });
 
   const [imageKey, setImageKey] = React.useState<string | undefined>(
     initialData?.avatar?.key
   );
-  const [selectedCategory, setSelectedCategory] = React.useState<
-    MenuItemCategory | undefined
-  >(initialData?.category);
+  const [category, setCategory] = React.useState<MenuItemCategory | undefined>(
+    initialData?.category
+  );
+  const [quantity, setQuantity] = React.useState<number>(
+    initialData?.quantity ?? 1
+  );
   const [categoryError, setCategoryError] = React.useState<
     string | undefined
   >();
@@ -61,30 +66,39 @@ export default function ProductPopup({
       if (initialData) {
         reset(initialData);
         setImageKey(initialData.avatar?.key);
-        setSelectedCategory(initialData.category);
+        setCategory(initialData.category);
+        setQuantity(initialData.quantity ?? 1);
       } else {
         reset({
           title: "",
           subtitle: "",
           price: 0,
           availableOnline: true,
+          quantity: 1,
         });
         setImageKey(undefined);
-        setSelectedCategory(undefined);
+        setCategory(undefined);
+        setQuantity(1);
       }
       setCategoryError(undefined);
     }
   }, [isOpen, initialData, reset]);
 
   const handleFormSubmit = async (data: CreateProductDTO) => {
-    if (!selectedCategory) {
-      setCategoryError(t("popup.errors.categoryRequired"));
+    if (!category) {
+      setCategoryError(t("popup.errors.categoryRequired")); // Changed to setCategoryError
+      toast.error(t("popup.errors.categoryRequired")); // Added toast
+      return;
+    }
+    if (quantity < 0) {
+      toast.error(t("popup.errors.quantityNegative")); // Added toast
       return;
     }
     if (imageKey) {
       data.avatar = { key: imageKey };
     }
-    data.category = selectedCategory;
+    data.category = category;
+    data.quantity = quantity; // Added quantity to data
     await onSubmit(data);
     onClose();
   };
@@ -169,14 +183,24 @@ export default function ProductPopup({
           </div>
 
           <CategorySelect
-            value={selectedCategory}
+            value={category}
             onChange={(value) => {
-              setSelectedCategory(value);
+              setCategory(value);
               setCategoryError(undefined);
             }}
             error={categoryError}
           />
 
+          <div className="space-y-2">
+            <Label htmlFor="quantity">{t("popup.quantityLabel")}</Label>
+            <Input
+              id="quantity"
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
+              min={0}
+            />
+          </div>
           <div className="space-y-2">
             <Label>{t("popup.imageLabel")}</Label>
             <div className="h-40 w-full border rounded-md">
@@ -193,7 +217,6 @@ export default function ProductPopup({
               />
             </div>
           </div>
-
           <div className="flex items-center space-x-2">
             <input
               type="checkbox"

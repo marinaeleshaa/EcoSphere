@@ -7,7 +7,7 @@ import { OrderService } from "../features/orders/order.service";
 @injectable()
 export class PaymentService {
   constructor(
-    @inject("OrderService") private readonly orderService: OrderService,
+    @inject("OrderService") private readonly orderService: OrderService
   ) {}
   /**
    * Creates a Stripe PaymentIntent.
@@ -18,13 +18,13 @@ export class PaymentService {
   async createPaymentIntent(
     amount: number,
     currency: string = "usd",
-    metadata: Record<string, string> = {},
+    metadata: Record<string, string> = {}
   ): Promise<Stripe.PaymentIntent> {
     // Stripe requires a minimum equivalent to $0.50 USD.
     // EGP ~0.50 USD is roughly 25-30 EGP. We'll enforce 30 EGP to be safe.
     if (currency.toLowerCase() === "egp" && amount < 3000) {
       throw new Error(
-        "Amount is too small. The minimum payment for EGP is 30.00 EGP due to payment processor requirements.",
+        "Amount is too small. The minimum payment for EGP is 30.00 EGP due to payment processor requirements."
       );
     }
     try {
@@ -62,7 +62,7 @@ export class PaymentService {
       // map the Stripe customer/subscription back to a user or restaurant in our DB.
       if (!opts.metadata || Object.keys(opts.metadata).length === 0) {
         console.warn(
-          "Creating Stripe Checkout session without metadata; webhooks will not be able to map customer to user/restaurant.",
+          "Creating Stripe Checkout session without metadata; webhooks will not be able to map customer to user/restaurant."
         );
       }
 
@@ -127,6 +127,14 @@ export class PaymentService {
       items: cartItems.map((item) => ({ ...item, productId: item.id })),
       paymentMethod: "stripe",
     });
+
+    // Prepare items data for webhook to decrease stock on payment success
+    const itemsForStock = cartItems.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+      restaurantId: item.restaurantId,
+    }));
+
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
@@ -145,7 +153,11 @@ export class PaymentService {
       success_url: `${successUrl}?orderId=${order._id}`, // `${process.env.NEXT_PUBLIC_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${cancelUrl}?orderId=${order._id}`, // `${process.env.NEXT_PUBLIC_BASE_URL}/cancel`,
       customer_email: userEmail,
-      metadata: { userId, orderId: `${order._id}` },
+      metadata: {
+        userId,
+        orderId: `${order._id}`,
+        items: JSON.stringify(itemsForStock), // Items for stock decrease on payment success
+      },
       // Allow promotion codes and automatic tax behavior if desired
       allow_promotion_codes: true,
     });

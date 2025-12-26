@@ -109,6 +109,18 @@ export default function ProductCard({
           </span>
         </div>
 
+        {/* Stock Information */}
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-sm text-muted-foreground">
+            {t("stock")}: {product.quantity}
+          </span>
+          {!product.inStock && (
+            <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+              {t("outOfStock")}
+            </span>
+          )}
+        </div>
+
         <p className="text-sm text-muted-foreground line-clamp-2 flex-1">
           {product.subtitle}
         </p>

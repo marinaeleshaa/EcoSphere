@@ -359,6 +359,7 @@ export default function ProductsClient({
                 price: editingProduct.price,
                 availableOnline: editingProduct.availableOnline,
                 category: editingProduct.category,
+                quantity: editingProduct.quantity,
                 avatar: editingProduct.avatar,
               }
             : undefined

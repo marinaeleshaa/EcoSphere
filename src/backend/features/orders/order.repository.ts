@@ -30,6 +30,11 @@ export interface IOrderRepository {
     startDate: string,
     endDate: string
   ): Promise<RevenuePerDate[]>;
+  atomicUpdateOrderStatus(
+    orderId: string,
+    expectedStatus: string,
+    newStatus: string
+  ): Promise<IOrder | null>;
 }
 
 @injectable()
@@ -167,5 +172,32 @@ export class OrderRepository implements IOrderRepository {
         },
       },
     ]).exec();
+  }
+
+  /**
+   * Atomically update order status only if current status matches expectedStatus.
+   * Returns the updated order if successful, null if order not found or status didn't match.
+   * This prevents race conditions when multiple requests try to confirm the same order.
+   */
+  async atomicUpdateOrderStatus(
+    orderId: string,
+    expectedStatus: string,
+    newStatus: string
+  ): Promise<IOrder | null> {
+    await DBInstance.getConnection();
+    const updatedOrder = await OrderModel.findOneAndUpdate(
+      {
+        _id: orderId,
+        status: expectedStatus, // Only update if status matches
+      },
+      {
+        status: newStatus,
+        paidAt: newStatus === "paid" ? new Date() : undefined,
+      },
+      { new: true }
+    )
+      .lean<IOrder>()
+      .exec();
+    return updatedOrder;
   }
 }

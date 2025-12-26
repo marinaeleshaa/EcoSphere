@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { type IOrderRepository } from "./order.repository";
+import { type IProductRepository } from "../product/product.repository";
 import {
   revenuePerRest,
   BestSailingProduct,
@@ -22,6 +23,7 @@ export interface IOrderService {
   handleStripeEvent(event: Stripe.Event): Promise<void>;
   updateOrderStatus(orderId: string, status: OrderStatus): Promise<IOrder>;
   deleteOrder(orderId: string): Promise<IOrder>;
+  decreaseStockForOrder(items: any[], restaurantId?: string): Promise<void>;
   getRestaurantRevenue(restaurantId: string): Promise<revenuePerRest[]>;
   getBestSellingProducts(): Promise<BestSailingProduct[]>;
   getTopCustomers(): Promise<TopCustomers[]>;
@@ -29,8 +31,9 @@ export interface IOrderService {
   getActiveRestaurantOrders(restaurantId: string): Promise<IOrder[]>;
   getRevenueByDateRange(
     startDate: string,
-    endDate: string,
+    endDate: string
   ): Promise<RevenuePerDate[]>;
+  atomicConfirmOrder(orderId: string): Promise<IOrder | null>;
 }
 
 @injectable()
@@ -38,13 +41,15 @@ export class OrderService implements IOrderService {
   constructor(
     @inject("OrderRepository")
     private readonly orderRepository: IOrderRepository,
+    @inject("IProductRepository") // Added this dependency
+    private readonly productRepository: IProductRepository, // Added this dependency
     @inject("IUserService") private readonly userService: IUserService,
-    @inject("IEventService") private readonly eventService: IEventService,
+    @inject("IEventService") private readonly eventService: IEventService
   ) {}
 
   async createOrder(
     userId: string,
-    orderData: CreateOrderDTO,
+    orderData: CreateOrderDTO
   ): Promise<IOrder> {
     if (orderData.items.length > 0 && orderData.items[0].eventId) {
       const item = orderData.items[0];
@@ -77,7 +82,7 @@ export class OrderService implements IOrderService {
 
     const orderItems: IOrderItem[] = orderData.items.map((item) => {
       const cartItem = userCart.items.find(
-        (ci) => `${ci.id}` === `${item.productId}`,
+        (ci) => `${ci.id}` === `${item.productId}`
       );
 
       if (!cartItem) {
@@ -99,7 +104,7 @@ export class OrderService implements IOrderService {
 
     const orderPrice = orderItems.reduce(
       (sum, item) => sum + item.totalPrice,
-      0,
+      0
     );
 
     const orderNewData = {
@@ -131,7 +136,7 @@ export class OrderService implements IOrderService {
             if (item.eventId) {
               await this.eventService.attendEvent(
                 order.userId.toString(),
-                item.eventId.toString(),
+                item.eventId.toString()
               );
             }
           }
@@ -181,7 +186,7 @@ export class OrderService implements IOrderService {
 
   async updateOrderStatus(
     orderId: string,
-    status: OrderStatus,
+    status: OrderStatus
   ): Promise<IOrder> {
     const updatedOrder = await this.orderRepository.updateOrderStatus(orderId, {
       status,
@@ -222,10 +227,65 @@ export class OrderService implements IOrderService {
 
   async getRevenueByDateRange(
     startDate: string,
-    endDate: string,
+    endDate: string
   ): Promise<RevenuePerDate[]> {
     return this.orderRepository.revenueFilteredByDate(startDate, endDate);
   }
+
+  /**
+   * Atomically confirm order - updates status from 'pending' to 'paid' in a single operation.
+   * Returns the order ONLY if it was successfully updated (was pending).
+   * Returns null if order doesn't exist or was already processed.
+   * This prevents double stock decrease from React Strict Mode calling useEffect twice.
+   */
+  async atomicConfirmOrder(orderId: string): Promise<IOrder | null> {
+    return await this.orderRepository.atomicUpdateOrderStatus(
+      orderId,
+      "pending", // Only update if current status is pending
+      "paid" // Update to paid
+    );
+  }
+
+  async decreaseStockForOrder(
+    items: any[],
+    restaurantId?: string
+  ): Promise<void> {
+    // Group items by restaurant
+    const itemsByRestaurant = new Map<string, any[]>();
+
+    for (const item of items) {
+      const restId = restaurantId || item.restaurantId;
+      if (!restId) continue;
+
+      if (!itemsByRestaurant.has(restId)) {
+        itemsByRestaurant.set(restId, []);
+      }
+      itemsByRestaurant.get(restId)!.push(item);
+    }
+
+    // Decrease stock for each restaurant's items
+    for (const [restId, restaurantItems] of itemsByRestaurant) {
+      for (const item of restaurantItems) {
+        try {
+          await this.productRepository.decreaseStock(
+            restId,
+            item.id,
+            item.quantity
+          );
+          console.log(
+            `✅ Stock decreased: Product ${item.id}, Quantity ${item.quantity}`
+          );
+        } catch (error) {
+          console.error(
+            `❌ Failed to decrease stock for product ${item.id}:`,
+            error
+          );
+          // Continue with other items even if one fails
+        }
+      }
+    }
+  }
+
   // private getCartTotal = (items: IProductCart[]) =>
   // 	items.reduce(
   // 		(sum, { productPrice, quantity }) => sum + productPrice * quantity,

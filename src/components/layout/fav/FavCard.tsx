@@ -21,7 +21,7 @@ const FavCard = ({ product }: FavCardProps) => {
   const t = useTranslations("Favorites.card");
   const { view } = useAppSelector((state: RootState) => state.fav);
   const isInCart = useAppSelector((state: RootState) =>
-    isInCartSelector(state, product.id),
+    isInCartSelector(state, product.id)
   );
   const dispatch = useAppDispatch();
   const handleRemoveFromFav = () => {
@@ -34,7 +34,13 @@ const FavCard = ({ product }: FavCardProps) => {
       dispatch(removeItem(product.id));
       toast.success(t("removedFromCart"));
     } else {
-      dispatch(addItem({ ...product, quantity: 1 }));
+      dispatch(
+        addItem({
+          ...product,
+          quantity: 1,
+          maxQuantity: product.quantity || 999,
+        })
+      );
       toast.success(t("addedToCart"));
     }
   };
