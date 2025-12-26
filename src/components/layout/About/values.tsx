@@ -48,9 +48,9 @@ export default async function Values() {
                 whileHover={{ translateY: -4 }}
                 className="rounded-2xl p-8 text-center shadow-lg duration-300 group border border-transparent hover:border-theme transform hover:scale-[1.02] ring-2 ring-primary/30 dark:ring-primary/60 dark:shadow-primary/30"
               >
-                <BasicAnimatedWrapper className="mx-auto w-20 h-20 bg-primary/0.08 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="mx-auto w-20 h-20 bg-primary/0.08 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   {value.icon}
-                </BasicAnimatedWrapper>
+                </div>
                 <h3 className="font-bold text-xl text-accent-foreground mb-4">
                   {t(`cards.${value.key}.title`)}
                 </h3>

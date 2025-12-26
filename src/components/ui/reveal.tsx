@@ -12,7 +12,7 @@ type RevealProps = {
 const Reveal = ({
   children,
   className = "",
-  threshold = 0.2, // 0.0–1.0: how much must be visible to trigger animation
+  threshold = 0, // 0.0–1.0: how much must be visible to trigger animation
 }: RevealProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
 

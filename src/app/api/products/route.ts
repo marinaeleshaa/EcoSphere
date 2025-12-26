@@ -26,20 +26,18 @@ export const GET = async (
 
   try {
     const searchParams = request.nextUrl.searchParams;
-    const page = searchParams.get("page");
-    const limit = searchParams.get("limit");
-    const search = searchParams.get("search");
-    const sortBy = searchParams.get("sortBy");
-    const sortOrder = searchParams.get("sortOrder");
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 10;
+    const search = searchParams.get("search") || "";
+    const sort = searchParams.get("sort") || "default";
+    const category = searchParams.get("category") || "default";
 
     const options = {
-      ...(page && { page: Number.parseInt(page) }),
-      ...(limit && { limit: Number.parseInt(limit) }),
-      ...(search && { search }),
-      ...(sortBy && {
-        sortBy: sortBy as "price" | "title" | "itemRating" | "createdAt",
-      }),
-      ...(sortOrder && { sortOrder: sortOrder as "asc" | "desc" }),
+      page,
+      limit,
+      search,
+      sort: sort as any,
+      category,
     };
 
     const result = await controller.getAll(options);

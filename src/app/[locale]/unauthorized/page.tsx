@@ -35,7 +35,7 @@ export default function Unauthorized() {
         <GoBackButton text={t("goBack")} />
 
         {/* Server-side Home button */}
-        <Link href="/" className="myBtnPrimary min-w-[200px]">
+        <Link href="/" className="myBtnPrimary bg-background! text-primary! border-primary! border-2 hover:bg-primary! hover:text-primary-foreground! min-w-50">
           {t("goHome")}
         </Link>
       </div>

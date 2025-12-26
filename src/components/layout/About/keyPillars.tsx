@@ -72,9 +72,9 @@ export default async function KeyPillars() {
                 whileHover={{ translateY: -4 }}
                 className="rounded-2xl p-8 text-center shadow-lg duration-300 group border border-transparent hover:border-theme transform hover:scale-[1.02] ring-2 ring-primary/30 dark:ring-primary/60 dark:shadow-primary/30 flex flex-col items-center"
               >
-                <BasicAnimatedWrapper className="w-20 h-20 bg-[var(--primary-foreground)/0.08] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-20 h-20 bg-[var(--primary-foreground)/0.08] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   {pillar.icon}
-                </BasicAnimatedWrapper>
+                </div>
                 <h3 className="font-bold text-xl text-foreground mb-3">
                   {t(`pillars.${pillar.key}.title`)}
                 </h3>

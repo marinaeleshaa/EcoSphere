@@ -4,14 +4,19 @@ import Image from "next/image";
 import { useState } from "react";
 import { Heart, ShoppingCart, Star, Plus, Minus } from "lucide-react";
 import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { RootState } from "@/frontend/redux/store";
 import {
   isInFavSelector,
   toggleFavoriteAsync,
 } from "@/frontend/redux/Slice/FavSlice";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+import { useAppDispatch, useAppSelector } from "@/frontend/redux/hooks";
+import {
+  addItem,
+  isInCartSelector,
+  removeItem,
+} from "@/frontend/redux/Slice/CartSlice";
 
 const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const t = useTranslations("ProductDetails.card");
@@ -37,10 +42,22 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
   const safeId = id || (product as any)._id;
 
   const [count, setCount] = useState(1);
-  const isFav = useSelector((state: RootState) =>
-    isInFavSelector(state, safeId)
+  const isFav = useAppSelector((state: RootState) =>
+    isInFavSelector(state, safeId),
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const isInCart = useAppSelector((state: RootState) =>
+    isInCartSelector(state, product.id),
+  );
+  const handleAddToCart = () => {
+    if (isInCart) {
+      dispatch(removeItem(product.id));
+      toast.success(t("removedFromCart"));
+    } else {
+      dispatch(addItem({ ...product, quantity: count }));
+      toast.success(t("addedToCart"));
+    }
+  };
+  const dispatch = useAppDispatch();
   const handleFav = () => {
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
@@ -166,30 +183,42 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
           {/* Quantity selector */}
           <div className="flex items-center gap-4">
             <span className="text-sm font-medium">{t("quantity")}</span>
-            <div className="flex items-center gap-3 border rounded-lg p-2">
+            <div className="flex items-center rounded-full text-primary border border-primary p-2">
               <button
                 onClick={handleDecrement}
-                className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
+                className="w-8 h-8 cursor-pointer text-foreground flex items-center justify-center rounded hover:bg-muted transition duration-400"
                 aria-label="Decrease quantity"
               >
-                <Minus className="w-4 h-4" />
+                <Minus className="w-4 h-4" strokeWidth={3} />
               </button>
-              <span className="w-12 text-center font-semibold">{count}</span>
+              <motion.div
+                key={count}
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 0.2 }}
+                className="border-x"
+              >
+                <span className="w-12 px-4 text-center font-semibold">
+                  {count}
+                </span>
+              </motion.div>
               <button
                 onClick={handleIncrement}
                 className="w-8 h-8 cursor-pointer flex items-center justify-center rounded hover:bg-muted transition-colors"
                 aria-label="Increase quantity"
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-4 h-4" strokeWidth={3} />
               </button>
             </div>
           </div>
 
           {/* Action buttons */}
           <div className="flex gap-4 mt-4">
-            <button className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer">
+            <button
+              className="flex-1 bg-primary text-primary-foreground p-3 rounded-full transition duration-400 hover:scale-102 flex justify-center items-center text-lg gap-2 hover:outline-2 hover:outline-primary hover:outline-offset-4 cursor-pointer"
+              onClick={handleAddToCart}
+            >
               <ShoppingCart className="w-5 h-5" />
-              {t("addToCart")}
+              {isInCart ? t("removeFromCart") : t("addToCart")}
             </button>
             <button
               onClick={handleFav}

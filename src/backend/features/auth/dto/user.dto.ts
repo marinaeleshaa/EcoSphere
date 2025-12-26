@@ -1,5 +1,5 @@
 import { Gender, UserRole, IUser } from "../../user/user.model";
-import { IRestaurant } from "../../restaurant/restaurant.model";
+import { IRestaurant, ShopCategory } from "../../restaurant/restaurant.model";
 
 export type LoginRequestDTO = {
   email: string;
@@ -45,6 +45,7 @@ export type ShopRegisterDTO = RegisterWithCredentialsDTO &
     hotline: string;
     location?: string;
     workingHours: string;
+    category: ShopCategory;
   };
 
 export type RegisterRequestDTO = {
@@ -66,7 +67,7 @@ export type RegisterWithPhoneNumber = {
 };
 
 export const mapToUserPublicProfile = (
-  user: Partial<IUser> | Partial<IRestaurant>,
+  user: Partial<IUser> | Partial<IRestaurant>
 ) => {
   const isUsr = isUser(user);
   const role = isUsr ? user.role! : "shop";
@@ -77,7 +78,7 @@ export const mapToUserPublicProfile = (
     !isUsr;
 
   const subscribed = includeSubscription
-    ? ((user as Partial<IUser | IRestaurant>).subscribed ?? false)
+    ? (user as Partial<IUser | IRestaurant>).subscribed ?? false
     : undefined;
 
   const rawPeriod = includeSubscription
@@ -88,8 +89,8 @@ export const mapToUserPublicProfile = (
     rawPeriod instanceof Date
       ? rawPeriod.toISOString()
       : rawPeriod
-        ? String(rawPeriod)
-        : undefined;
+      ? String(rawPeriod)
+      : undefined;
 
   return {
     id: `${user._id}`,
@@ -102,7 +103,7 @@ export const mapToUserPublicProfile = (
 };
 
 const isUser = (
-  u: Partial<IUser> | Partial<IRestaurant>,
+  u: Partial<IUser> | Partial<IRestaurant>
 ): u is Partial<IUser> => {
   return "firstName" in u;
 };

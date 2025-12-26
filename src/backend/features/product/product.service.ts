@@ -45,28 +45,12 @@ export class ProductService implements IProductService {
   private async attachSignedUrl(
     product: ProductResponse
   ): Promise<ProductResponse> {
-    console.log(
-      "[attachSignedUrl] Product:",
-      JSON.stringify(
-        {
-          productId: product._id?.toString(),
-          hasAvatar: !!product.avatar,
-          avatar: product.avatar,
-          avatarKey: product.avatar?.key,
-          avatarUrlBefore: product.avatar?.url,
-        },
-        null,
-        2
-      )
-    );
+    // Removed verbose logging to avoid terminal flooding
 
     if (product?.avatar?.key) {
       try {
         const url = await this.imageService.getSignedUrl(product.avatar.key);
-        console.log("[attachSignedUrl] Generated URL:", url);
-        // We ensure we don't mutate the original read-only object if it's frozen,
-        // essentially returning a new object or modifying it if allowed.
-        // For standard JS objects from Mongoose lean/aggregate, this is fine.
+        // URL generated successfully
         product.avatar.url = url;
       } catch (error) {
         console.error(
@@ -74,10 +58,6 @@ export class ProductService implements IProductService {
           error
         );
       }
-    } else {
-      console.log(
-        "[attachSignedUrl] No avatar.key found, skipping URL generation"
-      );
     }
     return product;
   }
@@ -93,12 +73,14 @@ export class ProductService implements IProductService {
 
     // If options are provided, return paginated response
     if (options && (options.page || options.limit)) {
+      // console.log("productsWithUrls 1", productsWithUrls);
       return {
         data: productsWithUrls,
         metadata: result.metadata,
       };
     }
 
+    // console.log("productsWithUrls 2", productsWithUrls);
     // Otherwise return just the array for backward compatibility
     return productsWithUrls;
   }
@@ -161,11 +143,6 @@ export class ProductService implements IProductService {
       productData.sustainabilityReason =
         "AI Analysis Failed. Check server logs.";
     }
-
-    console.log(
-      "Adding Product with Data:",
-      JSON.stringify(productData, null, 2)
-    );
 
     const result = await this.productRepository.addProduct(
       restaurantId,
