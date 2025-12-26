@@ -23,7 +23,7 @@ export interface IRating extends Document {
   userId: string;
   rate: number;
   review: string;
-  orderId: string;
+  orderId?: string;
 }
 
 export interface IMenuItem extends Document {
@@ -69,9 +69,9 @@ export const ratingSchema = new Schema<IRating>(
     userId: { type: String, required: true },
     rate: { type: Number, required: true },
     review: { type: String, required: true },
-    orderId: { type: String, ref: "Order", required: true },
+    orderId: { type: String, ref: "Order", required: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const menuItemSchema = new Schema<IMenuItem>({
@@ -92,6 +92,7 @@ export const menuItemSchema = new Schema<IMenuItem>({
       "Vegetables",
       "Meat",
       "Dairy",
+      "Bakery",
       "Beverages",
       "Bakery",
       "Snacks",
@@ -132,7 +133,7 @@ const restaurantSchema = new Schema<IRestaurant>(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 restaurantSchema.pre<IRestaurant>("save", function ():
@@ -148,7 +149,7 @@ restaurantSchema.pre<IRestaurant>("save", function ():
 });
 
 restaurantSchema.methods.comparePassword = async function (
-  candidatePassword: string
+  candidatePassword: string,
 ): Promise<boolean> {
   return await bcrypt.compare(candidatePassword, this.password);
 };

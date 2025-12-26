@@ -25,10 +25,10 @@ export default function OrderSummary() {
   const total = subtotalCents - discountCents + deliveryCents;
 
   const handleApplyCoupon = () => {
-    fetch(`/api/discount/${couponCode.trim()}`, { method: "GET" })
+    fetch(`/api/discount/${couponCode.trim()}`, { method: "POST" })
       .then((res) => {
         if (res.ok)
-          res.json().then((data) => {
+          res.json().then(({ data }) => {
             toast.success(t("toasts.couponApplied"));
             setDiscountRate(data.rate ?? 0);
           });
@@ -110,7 +110,7 @@ export default function OrderSummary() {
       <div className="flex items-start gap-2 mb-6 p-3 bg-muted/50 rounded-full">
         <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
         <div className="text-sm">
-          <span>{t("warranty")}</span>
+          <span>{t("warranty")}</span>{" "}
           <button className="text-primary hover:underline font-medium">
             {t("details")}
           </button>

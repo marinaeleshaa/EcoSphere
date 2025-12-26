@@ -281,10 +281,10 @@
       "filterBy": "تصفية حسب:",
       "sortOptions": {
         "default": "افتراضي",
-        "highestRating": "الأعلى تقييمًا",
-        "lowestRating": "الأدنى تقييمًا",
         "priceHigh": "السعر: من الأعلى إلى الأقل",
-        "priceLow": "السعر: من الأقل إلى الأعلى"
+        "priceLow": "السعر: من الأقل إلى الأعلى",
+        "sustainabilityLow": "الاستدامة: من الأقل إلى الأعلى",
+        "sustainabilityHigh": "الاستدامة: من الأعلى إلى الأقل"
       },
       "filterOptions": {
         "default": "افتراضي",
@@ -392,7 +392,30 @@
         "errors": {
           "titleRequired": "العنوان مطلوب",
           "subtitleRequired": "الوصف مطلوب",
-          "priceRequired": "السعر مطلوب"
+          "priceRequired": "السعر مطلوب",
+          "categoryRequired": "يرجى اختيار فئة"
+        }
+      },
+      "Categories": {
+        "label": "الفئة",
+        "placeholder": "اختر فئة",
+        "fruits": "فواكه",
+        "vegetables": "خضروات",
+        "meat": "لحوم",
+        "dairy": "ألبان",
+        "bakery": "مخبوزات",
+        "beverages": "مشروبات",
+        "snacks": "وجبات خفيفة",
+        "other": "أخرى"
+      },
+      "filter": {
+        "category": "الفئة",
+        "allCategories": "جميع الفئات",
+        "sortBy": "الترتيب حسب",
+        "sortOptions": {
+          "name": "الاسم",
+          "price": "السعر",
+          "sustainability": "درجة الاستدامة"
         }
       },
       "deleteDialog": {
@@ -857,7 +880,10 @@
     },
     "card": {
       "removedFromFavorites": "تمت الإزالة من المفضلات",
-      "addToCart": "أضف إلى السلة"
+      "addToCart": "أضف إلى السلة",
+      "removeFromCart": "إزالة من السلة",
+      "addedToCart": "تمت إضافة المنتج إلى السلة",
+      "removedFromCart": "تمت إزالة المنتج من السلة"
     },
     "view": {
       "grid": "عرض الشبكة",

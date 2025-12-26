@@ -582,6 +582,12 @@ export default function CustomerProfile({
     dispatch(updateProfile({ avatar: newUrl }));
   };
 
+  const displayRoleRaw = role || user.role || "customer";
+  const displayRole =
+    typeof displayRoleRaw === "string"
+      ? displayRoleRaw.charAt(0).toUpperCase() + displayRoleRaw.slice(1)
+      : String(displayRoleRaw);
+
   return (
     <div className="space-y-6">
       {/* Main Profile Section */}
@@ -608,7 +614,7 @@ export default function CustomerProfile({
                   <h1 className="text-2xl font-bold text-card-foreground">
                     {user.firstName} {user.lastName}
                   </h1>
-                  <p className="text-muted-foreground">Customer</p>
+                  <p className="text-muted-foreground">{displayRole}</p>
                 </div>
                 <div className="lg:hidden mt-2 w-fit mx-auto">
                   <button

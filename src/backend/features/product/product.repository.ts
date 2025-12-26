@@ -1,6 +1,7 @@
 import { injectable } from "tsyringe";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { RestaurantModel, IRestaurant } from "../restaurant/restaurant.model";
+import { buildProductsPipeline } from "./dto/product.dto";
 import mongoose from "mongoose";
 import {
   ProductResponse,
@@ -43,90 +44,7 @@ export class ProductRepository implements IProductRepository {
   ): Promise<PaginatedProductResponse> {
     await DBInstance.getConnection();
 
-    const {
-      page = 1,
-      limit = 10,
-      search = "",
-      sort = "default",
-      category = "default",
-    } = options ?? {};
-
-    const skip = (page - 1) * limit;
-
-    const pipeline: PipelineStage[] = [
-      // 1️⃣ Filter visible restaurants (uses index)
-      {
-        $match: {
-          isHidden: false,
-        },
-      },
-
-      // 2️⃣ Unwind menus
-      {
-        $unwind: "$menus",
-      },
-
-      // 3️⃣ Project only what we need
-      {
-        $project: {
-          _id: "$menus._id",
-          restaurantId: "$_id",
-          restaurantName: "$name",
-          title: "$menus.title",
-          subtitle: "$menus.subtitle",
-          price: "$menus.price",
-          avatar: "$menus.avatar",
-          availableOnline: "$menus.availableOnline",
-          sustainabilityScore: "$menus.sustainabilityScore",
-          sustainabilityReason: "$menus.sustainabilityReason",
-          category: "$menus.category",
-          itemRating: "$menus.itemRating",
-        },
-      },
-    ];
-
-    if (sort === "priceLow") {
-      pipeline.push({ $sort: { price: 1 } });
-    }
-
-    if (sort === "priceHigh") {
-      pipeline.push({ $sort: { price: -1 } });
-    }
-
-    //Optional search & category filters
-    const matchConditions: any[] = [];
-
-    if (search.trim()) {
-      matchConditions.push({
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { subtitle: { $regex: search, $options: "i" } },
-        ],
-      });
-    }
-
-    if (category !== "default") {
-      matchConditions.push({
-        category: category,
-      });
-    }
-
-    if (matchConditions.length > 0) {
-      pipeline.push({
-        $match: {
-          $and: matchConditions,
-        },
-      });
-    }
-
-    //Pagination
-    pipeline.push({
-      $facet: {
-        metadata: [{ $count: "total" }],
-        data: [{ $skip: skip }, { $limit: limit }],
-      },
-    });
-
+    const pipeline = buildProductsPipeline(options ?? {});
     const result = await RestaurantModel.aggregate(pipeline).exec();
 
     const data = result[0]?.data ?? [];
@@ -136,9 +54,9 @@ export class ProductRepository implements IProductRepository {
       data,
       metadata: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: options?.page ?? 1,
+        limit: options?.limit ?? 10,
+        totalPages: Math.ceil(total / (options?.limit ?? 10)),
       },
     };
   }
@@ -175,82 +93,13 @@ export class ProductRepository implements IProductRepository {
   ): Promise<PaginatedProductResponse> {
     await DBInstance.getConnection();
 
-    const {
-      page = 1,
-      limit = 10,
-      search = "",
-      sort = "default",
-      category = "default",
-    } = options ?? {};
-
-    const skip = (page - 1) * limit;
-
-    const pipeline: PipelineStage[] = [
-      // 1️⃣ Filter by restaurant ID
-      {
-        $match: { _id: new mongoose.Types.ObjectId(restaurantId) },
-      },
-
-      // 2️⃣ Unwind menus
-      { $unwind: "$menus" },
-
-      // 3️⃣ Project only needed fields
-      {
-        $project: {
-          _id: "$menus._id",
-          restaurantId: "$_id",
-          restaurantName: "$name",
-          title: "$menus.title",
-          subtitle: "$menus.subtitle",
-          price: "$menus.price",
-          avatar: "$menus.avatar",
-          availableOnline: "$menus.availableOnline",
-          sustainabilityScore: "$menus.sustainabilityScore",
-          sustainabilityReason: "$menus.sustainabilityReason",
-          category: "$menus.category",
-          itemRating: "$menus.itemRating",
-        },
-      },
-    ];
-
-    // 4️⃣ Sorting
-    if (sort === "priceLow") {
-      pipeline.push({ $sort: { price: 1, title: 1 } });
-    } else if (sort === "priceHigh") {
-      pipeline.push({ $sort: { price: -1, title: 1 } });
-    } else {
-      pipeline.push({ $sort: { title: 1 } });
-    }
-
-    // 5️⃣ Optional search & category filters
-    const matchConditions: any[] = [];
-
-    if (search.trim()) {
-      matchConditions.push({
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { subtitle: { $regex: search, $options: "i" } },
-        ],
-      });
-    }
-
-    if (category !== "default") {
-      matchConditions.push({ category });
-    }
-
-    if (matchConditions.length > 0) {
-      pipeline.push({ $match: { $and: matchConditions } });
-    }
-
-    // 6️⃣ Pagination
-    pipeline.push({
-      $facet: {
-        metadata: [{ $count: "total" }],
-        data: [{ $skip: skip }, { $limit: limit }],
-      },
+    const pipeline = buildProductsPipeline({
+      ...options,
+      restaurantId,
     });
 
     const result = await RestaurantModel.aggregate(pipeline).exec();
+
     const data = result[0]?.data ?? [];
     const total = result[0]?.metadata[0]?.total ?? 0;
 
@@ -258,9 +107,9 @@ export class ProductRepository implements IProductRepository {
       data,
       metadata: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: options?.page ?? 1,
+        limit: options?.limit ?? 10,
+        totalPages: Math.ceil(total / (options?.limit ?? 10)),
       },
     };
   }
