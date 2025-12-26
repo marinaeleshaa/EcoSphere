@@ -1,5 +1,6 @@
-import { Document, models, model, Schema, Types } from "mongoose";
+import { Document, models, model, Schema } from "mongoose";
 import { IUser } from "../user/user.model";
+import { IRestaurant } from "../restaurant/restaurant.model";
 
 export type EventType =
   | "environmental_seminar"
@@ -7,15 +8,21 @@ export type EventType =
   | "sustainable_brands_showcase"
   | "other";
 
-export type EventUnpopulated = IEvent & { user: Types.ObjectId };
-export type IsEventPopulated = Omit<IEvent, "user"> & { user: IUser };
-
 export interface ISection extends Document {
   title: string;
   description: string;
   startTime: string;
   endTime: string;
 }
+
+export type IEventPopulated = IEvent & {
+  user: {
+    email: string;
+    name?: string;
+    firstName?: string;
+    lastName?: string;
+  };
+};
 
 export interface IEvent extends Document {
   name: string;
@@ -37,7 +44,8 @@ export interface IEvent extends Document {
   type: EventType;
   isAccepted: boolean;
   isEventNew: boolean;
-  user: Types.ObjectId | IUser;
+  owner: string;
+  user?: IUser | IRestaurant;
 }
 
 export const sectionsSchema = new Schema<ISection>(
@@ -80,7 +88,15 @@ export const eventSchema = new Schema<IEvent>(
     eventDate: { type: Date, required: true },
     isAccepted: { type: Boolean, required: true, default: false },
     isEventNew: { type: Boolean, required: true, default: true },
-    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    // user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    owner: {
+      type: String,
+      required: true,
+    },
+    user: {
+      type: Object,
+      required: false,
+    },
   },
   { _id: true, timestamps: true },
 );

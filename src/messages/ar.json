@@ -352,22 +352,7 @@
       "workingHours": "ساعات العمل:",
       "about": "حول المتجر",
       "visitShop": "زيارة المتجر",
-      "contact": "تواصل"
-    },
-    "reviews": {
-      "title": "المراجعات",
-      "noReviews": "لا توجد مراجعات بعد. كن أول من يقيم هذا المتجر!"
-    },
-    "related": {
-      "title": "متاجر ذات صلة",
-      "subtitle": "استكشف مجموعتنا الواسعة من المتاجر ذات الصلة"
-    },
-    "products": {
-      "title": "منتجات المتجر",
-      "subtitle": "استكشف منتجات هذا المتجر",
-      "noProducts": "لا توجد منتجات متاحة لهذا المتجر."
-    },
-    "card": {
+      "contact": "تواصل",
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
       "addedToCart": "تمت الإضافة للسلة",
@@ -381,6 +366,19 @@
       "removeFromCart": "إزالة من السلة",
       "availableOnline": "متاح أونلاين",
       "notAvailableOnline": "غير متاح أونلاين"
+    },
+    "reviews": {
+      "title": "المراجعات",
+      "noReviews": "لا توجد مراجعات بعد. كن أول من يقيم هذا المتجر!"
+    },
+    "related": {
+      "title": "متاجر ذات صلة",
+      "subtitle": "استكشف مجموعتنا الواسعة من المتاجر ذات الصلة"
+    },
+    "products": {
+      "title": "منتجات المتجر",
+      "subtitle": "استكشف منتجات هذا المتجر",
+      "noProducts": "لا توجد منتجات متاحة لهذا المتجر."
     }
   },
   "Restaurant": {
@@ -606,7 +604,8 @@
         "orderId": "رقم الطلب",
         "date": "التاريخ",
         "total": "الإجمالي",
-        "status": "الحالة"
+        "status": "الحالة",
+        "loading": "جاري التحميل..."
       },
       "recyclingHistory": {
         "title": "سجل إعادة التدوير",
@@ -738,40 +737,6 @@
         "couponApplied": "تم تطبيق الكوبون",
         "invalidCoupon": "الكوبون غير صالح"
       }
-    }
-  },
-  "Checkout": {
-    "page": {
-      "title": "إتمام الدفع",
-      "payWithCard": "الدفع بالبطاقة",
-      "payWithCash": "الدفع عند الاستلام",
-      "somethingWentWrong": "فعالية خطأ ما",
-      "youWillPay": "ستدفع",
-      "directlyToCourier": "مباشرة إلى المندوب عند الاستلام.",
-      "confirmOrder": "تأكيد الطلب"
-    },
-    "form": {
-      "initializing": "جاري تحضير الدفع الآمن...",
-      "securePayment": "دفع آمن",
-      "securePaymentDesc": "أكمل عملية الشراء بأمان.",
-      "errorTitle": "خطأ",
-      "unexpectedError": "فعالية خطأ غير متوقع.",
-      "processing": "جاري المعالجة...",
-      "pay": "ادفع {amount}",
-      "securedByStripe": "المدفوعات مؤمنة بواسطة Stripe"
-    },
-    "verification": {
-      "successTitle": "تم تأكيد الدفع",
-      "successDesc": "شكرًا لمساهمتك في مستقبل أكثر خضرة.",
-      "transactionId": "رقم المعاملة",
-      "totalAmount": "المبلغ الإجمالي",
-      "returnHome": "العودة للرئيسية",
-      "downloadReceipt": "تحميل الإيصال",
-      "failedTitle": "فشل الدفع",
-      "failedDesc": "واجهنا مشكلة في معالجة مساهمتك البيئية. لم يتم خصم أي أموال.",
-      "errorCode": "رمز الخطأ: {code}",
-      "cardDeclined": "تم رفض البطاقة. يرجى التحقق من تفاصيل البطاقة أو المحاولة بطريقة دفع أخرى.",
-      "tryAgain": "حاول مرة أخرى"
     }
   },
   "Events": {
@@ -1269,6 +1234,12 @@
         "active": "نشط",
         "pending": "قيد الانتظار"
       },
+      "filter": {
+        "all": "الكل",
+        "pending": "قيد الانتظار",
+        "accepted": "مقبول",
+        "rejected": "مرفوض"
+      },
       "card": {
         "organizer": "المنظم",
         "email": "البريد الإلكتروني",
@@ -1289,6 +1260,7 @@
           "acceptError": "فشل قبول الفعالية.",
           "denyError": "فشل رفض الفعالية."
         },
+        "noEventsInFilter": "لم يتم العثور على فعاليات تطابق حالة الفلتر هذه.",
         "Loading": "جاري تحميل الفعاليات...."
       }
     },
@@ -1301,6 +1273,13 @@
         "pending": "قيد الانتظار",
         "hidden": "مخفي"
       },
+      "filter": {
+        "all": "الكل",
+        "visible": "ظاهر",
+        "hidden": "مخفي",
+        "noShopsFound": "لم يتم العثور على متاجر تطابق هذا الفلتر."
+      },
+      "Loading": "جاري تحميل المتاجر...",
       "table": {
         "headers": {
           "name": "اسم المتجر",

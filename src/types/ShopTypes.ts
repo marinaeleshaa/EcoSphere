@@ -32,6 +32,7 @@ export type CategoryOptionClient =
 export interface IShop {
   _id: string;
   name: string;
+  email: string;
   location: string;
   workingHours: string;
   phoneNumber: string;
@@ -40,4 +41,6 @@ export interface IShop {
   menus?: IProduct[];
   restaurantRating?: IReview[];
   category: string;
+  isHidden?: boolean;
+  subscribed?: boolean;
 }

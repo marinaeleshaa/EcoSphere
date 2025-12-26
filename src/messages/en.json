@@ -597,7 +597,8 @@
         "orderId": "Order ID",
         "date": "Date",
         "total": "Total",
-        "status": "Status"
+        "status": "Status",
+        "loading": "Loading..."
       },
       "recyclingHistory": {
         "title": "Recycling History",
@@ -1260,6 +1261,12 @@
         "active": "Active",
         "pending": "Pending"
       },
+      "filter": {
+        "all": "All",
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "rejected": "Rejected"
+      },
       "card": {
         "organizer": "Organizer",
         "email": "Email",
@@ -1280,6 +1287,7 @@
           "acceptError": "Failed to accept event.",
           "denyError": "Failed to deny event."
         },
+        "noEventsInFilter": "No events found matching this status.",
         "Loading": "Loading Events..."
       }
     },
@@ -1292,6 +1300,13 @@
         "pending": "Pending",
         "hidden": "Hidden"
       },
+      "filter": {
+        "all": "All",
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "noShopsFound": "No shops found matching this filter."
+      },
+      "Loading": "Loading Shops...",
       "table": {
         "headers": {
           "name": "Shop Name",

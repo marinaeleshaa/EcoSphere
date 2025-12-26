@@ -119,6 +119,23 @@ export function buildProductsPipeline({
     },
   });
 
+  pipeline.push({
+    $group: {
+      _id: "$_id", // menu item id
+      restaurantId: { $first: "$restaurantId" },
+      restaurantName: { $first: "$restaurantName" },
+      title: { $first: "$title" },
+      subtitle: { $first: "$subtitle" },
+      price: { $first: "$price" },
+      category: { $first: "$category" },
+      avatar: { $first: "$avatar" },
+      availableOnline: { $first: "$availableOnline" },
+      sustainabilityScore: { $first: "$sustainabilityScore" },
+      sustainabilityReason: { $first: "$sustainabilityReason" },
+      itemRating: { $first: "$itemRating" },
+    },
+  });
+
   // 🔹 Search & category filters
   const filters: any[] = [];
 

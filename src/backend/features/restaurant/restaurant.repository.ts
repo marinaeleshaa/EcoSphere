@@ -69,13 +69,19 @@ class RestaurantRepository {
       search = "",
       sort = "default",
       category = "default",
+      status = "visible",
     } = options;
 
     const skip = (page - 1) * limit;
 
-    const matchStage: any = {
-      isHidden: false,
-    };
+    const matchStage: any = {};
+
+    if (status === "visible") {
+      matchStage.isHidden = false;
+    } else if (status === "hidden") {
+      matchStage.isHidden = true;
+    }
+    // If status is "all", we don't add isHidden to matchStage
 
     if (search) {
       const regex = new RegExp(search, "i");

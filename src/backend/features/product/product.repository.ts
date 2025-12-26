@@ -1,8 +1,7 @@
 import { injectable } from "tsyringe";
 import { DBInstance } from "@/backend/config/dbConnect";
 import { RestaurantModel, IRestaurant } from "../restaurant/restaurant.model";
-import { buildProductsPipeline } from "./dto/product.dto";
-import mongoose from "mongoose";
+import mongoose, { PipelineStage } from "mongoose";
 import {
   ProductResponse,
   CreateProductDTO,
@@ -10,7 +9,6 @@ import {
   PaginatedProductResponse,
   ProductPageOptions,
 } from "./dto/product.dto";
-import { PipelineStage } from "mongoose";
 
 export interface IProductRepository {
   findAllProducts(
@@ -101,7 +99,6 @@ export class ProductRepository implements IProductRepository {
       pipeline.push({ $sort: { price: -1 } });
     }
 
-    //Optional search & category filters
     const matchConditions: any[] = [];
 
     if (search.trim()) {
@@ -127,7 +124,6 @@ export class ProductRepository implements IProductRepository {
       });
     }
 
-    //Pagination
     pipeline.push({
       $facet: {
         metadata: [{ $count: "total" }],
