@@ -5,6 +5,7 @@ import { IRestaurant } from "../restaurant/restaurant.model";
 import type { IEventRepository } from "./event.repository";
 import type { IUserService } from "../user/user.service";
 import type { IRestaurantService } from "../restaurant/restaurant.service";
+import { ImageService } from "@/backend/services/image.service";
 
 export interface IEventService {
   getEvents: (
@@ -29,8 +30,25 @@ class EventService implements IEventService {
     @inject("IUserService")
     private readonly userService: IUserService,
     @inject("IRestaurantService")
-    private readonly restaurantService: IRestaurantService
+    private readonly restaurantService: IRestaurantService,
+    @inject("ImageService")
+    private readonly imageService: ImageService
   ) {}
+
+  private async attachSignedUrl(event: IEvent): Promise<IEvent> {
+    if (event?.avatar?.key) {
+      try {
+        const url = await this.imageService.getSignedUrl(event.avatar.key);
+        event.avatar.url = url;
+      } catch (error) {
+        console.error(
+          `Failed to generate signed URL for event ${event._id}:`,
+          error
+        );
+      }
+    }
+    return event;
+  }
 
   private async getOwnerData(ownerId: string) {
     if (!ownerId) return null;
@@ -78,7 +96,7 @@ class EventService implements IEventService {
         if (!event.user && event.owner) {
           event.user = (await this.getOwnerData(event.owner)) as any;
         }
-        return event;
+        return await this.attachSignedUrl(event);
       })
     );
   }
@@ -88,7 +106,7 @@ class EventService implements IEventService {
     if (event && !event.user && event.owner) {
       event.user = (await this.getOwnerData(event.owner)) as any;
     }
-    return event;
+    return await this.attachSignedUrl(event);
   }
 
   async getEventsByUserId(id: string): Promise<IEvent[]> {
@@ -98,7 +116,7 @@ class EventService implements IEventService {
         if (!event.user && event.owner) {
           event.user = (await this.getOwnerData(event.owner)) as any;
         }
-        return event;
+        return await this.attachSignedUrl(event);
       })
     );
   }
@@ -116,7 +134,7 @@ class EventService implements IEventService {
       throw new Error(`User ${id} not found or event could not be created.`);
     }
 
-    return createdEvent;
+    return await this.attachSignedUrl(createdEvent);
   }
 
   async updateEvent(userId: string, event: Partial<IEvent>): Promise<IEvent> {
@@ -131,7 +149,7 @@ class EventService implements IEventService {
       updated.user = (await this.getOwnerData(updated.owner)) as any;
     }
 
-    return updated;
+    return await this.attachSignedUrl(updated);
   }
 
   async deleteEvent(id: string, eventId: string): Promise<IEvent> {
@@ -143,7 +161,7 @@ class EventService implements IEventService {
     if (event && !event.user && event.owner) {
       event.user = (await this.getOwnerData(event.owner)) as any;
     }
-    return event;
+    return await this.attachSignedUrl(event);
   }
 
   async rejectEvent(eventId: string): Promise<IEvent> {
@@ -151,7 +169,7 @@ class EventService implements IEventService {
     if (event && !event.user && event.owner) {
       event.user = (await this.getOwnerData(event.owner)) as any;
     }
-    return event;
+    return await this.attachSignedUrl(event);
   }
 
   async attendEvent(id: string, eventId: string): Promise<IEvent> {
@@ -159,7 +177,7 @@ class EventService implements IEventService {
     if (event && !event.user && event.owner) {
       event.user = (await this.getOwnerData(event.owner)) as any;
     }
-    return event;
+    return await this.attachSignedUrl(event);
   }
 }
 
