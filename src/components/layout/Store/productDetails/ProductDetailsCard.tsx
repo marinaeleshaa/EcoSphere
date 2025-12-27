@@ -257,7 +257,7 @@ const ProductDetailsCard = ({ product }: { product: IProduct }) => {
               onClick={handleCartToggle}
               disabled={!product.inStock}
               className={cn(
-                "w-full",
+                "w-full h-full myBtnPrimary",
                 isInCart && "bg-red-500 hover:bg-red-600"
               )}
             >

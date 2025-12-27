@@ -835,6 +835,7 @@
       "nohistory": "لم يتم العثور على فعاليات سابقة",
       "EventCard": {
         "organizer": "أنت منظم الفعالية",
+        "live": "يُبث الآن",
         "status": {
           "status": {
             "approved": "موافق عليه",

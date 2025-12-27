@@ -67,7 +67,7 @@ const FavCard = ({ product }: FavCardProps) => {
         />
       </div>
       <div className="p-3 capitalize flex-1 flex flex-col justify-between gap-2">
-        <div className="flex justify-between text-foreground text-md md:text-lg">
+        <div className="flex flex-col justify-between text-foreground text-md md:text-lg">
           <span>{product.productName}</span>
           <span>{product.productPrice} EGP</span>
         </div>
@@ -76,7 +76,7 @@ const FavCard = ({ product }: FavCardProps) => {
         )}
         <div className="flex justify-evenly gap-5">
           <button
-            className={`myBtnPrimary ${
+            className={`myBtnPrimary w-full ${
               !product.quantity ? "cursor-not-allowed! opacity-50" : ""
             }`}
             onClick={handleAddToCart}

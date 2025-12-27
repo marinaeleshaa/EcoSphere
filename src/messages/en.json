@@ -864,6 +864,7 @@
       "nohistory": "No history events found",
       "EventCard": {
         "organizer": "You are the organizer",
+        "live": "Live Now",
         "status": {
           "approved": "Approved",
           "pending": "Pending ..",
@@ -1462,7 +1463,7 @@
       "toasts": {
         "emptyInput": "Please enter at least one ingredient",
         "success": "Recipe generated successfully! ",
-        "error": "Failed to generate recipe. Please try again."
+        "error": "Please login to generate a recipe"
       }
     },
     "cookbook": {
