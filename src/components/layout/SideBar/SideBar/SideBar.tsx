@@ -56,7 +56,7 @@ export default function SideBar() {
   const t = useTranslations("Layout.Sidebar");
   const matchPathWithOptionalLocale = (
     pathname: string,
-    targetSegment: string,
+    targetSegment: string
   ) => {
     const base = `\\${targetSegment}`;
     const en = `\\/en\\${targetSegment}`;
@@ -82,11 +82,6 @@ export default function SideBar() {
       title: t("menu.events"),
       url: "/events",
       icon: Calendar,
-    },
-    {
-      title: t("menu.news"),
-      url: "/news",
-      icon: Newspaper,
     },
     {
       title: t("menu.store"),
@@ -126,11 +121,6 @@ export default function SideBar() {
       url: "/organizer/history",
       icon: MdOutlineEventRepeat,
     },
-    {
-      title: t("dashboard.news"),
-      url: "/organizer/news",
-      icon: Newspaper,
-    }
   ];
   // Restaurant dashboard items.
   const restaurantItems = [
@@ -157,7 +147,7 @@ export default function SideBar() {
       url: "/admin/event",
       icon: MdEventAvailable,
     },
-     {
+    {
       title: t("dashboard.recycleAgent"),
       url: "/admin/recycleAgent",
       icon: Recycle,
@@ -216,7 +206,7 @@ export default function SideBar() {
                         tooltip={t("menu.recipes")}
                         isActive={matchPathWithOptionalLocale(
                           pathname,
-                          "/recipes",
+                          "/recipes"
                         )}
                       >
                         <Link href="/recipes">
@@ -233,7 +223,7 @@ export default function SideBar() {
                         tooltip={t("menu.recycle")}
                         isActive={matchPathWithOptionalLocale(
                           pathname,
-                          "/recycle",
+                          "/recycle"
                         )}
                       >
                         <Link href="/recycle">
