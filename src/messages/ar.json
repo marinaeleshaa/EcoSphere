@@ -276,6 +276,7 @@
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
       "addToCart": "أضف إلى السلة",
+      "availableOnlyOffline": "متوفر في المحل فقط",
       "removeFromCart": "إزالة من السلة",
       "outOfStock": "نفذت الكمية",
       "lowStock": "فقط {count} متبقي!",
@@ -318,6 +319,7 @@
       "description": "الوصف",
       "quantity": "الكمية:",
       "addToCart": "أضف إلى السلة",
+      "availableOnlyOffline": "متوفر في المحل فقط",
       "removeFromCart": "إزالة من السلة",
       "addedToFavorites": "تمت الإضافة إلى المفضلة",
       "removedFromFavorites": "تمت الإزالة من المفضلة",
@@ -363,6 +365,7 @@
       "description": "الوصف",
       "quantity": "الكمية",
       "addToCart": "أضف إلى السلة",
+      "availableOnlyOffline": "متوفر في المحل فقط",
       "removeFromCart": "إزالة من السلة",
       "availableOnline": "متاح أونلاين",
       "notAvailableOnline": "غير متاح أونلاين"
@@ -932,6 +935,7 @@
     "card": {
       "removedFromFavorites": "تمت الإزالة من المفضلات",
       "addToCart": "أضف إلى السلة",
+      "availableOnlyOffline": "متوفر في المحل فقط",
       "removeFromCart": "إزالة من السلة",
       "addedToCart": "تمت إضافة المنتج إلى السلة",
       "removedFromCart": "تمت إزالة المنتج من السلة"

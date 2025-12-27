@@ -25,7 +25,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { IProduct } from "@/types/ProductType";
-import Link from "next/link";
 
 interface ProductCardProps {
   product: IProduct;
@@ -60,10 +59,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const dispatch = useAppDispatch();
   const isFav = useSelector((state: RootState) =>
-    isInFavSelector(state, safeId)
+    isInFavSelector(state, safeId),
   );
   const isInCart = useSelector((state: RootState) =>
-    isInCartSelector(state, safeId)
+    isInCartSelector(state, safeId),
   );
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -99,7 +98,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           availableOnline: product.availableOnline || false,
           sustainabilityScore,
           sustainabilityReason,
-        })
+        }),
       );
       toast.success(t("addedToCart"));
     }
@@ -172,7 +171,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               <TooltipTrigger asChild>
                 <div
                   className={` w-fit px-2 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-md cursor-help ${getScoreColor(
-                    sustainabilityScore
+                    sustainabilityScore,
                   )}`}
                 >
                   <span>🌿</span>
@@ -233,7 +232,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
               !availableOnline || !product.quantity || product.quantity <= 0
             }
           >
-            {!availableOnline || !product.quantity || product.quantity <= 0 ? (
+            {!product.quantity || product.quantity <= 0 ? (
               <div className="flex gap-2 justify-evenly text-nowrap items-center">
                 <RiShoppingCartLine />
                 <span className="mr-2">{t("outOfStock")}</span>
@@ -243,10 +242,15 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <RiShoppingCartFill />
                 <span className="mr-2">{t("removeFromCart")}</span>
               </div>
-            ) : (
+            ) : !availableOnline ? (
               <div className="flex justify-evenly gap-2 text-nowrap items-center">
                 <RiShoppingCartLine />
+                <span className="mr-2">{t("availableOnlyOffline")}</span>
+              </div>
+            ) : (
+              <div className="flex justify-evenly gap-2 text-nowrap items-center">
                 <span className="mr-2">{t("addToCart")}</span>
+                <RiShoppingCartLine />
               </div>
             )}
           </button>

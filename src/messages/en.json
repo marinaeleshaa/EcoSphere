@@ -363,6 +363,7 @@
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
       "addToCart": "Add to Cart",
+      "availableOnlyOffline": "Offline only",
       "removeFromCart": "Remove from Cart",
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart",
@@ -410,6 +411,7 @@
       "description": "Description",
       "quantity": "Quantity:",
       "addToCart": "Add to Cart",
+      "availableOnlyOffline": "Offline only",
       "removeFromCart": "Remove from Cart",
       "addedToFavorites": "Added to favorites",
       "removedFromFavorites": "Removed from favorites",
@@ -967,6 +969,7 @@
       "removedFromFavorites": "Removed from favorites",
       "addToCart": "Add to cart",
       "removeFromCart": "Remove from cart",
+      "outOfStock": "Out of Stock",
       "addedToCart": "Added to cart",
       "removedFromCart": "Removed from cart"
     },
