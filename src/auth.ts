@@ -48,6 +48,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 		GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
+      authorization: {
+          params: {
+            scope: 'read:user user:email'
+          }
+        }
     }),
 	],
 	session: {
@@ -58,7 +63,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			switch (account?.provider) {
 				case "google":
 				case  "github": {
-				console.log(user, account, profile, "info")
 					const [firstName, ...rest] = (profile?.name ?? "").split(" ");
 					const lastName = rest.join(" ");
 					return !!(await rootContainer

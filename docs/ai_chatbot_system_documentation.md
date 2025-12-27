@@ -41,7 +41,7 @@ The EcoSphere AI Chatbot is a **conversational commerce assistant** that enables
    - **Customers:** Manage cart and favorites
    - **Restaurants:** Create/update/delete products
    - **Organizers:** Create/update/delete events (pending)
-   - **RecycleMan:** Manage recycling requests (pending)
+   - **recycleAgent:** Manage recycling requests (pending)
 
 3. **Natural Conversation**
    - AI language detection (English, Arabic, French)
@@ -271,7 +271,7 @@ async generateResponse(
 2. ⏰ `updateEvent(eventId, ...)` - Update event (TODO)
 3. ⏰ `deleteEvent(eventId)` - Cancel event (TODO)
 
-#### **RecycleMan CRUD Tools (2)**
+#### **recycleAgent CRUD Tools (2)**
 
 1. ⏰ `updateRecyclingRequestStatus(requestId, status)` - Manage request (TODO)
 2. ⏰ `assignRecyclingRequest(requestId)` - Assign to self (TODO)
@@ -337,13 +337,13 @@ async executeTool(
    - Customer tools: Require `userId`
    - Restaurant tools: Require `restaurantId`
    - Organizer tools: Require `userId` + `role === "organizer"`
-   - RecycleMan tools: Require `userId` + `role === "recycleMan"`
+   - recycleAgent tools: Require `userId` + `role === "recycleAgent"`
 
 3. **Error Codes:**
    - `AUTHENTICATION_REQUIRED` - No session
    - `RESTAURANT_AUTH_REQUIRED` - Restaurant-only
    - `ORGANIZER_AUTH_REQUIRED` - Organizer-only
-   - `RECYCLEMAN_AUTH_REQUIRED` - RecycleMan-only
+   - `recycleAgent_AUTH_REQUIRED` - recycleAgent-only
 
 **Execution Logic:**
 
@@ -409,13 +409,13 @@ interface Message {
   content: string;
 }
 
-// User context (authenticated customers/organizers/recycleMan/admin)
+// User context (authenticated customers/organizers/recycleAgent/admin)
 interface UserContextDTO {
   userId: string;
   email: string;
   firstName: string;
   lastName: string;
-  role: "customer" | "organizer" | "admin" | "recycleMan";
+  role: "customer" | "organizer" | "admin" | "recycleAgent";
   points: number;
   favoritesCount: number;
   cartItemsCount: number;
@@ -487,7 +487,7 @@ type types = "product" | "restaurant" | "static" | "user";
 | Favorites          | ✅ Customer   | Own favorites only |
 | Product CRUD       | ✅ Restaurant | Own products only  |
 | Event CRUD         | ✅ Organizer  | Own events only    |
-| Recycle Management | ✅ RecycleMan | Assigned requests  |
+| Recycle Management | ✅ recycleAgent | Assigned requests  |
 
 ### **Ownership Validation**
 
@@ -626,7 +626,7 @@ type types = "product" | "restaurant" | "static" | "user";
 - Update event (method exists, needs integration)
 - Delete event (method exists, needs integration)
 
-**RecycleMan (2 tools):**
+**recycleAgent (2 tools):**
 
 - Update recycling request status (method exists, needs field verification)
 - Assign recycling request (method exists, needs field verification)
@@ -657,7 +657,7 @@ type types = "product" | "restaurant" | "static" | "user";
 - Customer: View orders, check points
 - Restaurant: View sales, manage products
 - Organizer: View events, check attendees
-- RecycleMan: Pending requests, carbon saved
+- recycleAgent: Pending requests, carbon saved
 - Admin: Platform statistics
 
 ### **4. Feedback Collection**

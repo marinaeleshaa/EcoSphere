@@ -211,7 +211,7 @@ async getTotalCarbonSaved(): Promise<number> {
   return result[0]?.totalCarbon || 0;
 }
 
-// RECYCLING STATISTICS (for admin/recycleMan queries)
+// RECYCLING STATISTICS (for admin/recycleAgent queries)
 async getRecyclingStatistics(): Promise<{
   totalEntries: number;
   totalCarbonSaved: number;
@@ -244,7 +244,7 @@ async getRecyclingStatistics(): Promise<{
   };
 }
 
-// PENDING RECYCLING REQUESTS (for recycleMan)
+// PENDING RECYCLING REQUESTS (for recycleAgent)
 async getPendingRecyclingRequests(limit: number = 20): Promise<IRecycle[]> {
   return await RecycleModel.find({ isVerified: false })
     .sort({ createdAt: -1 })
@@ -264,7 +264,7 @@ async getRecentRecyclingEntries(limit: number = 10): Promise<IRecycle[]> {
 }
 ```
 
-**Why Needed:** RecycleMan and admins need "show pending requests," "total carbon saved," etc.
+**Why Needed:** recycleAgent and admins need "show pending requests," "total carbon saved," etc.
 
 ---
 

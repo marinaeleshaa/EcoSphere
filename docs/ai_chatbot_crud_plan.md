@@ -186,7 +186,7 @@
 
 ---
 
-### ♻️ **RecycleMan Tools (2 tools)**
+### ♻️ **recycleAgent Tools (2 tools)**
 
 #### Recycling Request Management
 
@@ -194,9 +194,9 @@
 1. updateRecyclingRequestStatus(requestId: string, status: string)
    - "Approve request #123"
    - "Mark request as completed"
-   - ⚠️ Requires recycleMan role
+   - ⚠️ Requires recycleAgent role
 
-2. assignRecyclingRequest(requestId: string, recycleManId: string)
+2. assignRecyclingRequest(requestId: string, recycleAgentId: string)
    - "Assign this request to me"
 ```
 
@@ -325,14 +325,14 @@ try {
 2. Handle event cancellation properly
 3. Notify attendees of changes (if applicable)
 
-### Phase 4: RecycleMan Requests (Low Risk)
+### Phase 4: recycleAgent Requests (Low Risk)
 
 **Time:** 1 hour  
 **Tools:** 2 tools  
 **Risk:** Low (status updates only)
 
 1. Add recycling request tools
-2. Verify recycleMan role
+2. Verify recycleAgent role
 
 ### Phase 5: Order Placement (HIGH RISK - Deferred)
 
@@ -457,7 +457,7 @@ try {
 | **Customer**   | 0              | 8 → **6** (skip orders) | 6            |
 | **Restaurant** | 6              | 5                       | 11           |
 | **Organizer**  | 1              | 3                       | 4            |
-| **RecycleMan** | 4              | 2                       | 6            |
+| **recycleAgent** | 4              | 2                       | 6            |
 | **Analytics**  | 24             | 0                       | 24           |
 | **TOTAL**      | **24**         | **+16**                 | **40 tools** |
 

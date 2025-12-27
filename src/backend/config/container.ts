@@ -28,11 +28,11 @@ import { CouponRepository } from "../features/discountCoupon/coupon.repository";
 import { CouponService } from "../features/discountCoupon/coupon.service";
 import { AIRepository } from "../features/ai/ai.repository";
 import { AIService } from "../features/ai/ai.service";
-
 import { RecipeRepository } from "../features/recipe/recipe.repository";
 import { RecipeService } from "../features/recipe/recipe.service";
 import { SubscriptionRepository } from "../features/subscription/subscription.repository";
 import { WebhookEventRepository } from "../features/webhookEvent/webhook.event.repository";
+import { RecycleAgentRegistration } from "../features/auth/registration/recycleAgent.registeration";
 import { ToolExecutor } from "../features/ai/tool.executor";
 
 // you will register any
@@ -50,6 +50,10 @@ container.registerSingleton("RegistrationFactory", RegistrationFactory);
 container.registerSingleton("EndUserRegistration", EndUserRegistration);
 container.registerSingleton("ShopRegistration", ShopRegistration);
 container.registerSingleton("OrganizerRegistration", OrganizerRegistration);
+container.registerSingleton(
+  "RecycleAgentRegistration",
+  RecycleAgentRegistration,
+);
 container.registerSingleton("LoginService", LoginService);
 container.registerSingleton("ImageService", ImageService);
 container.registerSingleton("UploadService", UploadService);

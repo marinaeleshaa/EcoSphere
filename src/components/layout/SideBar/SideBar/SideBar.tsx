@@ -157,6 +157,11 @@ export default function SideBar() {
       url: "/admin/event",
       icon: MdEventAvailable,
     },
+     {
+      title: t("dashboard.recycleAgent"),
+      url: "/admin/recycleAgent",
+      icon: Recycle,
+    },
   ];
   // recycle dashboard items.
   const recycleItems = [
@@ -325,8 +330,8 @@ export default function SideBar() {
           </SidebarGroup>
         )}
 
-        {/* **! change the role to be recycleMan */}
-        {session?.user.role == "recycleMan" && (
+        {/* **! change the role to be recycleAgent */}
+        {session?.user.role == "recycleAgent" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>

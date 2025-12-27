@@ -19,7 +19,7 @@ Enhance the EcoSphere AI chatbot to:
 | **Customer**        | ✅ Yes                 | ✅ All public routes                                    | ✅ My orders, points, favorites, cart   |
 | **Restaurant/Shop** | ✅ Yes (separate auth) | ✅ All public routes                                    | ✅ CRUD products, shop stats, orders    |
 | **Organizer**       | ✅ Yes                 | ✅ All public routes                                    | ✅ Create/manage events, attendees      |
-| **RecycleMan**      | ✅ Yes                 | ✅ All public routes                                    | ✅ Manage recycling requests            |
+| **recycleAgent**      | ✅ Yes                 | ✅ All public routes                                    | ✅ Manage recycling requests            |
 | **Admin**           | ✅ Yes                 | ✅ All public routes                                    | ✅ Platform-wide statistics, manage all |
 
 ### Example Queries by User Type
@@ -55,7 +55,7 @@ Enhance the EcoSphere AI chatbot to:
 - "How many attendees do I have?"
 - "What are my upcoming events?"
 
-**RecycleMan:**
+**recycleAgent:**
 
 - All guest queries **+**
 - "Show pending recycling requests"
@@ -74,7 +74,7 @@ Enhance the EcoSphere AI chatbot to:
 
 The system has **two separate authentication models:**
 
-1. **UserModel** - for customers, organizers, recycleMan, admin
+1. **UserModel** - for customers, organizers, recycleAgent, admin
 2. **RestaurantModel** - for restaurant/shop owners
 
 The AI controller will:
@@ -257,7 +257,7 @@ User Types & Access:
 2. Customer: Guest access + orders, points, favorites, cart
 3. Restaurant/Shop: Guest access + manage products, view sales stats, orders
 4. Organizer: Guest access + create/manage events, attendees
-5. RecycleMan: Guest access + manage recycling requests
+5. recycleAgent: Guest access + manage recycling requests
 6. Admin: Full platform access and statistics
 
 Authentication Rules:
@@ -290,7 +290,7 @@ export interface UserContextDTO {
   email: string;
   firstName: string;
   lastName: string;
-  role: "customer" | "organizer" | "admin" | "recycleMan";
+  role: "customer" | "organizer" | "admin" | "recycleAgent";
   points: number;
   favoritesCount: number;
   cartItemsCount: number;
@@ -484,7 +484,7 @@ const sendMessage = async (content: string) => {
 - **Personal:** "Show my events" → Lists organizer's events
 - **Personal:** "How many attendees do I have?" → Attendee statistics
 
-### 5. RecycleMan Queries (Logged In)
+### 5. recycleAgent Queries (Logged In)
 
 - **General:** "Tell me about recycling" → General recycling info
 - **Personal:** "Show pending requests" → Recycling requests to handle

@@ -41,7 +41,6 @@ export const GET = async (
     };
 
     const result = await controller.getAll(options);
-    console.log("[API /products] Returning paginated products");
 
     return ok(result);
   } catch (error) {

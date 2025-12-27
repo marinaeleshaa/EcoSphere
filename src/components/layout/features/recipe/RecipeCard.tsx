@@ -17,7 +17,7 @@ export default function RecipeCard({
   recipe,
   onDelete,
 }: Readonly<RecipeCardProps>) {
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+   
   const tRecipes = useTranslations("Recipes");
 
   const getDifficultyColor = (difficulty?: string) => {

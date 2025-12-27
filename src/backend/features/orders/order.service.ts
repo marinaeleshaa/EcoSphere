@@ -150,7 +150,6 @@ export class OrderService implements IOrderService {
         break;
       }
       case "payment_intent.payment_failed": {
-        console.log(intent.metadata, "metaData");
         const orderId = intent.metadata.orderId;
         if (!orderId) return;
         await this.orderRepository.updateOrderStatus(orderId, {

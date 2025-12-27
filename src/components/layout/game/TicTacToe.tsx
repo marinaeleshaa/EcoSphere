@@ -32,22 +32,6 @@ export default function TicTacToe() {
   // -------------------------
   // ⏱️ GAME LIMIT LOGIC (LOCAL)
   // -------------------------
-  const checkGameLimit = useCallback(() => {
-    const playData = localStorage.getItem("tictactoe_play_data");
-    const today = new Date().toDateString();
-
-    if (playData) {
-      const { date, count } = JSON.parse(playData);
-      if (date === today) {
-        setRemainingPlays(Math.max(0, 2 - count));
-        setCanPlay(count < 2);
-        return;
-      }
-    }
-
-    setRemainingPlays(2);
-    setCanPlay(true);
-  }, []);
 
   const recordPlayLocally = () => {
     const today = new Date().toDateString();
@@ -63,7 +47,7 @@ export default function TicTacToe() {
 
     localStorage.setItem(
       "tictactoe_play_data",
-      JSON.stringify({ date: today, count })
+      JSON.stringify({ date: today, count }),
     );
     setRemainingPlays(Math.max(0, 2 - count));
     if (count >= 2) setCanPlay(false);
@@ -75,14 +59,29 @@ export default function TicTacToe() {
     if (mainAudioRef.current) {
       mainAudioRef.current.volume = 0.1;
     }
-    checkGameLimit();
+    const playData = localStorage.getItem("tictactoe_play_data");
+    const today = new Date().toDateString();
+
+    if (playData) {
+      const { date, count } = JSON.parse(playData);
+      if (date === today) {
+        setRemainingPlays(Math.max(0, 2 - count));
+        setCanPlay(count < 2);
+      } else {
+        setRemainingPlays(2);
+        setCanPlay(true);
+      }
+    } else {
+      setRemainingPlays(2);
+      setCanPlay(true);
+    }
     const savedScores = localStorage.getItem("tictactoe_scores");
     if (savedScores) {
       setTimeout(() => {
         setScores(JSON.parse(savedScores));
       }, 500);
     }
-  }, [checkGameLimit]);
+  }, []);
 
   // -------------------------
   // 💾 SAVE SCORES TO STORAGE
@@ -150,7 +149,7 @@ export default function TicTacToe() {
         updateScores("Draw");
       }
     },
-    [updateScores, status, updateUser, t]
+    [updateScores, status, updateUser, t],
   );
 
   // -------------------------
@@ -159,7 +158,8 @@ export default function TicTacToe() {
   const aiMove = useCallback(() => {
     // Determine random move chance based on difficulty
     let randomMoveChance = 0;
-    if (difficulty === "easy") randomMoveChance = 0.7; // 70% random moves
+    if (difficulty === "easy")
+      randomMoveChance = 0.7; // 70% random moves
     else if (difficulty === "medium") randomMoveChance = 0.5; // 50% random moves
 
     const makeRandomMove = Math.random() < randomMoveChance;
@@ -260,7 +260,22 @@ export default function TicTacToe() {
     setWinner(null);
     setIsAiTurn(false);
     setGameStarted(false);
-    checkGameLimit();
+    const playData = localStorage.getItem("tictactoe_play_data");
+    const today = new Date().toDateString();
+
+    if (playData) {
+      const { date, count } = JSON.parse(playData);
+      if (date === today) {
+        setRemainingPlays(Math.max(0, 2 - count));
+        setCanPlay(count < 2);
+      } else {
+        setRemainingPlays(2);
+        setCanPlay(true);
+      }
+    } else {
+      setRemainingPlays(2);
+      setCanPlay(true);
+    }
   };
 
   // -------------------------
@@ -388,7 +403,7 @@ export default function TicTacToe() {
                     }
                     className={`
                       w-20 h-20 sm:w-28 sm:h-28 lg:w-30 lg:h-30
-                      bg-linear-to-br from-primary via-primary to-primary/80 
+                      bg-linear-to-br from-primary via-primary to-primary/80
                       rounded-3xl flex items-center justify-center shadow-xl
                       transition-all duration-300 ease-out
                       ${
@@ -417,7 +432,7 @@ export default function TicTacToe() {
                 <button
                   onClick={restartGame}
                   className="mt-6 w-full bg-linear-to-r from-primary to-primary/80 text-primary-foreground py-4 rounded-2xl font-black text-xl
-                    hover:from-primary/90 hover:to-primary/70 flex items-center justify-center gap-3 cursor-pointer 
+                    hover:from-primary/90 hover:to-primary/70 flex items-center justify-center gap-3 cursor-pointer
                     active:scale-95 transition-all duration-200 shadow-xl hover:shadow-2xl"
                 >
                   <FaPlay />

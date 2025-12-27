@@ -30,10 +30,8 @@ export const getEventEndDateTime = (event: any) => {
 };
 
 
-export default function UpcomingEvents({ events }: EventProps) {
+export default function UpcomingEvents({ events }: Readonly<EventProps>) {
     const t = useTranslations("Events.displayEvents");
-    console.log(events);
-    
 
     const [resetKey, setResetKey] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");

@@ -1,7 +1,7 @@
 "use client";
 
 import { Package, Plus } from "lucide-react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { type RecycleFormValues } from "@/frontend/schema/recycle.schema";
 import ItemCard from "./UI/ItemCard";
@@ -17,10 +17,9 @@ interface MaterialSectionProps {
   removeMaterial: (id: number) => void;
   updateAmount: (index: number, delta: number) => void;
   updateType: (index: number, newType: string) => void;
-  register: UseFormRegister<RecycleFormValues>;
   addMaterial: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  errors: FieldErrors<any>;
+  errors: FieldErrors<RecycleFormValues>;
+  register: UseFormRegister<any>;
 }
 
 const MaterialSection = ({
@@ -28,11 +27,14 @@ const MaterialSection = ({
   removeMaterial,
   updateAmount,
   updateType,
-  register,
   addMaterial,
   errors,
+  register,
 }: MaterialSectionProps) => {
   const t = useTranslations("RecycleForm.materialSection");
+
+  // Collect all selected types (excluding empty selections)
+  const selectedTypes = materials.filter((m) => m.type).map((m) => m.type);
 
   return (
     <div className="space-y-6">
@@ -51,9 +53,9 @@ const MaterialSection = ({
             onRemove={removeMaterial}
             onAmountChange={updateAmount}
             onTypeChange={updateType}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            register={register as unknown as (name: string) => any}
-            error={errors[`type-${m.id}`]?.message as string | undefined}
+            register={register}
+            error={(errors as any)[`type-${m.id}`]?.message}
+            selectedTypes={selectedTypes}
           />
         ))}
 

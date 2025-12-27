@@ -1,6 +1,5 @@
 export async function getUserRecyclingEntries(userId: string) {
   try {
-    console.log(userId)
     const response = await fetch(`/api/recycle/user/${userId}`);
     if (!response.ok) {
       throw new Error("Failed to fetch recycling entries");

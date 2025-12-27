@@ -22,7 +22,6 @@ export const getFavorites = createAsyncThunk("fav/getFavorites", async (_) => {
   if (!res.ok) throw new Error("Failed to fetch favorites");
 
   const { data } = await res.json();
-  console.log(data);
   return data;
 });
 

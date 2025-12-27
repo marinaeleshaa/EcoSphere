@@ -80,7 +80,7 @@ export const ROLE_PROMPTS: Record<string, PromptCategory[]> = {
       prompts: [{ icon: "➕", text: "How to create a new event?" }],
     },
   ],
-  recycleMan: [
+  recycleAgent: [
     {
       title: "Worklist (Read)",
       prompts: [

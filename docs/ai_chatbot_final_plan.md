@@ -42,12 +42,12 @@ This plan outlines the enhancement of the EcoSphere AI chatbot to be a comprehen
 | **Customer**        | ✅ Yes      | All public routes                               | Orders, points, favorites, cart |
 | **Restaurant/Shop** | ✅ Separate | All public routes                               | CRUD products, stats, orders    |
 | **Organizer**       | ✅ Yes      | All public routes                               | Manage events, attendees        |
-| **RecycleMan**      | ✅ Yes      | All public routes                               | Manage recycling requests       |
+| **recycleAgent**      | ✅ Yes      | All public routes                               | Manage recycling requests       |
 | **Admin**           | ✅ Yes      | All public routes                               | Platform stats, full management |
 
 ### Authentication Models
 
-1. **UserModel** - customers, organizers, recycleMan, admin
+1. **UserModel** - customers, organizers, recycleAgent, admin
 2. **RestaurantModel** - restaurant/shop owners (separate authentication)
 
 ---
@@ -303,7 +303,7 @@ async generateResponse(
     2. Customer: Guest + orders, points, favorites, cart
     3. Restaurant: Guest + manage products, stats, orders
     4. Organizer: Guest + manage events, attendees
-    5. RecycleMan: Guest + manage recycling requests
+    5. recycleAgent: Guest + manage recycling requests
     6. Admin: Full platform access
 
     Authentication Rules:
@@ -380,7 +380,7 @@ export interface UserContextDTO {
   email: string;
   firstName: string;
   lastName: string;
-  role: "customer" | "organizer" | "admin" | "recycleMan";
+  role: "customer" | "organizer" | "admin" | "recycleAgent";
   points: number;
   favoritesCount: number;
   cartItemsCount: number;
@@ -565,7 +565,7 @@ interface SuggestedPromptsProps {
     | "customer"
     | "restaurant"
     | "organizer"
-    | "recycleMan"
+    | "recycleAgent"
     | "admin";
   onPromptClick: (prompt: string) => void;
 }
@@ -624,7 +624,7 @@ const ROLE_PROMPTS = {
     { icon: "📅", text: "Upcoming events" },
     { icon: "➕", text: "Create new event guide" },
   ],
-  recycleMan: [
+  recycleAgent: [
     { icon: "📋", text: "Pending recycling requests" },
     { icon: "🚚", text: "Today's pickups" },
     { icon: "♻️", text: "Carbon saved this month" },
@@ -832,7 +832,7 @@ export const FeedbackButtons: React.FC<FeedbackButtonsProps> = ({
 - [ ] Customer: "Show my points" → User's actual points
 - [ ] Restaurant: "My revenue" → Restaurant's actual revenue
 - [ ] Organizer: "My events" → Organizer's events
-- [ ] RecycleMan: "Pending requests" → Recycling requests
+- [ ] recycleAgent: "Pending requests" → Recycling requests
 - [ ] Admin: "Total carbon saved" → Platform total
 
 ---

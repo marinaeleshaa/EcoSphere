@@ -44,7 +44,6 @@ import Image from "next/image";
 import z from "zod";
 import { useTranslations } from "next-intl";
 
-
 export default function ManageEvent({
   initialData,
 }: Readonly<{ initialData?: any }>) {

@@ -126,7 +126,7 @@ const ForgotPasswordPage = () => {
       }
     };
     sequence();
-  }, [step, controls]);
+  }, [step, controls, isRTL]);
 
   const handleEmailVerified = () => {
     setStep("reset");

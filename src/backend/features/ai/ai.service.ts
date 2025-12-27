@@ -79,7 +79,7 @@ export class AIService implements IAIService {
         2. Customer: Guest + orders, points, favorites, cart
         3. Restaurant: Guest + manage products, stats, orders
         4. Organizer: Guest + manage events, attendees
-        5. RecycleMan: Guest + manage recycling requests
+        5. recycleAgent: Guest + manage recycling requests
         6. Admin: Full platform access
 
         Authentication Rules:

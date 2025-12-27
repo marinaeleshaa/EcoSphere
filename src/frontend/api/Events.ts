@@ -5,9 +5,7 @@ export async function PostEvent(formData: FormData) {
       method: "POST",
       body: formData,
     }
-  );
-  console.log(res);
-  
+  );  
 
   if (!res.ok) {
     throw new Error("error in fetch api response");

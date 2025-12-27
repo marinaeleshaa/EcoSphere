@@ -544,7 +544,7 @@ export interface IRecycleRepository {
 
 **Why Needed:**
 
-- RecycleMan: "Show pending requests"
+- recycleAgent: "Show pending requests"
 - Admin: "Total carbon saved"
 - "Recent recycling entries"
 

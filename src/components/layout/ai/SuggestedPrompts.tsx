@@ -9,7 +9,7 @@ interface SuggestedPromptsProps {
     | "customer"
     | "restaurant"
     | "organizer"
-    | "recycleMan"
+    | "recycleAgent"
     | "admin";
   onPromptClick: (prompt: string) => void;
   disabled?: boolean;
