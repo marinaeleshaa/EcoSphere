@@ -38,6 +38,12 @@ export type UserRegisterDTO = RegisterWithCredentialsDTO &
     address?: string;
   };
 
+export type RecycleAgentDTO = RegisterWithCredentialsDTO &
+  RegisterWithPhoneNumber &
+  RegisterForConsumer & {
+    birthDate: string;
+  };
+
 export type ShopRegisterDTO = RegisterWithCredentialsDTO &
   RegisterWithPhoneNumber & {
     name: string;
@@ -67,18 +73,16 @@ export type RegisterWithPhoneNumber = {
 };
 
 export const mapToUserPublicProfile = (
-  user: Partial<IUser> | Partial<IRestaurant>
+  user: Partial<IUser> | Partial<IRestaurant>,
 ) => {
   const isUsr = isUser(user);
   const role = isUsr ? user.role! : "shop";
 
-  // Include subscription info only for organizers, recycleMen, and shops/restaurants.
-  const includeSubscription =
-    (isUsr && (user.role === "organizer" || user.role === "recycleMan")) ||
-    !isUsr;
+  // Include subscription info only for organizers, and shops/restaurants.
+  const includeSubscription = (isUsr && user.role === "organizer") || !isUsr;
 
   const subscribed = includeSubscription
-    ? (user as Partial<IUser | IRestaurant>).subscribed ?? false
+    ? ((user as Partial<IUser | IRestaurant>).subscribed ?? false)
     : undefined;
 
   const rawPeriod = includeSubscription
@@ -89,8 +93,8 @@ export const mapToUserPublicProfile = (
     rawPeriod instanceof Date
       ? rawPeriod.toISOString()
       : rawPeriod
-      ? String(rawPeriod)
-      : undefined;
+        ? String(rawPeriod)
+        : undefined;
 
   return {
     id: `${user._id}`,
@@ -103,7 +107,7 @@ export const mapToUserPublicProfile = (
 };
 
 const isUser = (
-  u: Partial<IUser> | Partial<IRestaurant>
+  u: Partial<IUser> | Partial<IRestaurant>,
 ): u is Partial<IUser> => {
   return "firstName" in u;
 };

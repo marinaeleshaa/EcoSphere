@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,7 @@ export default function ProductsClient({
   >();
   const [deleteProductId, setDeleteProductId] = useState<string | null>(null);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -56,7 +56,7 @@ export default function ProductsClient({
       });
 
       const res = await fetch(
-        `/api/restaurants/${restaurantId}/products?${params}`
+        `/api/restaurants/${restaurantId}/products?${params}`,
       );
       if (!res.ok) throw new Error(res.statusText);
 
@@ -74,11 +74,11 @@ export default function ProductsClient({
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, debouncedSearch, restaurantId, t]);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, debouncedSearch]);
+  }, [fetchProducts]);
 
   const handleCreate = async (payload: CreateProductDTO) => {
     try {
@@ -108,7 +108,7 @@ export default function ProductsClient({
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       if (!res.ok) throw new Error(res.statusText);
@@ -128,7 +128,7 @@ export default function ProductsClient({
     try {
       const res = await fetch(
         `/api/restaurants/${restaurantId}/products/${deleteProductId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       if (!res.ok) throw new Error(res.statusText);

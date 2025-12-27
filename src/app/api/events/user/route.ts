@@ -59,7 +59,7 @@ export const GET = async (): Promise<
       return unauthorized();
     }
     return ok(
-      await rootContainer.resolve(EventController).getEventsByUserId(user.id)
+      await rootContainer.resolve(EventController).getEventsByUserId(user.id),
     );
   } catch (error) {
     console.error(error);
@@ -69,7 +69,7 @@ export const GET = async (): Promise<
 
 export const POST = organizerOnly(
   async (
-    req: NextRequest
+    req: NextRequest,
   ): Promise<NextResponse<ApiResponse<EventResponse>>> => {
     try {
       const user = await getCurrentUser();
@@ -88,18 +88,18 @@ export const POST = organizerOnly(
       }
 
       return ok(
-        await rootContainer.resolve(EventController).createEvent(user.id, body)
+        await rootContainer.resolve(EventController).createEvent(user.id, body),
       );
     } catch (error) {
       console.error(error);
       return serverError("Something went wrong");
     }
-  }
+  },
 );
 
 export const PUT = organizerOnly(
   async (
-    req: NextRequest
+    req: NextRequest,
   ): Promise<NextResponse<ApiResponse<EventResponse>>> => {
     try {
       const user = await getCurrentUser();
@@ -118,13 +118,13 @@ export const PUT = organizerOnly(
       }
 
       return ok(
-        await rootContainer.resolve(EventController).updateEvent(user.id, body)
+        await rootContainer.resolve(EventController).updateEvent(user.id, body),
       );
     } catch (error) {
       console.error(error);
       return serverError("Something went wrong");
     }
-  }
+  },
 );
 
 export const DELETE = organizerOnly(
@@ -143,7 +143,7 @@ export const DELETE = organizerOnly(
       console.error(error);
       return serverError("Something went wrong");
     }
-  }
+  },
 );
 
 export const PATCH = adminOnly(
@@ -167,5 +167,5 @@ export const PATCH = adminOnly(
       console.error(error);
       return serverError("Something went wrong");
     }
-  }
+  },
 );

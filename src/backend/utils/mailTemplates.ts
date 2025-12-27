@@ -23,7 +23,7 @@ const baseStyles = {
 
 const formatName = (name?: string) => name?.trim() || "EcoSphere friend";
 
-export type UserType = "customer" | "organizer" | "shop";
+export type UserType = "customer" | "organizer" | "shop" | "recycleAgent";
 
 export function getRegistrationSubject(userType: UserType): string {
   switch (userType) {

@@ -30,6 +30,13 @@ export interface IOrderRepository {
     startDate: string,
     endDate: string
   ): Promise<RevenuePerDate[]>;
+  // Analytics methods for AI chatbot
+  getRecentOrders(limit?: number): Promise<IOrder[]>;
+  getTotalRevenue(): Promise<number>;
+  getOrdersByStatus(
+    status: "pending" | "completed" | "cancelled",
+    limit?: number
+  ): Promise<IOrder[]>;
   atomicUpdateOrderStatus(
     orderId: string,
     expectedStatus: string,
@@ -172,6 +179,40 @@ export class OrderRepository implements IOrderRepository {
         },
       },
     ]).exec();
+  }
+
+  // Analytics methods for AI chatbot
+  async getRecentOrders(limit: number = 10): Promise<IOrder[]> {
+    return await OrderModel.find()
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean<IOrder[]>()
+      .exec();
+  }
+
+  async getTotalRevenue(): Promise<number> {
+    const result = await OrderModel.aggregate([
+      { $match: { status: "completed" } },
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$orderPrice" },
+        },
+      },
+    ]).exec();
+
+    return result[0]?.totalRevenue || 0;
+  }
+
+  async getOrdersByStatus(
+    status: "pending" | "completed" | "cancelled",
+    limit: number = 20
+  ): Promise<IOrder[]> {
+    return await OrderModel.find({ status })
+      .sort({ createdAt: -1 })
+      .limit(limit)
+      .lean<IOrder[]>()
+      .exec();
   }
 
   /**

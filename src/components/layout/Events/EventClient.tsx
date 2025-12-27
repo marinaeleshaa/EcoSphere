@@ -1,6 +1,6 @@
 import HeroSection from '../common/HeroSection'
 import WhyEcosphere from './WhyEcosphere'
-import MainDisplayEvents from '../common/events/MainDisplayEvents'
+import MainDisplayEvents from './MainDisplayEvents'
 import { EventProps } from '@/types/EventTypes'
 import { useTranslations } from 'next-intl'
 

@@ -5,7 +5,10 @@ import { DBInstance } from "@/backend/config/dbConnect";
 import { Types } from "mongoose";
 
 export interface IEventRepository {
-  getEvents(): Promise<IEvent[]>;
+  getEvents(
+    isAdmin?: boolean,
+    status?: "accepted" | "rejected" | "pending"
+  ): Promise<IEvent[]>;
   getEvent(id: string, eventId: string): Promise<IEvent>;
   getEventsByUserId(id: string): Promise<IEvent[]>;
   createEvent(id: string, data: IEvent): Promise<IEvent>;
@@ -15,20 +18,47 @@ export interface IEventRepository {
   rejectEvent(id: string, eventId: string): Promise<IEvent>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
   attendEvent(id: string, eventId: string): Promise<IEvent>;
+  // Analytics method for AI chatbot
+  getUpcomingEvents(limit?: number): Promise<IEvent[]>;
+  getTotalEventsCount(): Promise<number>;
+  getEventStatistics(): Promise<{
+    totalEvents: number;
+    upcomingEvents: number;
+    totalAttendees: number;
+  }>;
+  getEventsByOrganizerLimited(
+    userId: string,
+    limit?: number
+  ): Promise<IEvent[]>;
 }
 
 @injectable()
 class EventRepository {
-  async getEvents(): Promise<IEvent[]> {
+  async getEvents(
+    isAdmin: boolean = false,
+    status?: "accepted" | "rejected" | "pending"
+  ): Promise<IEvent[]> {
     await DBInstance.getConnection();
 
-    return EventModel.find({
+    const query: any = {
       eventDate: { $gte: new Date() },
-      isAccepted: true,
-    })
-      .populate("user", "firstName phoneNumber email")
-      .lean()
-      .exec();
+    };
+
+    if (isAdmin) {
+      if (status === "pending") {
+        query.isEventNew = true;
+      } else if (status === "accepted") {
+        query.isAccepted = true;
+        query.isEventNew = false;
+      } else if (status === "rejected") {
+        query.isAccepted = false;
+        query.isEventNew = false;
+      }
+    } else {
+      query.isAccepted = true;
+    }
+
+    return EventModel.find(query).lean().exec();
   }
 
   async getEvent(userId: string, eventId: string): Promise<IEvent> {
@@ -36,7 +66,7 @@ class EventRepository {
 
     const event = await EventModel.findOne({
       _id: eventId,
-      user: userId,
+      owner: userId,
     })
       .lean()
       .exec();
@@ -51,15 +81,15 @@ class EventRepository {
   async getEventsByUserId(userId: string): Promise<IEvent[]> {
     await DBInstance.getConnection();
 
-    return EventModel.find({ user: userId }).lean().exec();
+    return EventModel.find({ owner: userId }).lean().exec();
   }
 
-  async createEvent(userId: string, data: IEvent): Promise<IEvent> {
+  async createEvent(id: string, data: IEvent): Promise<IEvent> {
     await DBInstance.getConnection();
 
     const event = await EventModel.create({
       ...data,
-      user: userId,
+      owner: id,
     });
 
     return event.toObject();
@@ -69,9 +99,9 @@ class EventRepository {
     await DBInstance.getConnection();
 
     const event = await EventModel.findOneAndUpdate(
-      { _id: data._id, user: userId },
+      { _id: data._id, owner: userId },
       { ...data, updatedAt: new Date() },
-      { new: true },
+      { new: true }
     )
       .lean()
       .exec();
@@ -88,7 +118,7 @@ class EventRepository {
 
     const event = await EventModel.findOneAndDelete({
       _id: eventId,
-      user: userId,
+      owner: userId,
     })
       .lean()
       .exec();
@@ -104,7 +134,7 @@ class EventRepository {
     await DBInstance.getConnection();
     const response = await UserModel.findOne(
       { "events._id": eventId },
-      { _id: 1 },
+      { _id: 1 }
     )
       .lean<IUser>()
       .exec();
@@ -117,7 +147,7 @@ class EventRepository {
     const event = await EventModel.findByIdAndUpdate(
       eventId,
       { isAccepted: true, isEventNew: false },
-      { new: true },
+      { new: true }
     )
       .lean()
       .exec();
@@ -133,7 +163,7 @@ class EventRepository {
     const event = await EventModel.findByIdAndUpdate(
       eventId,
       { isAccepted: false, isEventNew: false },
-      { new: true },
+      { new: true }
     )
       .lean()
       .exec();
@@ -152,7 +182,7 @@ class EventRepository {
         $addToSet: { attenders: new Types.ObjectId(userId) },
         $set: { updatedAt: new Date() },
       },
-      { new: true },
+      { new: true }
     )
       .lean()
       .exec();
@@ -162,6 +192,74 @@ class EventRepository {
     }
 
     return event;
+  }
+
+  // Analytics method for AI chatbot
+  async getUpcomingEvents(limit: number = 10): Promise<IEvent[]> {
+    await DBInstance.getConnection();
+
+    return await EventModel.find({
+      eventDate: { $gte: new Date() },
+      isAccepted: true,
+    })
+      .sort({ eventDate: 1 }) // Earliest events first
+      .limit(limit)
+      .populate("user", "firstName phoneNumber email")
+      .lean()
+      .exec();
+  }
+
+  async getTotalEventsCount(): Promise<number> {
+    await DBInstance.getConnection();
+
+    const count = await EventModel.countDocuments({}).exec();
+    return count;
+  }
+
+  async getEventStatistics(): Promise<{
+    totalEvents: number;
+    upcomingEvents: number;
+    totalAttendees: number;
+  }> {
+    await DBInstance.getConnection();
+
+    const result = await EventModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalEvents: { $count: {} },
+          upcomingEvents: {
+            $sum: {
+              $cond: [{ $gte: ["$eventDate", new Date()] }, 1, 0],
+            },
+          },
+          totalAttendees: {
+            $sum: { $size: { $ifNull: ["$attenders", []] } },
+          },
+        },
+      },
+    ]).exec();
+
+    return (
+      result[0] || {
+        totalEvents: 0,
+        upcomingEvents: 0,
+        totalAttendees: 0,
+      }
+    );
+  }
+
+  async getEventsByOrganizerLimited(
+    userId: string,
+    limit: number = 10
+  ): Promise<IEvent[]> {
+    await DBInstance.getConnection();
+
+    return await EventModel.find({ user: userId })
+      .sort({ eventDate: -1 })
+      .limit(limit)
+      .lean()
+      .exec();
   }
 }
 

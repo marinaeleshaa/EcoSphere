@@ -5,7 +5,7 @@ export interface User {
   description: string;
   id: any;
   points: number;
-  paymentHistory: Object[];
+  paymentHistory: object[];
   subscriptionPeriod: string;
   _id: string;
   firstName: string;
@@ -31,7 +31,7 @@ export interface Shop {
   description: string;
   id: any;
   points: number;
-  paymentHistory: Object[];
+  paymentHistory: object[];
   subscriptionPeriod: string;
   _id: string;
   email: string;

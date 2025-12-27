@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IEventDetails } from "@/types/EventTypes";
 
 export const formatTime = (
@@ -36,7 +37,6 @@ export const formatDate = (
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function serializeEvent(event: any): IEventDetails {
   return {
     _id: event._id.toString(),

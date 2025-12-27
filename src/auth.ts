@@ -48,46 +48,50 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
-    }),
-  ],
-  session: {
-    strategy: "jwt",
-  },
-  callbacks: {
-    async signIn({ user, account, profile }) {
-      switch (account?.provider) {
-        case "google":
-        case "github": {
-          console.log(user, account, profile, "info");
-          const [firstName, ...rest] = (profile?.name ?? "").split(" ");
-          const lastName = rest.join(" ");
-          return !!(await rootContainer
-            .resolve(AuthController)
-            .LoginWithGoogle({
-              firstName: firstName,
-              lastName: lastName,
-              email: user?.email as string,
-              role: "customer",
-              oAuthId: account.providerAccountId,
-              provider: account.provider,
-            }));
+      authorization: {
+          params: {
+            scope: 'read:user user:email'
+          }
         }
-        // case :
-        case "credentials":
-          return true;
-        default:
-          return false;
-      }
-    },
-    async jwt({ token, user, account, profile }) {
-      // When NextAuth authorizes a user object (credentials provider), that `user`
-      // object contains fields returned by our controller (mapToUserPublicProfile).
-      // Copy standard fields and subscription info (when present) into token so
-      // we can later expose them via session().
-      if (user) {
-        token.userId = user.id;
-        token.role = user.role;
-        token.image = user.image;
+    }),
+	],
+	session: {
+		strategy: "jwt",
+	},
+	callbacks: {
+		async signIn({ user, account, profile }) {
+			switch (account?.provider) {
+				case "google":
+				case  "github": {
+					const [firstName, ...rest] = (profile?.name ?? "").split(" ");
+					const lastName = rest.join(" ");
+					return !!(await rootContainer
+						.resolve(AuthController)
+						.LoginWithGoogle({
+							firstName: firstName,
+							lastName: lastName,
+							email: user?.email as string,
+							role: "customer",
+							oAuthId: account.providerAccountId,
+							provider: account.provider,
+						}));
+				}
+				// case : 
+				case "credentials":
+					return true;
+				default:
+					return false;
+			}
+		},
+		async jwt({ token, user, account, profile }) {
+			// When NextAuth authorizes a user object (credentials provider), that `user`
+			// object contains fields returned by our controller (mapToUserPublicProfile).
+			// Copy standard fields and subscription info (when present) into token so
+			// we can later expose them via session().
+			if (user) {
+				token.userId = user.id;
+				token.role = user.role;
+				token.image = user.image;
 
         if (user.subscribed) {
           token.subscribed = user.subscribed;
@@ -110,7 +114,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       // Google provider flow: the 'user' may not include DB-mapped subscription fields
       // because we create/find the DB user separately. For Google logins we keep existing
       // behavior (role=customer) — customers don't get subscription fields in token.
-      if (["google", "github"].includes(account?.provider!)) {
+      if (["google", "github"].includes(account!.provider)) {
         token.role = "customer";
         token.image =
           profile?.picture ??

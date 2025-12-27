@@ -24,7 +24,6 @@ export class WebhookEventService {
 		const existing = await this.webhookRepo.getByStripeEventId(event.id);
 
 		if (existing) {
-			console.log("Webhook event already processed:", event.id);
 			return { received: true };
 		}
 
@@ -57,7 +56,7 @@ export class WebhookEventService {
 				await this.handleSubscriptionDeleted(event);
 				break;
 			default:
-				console.log("Unhandled event type:", event.type);
+				console.warn("Unhandled event type:", event.type);
 		}
 	}
 
@@ -173,11 +172,7 @@ export class WebhookEventService {
 				await this.restaurantService.updateById(userId, {
 					stripeCustomerId: stripeCustomer,
 				} as Partial<IRestaurant>);
-				console.log(
-					`Attached stripeCustomerId to restaurant from ${source}:`,
-					userId,
-					stripeCustomer
-				);
+				
 			} catch (err) {
 				console.error(
 					`Failed to attach stripeCustomerId to restaurant (from ${source}):`,
@@ -189,11 +184,7 @@ export class WebhookEventService {
 				await this.userService.updateSubscription(userId, {
 					stripeCustomerId: stripeCustomer,
 				});
-				console.log(
-					`Attached stripeCustomerId to user from ${source}:`,
-					userId,
-					stripeCustomer
-				);
+				
 			} catch (err) {
 				console.error(
 					`Failed to attach stripeCustomerId to user (from ${source}):`,

@@ -9,29 +9,37 @@ import EventDetailsCard from "./EventDetailsCard";
 import DeleteEventBtn from "../../Dashboard/Events/DisplayEvents/DeleteEventBtn";
 import UpdateEventBtn from "../../Dashboard/Events/DisplayEvents/UpdateEventBtn";
 import { usePathname } from "next/navigation";
-import AddAttendBtn from "./AddAttendBtn";
+import AddAttendBtn from "../../Events/AddAttendBtn";
 import { useSession } from "next-auth/react";
 import { EventStatus } from "@/types/EventTypes";
 import { FaUserTie } from "react-icons/fa6";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+
 export default function EventCard({ event }: { event: any }) {
   const t = useTranslations("Events.displayEvents.EventCard");
   const locale = useLocale();
   const { data: session } = useSession();
   const pathname = usePathname();
+
+  // --- Locale-aware route parsing ---
   const segments = pathname.split("/").filter(Boolean);
-  const isOrganizerDetails =
-    segments.length >= 2 &&
-    segments[1] === "organizer" &&
-    segments[2] === "details";
-  const isEventOrganizer = session?.user?.id === event.user._id;
-  const canAttend = !isOrganizerDetails && !isEventOrganizer;
+  const locales = ["en", "ar"]; // Add other locales if needed
+  const firstSegmentIsLocale = locales.includes(segments[0]);
+  const routeSegment = firstSegmentIsLocale ? segments[1] : segments[0];
+  const secondSegment = firstSegmentIsLocale ? segments[2] : segments[1];
+
+  // --- Route flags ---
+  const isEventsPage = routeSegment === "events";
+  const isOrganizerUpcoming = routeSegment === "organizer" && secondSegment === "upcomingEvents";
+  const isOrganizerHistory = routeSegment === "organizer" && secondSegment === "history";
+
   const status: EventStatus = event.isAccepted
     ? "approved"
     : event.isEventNew
-    ? "pending"
-    : "rejected";
+      ? "pending"
+      : "rejected";
+
   const statusStyles: Record<EventStatus, string> = {
     approved: "bg-green-600 text-white",
     pending: "bg-yellow-500 text-white",
@@ -41,6 +49,7 @@ export default function EventCard({ event }: { event: any }) {
   return (
     <div className="col-span-1 flex justify-center">
       <div className="w-full flex flex-col max-w-sm rounded-2xl overflow-hidden border border-primary/20 bg-background shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+
         {/* Image Header */}
         <div className="relative h-52">
           <Image
@@ -49,25 +58,33 @@ export default function EventCard({ event }: { event: any }) {
             fill
             className="object-cover"
           />
-          {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
-          {isOrganizerDetails && (
+
+          {/* Edit/Delete buttons & status for organizer upcoming */}
+          {isOrganizerUpcoming && (
             <div>
-              <div className="absolute top-4 ltr:right-4 rtl:left-4  z-20 flex gap-2">
+              <div className="absolute top-4 ltr:right-4 rtl:left-4 z-20 flex gap-2">
                 <UpdateEventBtn id={event._id} detailscard={false} />
                 <DeleteEventBtn id={event._id} detailscard={false} />
               </div>
-              <div className="absolute top-4 ltr:left-4 rtl:right-4 z-20 ">
+              <div className="absolute top-4 ltr:left-4 rtl:right-4 z-20">
                 <p
                   className={`capitalize py-1 px-3 rounded-full text-sm font-medium bg-primary text-primary-foreground
-                      ${statusStyles[status]}
-                      `}
+                    ${statusStyles[status]}`}
                 >
                   {t(`status.${status}`)}
                 </p>
               </div>
             </div>
           )}
+
+          {/* Delete button only on organizer history */}
+          {isOrganizerHistory && (
+            <div className="absolute top-4 ltr:right-4 rtl:left-4 z-20">
+              <DeleteEventBtn id={event._id} detailscard={false} />
+            </div>
+          )}
+
           {/* Event Name */}
           <div className="absolute bottom-4 left-4 right-4">
             <h2 className="text-xl font-bold text-white leading-tight line-clamp-2">
@@ -75,9 +92,10 @@ export default function EventCard({ event }: { event: any }) {
             </h2>
           </div>
         </div>
+
         {/* Content */}
         <div className="p-5 flex-1 space-y-4">
-          <div className="flex  flex-wrap gap-1.5 text-sm">
+          <div className="flex flex-wrap gap-1.5 text-sm">
             <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
               <FaCalendar className="text-primary" />
               <span>{formatDate(event.eventDate, locale)}</span>
@@ -85,28 +103,21 @@ export default function EventCard({ event }: { event: any }) {
             <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
               <MdAccessTime className="text-primary" />
               <span>
-                {formatTime(event.startTime, locale)} –{" "}
-                {formatTime(event.endTime, locale)}
+                {formatTime(event.startTime, locale)} – {formatTime(event.endTime, locale)}
               </span>
             </div>
             <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
               <FaLocationDot className="text-primary" />
               <span>{event.locate}</span>
             </div>
-            {!isOrganizerDetails && (
+
+            {/* Organizer info only on /events */}
+            {isEventsPage && (
               <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
                 <FaUserTie className="text-primary" />
-                {isEventOrganizer ? (
-                  <span className="text-xs text-primary font-semibold">
-                    {t("organizer")}
-                  </span>
-                ) : (
-                  <div className="flex flex-col text-sm">
-                    <span className="font-medium text-foreground">
-                      {event.user?.firstName}
-                    </span>
-                  </div>
-                )}
+                <div className="flex flex-col text-sm">
+                  <span className="font-medium text-foreground">{event.user?.name}</span>
+                </div>
               </div>
             )}
           </div>
@@ -114,14 +125,14 @@ export default function EventCard({ event }: { event: any }) {
 
         {/* Actions */}
         <div className="flex m-2 gap-3">
+          {/* Details card */}
           <EventDetailsCard
             event={event}
-            isOrganizerDetails={isOrganizerDetails}
-            isEventOrganizer={isEventOrganizer}
-            canAttend={canAttend}
             userId={session?.user?.id || ""}
           />
-          {!isOrganizerDetails && canAttend && (
+
+          {/* Attend button only on /events */}
+          {isEventsPage && (
             <AddAttendBtn
               eventId={event._id}
               ticketPrice={event.ticketPrice}

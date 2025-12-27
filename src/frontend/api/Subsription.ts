@@ -11,7 +11,6 @@ export async function PostPlan(plan: ISubscribePlanData) {
       body: JSON.stringify(plan),
     }
   );
-  console.log(res);
 
   if (!res.ok) {
     throw new Error("error in fetch api response");

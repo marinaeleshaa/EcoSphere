@@ -68,7 +68,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const handleFav = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    // Use partial object logic or ensure FavSlice handles it
     dispatch(toggleFavoriteAsync({ ...product, id: safeId } as IProduct));
     if (isFav) {
       toast.success(t("removedFromFavorites"));
@@ -242,12 +241,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
             ) : isInCart ? (
               <div className="flex gap-2 justify-evenly text-nowrap items-center">
                 <RiShoppingCartFill />
-                <span className="mr-2">{t("removedFromCart")}</span>
+                <span className="mr-2">{t("removeFromCart")}</span>
               </div>
             ) : (
               <div className="flex justify-evenly gap-2 text-nowrap items-center">
                 <RiShoppingCartLine />
-                <span className="mr-2">{t("addedToCart")}</span>
+                <span className="mr-2">{t("addToCart")}</span>
               </div>
             )}
           </button>

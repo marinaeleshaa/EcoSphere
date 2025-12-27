@@ -1,16 +1,22 @@
 "use client";
 
-import { RootState } from "@/frontend/redux/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/frontend/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import FavCard from "./FavCard";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import Pagination from "@/components/ui/Pagination";
+import { useEffect } from "react";
+import { getFavorites } from "@/frontend/redux/Slice/FavSlice";
 
 const FavCardsSection = () => {
   const t = useTranslations("Favorites.emptyState");
   const { view, favProducts } = useSelector((state: RootState) => state.fav);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(getFavorites());
+  }, [dispatch]);
 
   return (
     <section>

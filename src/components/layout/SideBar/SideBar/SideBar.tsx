@@ -1,7 +1,7 @@
 "use client";
 import { useSelector } from "react-redux";
 import { RootState } from "@/frontend/redux/store";
-import { PiListMagnifyingGlassBold } from "react-icons/pi";
+import { LuCalendarClock } from "react-icons/lu";
 import {
   Gamepad2,
   Calendar,
@@ -84,11 +84,6 @@ export default function SideBar() {
       icon: Calendar,
     },
     {
-      title: t("menu.news"),
-      url: "/news",
-      icon: Newspaper,
-    },
-    {
       title: t("menu.store"),
       url: "/store",
       icon: Store,
@@ -112,25 +107,20 @@ export default function SideBar() {
       icon: RxDashboard,
     },
     {
-      title: t("dashboard.addEvent"),
+      title: t("dashboard.mangeevent"),
       url: "/organizer/manage",
       icon: MdOutlineAddToPhotos,
     },
     {
-      title: t("dashboard.eventDetails"),
-      url: "/organizer/details",
+      title: t("dashboard.upcomingevents"),
+      url: "/organizer/upcomingEvents",
+      icon: LuCalendarClock,
+    },
+    {
+      title: t("dashboard.history"),
+      url: "/organizer/history",
       icon: MdOutlineEventRepeat,
     },
-    {
-      title: t("dashboard.browseEvents"),
-      url: "/organizer/browse",
-      icon: PiListMagnifyingGlassBold,
-    },
-    {
-      title: t("dashboard.news"),
-      url: "/organizer/news",
-      icon: Newspaper,
-    }
   ];
   // Restaurant dashboard items.
   const restaurantItems = [
@@ -156,6 +146,11 @@ export default function SideBar() {
       title: t("dashboard.events"),
       url: "/admin/event",
       icon: MdEventAvailable,
+    },
+    {
+      title: t("dashboard.recycleAgent"),
+      url: "/admin/recycleAgent",
+      icon: Recycle,
     },
   ];
   // recycle dashboard items.
@@ -245,12 +240,12 @@ export default function SideBar() {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
-        {session?.user.role == "organizer" && (
+        {session?.user.role == "shop" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {OrganizerItems.map((item) => (
+                {restaurantItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
@@ -271,12 +266,13 @@ export default function SideBar() {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
-        {session?.user.role == "shop" && (
+        {(session?.user.role == "organizer" ||
+          session?.user.role == "shop") && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {restaurantItems.map((item) => (
+                {OrganizerItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton
                       asChild
@@ -324,8 +320,8 @@ export default function SideBar() {
           </SidebarGroup>
         )}
 
-        {/* **! change the role to be recycleMan */}
-        {session?.user.role == "recycleMan" && (
+        {/* **! change the role to be recycleAgent */}
+        {session?.user.role == "recycleAgent" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>

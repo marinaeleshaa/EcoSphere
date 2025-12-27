@@ -19,12 +19,10 @@ export class OrderController {
   async handleStripeEvent(event: Stripe.Event) {
     // Handle checkout session completed - this fires when payment succeeds
     if (event.type === "checkout.session.completed") {
-      const session = event.data.object as Stripe.Checkout.Session;
-      console.log("✅ Checkout session completed:", session.id);
+      const session = event.data.object;
 
       // Only process if payment was successful
       if (session.payment_status !== "paid") {
-        console.log("⏳ Payment not yet confirmed, skipping stock decrease");
         return;
       }
 
@@ -45,10 +43,6 @@ export class OrderController {
       try {
         // Decrease stock for each item (order already created in PaymentService)
         await this.orderService.decreaseStockForOrder(items);
-        console.log(
-          "✅ Stock decreased successfully for order:",
-          metadata.orderId
-        );
       } catch (error) {
         console.error("❌ Error decreasing stock:", error);
       }

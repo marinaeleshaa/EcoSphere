@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getRestaurantOrders, updateOrderStatus } from "@/frontend/api/Orders";
 import { IOrder } from "@/backend/features/orders/order.model";
 import { OrderStatus } from "@/backend/features/orders/order.types";
@@ -53,7 +53,7 @@ export default function RestaurantOrdersClient() {
     direction: "asc" | "desc";
   }>({ key: "createdAt", direction: "desc" });
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const data = await getRestaurantOrders();
       setOrders(data);
@@ -63,15 +63,15 @@ export default function RestaurantOrdersClient() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   const handleStatusChange = async (
     orderId: string,
-    newStatus: OrderStatus
+    newStatus: OrderStatus,
   ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
@@ -115,7 +115,7 @@ export default function RestaurantOrdersClient() {
   const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
   const currentOrders = sortedOrders.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const handlePageChange = (newPage: number) => {
@@ -233,7 +233,7 @@ export default function RestaurantOrdersClient() {
                   <TableCell>
                     <Badge
                       className={`${getStatusColor(
-                        order.status
+                        order.status,
                       )} border-0 badge-action`}
                     >
                       {t(`statuses.${order.status}`)}
@@ -245,7 +245,7 @@ export default function RestaurantOrdersClient() {
                       onValueChange={(value) =>
                         handleStatusChange(
                           order._id!.toString(),
-                          value as OrderStatus
+                          value as OrderStatus,
                         )
                       }
                     >
@@ -341,7 +341,7 @@ export default function RestaurantOrdersClient() {
                   onValueChange={(value) =>
                     handleStatusChange(
                       order._id!.toString(),
-                      value as OrderStatus
+                      value as OrderStatus,
                     )
                   }
                 >
@@ -401,7 +401,7 @@ export default function RestaurantOrdersClient() {
                     day: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
-                  }
+                  },
                 )}
             </DialogDescription>
           </DialogHeader>
@@ -459,7 +459,7 @@ export default function RestaurantOrdersClient() {
                   {/* Badge visible here on Mobile only */}
                   <Badge
                     className={`${getStatusColor(
-                      selectedOrder.status
+                      selectedOrder.status,
                     )} md:hidden border-0 text-base py-1 px-3 w-fit`}
                   >
                     {t(`statuses.${selectedOrder.status}`)}
@@ -471,7 +471,7 @@ export default function RestaurantOrdersClient() {
                   {/* Badge visible here on Tablet only */}
                   <Badge
                     className={`${getStatusColor(
-                      selectedOrder.status
+                      selectedOrder.status,
                     )} hidden md:inline-flex border-0 text-base py-1 px-3 w-fit`}
                   >
                     {t(`statuses.${selectedOrder.status}`)}
@@ -481,7 +481,7 @@ export default function RestaurantOrdersClient() {
                     onValueChange={(value) =>
                       handleStatusChange(
                         selectedOrder._id!.toString(),
-                        value as OrderStatus
+                        value as OrderStatus,
                       )
                     }
                   >
