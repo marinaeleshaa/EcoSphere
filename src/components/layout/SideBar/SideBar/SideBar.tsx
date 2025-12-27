@@ -12,7 +12,6 @@ import {
   ShoppingCart,
   Heart,
   LogIn,
-  Newspaper,
   Info,
   Salad,
 } from "lucide-react";
@@ -56,7 +55,7 @@ export default function SideBar() {
   const t = useTranslations("Layout.Sidebar");
   const matchPathWithOptionalLocale = (
     pathname: string,
-    targetSegment: string
+    targetSegment: string,
   ) => {
     const base = `\\${targetSegment}`;
     const en = `\\/en\\${targetSegment}`;
@@ -198,44 +197,30 @@ export default function SideBar() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
-                {session?.user.role === "customer" && (
-                  <>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton
-                        asChild
-                        tooltip={t("menu.recipes")}
-                        isActive={matchPathWithOptionalLocale(
-                          pathname,
-                          "/recipes"
-                        )}
-                      >
-                        <Link href="/recipes">
-                          <Salad />
-                          <span className="capitalize">
-                            {t("menu.recipes")}
-                          </span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton
-                        asChild
-                        tooltip={t("menu.recycle")}
-                        isActive={matchPathWithOptionalLocale(
-                          pathname,
-                          "/recycle"
-                        )}
-                      >
-                        <Link href="/recycle">
-                          <Recycle />
-                          <span className="capitalize">
-                            {t("menu.recycle")}
-                          </span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </>
-                )}
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={t("menu.recipes")}
+                    isActive={matchPathWithOptionalLocale(pathname, "/recipes")}
+                  >
+                    <Link href="/recipes">
+                      <Salad />
+                      <span className="capitalize">{t("menu.recipes")}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={t("menu.recycle")}
+                    isActive={matchPathWithOptionalLocale(pathname, "/recycle")}
+                  >
+                    <Link href="/recycle">
+                      <Recycle />
+                      <span className="capitalize">{t("menu.recycle")}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

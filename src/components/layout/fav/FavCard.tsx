@@ -1,6 +1,5 @@
 import { RootState } from "@/frontend/redux/store";
 import { IProduct } from "@/types/ProductType";
-import { Star } from "lucide-react";
 import Image from "next/image";
 import { HiMiniTrash } from "react-icons/hi2";
 import { toggleFavoriteAsync } from "@/frontend/redux/Slice/FavSlice";
