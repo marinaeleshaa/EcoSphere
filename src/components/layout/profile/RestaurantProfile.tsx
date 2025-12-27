@@ -107,7 +107,13 @@ export default function RestaurantProfile({
   };
 
   const handleEditClick = () => {
-    setFormData({});
+    setFormData({
+      name: user.name,
+      phoneNumber: user.phoneNumber,
+      location: user.location,
+      workingHours: user.workingHours,
+      description: user.description,
+    });
     setIsEditing(true);
   };
 
@@ -129,8 +135,27 @@ export default function RestaurantProfile({
   };
 
   const handleSave = async () => {
-    if (user.id) {
-      //   await dispatch(updateUserProfile({ id: user.id, data: formData }));
+    if (user._id) {
+      try {
+        const response = await fetch(`/api/restaurants/${user._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Refresh local state with updated data
+          setUser((prev) => (prev ? { ...prev, ...formData } : prev));
+          toast.success(t("toasts.profileUpdated"));
+        } else {
+          toast.error(result.message || t("toasts.profileUpdateFailed"));
+        }
+      } catch (error) {
+        console.error("Failed to update profile", error);
+        toast.error(t("toasts.profileUpdateFailed"));
+      }
       setIsEditing(false);
     }
   };

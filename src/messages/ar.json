@@ -635,7 +635,9 @@
     "toasts": {
       "passwordChanged": "تم تغيير كلمة المرور بنجاح",
       "passwordChangeFailed": "فشل تغيير كلمة المرور",
-      "redeemFailed": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى."
+      "redeemFailed": "فشل استبدال النقاط. يرجى المحاولة مرة أخرى.",
+      "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+      "profileUpdateFailed": "فشل تحديث الملف الشخصي"
     },
     "states": {
       "loading": "جاري تحميل الملف الشخصي...",

@@ -629,7 +629,9 @@
     "toasts": {
       "passwordChanged": "Password changed successfully",
       "passwordChangeFailed": "Failed to change password",
-      "redeemFailed": "Failed to redeem points. Please try again."
+      "redeemFailed": "Failed to redeem points. Please try again.",
+      "profileUpdated": "Profile updated successfully",
+      "profileUpdateFailed": "Failed to update profile"
     },
     "states": {
       "loading": "Loading profile...",

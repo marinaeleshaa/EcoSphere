@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -59,7 +58,7 @@ const OrderHistoryComponent = () => {
   const totalPages = Math.ceil(orders.length / itemsPerPage);
   const currentOrders = orders.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handlePageChange = (newPage: number) => {
@@ -136,10 +135,10 @@ const OrderHistoryComponent = () => {
                               order.status === "completed"
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                                 : order.status === "pending"
-                                  ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                                  : order.status === "canceled"
-                                    ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                                    : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                                ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                : order.status === "canceled"
+                                ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                             }`}
                           >
                             {order.status}
@@ -168,10 +167,10 @@ const OrderHistoryComponent = () => {
                           order.status === "completed"
                             ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                             : order.status === "pending"
-                              ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                              : order.status === "canceled"
-                                ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                                : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                            : order.status === "canceled"
+                            ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                            : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                         }`}
                       >
                         {order.status}
@@ -250,7 +249,7 @@ const RecyclingHistoryComponent = ({ id }: { id: string }) => {
   const totalPages = Math.ceil(recyclingEntries.length / itemsPerPage);
   const currentEntries = recyclingEntries.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handlePageChange = (newPage: number) => {
@@ -482,7 +481,7 @@ export default function CustomerProfile({
         const userData = await getUserData<User>(
           id,
           role,
-          "firstName lastName email phoneNumber address birthDate gender points avatar role",
+          "firstName lastName email phoneNumber address birthDate gender points avatar role"
         );
         setUser(userData);
       } catch (error) {
@@ -528,7 +527,7 @@ export default function CustomerProfile({
     try {
       const response = await changeUserPassword(
         passwordData.currentPassword,
-        passwordData.newPassword,
+        passwordData.newPassword
       );
       if (response.success) {
         toast.success(tToasts("passwordChanged"));
@@ -563,14 +562,14 @@ export default function CustomerProfile({
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePasswordInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target;
     const newData = { ...passwordData, [name]: value };
@@ -581,9 +580,13 @@ export default function CustomerProfile({
 
   const handleSave = async () => {
     if (user._id) {
-      await dispatch(
-        updateUserProfile({ id: user._id, data: formData as any }),
+      const result = await dispatch(
+        updateUserProfile({ id: user._id, data: formData as any })
       );
+      if (updateUserProfile.fulfilled.match(result)) {
+        // Refresh local state with updated data
+        setUser((prev) => (prev ? { ...prev, ...formData } : prev));
+      }
       setIsEditing(false);
     }
   };
@@ -717,7 +720,7 @@ export default function CustomerProfile({
                         const userData = await getUserData<User>(
                           id,
                           role,
-                          "firstName lastName email phoneNumber address birthDate gender points avatar role",
+                          "firstName lastName email phoneNumber address birthDate gender points avatar role"
                         );
                         setUser(userData);
                       }

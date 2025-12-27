@@ -146,9 +146,13 @@ export default function OrganizerProfile({
 
   const handleSave = async () => {
     if (user._id) {
-      await dispatch(
+      const result = await dispatch(
         updateUserProfile({ id: user._id, data: formData as any })
       );
+      if (updateUserProfile.fulfilled.match(result)) {
+        // Refresh local state with updated data
+        setUser((prev) => (prev ? { ...prev, ...formData } : prev));
+      }
       setIsEditing(false);
     }
   };
