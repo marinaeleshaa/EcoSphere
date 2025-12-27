@@ -71,7 +71,7 @@ export default function RestaurantOrdersClient() {
 
   const handleStatusChange = async (
     orderId: string,
-    newStatus: OrderStatus,
+    newStatus: OrderStatus
   ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
@@ -115,7 +115,7 @@ export default function RestaurantOrdersClient() {
   const totalPages = Math.ceil(sortedOrders.length / itemsPerPage);
   const currentOrders = sortedOrders.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   const handlePageChange = (newPage: number) => {
@@ -233,7 +233,7 @@ export default function RestaurantOrdersClient() {
                   <TableCell>
                     <Badge
                       className={`${getStatusColor(
-                        order.status,
+                        order.status
                       )} border-0 badge-action`}
                     >
                       {t(`statuses.${order.status}`)}
@@ -245,7 +245,7 @@ export default function RestaurantOrdersClient() {
                       onValueChange={(value) =>
                         handleStatusChange(
                           order._id!.toString(),
-                          value as OrderStatus,
+                          value as OrderStatus
                         )
                       }
                     >
@@ -258,6 +258,9 @@ export default function RestaurantOrdersClient() {
                       <SelectContent>
                         <SelectItem value="pending">
                           {t("statuses.pending")}
+                        </SelectItem>
+                        <SelectItem value="paid">
+                          {t("statuses.paid")}
                         </SelectItem>
                         <SelectItem value="preparing">
                           {t("statuses.preparing")}
@@ -341,7 +344,7 @@ export default function RestaurantOrdersClient() {
                   onValueChange={(value) =>
                     handleStatusChange(
                       order._id!.toString(),
-                      value as OrderStatus,
+                      value as OrderStatus
                     )
                   }
                 >
@@ -352,6 +355,7 @@ export default function RestaurantOrdersClient() {
                     <SelectItem value="pending">
                       {t("statuses.pending")}
                     </SelectItem>
+                    <SelectItem value="paid">{t("statuses.paid")}</SelectItem>
                     <SelectItem value="preparing">
                       {t("statuses.preparing")}
                     </SelectItem>
@@ -401,7 +405,7 @@ export default function RestaurantOrdersClient() {
                     day: "numeric",
                     hour: "2-digit",
                     minute: "2-digit",
-                  },
+                  }
                 )}
             </DialogDescription>
           </DialogHeader>
@@ -459,7 +463,7 @@ export default function RestaurantOrdersClient() {
                   {/* Badge visible here on Mobile only */}
                   <Badge
                     className={`${getStatusColor(
-                      selectedOrder.status,
+                      selectedOrder.status
                     )} md:hidden border-0 text-base py-1 px-3 w-fit`}
                   >
                     {t(`statuses.${selectedOrder.status}`)}
@@ -471,7 +475,7 @@ export default function RestaurantOrdersClient() {
                   {/* Badge visible here on Tablet only */}
                   <Badge
                     className={`${getStatusColor(
-                      selectedOrder.status,
+                      selectedOrder.status
                     )} hidden md:inline-flex border-0 text-base py-1 px-3 w-fit`}
                   >
                     {t(`statuses.${selectedOrder.status}`)}
@@ -481,7 +485,7 @@ export default function RestaurantOrdersClient() {
                     onValueChange={(value) =>
                       handleStatusChange(
                         selectedOrder._id!.toString(),
-                        value as OrderStatus,
+                        value as OrderStatus
                       )
                     }
                   >
@@ -492,6 +496,7 @@ export default function RestaurantOrdersClient() {
                       <SelectItem value="pending">
                         {t("statuses.pending")}
                       </SelectItem>
+                      <SelectItem value="paid">{t("statuses.paid")}</SelectItem>
                       <SelectItem value="preparing">
                         {t("statuses.preparing")}
                       </SelectItem>
