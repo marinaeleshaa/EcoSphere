@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 const OrderHistoryEmptyState = () => {
-  const t = useTranslations("Profile.customer");
+  const t = useTranslations("Profile.customer.orderHistory");
   return (
     <div className="flex items-center justify-center p-20 bg-primary/10 rounded-xl mt-10 my-20">
       <div className="text-center max-w-md px-6">
