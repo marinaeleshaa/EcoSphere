@@ -20,7 +20,7 @@ export default function RecipeGenerator({
   const [loading, setLoading] = useState(false);
   const [generatedRecipe, setGeneratedRecipe] = useState<IRecipe | null>(null);
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+   
   const tRecipes = useTranslations("Recipes");
 
   const handleGenerate = async () => {

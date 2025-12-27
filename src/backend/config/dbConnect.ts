@@ -14,7 +14,7 @@ type MongooseCache = {
  * MUST use `var` because it re-declares safely across hot reloads.
  */
 declare global {
-	// eslint-disable-next-line no-var
+	 
 	var _mongooseCache: MongooseCache | undefined;
 }
 

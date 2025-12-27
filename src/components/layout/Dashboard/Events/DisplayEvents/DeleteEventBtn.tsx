@@ -17,7 +17,6 @@ export default function DeleteEventBtn({
   const router = useRouter();
   async function onDelete(id: string) {
     const res = await DeleteEvent({ eventId: id });
-    console.log(res);
     if (res) {
       toast.success(t("success"));
       if (detailscard) {

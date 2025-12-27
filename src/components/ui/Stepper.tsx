@@ -159,9 +159,9 @@ export default function Stepper({
               <button
                 onClick={isLastStep ? handleComplete : handleNext}
                 disabled={nextButtonProps.disabled || !isStepValid}
-                className={`duration-350 flex items-center justify-center rounded-full bg-primary py-3 px-7 
-  font-medium tracking-tight text-primary-foreground cursor-pointer transition 
-  hover:bg-primary/80 hover:scale-105 
+                className={`duration-350 flex items-center justify-center rounded-full bg-primary py-3 px-7
+  font-medium tracking-tight text-primary-foreground cursor-pointer transition
+  hover:bg-primary/80 hover:scale-105
   ${!isStepValid ? "opacity-50 pointer-events-none" : ""}`}
                 {...nextButtonProps}
               >
@@ -289,8 +289,8 @@ function StepIndicator({
     currentStep === step
       ? "active"
       : currentStep < step
-      ? "inactive"
-      : "complete";
+        ? "inactive"
+        : "complete";
 
   const handleClick = () => {
     if (step !== currentStep && !disableStepIndicators) {
@@ -361,7 +361,7 @@ function StepConnector({ isComplete }: StepConnectorProps) {
   );
 }
 
-interface CheckIconProps extends React.SVGProps<SVGSVGElement> {}
+type CheckIconProps = React.SVGProps<SVGSVGElement>;
 
 function CheckIcon(props: CheckIconProps) {
   return (

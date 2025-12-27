@@ -67,12 +67,12 @@ const RecycleForm = () => {
   };
 
   const handleNumberInput = (e: React.FormEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, "");
+    e.currentTarget.value = e.currentTarget.value.replaceAll(/\D/g, "");
   };
 
   const onSubmit: SubmitHandler<RecycleFormValues> = async (formData) => {
     // 1. Determine Analysis/Calculation Data
-    let finalItems = [];
+    let finalItems: any[] = [];
     let carbonSaved = 0;
 
     try {
@@ -98,8 +98,11 @@ const RecycleForm = () => {
           return;
         }
         const data = await analyzeImages(imageFiles); // Now returns data
-        if (!data) return; // Error handled in hook
-        finalItems = data.items;
+        if (!data) return;
+        finalItems = data.items.map((item) => ({
+          type: item.type,
+          amount: item.estimatedWeight,
+        }));
         carbonSaved = data.estimatedCarbonSaved;
       }
 
@@ -238,9 +241,9 @@ const RecycleForm = () => {
                   removeMaterial={removeMaterial}
                   updateAmount={updateAmount}
                   updateType={updateType}
-                  register={register}
                   addMaterial={addMaterial}
                   errors={errors}
+                  register={register}
                 />
               </motion.div>
             )}

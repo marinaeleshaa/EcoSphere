@@ -2,32 +2,36 @@ import { inject, injectable } from "tsyringe";
 import type { IRegistrationStrategy } from "./registration.service";
 
 interface IRegistrationFactory {
-	getStrategy(userType: string): IRegistrationStrategy;
+  getStrategy(userType: string): IRegistrationStrategy;
 }
 
 @injectable()
 class RegistrationFactory implements IRegistrationFactory {
-	constructor(
-		@inject("EndUserRegistration")
-		private readonly userStrategy: IRegistrationStrategy,
-		@inject("OrganizerRegistration")
-		private readonly organizerStrategy: IRegistrationStrategy,
-		@inject("ShopRegistration")
-		private readonly shopStrategy: IRegistrationStrategy
-	) {}
+  constructor(
+    @inject("EndUserRegistration")
+    private readonly userStrategy: IRegistrationStrategy,
+    @inject("OrganizerRegistration")
+    private readonly organizerStrategy: IRegistrationStrategy,
+    @inject("RecycleAgentRegistration")
+    private readonly recycleAgentStrategy: IRegistrationStrategy,
+    @inject("ShopRegistration")
+    private readonly shopStrategy: IRegistrationStrategy,
+  ) {}
 
-	getStrategy(userType: string): IRegistrationStrategy {
-		switch (userType) {
+  getStrategy(userType: string): IRegistrationStrategy {
+    switch (userType) {
       case "customer":
         return this.userStrategy;
       case "organizer":
         return this.organizerStrategy;
+      case "recycleAgent": //recycleAgent
+        return this.recycleAgentStrategy;
       case "shop":
       case "restaurant":
         return this.shopStrategy;
       default:
         throw new Error("Invalid user type, from strategy factory");
     }
-	}
+  }
 }
 export { RegistrationFactory, type IRegistrationFactory };

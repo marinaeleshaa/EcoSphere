@@ -17,8 +17,8 @@ import { EventType } from "@/backend/features/event/event.model";
 import BasicAnimatedWrapper from "../common/BasicAnimatedWrapper";
 
 const parseEventDate = (dateStr: string) => {
-  if (dateStr.includes('-')) {
-    const parts = dateStr.split('-').map(Number);
+  if (dateStr.includes("-")) {
+    const parts = dateStr.split("-").map(Number);
     if (parts[0] > 31) {
       // YYYY-MM-DD
       return new Date(parts[0], parts[1] - 1, parts[2]);
@@ -33,7 +33,7 @@ const parseEventDate = (dateStr: string) => {
 const getEventStartDateTime = (event: any) => {
   const date = parseEventDate(event.eventDate);
   if (event.startTime) {
-    const [hours, minutes] = event.startTime.split(':').map(Number);
+    const [hours, minutes] = event.startTime.split(":").map(Number);
     date.setHours(hours, minutes, 0, 0);
   } else {
     date.setHours(0, 0, 0, 0);
@@ -46,14 +46,20 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
 
   const [resetKey, setResetKey] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [priceFilter, setPriceFilter] = useState<"free" | "paid" | undefined>(undefined);
-  const [typeFilter, setTypeFilter] = useState<EventType | undefined>(undefined);
-  const [dateFilter, setDateFilter] = useState<"today" | "this_week" | "this_month" | undefined>(undefined);
+  const [priceFilter, setPriceFilter] = useState<"free" | "paid" | undefined>(
+    undefined
+  );
+  const [typeFilter, setTypeFilter] = useState<EventType | undefined>(
+    undefined
+  );
+  const [dateFilter, setDateFilter] = useState<
+    "today" | "this_week" | "this_month" | undefined
+  >(undefined);
 
   const now = new Date();
 
   const filteredEvents = events
-    .filter((event) => event.isAccepted === true) 
+    .filter((event) => event.isAccepted === true)
     .filter((event) =>
       event.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
@@ -69,18 +75,25 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
     .filter((event) => {
       if (!dateFilter) return true;
       const start = getEventStartDateTime(event);
-      if (dateFilter === "today") return start.toDateString() === now.toDateString();
+      if (dateFilter === "today")
+        return start.toDateString() === now.toDateString();
       if (dateFilter === "this_week") {
         const weekEnd = new Date();
         weekEnd.setDate(now.getDate() + 7);
         return start >= now && start <= weekEnd;
       }
       if (dateFilter === "this_month") {
-        return start.getMonth() === now.getMonth() && start.getFullYear() === now.getFullYear();
+        return (
+          start.getMonth() === now.getMonth() &&
+          start.getFullYear() === now.getFullYear()
+        );
       }
       return true;
     })
-    .sort((a, b) => getEventStartDateTime(a).getTime() - getEventStartDateTime(b).getTime());
+    .sort(
+      (a, b) =>
+        getEventStartDateTime(a).getTime() - getEventStartDateTime(b).getTime()
+    );
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -107,20 +120,34 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center w-full">
         {/* Event Type */}
-        <Select key={`type-${resetKey}`} value={typeFilter} onValueChange={(v) => setTypeFilter(v as EventType)}>
+        <Select
+          key={`type-${resetKey}`}
+          value={typeFilter}
+          onValueChange={(v) => setTypeFilter(v as EventType)}
+        >
           <SelectTrigger className="h-10 rounded-full w-full px-4 rtl:flex-row-reverse">
             <SelectValue placeholder={t("eventType")} />
           </SelectTrigger>
-          <SelectContent >
-            <SelectItem value="environmental_seminar">{t("environmental_seminar")}</SelectItem>
-            <SelectItem value="community_cleanup">{t("community_cleanup")}</SelectItem>
-            <SelectItem value="sustainable_brands_showcase">{t("sustainable_brands_showcase")}</SelectItem>
+          <SelectContent>
+            <SelectItem value="environmental_seminar">
+              {t("environmental_seminar")}
+            </SelectItem>
+            <SelectItem value="community_cleanup">
+              {t("community_cleanup")}
+            </SelectItem>
+            <SelectItem value="sustainable_brands_showcase">
+              {t("sustainable_brands_showcase")}
+            </SelectItem>
             <SelectItem value="other">{t("other")}</SelectItem>
           </SelectContent>
         </Select>
 
         {/* Date */}
-        <Select key={`date-${resetKey}`} value={dateFilter} onValueChange={(v) => setDateFilter(v as any)}>
+        <Select
+          key={`date-${resetKey}`}
+          value={dateFilter}
+          onValueChange={(v) => setDateFilter(v as any)}
+        >
           <SelectTrigger className="h-10 rounded-full w-full px-4 rtl:flex-row-reverse">
             <SelectValue placeholder={t("date")} />
           </SelectTrigger>
@@ -132,20 +159,23 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
         </Select>
 
         {/* Price */}
-        <Select key={`price-${resetKey}`} value={priceFilter} onValueChange={(v) => setPriceFilter(v as any)}>
+        <Select
+          key={`price-${resetKey}`}
+          value={priceFilter}
+          onValueChange={(v) => setPriceFilter(v as any)}
+        >
           <SelectTrigger className="h-10 rounded-full w-full px-4  rtl:flex-row-reverse">
             <SelectValue placeholder={t("price")} />
           </SelectTrigger>
           <SelectContent className=" text-right">
-            <SelectItem  value="free">{t("free")}</SelectItem>
+            <SelectItem value="free">{t("free")}</SelectItem>
             <SelectItem value="paid">{t("paid")}</SelectItem>
           </SelectContent>
         </Select>
 
         {/* Clear Filters */}
         <Button
-          className='bg-primary text-primary-foreground hover:bg-primary/80 rounded-full hover:text-primary-foreground'
-          variant="ghost"
+          className="bg-primary text-primary-foreground rounded-full hover:text-primary-foreground"
           onClick={() => {
             setTypeFilter(undefined);
             setPriceFilter(undefined);

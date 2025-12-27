@@ -16,7 +16,7 @@ export default function ThemeBtn() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     setMounted(true);
   }, []);
   const t = useTranslations("Layout.Sidebar.theme");

@@ -33,7 +33,7 @@ const UStep2 = () => {
       dispatch(saveStep2Data(value));
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, dispatch]);
+  }, [form, dispatch]);
 
   useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));

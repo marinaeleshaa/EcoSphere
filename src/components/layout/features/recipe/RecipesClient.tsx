@@ -26,7 +26,7 @@ export default function RecipesClient({
   const [currentPage, setCurrentPage] = useState(1);
   const [isCookbookOpen, setIsCookbookOpen] = useState(true);
 
-  /* eslint-disable @typescript-eslint/no-unused-vars */
+   
   const tRecipes = useTranslations("Recipes");
 
   const totalPages = Math.ceil(recipes.length / ITEMS_PER_PAGE);

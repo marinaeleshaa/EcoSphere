@@ -1,7 +1,7 @@
 import { Document, model, models, Schema, Types } from "mongoose";
 import bcrypt from "bcrypt";
 
-export type UserRole = "customer" | "organizer" | "admin" | "recycleMan";
+export type UserRole = "customer" | "organizer" | "admin" | "recycleAgent";
 
 export type Gender = "male" | "female";
 
@@ -41,6 +41,7 @@ export interface IUser extends Document {
   };
   createdAt?: Date;
   updatedAt?: Date;
+  isActive: boolean;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
@@ -85,7 +86,7 @@ const userSchema = new Schema<IUser>(
     accountProvider: { type: String, required: false },
     role: {
       type: String,
-      enum: ["customer", "organizer", "admin", "recycleMan"],
+      enum: ["customer", "organizer", "admin", "recycleAgent"],
       default: "customer",
     },
     favoritesIds: { type: [String], default: [] },
@@ -96,6 +97,7 @@ const userSchema = new Schema<IUser>(
       code: { type: String, required: false },
       validTo: { type: String, required: false },
     },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

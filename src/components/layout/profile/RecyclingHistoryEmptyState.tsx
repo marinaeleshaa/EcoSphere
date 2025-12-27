@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Package } from "lucide-react";
+import Link from "next/link";
 
 const RecyclingHistoryEmptyState = () => {
   const t = useTranslations("Profile.customer.recyclingHistory");
@@ -17,12 +18,12 @@ const RecyclingHistoryEmptyState = () => {
       <p className="text-muted-foreground mb-6 max-w-sm">
         {t("noRecyclingOrdersDescription")}
       </p>
-      <a
+      <Link
         href="/en/recycle"
         className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
       >
         {t("browseRecycling")}
-      </a>
+      </Link>
     </div>
   );
 };

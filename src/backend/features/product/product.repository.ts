@@ -33,6 +33,17 @@ export interface IProductRepository {
     productId: string
   ): Promise<IRestaurant | null>;
   addProductReview(productId: string, review: any): Promise<IRestaurant | null>;
+  // Category filtering methods for AI chatbot
+  getProductsByCategory(
+    category: string,
+    limit?: number
+  ): Promise<ProductResponse[]>;
+  getProductCategoryCounts(): Promise<{ category: string; count: number }[]>;
+  // Analytics methods for AI chatbot
+  getTopProductsByRating(limit?: number): Promise<ProductResponse[]>;
+  getCheapestProducts(limit?: number): Promise<ProductResponse[]>;
+  getTotalProductCount(): Promise<number>;
+  getMostSustainableProducts(limit?: number): Promise<ProductResponse[]>;
   decreaseStock(
     restaurantId: string,
     productId: string,
@@ -97,6 +108,14 @@ export class ProductRepository implements IProductRepository {
 
     if (sort === "priceHigh") {
       pipeline.push({ $sort: { price: -1 } });
+    }
+
+    if (sort === "sustainabilityLow") {
+      pipeline.push({ $sort: { sustainabilityScore: 1 } });
+    }
+
+    if (sort === "sustainabilityHigh") {
+      pipeline.push({ $sort: { sustainabilityScore: -1 } });
     }
 
     const matchConditions: any[] = [];
@@ -223,9 +242,13 @@ export class ProductRepository implements IProductRepository {
 
     // 4️⃣ Sorting
     if (sort === "priceLow") {
-      pipeline.push({ $sort: { price: 1, title: 1 } });
+      pipeline.push({ $sort: { price: 1 } });
     } else if (sort === "priceHigh") {
-      pipeline.push({ $sort: { price: -1, title: 1 } });
+      pipeline.push({ $sort: { price: -1 } });
+    } else if (sort === "sustainabilityLow") {
+      pipeline.push({ $sort: { sustainabilityScore: 1 } });
+    } else if (sort === "sustainabilityHigh") {
+      pipeline.push({ $sort: { sustainabilityScore: -1 } });
     } else {
       pipeline.push({ $sort: { title: 1 } });
     }
@@ -333,6 +356,187 @@ export class ProductRepository implements IProductRepository {
       },
       { new: true }
     ).exec();
+  }
+
+  // Category filtering methods for AI chatbot
+  async getProductsByCategory(
+    category: string,
+    limit: number = 10
+  ): Promise<ProductResponse[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $unwind: "$menus" },
+      { $match: { "menus.category": category } },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: [
+              { $gt: [{ $size: { $ifNull: ["$menus.itemRating", []] } }, 0] },
+              { $avg: "$menus.itemRating.rate" },
+              0,
+            ],
+          },
+        },
+      },
+      { $sort: { avgRating: -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: "$menus._id",
+          restaurantId: "$_id",
+          restaurantName: "$name",
+          title: "$menus.title",
+          subtitle: "$menus.subtitle",
+          price: "$menus.price",
+          category: "$menus.category",
+          avatar: "$menus.avatar",
+          avgRating: 1,
+          sustainabilityScore: "$menus.sustainabilityScore",
+          availableOnline: "$menus.availableOnline",
+          itemRating: "$menus.itemRating",
+        },
+      },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
+  }
+
+  async getProductCategoryCounts(): Promise<
+    { category: string; count: number }[]
+  > {
+    await DBInstance.getConnection();
+
+    const result = await RestaurantModel.aggregate([
+      { $unwind: "$menus" },
+      {
+        $group: {
+          _id: "$menus.category",
+          count: { $count: {} },
+        },
+      },
+      {
+        $project: {
+          category: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+      { $sort: { count: -1 } },
+    ]).exec();
+
+    return result;
+  }
+
+  //Analytics methods for AI chatbot
+  async getTopProductsByRating(limit: number = 10): Promise<ProductResponse[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $unwind: "$menus" },
+      {
+        $addFields: {
+          avgRating: {
+            $cond: [
+              { $gt: [{ $size: { $ifNull: ["$menus.itemRating", []] } }, 0] },
+              { $avg: "$menus.itemRating.rate" },
+              0,
+            ],
+          },
+        },
+      },
+      { $match: { avgRating: { $gt: 0 } } }, // Only products with ratings
+      { $sort: { avgRating: -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: "$menus._id",
+          restaurantId: "$_id",
+          restaurantName: "$name",
+          title: "$menus.title",
+          subtitle: "$menus.subtitle",
+          price: "$menus.price",
+          avgRating: 1,
+          sustainabilityScore: "$menus.sustainabilityScore",
+          category: "$menus.category",
+          avatar: "$menus.avatar",
+          itemRating: "$menus.itemRating",
+        },
+      },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
+  }
+
+  async getCheapestProducts(limit: number = 10): Promise<ProductResponse[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $unwind: "$menus" },
+      { $sort: { "menus.price": 1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: "$menus._id",
+          restaurantId: "$_id",
+          restaurantName: "$name",
+          title: "$menus.title",
+          subtitle: "$menus.subtitle",
+          price: "$menus.price",
+          category: "$menus.category",
+          avatar: "$menus.avatar",
+          availableOnline: "$menus.availableOnline",
+          itemRating: "$menus.itemRating",
+        },
+      },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
+  }
+
+  async getMostSustainableProducts(
+    limit: number = 10
+  ): Promise<ProductResponse[]> {
+    await DBInstance.getConnection();
+
+    const pipeline: PipelineStage[] = [
+      { $unwind: "$menus" },
+      {
+        $match: {
+          "menus.sustainabilityScore": { $exists: true, $ne: null, $gt: 0 },
+        },
+      },
+      { $sort: { "menus.sustainabilityScore": -1 } },
+      { $limit: limit },
+      {
+        $project: {
+          _id: "$menus._id",
+          restaurantId: "$_id",
+          restaurantName: "$name",
+          title: "$menus.title",
+          subtitle: "$menus.subtitle",
+          price: "$menus.price",
+          sustainabilityScore: "$menus.sustainabilityScore",
+          sustainabilityReason: "$menus.sustainabilityReason",
+          category: "$menus.category",
+          avatar: "$menus.avatar",
+          itemRating: "$menus.itemRating",
+        },
+      },
+    ];
+
+    return await RestaurantModel.aggregate(pipeline).exec();
+  }
+
+  async getTotalProductCount(): Promise<number> {
+    await DBInstance.getConnection();
+
+    const result = await RestaurantModel.aggregate([
+      { $unwind: "$menus" },
+      { $count: "total" },
+    ]).exec();
+
+    return result[0]?.total || 0;
   }
 
   async decreaseStock(

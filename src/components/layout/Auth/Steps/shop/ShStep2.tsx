@@ -7,10 +7,10 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as Z from "zod";
-import { useTranslations } from 'next-intl';
+import { useTranslations } from "next-intl";
 
 const ShStep2 = () => {
-  const t = useTranslations('Auth.steps.shopStep2');
+  const t = useTranslations("Auth.steps.shopStep2");
   const dispatch = useDispatch();
 
   const form = useForm<Z.infer<typeof Step2ShopSchema>>({
@@ -33,7 +33,7 @@ const ShStep2 = () => {
       dispatch(saveStep2Data(value));
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, dispatch]);
+  }, [form, dispatch]);
 
   useEffect(() => {
     dispatch(setStepValid({ step: 2, valid: form.formState.isValid }));
@@ -52,12 +52,12 @@ const ShStep2 = () => {
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <p className="text-2xl md:text-3xl font-bold text-center text-secondary-foreground">
-          {t('title')}
+          {t("title")}
         </p>
         <div>
           <input
             type="text"
-            placeholder={t('name')}
+            placeholder={t("name")}
             className=" myInput"
             {...register("name")}
           />
@@ -65,7 +65,7 @@ const ShStep2 = () => {
         </div>
         <div>
           <textarea
-            placeholder={t('description')}
+            placeholder={t("description")}
             className="myInput resize-none"
             {...register("description")}
           />
@@ -76,7 +76,7 @@ const ShStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder={t('phoneNumber')}
+            placeholder={t("phoneNumber")}
             className="myInput"
             {...register("phoneNumber")}
           />
@@ -87,7 +87,7 @@ const ShStep2 = () => {
         <div>
           <input
             type="tel"
-            placeholder={t('hotline')}
+            placeholder={t("hotline")}
             className="myInput"
             {...register("hotline")}
           />

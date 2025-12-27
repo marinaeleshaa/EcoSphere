@@ -17,17 +17,17 @@ export async function Providers({
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale} key={locale}>
-      <StoreProvider>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <SessionProvider>
+      <SessionProvider>
+        <StoreProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <TooltipProvider delayDuration={200}>
               <SidebarProvider defaultOpen={defaultOpen}>
                 {children}
               </SidebarProvider>
             </TooltipProvider>
-          </SessionProvider>
-        </ThemeProvider>
-      </StoreProvider>
+          </ThemeProvider>
+        </StoreProvider>
+      </SessionProvider>
     </NextIntlClientProvider>
   );
 }

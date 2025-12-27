@@ -32,11 +32,6 @@ const ShopProductsSliderSection = ({ products }: { products: IProduct[] }) => {
           ))}
         </div>
       </div>
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </div>
   );
 };

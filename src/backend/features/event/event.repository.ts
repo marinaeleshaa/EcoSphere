@@ -18,6 +18,18 @@ export interface IEventRepository {
   rejectEvent(id: string, eventId: string): Promise<IEvent>;
   getUserIdByEventId(eventId: string): Promise<IEvent>;
   attendEvent(id: string, eventId: string): Promise<IEvent>;
+  // Analytics method for AI chatbot
+  getUpcomingEvents(limit?: number): Promise<IEvent[]>;
+  getTotalEventsCount(): Promise<number>;
+  getEventStatistics(): Promise<{
+    totalEvents: number;
+    upcomingEvents: number;
+    totalAttendees: number;
+  }>;
+  getEventsByOrganizerLimited(
+    userId: string,
+    limit?: number
+  ): Promise<IEvent[]>;
 }
 
 @injectable()
@@ -180,6 +192,74 @@ class EventRepository {
     }
 
     return event;
+  }
+
+  // Analytics method for AI chatbot
+  async getUpcomingEvents(limit: number = 10): Promise<IEvent[]> {
+    await DBInstance.getConnection();
+
+    return await EventModel.find({
+      eventDate: { $gte: new Date() },
+      isAccepted: true,
+    })
+      .sort({ eventDate: 1 }) // Earliest events first
+      .limit(limit)
+      .populate("user", "firstName phoneNumber email")
+      .lean()
+      .exec();
+  }
+
+  async getTotalEventsCount(): Promise<number> {
+    await DBInstance.getConnection();
+
+    const count = await EventModel.countDocuments({}).exec();
+    return count;
+  }
+
+  async getEventStatistics(): Promise<{
+    totalEvents: number;
+    upcomingEvents: number;
+    totalAttendees: number;
+  }> {
+    await DBInstance.getConnection();
+
+    const result = await EventModel.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalEvents: { $count: {} },
+          upcomingEvents: {
+            $sum: {
+              $cond: [{ $gte: ["$eventDate", new Date()] }, 1, 0],
+            },
+          },
+          totalAttendees: {
+            $sum: { $size: { $ifNull: ["$attenders", []] } },
+          },
+        },
+      },
+    ]).exec();
+
+    return (
+      result[0] || {
+        totalEvents: 0,
+        upcomingEvents: 0,
+        totalAttendees: 0,
+      }
+    );
+  }
+
+  async getEventsByOrganizerLimited(
+    userId: string,
+    limit: number = 10
+  ): Promise<IEvent[]> {
+    await DBInstance.getConnection();
+
+    return await EventModel.find({ user: userId })
+      .sort({ eventDate: -1 })
+      .limit(limit)
+      .lean()
+      .exec();
   }
 }
 

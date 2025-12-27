@@ -56,7 +56,7 @@ export default function SideBar() {
   const t = useTranslations("Layout.Sidebar");
   const matchPathWithOptionalLocale = (
     pathname: string,
-    targetSegment: string,
+    targetSegment: string
   ) => {
     const base = `\\${targetSegment}`;
     const en = `\\/en\\${targetSegment}`;
@@ -82,11 +82,6 @@ export default function SideBar() {
       title: t("menu.events"),
       url: "/events",
       icon: Calendar,
-    },
-    {
-      title: t("menu.news"),
-      url: "/news",
-      icon: Newspaper,
     },
     {
       title: t("menu.store"),
@@ -126,11 +121,6 @@ export default function SideBar() {
       url: "/organizer/history",
       icon: MdOutlineEventRepeat,
     },
-    {
-      title: t("dashboard.news"),
-      url: "/organizer/news",
-      icon: Newspaper,
-    }
   ];
   // Restaurant dashboard items.
   const restaurantItems = [
@@ -156,6 +146,11 @@ export default function SideBar() {
       title: t("dashboard.events"),
       url: "/admin/event",
       icon: MdEventAvailable,
+    },
+    {
+      title: t("dashboard.recycleAgent"),
+      url: "/admin/recycleAgent",
+      icon: Recycle,
     },
   ];
   // recycle dashboard items.
@@ -211,7 +206,7 @@ export default function SideBar() {
                         tooltip={t("menu.recipes")}
                         isActive={matchPathWithOptionalLocale(
                           pathname,
-                          "/recipes",
+                          "/recipes"
                         )}
                       >
                         <Link href="/recipes">
@@ -228,7 +223,7 @@ export default function SideBar() {
                         tooltip={t("menu.recycle")}
                         isActive={matchPathWithOptionalLocale(
                           pathname,
-                          "/recycle",
+                          "/recycle"
                         )}
                       >
                         <Link href="/recycle">
@@ -325,8 +320,8 @@ export default function SideBar() {
           </SidebarGroup>
         )}
 
-        {/* **! change the role to be recycleMan */}
-        {session?.user.role == "recycleMan" && (
+        {/* **! change the role to be recycleAgent */}
+        {session?.user.role == "recycleAgent" && (
           <SidebarGroup>
             <SidebarGroupLabel>{t("groups.dashboard")}</SidebarGroupLabel>
             <SidebarGroupContent>
