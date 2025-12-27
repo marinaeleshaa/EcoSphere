@@ -158,8 +158,6 @@ export class PaymentService {
         orderId: `${order._id}`,
         items: JSON.stringify(itemsForStock), // Items for stock decrease on payment success
       },
-      // Allow promotion codes and automatic tax behavior if desired
-      allow_promotion_codes: true,
     });
     return session;
   }
@@ -220,7 +218,6 @@ export class PaymentService {
         eventId: eventItem.id,
         type: "event_ticket",
       },
-      allow_promotion_codes: true,
     });
     return session;
   }
