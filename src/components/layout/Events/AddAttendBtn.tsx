@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
+
 export default function AddAttendBtn({
   eventId,
   ticketPrice,
@@ -16,14 +17,27 @@ export default function AddAttendBtn({
   const router = useRouter();
   const isFree = ticketPrice === 0;
   const isAttending = attenders?.includes(userId);
-  const handleAddEvent = async () => {
-    if (!isFree) {
-      router.push(`/checkout?eventId=${eventId}&amount=${ticketPrice}`);
-      return;
-    }
-    const url = `/api/events/${eventId}`;
 
+  const handleAddEvent = async () => {
     try {
+      if (!isFree) {
+        const response = await fetch("/api/payment/ticket", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ eventId, userId }),
+        });
+
+        const data = await response.json();
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+        throw new Error("Failed to create payment session");
+      }
+
+      const url = `/api/events/${eventId}`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {
@@ -36,10 +50,11 @@ export default function AddAttendBtn({
         router.refresh();
       }
     } catch (error) {
-      console.error(t("error"));
-      toast.error("Something went wrong");
+      console.error(error);
+      toast.error(t("error"));
     }
   };
+
   return (
     <button
       onClick={handleAddEvent}

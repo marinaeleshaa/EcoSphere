@@ -33,9 +33,10 @@ export interface IOrderService {
   getActiveRestaurantOrders(restaurantId: string): Promise<IOrder[]>;
   getRevenueByDateRange(
     startDate: string,
-    endDate: string,
+    endDate: string
   ): Promise<RevenuePerDate[]>;
   atomicConfirmOrder(orderId: string): Promise<IOrder | null>;
+  addOrderAttendees(order: IOrder): Promise<void>;
 }
 
 @injectable()
@@ -46,30 +47,31 @@ export class OrderService implements IOrderService {
     @inject("IProductRepository") // Added this dependency
     private readonly productRepository: IProductRepository, // Added this dependency
     @inject("IUserService") private readonly userService: IUserService,
-    @inject("IEventService") private readonly eventService: IEventService,
+    @inject("IEventService") private readonly eventService: IEventService
   ) {}
 
   async createOrder(
     userId: string,
-    orderData: CreateOrderDTO,
+    orderData: CreateOrderDTO
   ): Promise<IOrder> {
     if (orderData.items.length > 0 && orderData.items[0].eventId) {
       const item = orderData.items[0];
       const eventId = item.eventId as string;
-      const event = await this.eventService.getEventById(userId, eventId);
+      const event = await this.eventService.getPublicEventById(eventId);
       if (!event) throw new Error("Event not found");
 
+      const quantity = item.quantity || 1;
       const orderItem: IOrderItem = {
         eventId: eventId,
-        quantity: 1,
+        quantity,
         unitPrice: event.ticketPrice,
-        totalPrice: event.ticketPrice,
+        totalPrice: event.ticketPrice * quantity,
       };
 
       const orderNewData = {
         userId,
         items: [orderItem],
-        orderPrice: event.ticketPrice,
+        orderPrice: orderItem.totalPrice,
         paymentMethod: orderData.paymentMethod,
       };
 
@@ -84,7 +86,7 @@ export class OrderService implements IOrderService {
 
     const orderItems: IOrderItem[] = orderData.items.map((item) => {
       const cartItem = userCart.items.find(
-        (ci) => `${ci.id}` === `${item.productId}`,
+        (ci) => `${ci.id}` === `${item.productId}`
       );
 
       if (!cartItem) {
@@ -107,7 +109,7 @@ export class OrderService implements IOrderService {
 
     const orderPrice = orderItems.reduce(
       (sum, item) => sum + item.totalPrice,
-      0,
+      0
     );
 
     const orderNewData = {
@@ -125,7 +127,7 @@ export class OrderService implements IOrderService {
     await sendOrderReceivedEmail(
       user.email,
       user.firstName,
-      mapOrderToEmailOrder(userCart.items),
+      mapOrderToEmailOrder(userCart.items)
     );
     // await this.decreaseStockForOrder(order.items, `${order.restaurantId}`);
 
@@ -148,7 +150,7 @@ export class OrderService implements IOrderService {
             if (item.eventId) {
               await this.eventService.attendEvent(
                 order.userId.toString(),
-                item.eventId.toString(),
+                item.eventId.toString()
               );
             }
           }
@@ -197,7 +199,7 @@ export class OrderService implements IOrderService {
 
   async updateOrderStatus(
     orderId: string,
-    status: OrderStatus,
+    status: OrderStatus
   ): Promise<IOrder> {
     const updatedOrder = await this.orderRepository.updateOrderStatus(orderId, {
       status,
@@ -238,7 +240,7 @@ export class OrderService implements IOrderService {
 
   async getRevenueByDateRange(
     startDate: string,
-    endDate: string,
+    endDate: string
   ): Promise<RevenuePerDate[]> {
     return this.orderRepository.revenueFilteredByDate(startDate, endDate);
   }
@@ -253,13 +255,24 @@ export class OrderService implements IOrderService {
     return await this.orderRepository.atomicUpdateOrderStatus(
       orderId,
       "pending", // Only update if current status is pending
-      "paid", // Update to paid
+      "paid" // Update to paid
     );
+  }
+
+  async addOrderAttendees(order: IOrder): Promise<void> {
+    for (const item of order.items) {
+      if (item.eventId) {
+        await this.eventService.attendEvent(
+          order.userId.toString(),
+          item.eventId.toString()
+        );
+      }
+    }
   }
 
   async decreaseStockForOrder(
     items: any[],
-    restaurantId?: string,
+    restaurantId?: string
   ): Promise<void> {
     // Group items by restaurant
     const itemsByRestaurant = new Map<string, any[]>();
@@ -281,15 +294,15 @@ export class OrderService implements IOrderService {
           await this.productRepository.decreaseStock(
             restId,
             item.id,
-            item.quantity,
+            item.quantity
           );
           console.log(
-            `✅ Stock decreased: Product ${item.id}, Quantity ${item.quantity}`,
+            `✅ Stock decreased: Product ${item.id}, Quantity ${item.quantity}`
           );
         } catch (error) {
           console.error(
             `❌ Failed to decrease stock for product ${item.id}:`,
-            error,
+            error
           );
           // Continue with other items even if one fails
         }

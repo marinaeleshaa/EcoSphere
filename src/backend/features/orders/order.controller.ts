@@ -39,7 +39,7 @@ export class OrderController {
         console.error("❌ No items found in metadata");
         return;
       }
-      console.log(items)
+      console.log(items);
 
       try {
         // Decrease stock for each item (order already created in PaymentService)
@@ -140,6 +140,9 @@ export class OrderController {
       // Decrease stock
       await this.orderService.decreaseStockForOrder(items);
       console.log("✅ Stock decreased for order:", orderId);
+
+      // Add attendees for event tickets
+      await this.orderService.addOrderAttendees(updatedOrder);
 
       return { success: true, message: "Order confirmed and stock decreased" };
     } catch (error) {

@@ -10,6 +10,7 @@ export interface IEventRepository {
     status?: "accepted" | "rejected" | "pending"
   ): Promise<IEvent[]>;
   getEvent(id: string, eventId: string): Promise<IEvent>;
+  getPublicEvent(eventId: string): Promise<IEvent>;
   getEventsByUserId(id: string): Promise<IEvent[]>;
   createEvent(id: string, data: IEvent): Promise<IEvent>;
   updateEvent(id: string, data: Partial<IEvent>): Promise<IEvent>;
@@ -70,6 +71,18 @@ class EventRepository {
     })
       .lean()
       .exec();
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    return event;
+  }
+
+  async getPublicEvent(eventId: string): Promise<IEvent> {
+    await DBInstance.getConnection();
+
+    const event = await EventModel.findById(eventId).lean().exec();
 
     if (!event) {
       throw new Error("Event not found");

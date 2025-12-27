@@ -13,6 +13,7 @@ export interface IEventService {
     status?: "accepted" | "rejected" | "pending"
   ) => Promise<IEvent[]>;
   getEventById: (id: string, eventId: string) => Promise<IEvent>;
+  getPublicEventById: (eventId: string) => Promise<IEvent>;
   getEventsByUserId: (id: string) => Promise<IEvent[]>;
   createEvent: (id: string, event: IEvent) => Promise<IEvent>;
   updateEvent: (id: string, event: Partial<IEvent>) => Promise<IEvent>;
@@ -103,6 +104,14 @@ class EventService implements IEventService {
 
   async getEventById(id: string, eventId: string): Promise<IEvent> {
     const event = await this.eventRepository.getEvent(id, eventId);
+    if (event && !event.user && event.owner) {
+      event.user = (await this.getOwnerData(event.owner)) as any;
+    }
+    return await this.attachSignedUrl(event);
+  }
+
+  async getPublicEventById(eventId: string): Promise<IEvent> {
+    const event = await this.eventRepository.getPublicEvent(eventId);
     if (event && !event.user && event.owner) {
       event.user = (await this.getOwnerData(event.owner)) as any;
     }
