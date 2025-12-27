@@ -126,7 +126,7 @@ const OrderHistoryComponent = () => {
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3 font-semibold">
-                          ${order.orderPrice.toFixed(2)}
+                          {order.orderPrice.toFixed(2)} €
                         </td>
                         <td className="px-4 py-3">
                           <span
@@ -188,7 +188,7 @@ const OrderHistoryComponent = () => {
                       <span className="text-muted-foreground">
                         {t("total")}:
                       </span>
-                      <span>${order.orderPrice.toFixed(2)}</span>
+                      <span>{order.orderPrice.toFixed(2)} €</span>
                     </div>
                   </div>
                 ))}

@@ -36,6 +36,8 @@ export default function OrderSummary() {
   const cartItems = useAppSelector(selectCartItems);
   const dispatch = useAppDispatch();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const discountCents = Math.round(subtotalCents! * (discountRate / 100));
 
   let total = subtotalCents - discountCents;
@@ -56,12 +58,21 @@ export default function OrderSummary() {
   };
 
   const handleCheckout = () => {
+    if (isSubmitting) return;
+
     if (!session?.user) {
       toast.error(t("toasts.notCustomer"));
       router.push("/auth?reason=unauthorized");
       return;
-    } else if (paymentMethod === "Credit card") stripePayment();
-    else if (paymentMethod === "Cash on delivery") cashOnDelivery();
+    }
+
+    setIsSubmitting(true);
+
+    if (paymentMethod === "Credit card") {
+      stripePayment().finally(() => setIsSubmitting(false));
+    } else if (paymentMethod === "Cash on delivery") {
+      cashOnDelivery().finally(() => setIsSubmitting(false));
+    }
   };
 
   const cashOnDelivery = () =>
@@ -166,13 +177,13 @@ export default function OrderSummary() {
       )}
       <button
         onClick={handleCheckout}
-        disabled={total < 30}
+        disabled={total < 30 || isSubmitting}
         aria-label={"30 is the minimum charge"}
         className={`myBtnPrimary w-full font-semibold transition duration-400 hover:scale-102 text-lg ${
-          total < 30 ? "cursor-not-allowed opacity-50" : ""
+          total < 30 || isSubmitting ? "cursor-not-allowed opacity-50" : ""
         }`}
       >
-        {t("checkoutNow")}
+        {isSubmitting ? "Processing..." : t("checkoutNow")}
       </button>
     </div>
   );

@@ -19,19 +19,6 @@ export const POST = async (req: NextRequest) => {
       status: orderStatus,
     });
 
-    // Decrease stock immediately for Cash on Delivery orders
-    // (Stripe orders decrease stock via /api/orders/[orderId]/confirm after payment)
-    if (paymentMethod === "cashOnDelivery" && order) {
-      const stockItems = order.items.map((item: any) => ({
-        id: item.productId || item.id,
-        quantity: item.quantity,
-        restaurantId: item.restaurantId,
-      }));
-
-      await orderService.decreaseStockForOrder(stockItems);
-      console.log("✅ Stock decreased for COD order:", order._id);
-    }
-
     return ok(order);
   } catch (error) {
     console.error(error);
