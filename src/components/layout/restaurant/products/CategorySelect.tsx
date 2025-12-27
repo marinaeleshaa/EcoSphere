@@ -38,7 +38,7 @@ export default function CategorySelect({
     <div className="space-y-2">
       <Label htmlFor="category">{t("label")}</Label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className={error ? "border-red-500" : ""}>
+        <SelectTrigger className={`${error ? "border-red-500" : ""} w-full`}>
           <SelectValue placeholder={t("placeholder")} />
         </SelectTrigger>
         <SelectContent>
