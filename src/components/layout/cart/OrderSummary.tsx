@@ -68,7 +68,7 @@ export default function OrderSummary() {
     createOrder(
       mapCartItemsToIOrderItems(Object.values(cartItems)),
       "cashOnDelivery",
-      "preparing",
+      "preparing"
     )
       .then(() => {
         router.push("/profile");
