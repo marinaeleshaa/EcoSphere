@@ -862,8 +862,9 @@
         "organizer": "You are the organizer",
         "status": {
           "approved": "Approved",
-          "pending": "Pending...",
-          "rejected": "Rejected"
+          "pending": "Pending ..",
+          "rejected": "Rejected",
+          "live": "LIVE NOW"
         }
       },
       "EventCardDetails": {
@@ -878,7 +879,8 @@
         "ticketPrice": "Ticket Price",
         "free": "Free",
         "schedule": "Schedule",
-        "organizer": "You are the organizer"
+        "organizer": "You are the organizer",
+        "liveActionsDisabled": "Actions are disabled while the event is live"
       },
       "AddAttendBtn": {
         "join": "Join Event",

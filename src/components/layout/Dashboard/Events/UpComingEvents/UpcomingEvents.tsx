@@ -32,6 +32,14 @@ export const getEventEndDateTime = (event: any) => {
   );
 };
 
+export const isEventLiveNow = (event: any, now: Date) => {
+  const start = getEventStartDateTime(event);
+  const end = getEventEndDateTime(event);
+
+  return event.isAccepted && start <= now && end >= now;
+};
+
+
 export default function UpcomingEvents({ events }: Readonly<EventProps>) {
   const t = useTranslations("Events.displayEvents");
   const [isLoading, setIsLoading] = useState(true);
@@ -85,10 +93,20 @@ export default function UpcomingEvents({ events }: Readonly<EventProps>) {
 
       return true;
     })
-    .sort(
-      (a, b) =>
-        getEventStartDateTime(a).getTime() - getEventStartDateTime(b).getTime()
-    );
+    .sort((a, b) => {
+      const aLive = isEventLiveNow(a, now);
+      const bLive = isEventLiveNow(b, now);
+
+      // LIVE events first
+      if (aLive && !bLive) return -1;
+      if (!aLive && bLive) return 1;
+
+      // Otherwise sort by start time
+      return (
+        getEventStartDateTime(a).getTime() -
+        getEventStartDateTime(b).getTime()
+      );
+    });
 
   React.useEffect(() => {
     if (events) setIsLoading(false);
@@ -118,14 +136,14 @@ export default function UpcomingEvents({ events }: Readonly<EventProps>) {
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-3 items-center w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 items-center w-full">
         {/* Event Type */}
         <Select
           key={`type-${resetKey}`}
           value={typeFilter}
           onValueChange={(v) => setTypeFilter(v as EventType)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("eventType")} />
           </SelectTrigger>
           <SelectContent className="rtl:text-right">
@@ -148,7 +166,7 @@ export default function UpcomingEvents({ events }: Readonly<EventProps>) {
           value={dateFilter}
           onValueChange={(v) => setDateFilter(v as any)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("date")} />
           </SelectTrigger>
           <SelectContent className="rtl:text-right">
@@ -164,7 +182,7 @@ export default function UpcomingEvents({ events }: Readonly<EventProps>) {
           value={priceFilter}
           onValueChange={(v) => setPriceFilter(v as any)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("price")} />
           </SelectTrigger>
           <SelectContent className="rtl:text-right">

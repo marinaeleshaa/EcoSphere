@@ -131,7 +131,7 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
           value={typeFilter}
           onValueChange={(v) => setTypeFilter(v as EventType)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("eventType")} />
           </SelectTrigger>
           <SelectContent>
@@ -154,7 +154,7 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
           value={dateFilter}
           onValueChange={(v) => setDateFilter(v as any)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4 rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("date")} />
           </SelectTrigger>
           <SelectContent className="rtl:text-right">
@@ -170,7 +170,7 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
           value={priceFilter}
           onValueChange={(v) => setPriceFilter(v as any)}
         >
-          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4  rtl:flex-row-reverse">
+          <SelectTrigger className="h-10 rounded-full border-primary w-full px-4  rtl:flex-row-reverse cursor-pointer">
             <SelectValue placeholder={t("price")} />
           </SelectTrigger>
           <SelectContent className=" text-right">

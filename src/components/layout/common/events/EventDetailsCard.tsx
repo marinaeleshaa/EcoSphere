@@ -42,6 +42,20 @@ export default function EventDetailsCard({ event, userId }: { event: any; userId
   const showEditButton = isOrganizerUpcoming;
   const showDeleteButton = isOrganizerUpcoming || isOrganizerHistory;
 
+  const now = new Date();
+
+  const start = new Date(
+    `${event.eventDate.split("T")[0]}T${event.startTime ?? "00:00"}`
+  );
+
+  const end = new Date(
+    `${event.eventDate.split("T")[0]}T${event.endTime ?? "23:59"}`
+  );
+
+  // LIVE only if approved AND within time
+  const isLiveNow = event.isAccepted && start <= now && end >= now;
+
+
   return (
     <Dialog>
       <DialogTrigger className="flex-1 py-3 rounded-xl border border-primary font-semibold text-sm hover:bg-primary/10 transition cursor-pointer">
@@ -175,8 +189,18 @@ export default function EventDetailsCard({ event, userId }: { event: any; userId
                     ? "grid-cols-1"
                     : "grid-cols-2"
                   } w-full`}>
-                  {showEditButton && <UpdateEventBtn id={event._id} detailscard={true} />}
-                  {showDeleteButton && <DeleteEventBtn id={event._id} detailscard={true} />}
+                  {showEditButton && (
+                    <div title={isLiveNow ? t("liveActionsDisabled") : undefined} className={isLiveNow ? "opacity-50 pointer-events-none" : ""}>
+                      <UpdateEventBtn id={event._id} detailscard={true} />
+                    </div>
+                  )}
+
+                  {showDeleteButton && (
+                    <div title={isLiveNow ? t("liveActionsDisabled") : undefined} className={isLiveNow ? "opacity-50 pointer-events-none" : ""}>
+                      <DeleteEventBtn id={event._id} detailscard={true} />
+                    </div>
+                  )}
+
                   {canAttend && <AddAttendBtn eventId={event._id} ticketPrice={event.ticketPrice} attenders={event.attenders ?? []} userId={userId} />}
                 </div>
               </div>

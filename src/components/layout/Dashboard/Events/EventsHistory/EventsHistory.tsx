@@ -111,7 +111,7 @@ export default function EventsHistory({ events }: EventProps) {
                     key={`type-${resetKey}`}
                     onValueChange={(v) => setTypeFilter(v as EventType)}
                 >
-                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse">
+                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse cursor-pointer">
                         <SelectValue placeholder={t("eventType")} />
                     </SelectTrigger>
                     <SelectContent className="rtl:text-right">
@@ -133,7 +133,7 @@ export default function EventsHistory({ events }: EventProps) {
                     key={`date-${resetKey}`}
                     onValueChange={(v) => setDateFilter(v as any)}
                 >
-                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse">
+                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse cursor-pointer">
                         <SelectValue placeholder={t("date")} />
                     </SelectTrigger>
                     <SelectContent className="rtl:text-right">
@@ -148,7 +148,7 @@ export default function EventsHistory({ events }: EventProps) {
                     key={`price-${resetKey}`}
                     onValueChange={(v) => setPriceFilter(v as any)}
                 >
-                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse">
+                    <SelectTrigger className="h-10 w-full rounded-full border-primary px-4 rtl:flex-row-reverse cursor-pointer">
                         <SelectValue placeholder={t("price")} />
                     </SelectTrigger>
                     <SelectContent className="rtl:text-right">

@@ -831,9 +831,12 @@
       "EventCard": {
         "organizer": "أنت منظم الفعالية",
         "status": {
-          "approved": "تمت الموافقة",
-          "pending": "قيد المراجعة...",
-          "rejected": "مرفوض"
+          "status": {
+            "approved": "موافق عليه",
+            "pending": "قيد المراجعة ..",
+            "rejected": "مرفوض",
+            "live": "يُبث الآن"
+          }
         }
       },
       "EventCardDetails": {
@@ -848,7 +851,8 @@
         "ticketPrice": "سعر التذكرة",
         "free": "مجاني",
         "schedule": "الجدول",
-        "organizer": "أنت منظم الفعالية"
+        "organizer": "أنت منظم الفعالية",
+        "liveActionsDisabled": "لا يمكن تعديل أو حذف الحدث أثناء البث المباشر"
       },
       "AddAttendBtn": {
         "join": "انضم إلى الفعالية",

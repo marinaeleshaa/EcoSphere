@@ -34,11 +34,6 @@ export default function EventCard({ event }: { event: any }) {
   const isOrganizerUpcoming = routeSegment === "organizer" && secondSegment === "upcomingEvents";
   const isOrganizerHistory = routeSegment === "organizer" && secondSegment === "history";
 
-  const status: EventStatus = event.isAccepted
-    ? "approved"
-    : event.isEventNew
-      ? "pending"
-      : "rejected";
 
   const statusStyles: Record<EventStatus, string> = {
     approved: "bg-green-600 text-white",
@@ -46,9 +41,40 @@ export default function EventCard({ event }: { event: any }) {
     rejected: "bg-red-600 text-white",
   };
 
+  const now = new Date();
+
+  const start = new Date(
+    `${event.eventDate.split("T")[0]}T${event.startTime ?? "00:00"}`
+  );
+  const end = new Date(
+    `${event.eventDate.split("T")[0]}T${event.endTime ?? "23:59"}`
+  );
+
+  // LIVE only if approved AND time matches
+  const isLiveNow = event.isAccepted && start <= now && end >= now;
+  const liveCardBorder = isLiveNow
+    ? "border-red-600 ring-2 ring-red-500/60 "
+    : "border-primary/20";
+
+  const status: EventStatus = event.isAccepted
+    ? "approved"
+    : event.isEventNew
+      ? "pending"
+      : "rejected";
+
+  const badgeText = isLiveNow
+    ? t("status.live")
+    : t(`status.${status}`);
+
+  const badgeClass = isLiveNow
+    ? "bg-red-600 text-white animate-pulse"
+    : statusStyles[status];
+
+
+
   return (
     <div className="col-span-1 flex h-full justify-center">
-      <div className="w-full h-full flex flex-col max-w-sm ltr:rounded-tr-4xl ltr:rounded-bl-4xl rtl:rounded-tl-4xl rtl:rounded-br-4xl overflow-hidden border border-primary/20 bg-background shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+      <div className={`${liveCardBorder} w-full h-full flex flex-col max-w-sm ltr:rounded-tr-4xl ltr:rounded-bl-4xl rtl:rounded-tl-4xl rtl:rounded-br-4xl overflow-hidden border border-primary/20 bg-background shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2`}>
 
         {/* Image Header */}
         <div className="relative h-52">
@@ -63,16 +89,20 @@ export default function EventCard({ event }: { event: any }) {
           {/* Edit/Delete buttons & status for organizer upcoming */}
           {isOrganizerUpcoming && (
             <div>
-              <div className="absolute top-4 ltr:right-4 rtl:left-4 z-20 flex gap-2">
-                <UpdateEventBtn id={event._id} detailscard={false} />
-                <DeleteEventBtn id={event._id} detailscard={false} />
-              </div>
+              {/* Edit / Delete → ONLY if NOT live */}
+              {!isLiveNow && (
+                <div className="absolute top-4 ltr:right-4 rtl:left-4 z-20 flex gap-2">
+                  <UpdateEventBtn id={event._id} detailscard={false} />
+                  <DeleteEventBtn id={event._id} detailscard={false} />
+                </div>
+              )}
+
+              {/* Status badge (always visible) */}
               <div className="absolute top-4 ltr:left-4 rtl:right-4 z-20">
                 <p
-                  className={`capitalize py-1 px-3 rounded-full text-sm font-medium bg-primary text-primary-foreground
-                    ${statusStyles[status]}`}
+                  className={`capitalize py-1 px-3 rounded-full text-sm font-medium ${badgeClass}`}
                 >
-                  {t(`status.${status}`)}
+                  {badgeText}
                 </p>
               </div>
             </div>
