@@ -5,7 +5,9 @@ import { NewRecycleAgentFormData } from "@/types/recycleAgent";
 
 export const POST = async (req: NextRequest) => {
   const body = (await req.json()) as NewRecycleAgentFormData;
-  await rootContainer.resolve(AuthController).register(body);
+  const createdAgent = await rootContainer
+    .resolve(AuthController)
+    .register(body);
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, data: createdAgent });
 };

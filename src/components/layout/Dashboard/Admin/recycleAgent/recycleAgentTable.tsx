@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Store, Plus } from "lucide-react";
-import Pagination from "@/components/ui/Pagination";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import RecycleAgentForm from "./recycleAgentForm";
 import {
   mapUserToAgent,
@@ -44,13 +44,13 @@ const RecycleAgentTable = () => {
 
   const toggleStatus = async (
     id: string,
-    currentStatus: boolean,
+    currentStatus: boolean
   ): Promise<void> => {
     // Optimistic update
     setAgents((prev) =>
       prev.map((agent) =>
-        agent.id === id ? { ...agent, isActive: !agent.isActive } : agent,
-      ),
+        agent.id === id ? { ...agent, isActive: !agent.isActive } : agent
+      )
     );
 
     try {
@@ -59,46 +59,35 @@ const RecycleAgentTable = () => {
       // Revert optimistic update on failure
       setAgents((prev) =>
         prev.map((agent) =>
-          agent.id === id ? { ...agent, isActive: currentStatus } : agent,
-        ),
+          agent.id === id ? { ...agent, isActive: currentStatus } : agent
+        )
       );
       console.error("Error updating agent status:", err);
-      alert(t("table.toasts.updateError") || "Failed to update agent status");
+      toast.error(
+        t("table.toasts.updateError") || "Failed to update agent status"
+      );
     }
   };
 
   const handleFormSubmit = async (formData: NewRecycleAgentFormData) => {
     setIsSubmitting(true);
 
-    // optimistic add (temporary id)
-    const tempId = `temp-${Date.now()}`;
-    const tempAgent: RecycleAgent = {
-      id: tempId,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      phoneNumber: formData.phoneNumber,
-      birthDate: formData.birthDate,
-      role: "recycleAgent" as UserType,
-      agentType: "independent",
-      isActive: true,
-    };
-
-    setAgents((prev) => [tempAgent, ...prev]);
-
     try {
-      const created = await createRecycleAgent({
+      await createRecycleAgent({
         ...formData,
         role: "recycleAgent" as UserType,
       });
-      // replace temp
-      setAgents((prev) => prev.map((a) => (a.id === tempId ? created : a)));
+
+      // Refetch the entire list to get fresh data from server
+      const list = await fetchRecycleAgents();
+      setAgents(mapUserToAgent(list.data));
+      setPagingData(list.meta);
+
       setShowForm(false);
-      alert(t("form.toasts.success"));
+      toast.success(t("form.toasts.success"));
     } catch (err) {
-      setAgents((prev) => prev.filter((a) => a.id !== tempId));
       console.error("Error creating recycle agent:", err);
-      alert(t("form.toasts.error"));
+      toast.error(t("form.toasts.error"));
     } finally {
       setIsSubmitting(false);
     }
@@ -185,8 +174,7 @@ const RecycleAgentTable = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <button
                           onClick={() => toggleStatus(agent.id, agent.isActive)}
-                          disabled={agent.id?.toString().startsWith("temp-")}
-                          className={`myBtnPrimary text-sm p-2 px-3 ${agent.id?.toString().startsWith("temp-") ? "opacity-50 cursor-not-allowed" : ""}`}
+                          className="myBtnPrimary text-sm p-2 px-3"
                         >
                           {agent.isActive
                             ? t("table.actions.disable")
@@ -200,10 +188,6 @@ const RecycleAgentTable = () => {
             </table>
           </div>
         </div>
-        <Pagination
-          currentPage={pagingData?.page}
-          totalPages={pagingData?.total}
-        />
       </div>
     </div>
   );
