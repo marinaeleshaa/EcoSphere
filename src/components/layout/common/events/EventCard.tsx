@@ -33,10 +33,11 @@ export default function EventCard({ event }: { event: any }) {
   const isEventsPage = routeSegment === "events";
   const isOrganizerUpcoming = routeSegment === "organizer" && secondSegment === "upcomingEvents";
   const isOrganizerHistory = routeSegment === "organizer" && secondSegment === "history";
+  
 
 
   const statusStyles: Record<EventStatus, string> = {
-    approved: "bg-green-600 text-white",
+    approved: "bg-primary text-white",
     pending: "bg-yellow-500 text-white",
     rejected: "bg-red-600 text-white",
   };
@@ -52,6 +53,13 @@ export default function EventCard({ event }: { event: any }) {
 
   // LIVE only if approved AND time matches
   const isLiveNow = event.isAccepted && start <= now && end >= now;
+
+  const showLiveBadge = isLiveNow && (isEventsPage || isOrganizerUpcoming);
+
+  const showStatusBadge =
+    isOrganizerUpcoming && !isLiveNow;
+
+
   const liveCardBorder = isLiveNow
     ? "border-red-600 ring-2 ring-red-500/60 "
     : "border-primary/20";
@@ -62,16 +70,19 @@ export default function EventCard({ event }: { event: any }) {
       ? "pending"
       : "rejected";
 
-  const badgeText = isLiveNow
+  const badgeText = showLiveBadge
     ? t("status.live")
-    : t(`status.${status}`);
+    : showStatusBadge
+      ? t(`status.${status}`)
+      : null;
 
-  const badgeClass = isLiveNow
+
+  const badgeClass = showLiveBadge
     ? "bg-red-600 text-white animate-pulse"
-    : statusStyles[status];
-
-
-
+    : showStatusBadge
+      ? statusStyles[status]
+      : "";
+      
   return (
     <div className="col-span-1 flex h-full justify-center">
       <div className={`${liveCardBorder} w-full h-full flex flex-col max-w-sm ltr:rounded-tr-4xl ltr:rounded-bl-4xl rtl:rounded-tl-4xl rtl:rounded-br-4xl overflow-hidden border border-primary/20 bg-background shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2`}>

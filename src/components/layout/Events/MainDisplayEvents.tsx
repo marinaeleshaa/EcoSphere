@@ -18,29 +18,18 @@ import BasicAnimatedWrapper from "../common/BasicAnimatedWrapper";
 import { TbCalendarEvent } from "react-icons/tb";
 import EventCardSkeleton from "../common/events/EventCardSkeleton";
 
-const parseEventDate = (dateStr: string) => {
-  if (dateStr.includes("-")) {
-    const parts = dateStr.split("-").map(Number);
-    if (parts[0] > 31) {
-      // YYYY-MM-DD
-      return new Date(parts[0], parts[1] - 1, parts[2]);
-    } else {
-      // DD-MM-YYYY
-      return new Date(parts[2], parts[1] - 1, parts[0]);
-    }
-  }
-  return new Date(dateStr);
-};
+const getEventStartDateTime = (event: any) =>
+  new Date(`${event.eventDate.split("T")[0]}T${event.startTime ?? "00:00"}`);
 
-const getEventStartDateTime = (event: any) => {
-  const date = parseEventDate(event.eventDate);
-  if (event.startTime) {
-    const [hours, minutes] = event.startTime.split(":").map(Number);
-    date.setHours(hours, minutes, 0, 0);
-  } else {
-    date.setHours(0, 0, 0, 0);
-  }
-  return date;
+const getEventEndDateTime = (event: any) =>
+  new Date(`${event.eventDate.split("T")[0]}T${event.endTime ?? "23:59"}`);
+
+const isEventLiveNow = (event: any, now: Date) => {
+  if (!event.isAccepted) return false;
+  return (
+    getEventStartDateTime(event) <= now &&
+    getEventEndDateTime(event) >= now
+  );
 };
 
 export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
@@ -60,42 +49,74 @@ export default function MainDisplayEvents({ events }: Readonly<EventProps>) {
 
   const now = new Date();
 
+
   const filteredEvents = events
-    .filter((event) => event.isAccepted === true)
-    .filter((event) =>
+    // ✅ Accepted by admin only
+    .filter(event => event.isAccepted)
+
+    // ✅ Upcoming or live (not ended)
+    .filter(event => getEventEndDateTime(event) > now)
+
+    // 🔍 Search
+    .filter(event =>
       event.name.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter((event) => {
+
+    // 💰 Price
+    .filter(event => {
       if (!priceFilter) return true;
       if (priceFilter === "free") return event.ticketPrice === 0;
       return event.ticketPrice > 0;
     })
-    .filter((event) => {
+
+    // 🏷️ Type
+    .filter(event => {
       if (!typeFilter) return true;
       return event.type === typeFilter;
     })
-    .filter((event) => {
+
+    // 📅 Date
+    .filter(event => {
       if (!dateFilter) return true;
+
       const start = getEventStartDateTime(event);
-      if (dateFilter === "today")
+
+      if (dateFilter === "today") {
         return start.toDateString() === now.toDateString();
+      }
+
       if (dateFilter === "this_week") {
         const weekEnd = new Date();
         weekEnd.setDate(now.getDate() + 7);
         return start >= now && start <= weekEnd;
       }
+
       if (dateFilter === "this_month") {
         return (
           start.getMonth() === now.getMonth() &&
           start.getFullYear() === now.getFullYear()
         );
       }
+
       return true;
     })
-    .sort(
-      (a, b) =>
-        getEventStartDateTime(a).getTime() - getEventStartDateTime(b).getTime()
-    );
+
+    // 🔥 Sorting (LIVE → Upcoming → Date)
+    .sort((a, b) => {
+      const aLive = isEventLiveNow(a, now);
+      const bLive = isEventLiveNow(b, now);
+
+      if (aLive && !bLive) return -1;
+      if (!aLive && bLive) return 1;
+
+      return (
+        getEventStartDateTime(a).getTime() -
+        getEventStartDateTime(b).getTime()
+      );
+    });
+
+
+
 
   React.useEffect(() => {
     if (events) setIsLoading(false);
