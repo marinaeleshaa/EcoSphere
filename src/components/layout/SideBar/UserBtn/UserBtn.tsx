@@ -27,24 +27,22 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
   const router = useRouter();
   const t = useTranslations("Layout.UserBtn");
 
-  const handleLogout = () => {
-    signOut({ redirect: false });
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
     router.replace("/");
     toast.success(t("logoutSuccess"));
   };
 
   return (
-    <SidebarMenuItem >
-      <DropdownMenu >
+    <SidebarMenuItem>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild className="cursor-pointer">
           <SidebarMenuButton
             size="lg"
             tooltip={session?.user.name ?? ""}
             className="group gap-3 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground "
           >
-            <Avatar
-              className="h-9 w-9 rounded-lg transition-all duration-200 group-hover:scale-101 group-hover:shadow-md group-hover:ring-2 group-hover:ring-sidebar-accent"
-            >
+            <Avatar className="h-9 w-9 rounded-lg transition-all duration-200 group-hover:scale-101 group-hover:shadow-md group-hover:ring-2 group-hover:ring-sidebar-accent">
               <AvatarImage
                 src={session?.user.image ?? ""}
                 alt={session?.user.name ?? ""}
@@ -108,7 +106,7 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
           )}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link href="/profile" >
+            <Link href="/profile">
               <DropdownMenuItem className="rtl:flex-row-reverse cursor-pointer">
                 <BadgeCheck />
                 {t("profile")}
@@ -116,7 +114,10 @@ export default function UserBtn({ session }: Readonly<{ session: Session }>) {
             </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout} className="rtl:flex-row-reverse cursor-pointer">
+          <DropdownMenuItem
+            onClick={handleLogout}
+            className="rtl:flex-row-reverse cursor-pointer"
+          >
             <LogOut />
             <span>{t("logout")}</span>
           </DropdownMenuItem>
